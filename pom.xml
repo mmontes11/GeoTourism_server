@@ -7,14 +7,11 @@
     <version>1.0-SNAPSHOT</version>
     <name>GeoTourism</name>
     <url>http://maven.apache.org</url>
+
     <properties>
-        <junit.version>3.8.1</junit.version>
-        <spring.version>2.5.6</spring.version>
-        <spring.aop.version>2.2</spring.aop.version>
         <postgresql.driver.version>9.3-1100-jdbc41</postgresql.driver.version>
         <hibernate.version>4.0</hibernate.version>
-        <hibernate.annotations.version>3.5.6-Final</hibernate.annotations.version>
-        <slf4j.version>1.5.11</slf4j.version>
+        <spring.version>3.1.2.RELEASE</spring.version>
     </properties>
 
     <repositories>
@@ -33,45 +30,43 @@
     </repositories>
 
     <dependencies>
-        <!-- JUnit -->
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <!-- Spring -->
-        <dependency>
-            <groupId>org.springframework</groupId>
-            <artifactId>spring</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>cglib</groupId>
-            <artifactId>cglib</artifactId>
-            <version>${spring.aop.version}</version>
-        </dependency>
-
         <!-- PostgreSQL driver -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${postgresql.driver.version}</version>
         </dependency>
-
         <!-- Hibernate -->
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-spatial</artifactId>
             <version>${hibernate.version}</version>
         </dependency>
-
-        <!-- SLF4J -->
+        <!-- Spring  -->
         <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-log4j12</artifactId>
-            <version>${slf4j.version}</version>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-core</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-webmvc</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-tx</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-orm</artifactId>
+            <version>${spring.version}</version>
         </dependency>
     </dependencies>
 </project>

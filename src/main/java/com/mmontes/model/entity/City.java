@@ -11,19 +11,16 @@ import javax.persistence.Id;
 @Entity
 public class City {
 
-    @Id
-    @GeneratedValue(generator = "increment")
-    @GenericGenerator(name = "increment", strategy = "increment")
     private Long id;
-
     private String name;
-
-    @Type(type = "org.hibernate.spatial.GeometryType")
     private Geometry geom;
 
     public City() {
     }
 
+    @Id
+    @GeneratedValue(generator = "increment")
+    @GenericGenerator(name = "increment", strategy = "increment")
     public Long getId() {
         return id;
     }
@@ -40,6 +37,7 @@ public class City {
         this.name = name;
     }
 
+    @Type(type = "org.hibernate.spatial.GeometryType")
     public Geometry getGeom() {
         return geom;
     }

@@ -3,14 +3,18 @@ package com.mmontes.model.entity.TIP;
 import com.mmontes.model.entity.City;
 import com.vividsolutions.jts.geom.Geometry;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Entity
-@Table(name = "TIP")
+@Table(name = "tip")
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(
+        name="type",
+        discriminatorType = DiscriminatorType.STRING
+)
+@DiscriminatorValue(value = "TIP")
 public class TIP {
 
     private Long id;
@@ -27,9 +31,10 @@ public class TIP {
     public TIP() {
     }
 
+    @Column(name = "id")
     @Id
-    @GeneratedValue(generator = "increment")
     @GenericGenerator(name = "increment", strategy = "increment")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "increment")
     public Long getId() {
         return id;
     }
@@ -38,6 +43,7 @@ public class TIP {
         this.id = id;
     }
 
+    @Column(name = "type")
     public String getType() {
         return type;
     }
@@ -46,6 +52,7 @@ public class TIP {
         this.type = type;
     }
 
+    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -54,6 +61,8 @@ public class TIP {
         this.name = name;
     }
 
+    @Column(name = "geom")
+    @Type(type = "org.hibernate.spatial.GeometryType")
     public Geometry getGeom() {
         return geom;
     }
@@ -62,6 +71,7 @@ public class TIP {
         this.geom = geom;
     }
 
+    @Column(name = "address")
     public String getAddress() {
         return address;
     }
@@ -70,6 +80,7 @@ public class TIP {
         this.address = address;
     }
 
+    @Column(name = "description")
     public String getDescription() {
         return description;
     }
@@ -78,6 +89,7 @@ public class TIP {
         this.description = description;
     }
 
+    @Column(name = "photourl")
     public String getPhotoUrl() {
         return photoUrl;
     }
@@ -86,6 +98,7 @@ public class TIP {
         this.photoUrl = photoUrl;
     }
 
+    @Column(name = "infourl")
     public String getInfoUrl() {
         return infoUrl;
     }
@@ -94,6 +107,7 @@ public class TIP {
         this.infoUrl = infoUrl;
     }
 
+    @Column(name = "googlemapsurl")
     public String getGoogleMapsUrl() {
         return googleMapsUrl;
     }
@@ -102,6 +116,8 @@ public class TIP {
         this.googleMapsUrl = googleMapsUrl;
     }
 
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "cityid")
     public City getCity() {
         return city;
     }

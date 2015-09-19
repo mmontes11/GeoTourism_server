@@ -4,11 +4,10 @@ import com.vividsolutions.jts.geom.Geometry;
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 
 @Entity
+@Table(name = "city")
 public class City {
 
     private Long id;
@@ -18,9 +17,10 @@ public class City {
     public City() {
     }
 
+    @Column(name = "id")
     @Id
-    @GeneratedValue(generator = "increment")
     @GenericGenerator(name = "increment", strategy = "increment")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "increment")
     public Long getId() {
         return id;
     }
@@ -29,6 +29,7 @@ public class City {
         this.id = id;
     }
 
+    @Column(name = "name")
     public String getName() {
         return name;
     }
@@ -37,6 +38,7 @@ public class City {
         this.name = name;
     }
 
+    @Column(name = "geom")
     @Type(type = "org.hibernate.spatial.GeometryType")
     public Geometry getGeom() {
         return geom;

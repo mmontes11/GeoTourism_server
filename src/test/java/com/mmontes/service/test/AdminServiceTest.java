@@ -26,8 +26,9 @@ public class AdminServiceTest {
 
     @Test
     public void testCheckPassword(){
-        Admin admin = new Admin("admin", "admin");
+        Admin admin = new Admin("test", "test");
         adminDao.save(admin);
-        assertTrue(adminService.checkPassword("admin","admin"));
+        assertTrue(adminService.checkPassword("test", "test"));
+        assertFalse(adminService.checkPassword("test","other"));
     }
 }

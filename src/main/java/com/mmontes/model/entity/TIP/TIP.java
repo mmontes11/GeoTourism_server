@@ -14,11 +14,11 @@ import javax.persistence.*;
         name="type",
         discriminatorType = DiscriminatorType.STRING
 )
-@DiscriminatorValue(value = "TIP")
 public class TIP {
 
     private Long id;
     private String name;
+    private String type;
     private Geometry geom;
     private String address;
     private String description;

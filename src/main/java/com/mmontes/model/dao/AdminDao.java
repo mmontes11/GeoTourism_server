@@ -6,7 +6,6 @@ import com.mmontes.util.exception.InstanceNotFoundException;
 
 public interface AdminDao extends GenericDao<Admin, Long> {
 
-    public boolean checkPassword(String username, String password);
-    public Admin findByUsername(String username) throws InstanceNotFoundException;
-
+    boolean checkPassword(String username, String password);
+    Admin findByUsername(String username) throws InstanceNotFoundException;
 }

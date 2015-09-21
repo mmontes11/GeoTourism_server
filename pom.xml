@@ -8,26 +8,16 @@
     <name>GeoTourism</name>
     <url>http://maven.apache.org</url>
 
+    <!-- Package versions -->
     <properties>
         <postgresql.driver.version>9.3-1100-jdbc41</postgresql.driver.version>
+        <slf4j.version>1.6.6</slf4j.version>
+        <javassist.version>3.15.0-GA</javassist.version>
+        <cglib.version>2.2</cglib.version>
         <hibernate.version>4.0</hibernate.version>
         <spring.version>3.1.2.RELEASE</spring.version>
+        <junit.version>4.11</junit.version>
     </properties>
-
-    <repositories>
-        <repository>
-            <id>OSGEO GeoTools repo</id>
-            <url>http://download.osgeo.org/webdav/geotools</url>
-        </repository>
-        <repository>
-            <id>Hibernate Spatial repo</id>
-            <url>http://www.hibernatespatial.org/repository</url>
-        </repository>
-        <repository>
-            <id>JBOSS</id>
-            <url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
-        </repository>
-    </repositories>
 
     <dependencies>
         <!-- PostgreSQL driver -->
@@ -35,6 +25,27 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${postgresql.driver.version}</version>
+        </dependency>
+        <!-- SLF4J (required by Hibernate) -->
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- Javassist (required by Hibernate) -->
+        <dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>${javassist.version}</version>
+            <scope>runtime</scope>
+        </dependency>
+        <!-- CGLIB (required by Spring) -->
+        <dependency>
+            <groupId>cglib</groupId>
+            <artifactId>cglib-nodep</artifactId>
+            <version>${cglib.version}</version>
+            <scope>runtime</scope>
         </dependency>
         <!-- Hibernate -->
         <dependency>
@@ -68,5 +79,34 @@
             <artifactId>spring-orm</artifactId>
             <version>${spring.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring.version}</version>
+            <scope>test</scope>
+        </dependency>
+        <!-- JUnit -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
+
+    <repositories>
+        <repository>
+            <id>OSGEO GeoTools repo</id>
+            <url>http://download.osgeo.org/webdav/geotools</url>
+        </repository>
+        <repository>
+            <id>Hibernate Spatial repo</id>
+            <url>http://www.hibernatespatial.org/repository</url>
+        </repository>
+        <repository>
+            <id>JBOSS</id>
+            <url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
+        </repository>
+    </repositories>
+
 </project>

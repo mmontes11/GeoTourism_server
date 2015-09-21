@@ -18,7 +18,6 @@ import javax.persistence.*;
 public class TIP {
 
     private Long id;
-    private String type;
     private String name;
     private Geometry geom;
     private String address;
@@ -33,23 +32,14 @@ public class TIP {
 
     @Column(name = "id")
     @Id
-    @GenericGenerator(name = "increment", strategy = "increment")
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "increment")
+    @SequenceGenerator(name = "TIPIdGenerator", sequenceName = "tip_id_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "TIPIdGenerator")
     public Long getId() {
         return id;
     }
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    @Column(name = "type")
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     @Column(name = "name")

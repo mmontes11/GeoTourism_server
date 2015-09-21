@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns="http://www.springframework.org/schema/beans"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
@@ -11,8 +12,7 @@
                 <prop key="hibernate.dialect">${hibernate.dialect}</prop>
                 <prop key="hibernate.show_sql">${hibernate.show_sql}</prop>
                 <prop key="hibernate.format_sql">${hibernate.format_sql}</prop>
-                <prop key="hibernate.hibernate.connection.pool_size">${hibernate.hibernate.connection.pool_size}</prop>
-                <prop key="hibernate.current_session_context_class">${hibernate.current_session_context_class}</prop>
+                <prop key="hibernate.connection.pool_size">${hibernate.connection.pool_size}</prop>
             </props>
         </property>
         <property name="annotatedClasses">
@@ -23,6 +23,7 @@
                 <value>com.mmontes.model.entity.TIP.Hotel</value>
                 <value>com.mmontes.model.entity.TIP.Restaurant</value>
                 <value>com.mmontes.model.entity.City</value>
+                <value>com.mmontes.model.entity.Admin</value>
             </list>
         </property>
     </bean>

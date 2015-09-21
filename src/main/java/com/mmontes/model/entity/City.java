@@ -19,8 +19,8 @@ public class City {
 
     @Column(name = "id")
     @Id
-    @GenericGenerator(name = "increment", strategy = "increment")
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "increment")
+    @SequenceGenerator(name = "CityIdGenerator", sequenceName = "city_id_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = "CityIdGenerator")
     public Long getId() {
         return id;
     }

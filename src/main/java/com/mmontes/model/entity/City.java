@@ -13,14 +13,15 @@ public class City {
     private Long id;
     private String name;
     private Geometry geom;
+    private static final String CITY_ID_GENERATOR = "CityIdGenerator";
 
     public City() {
     }
 
     @Column(name = "id")
     @Id
-    @SequenceGenerator(name = "CityIdGenerator", sequenceName = "city_id_seq")
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "CityIdGenerator")
+    @SequenceGenerator(name = CITY_ID_GENERATOR, sequenceName = "city_id_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = CITY_ID_GENERATOR)
     public Long getId() {
         return id;
     }

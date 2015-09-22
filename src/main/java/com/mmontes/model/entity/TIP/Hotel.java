@@ -1,9 +1,21 @@
 package com.mmontes.model.entity.TIP;
 
+import com.mmontes.model.entity.City;
+import com.vividsolutions.jts.geom.Geometry;
+
+import static com.mmontes.util.GlobalNames.HOTEL_DISCRIMINATOR;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 
 @Entity
-@DiscriminatorValue(value = "H")
+@DiscriminatorValue(value = HOTEL_DISCRIMINATOR)
 public class Hotel extends TIP{
+
+    public Hotel() {
+    }
+
+    public Hotel(String name, String type, Geometry geom, String address, String description, String photoUrl, String infoUrl, String googleMapsUrl, City city) {
+        super(name, type, geom, address, description, photoUrl, infoUrl, googleMapsUrl, city);
+    }
 }

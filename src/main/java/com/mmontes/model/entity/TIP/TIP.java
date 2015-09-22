@@ -26,14 +26,27 @@ public class TIP {
     private String infoUrl;
     private String googleMapsUrl;
     private City city;
+    private static final String TIP_ID_GENERATOR = "TIPIdGenerator";
 
     public TIP() {
     }
 
+    public TIP(String name, String type, Geometry geom, String address, String description, String photoUrl, String infoUrl, String googleMapsUrl, City city) {
+        this.name = name;
+        this.type = type;
+        this.geom = geom;
+        this.address = address;
+        this.description = description;
+        this.photoUrl = photoUrl;
+        this.infoUrl = infoUrl;
+        this.googleMapsUrl = googleMapsUrl;
+        this.city = city;
+    }
+
     @Column(name = "id")
     @Id
-    @SequenceGenerator(name = "TIPIdGenerator", sequenceName = "tip_id_seq")
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "TIPIdGenerator")
+    @SequenceGenerator(name = TIP_ID_GENERATOR, sequenceName = "tip_id_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = TIP_ID_GENERATOR)
     public Long getId() {
         return id;
     }

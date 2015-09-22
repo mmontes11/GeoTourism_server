@@ -9,6 +9,7 @@ public class Admin {
     private Long id;
     private String username;
     private String password;
+    private static final String ADMIN_ID_GENERATOR = "AdminIdGenerator";
 
     public Admin() {
     }
@@ -20,8 +21,8 @@ public class Admin {
 
     @Column(name = "id")
     @Id
-    @SequenceGenerator(name = "AdminIdGenerator", sequenceName = "admin_id_seq")
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "AdminIdGenerator")
+    @SequenceGenerator(name = ADMIN_ID_GENERATOR, sequenceName = "admin_id_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = ADMIN_ID_GENERATOR)
     public Long getId() {
         return id;
     }

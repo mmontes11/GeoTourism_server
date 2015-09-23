@@ -1,7 +1,7 @@
 package com.mmontes.model.dao;
 
 import com.mmontes.model.entity.Admin;
-import com.mmontes.model.util.GenericDaoHibernate;
+import com.mmontes.model.util.dao.GenericDaoHibernate;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.stereotype.Repository;
 

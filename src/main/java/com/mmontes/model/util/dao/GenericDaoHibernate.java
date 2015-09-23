@@ -1,4 +1,4 @@
-package com.mmontes.model.util;
+package com.mmontes.model.util.dao;
 
 import java.io.Serializable;
 import java.lang.reflect.ParameterizedType;

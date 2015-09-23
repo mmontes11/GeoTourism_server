@@ -23,7 +23,11 @@
                 <value>com.mmontes.model.entity.TIP.Hotel</value>
                 <value>com.mmontes.model.entity.TIP.Restaurant</value>
                 <value>com.mmontes.model.entity.City</value>
+                <value>com.mmontes.model.entity.Region</value>
+                <value>com.mmontes.model.entity.Country</value>
                 <value>com.mmontes.model.entity.Admin</value>
+                <value>com.mmontes.model.entity.Comment</value>
+                <value>com.mmontes.model.entity.User</value>
             </list>
         </property>
     </bean>

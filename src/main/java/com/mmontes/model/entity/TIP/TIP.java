@@ -1,9 +1,8 @@
 package com.mmontes.model.entity.TIP;
 
 import com.mmontes.model.entity.City;
-import com.vividsolutions.jts.geom.Geometry;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
+import org.postgis.Geometry;
 
 import javax.persistence.*;
 

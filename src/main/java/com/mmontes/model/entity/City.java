@@ -13,6 +13,7 @@ public class City {
     private Long id;
     private String name;
     private Geometry geom;
+    private Region region;
     private static final String CITY_ID_GENERATOR = "CityIdGenerator";
 
     public City() {
@@ -47,5 +48,15 @@ public class City {
 
     public void setGeom(Geometry geom) {
         this.geom = geom;
+    }
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "regionid")
+    public Region getRegion() {
+        return region;
+    }
+
+    public void setRegion(Region region) {
+        this.region = region;
     }
 }

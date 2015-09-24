@@ -1,7 +1,6 @@
 package com.mmontes.model.entity;
 
 import com.vividsolutions.jts.geom.Geometry;
-import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;

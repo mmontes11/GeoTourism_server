@@ -1,6 +1,7 @@
 package com.mmontes.util.dto;
 
-import org.postgis.Geometry;
+
+import com.vividsolutions.jts.geom.Geometry;
 
 public class TIPDto {
 

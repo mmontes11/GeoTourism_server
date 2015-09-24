@@ -3,7 +3,8 @@ package com.mmontes.model.entity.TIP;
 import static com.mmontes.util.GlobalNames.HOTEL_DISCRIMINATOR;
 
 import com.mmontes.model.entity.City;
-import org.postgis.Geometry;
+import com.vividsolutions.jts.geom.Geometry;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 

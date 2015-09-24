@@ -1,14 +1,15 @@
-package com.mmontes.service;
+package com.mmontes.service.internal;
 
 
+import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.util.dto.TIPDto;
-import org.postgis.Geometry;
+import com.vividsolutions.jts.geom.Geometry;
 
 import java.util.List;
 
 public interface TIPService {
 
-    void create (Long type,String description, String photoUrl, String infoUrl, Geometry geom);
+    TIP create(String type, String name, String description, String photoUrl, String photoContent, String infoUrl, String geom);
     void edit(Long TIPId, String type, String name, String description, String photoUrl, String infoUrl, Geometry geom);
     TIPDto findById(Long TIPId);
     boolean exists(Long TIPId);

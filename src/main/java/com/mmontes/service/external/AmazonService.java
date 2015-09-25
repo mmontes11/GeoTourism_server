@@ -4,7 +4,6 @@ import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
 import com.amazonaws.services.s3.model.PutObjectRequest;
-import com.amazonaws.services.s3.model.PutObjectResult;
 
 import java.io.*;
 import java.util.Calendar;
@@ -25,15 +24,11 @@ public class AmazonService {
         return file;
     }
 
-    public static String uploadFile (String name,String extension,String fileContent){
+    public static String uploadFile (String name,String extension,String fileContent) throws Exception {
         AmazonS3 s3 = new AmazonS3Client();
         String fileName = name + "_" + Calendar.getInstance().getTimeInMillis() + extension;
-        try {
-            PutObjectRequest por = new PutObjectRequest(AMAZON_S3_BUCKET_NAME,fileName,createFile(fileName,extension,fileContent));
-            s3.putObject(por.withCannedAcl(CannedAccessControlList.PublicRead));
-        } catch (IOException e) {
-            return null;
-        }
+        PutObjectRequest por = new PutObjectRequest(AMAZON_S3_BUCKET_NAME,fileName,createFile(fileName,extension,fileContent));
+        s3.putObject(por.withCannedAcl(CannedAccessControlList.PublicRead));
         return AMAZON_S3_ROOT_URL + fileName;
     }
 }

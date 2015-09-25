@@ -3,13 +3,14 @@ package com.mmontes.service.internal;
 
 import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.util.dto.TIPDto;
+import com.mmontes.util.exception.AmazonServiceExeption;
 import com.vividsolutions.jts.geom.Geometry;
 
 import java.util.List;
 
 public interface TIPService {
 
-    TIP create(String type, String name, String description, String photoUrl, String photoContent, String infoUrl, String geom);
+    TIP create(String type, String name, String description, String photoUrl, String photoContent, String infoUrl, Geometry geom) throws AmazonServiceExeption;
     void edit(Long TIPId, String type, String name, String description, String photoUrl, String infoUrl, Geometry geom);
     TIPDto findById(Long TIPId);
     boolean exists(Long TIPId);

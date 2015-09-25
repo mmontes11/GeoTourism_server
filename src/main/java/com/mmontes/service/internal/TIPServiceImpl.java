@@ -4,7 +4,9 @@ import com.mmontes.model.dao.TIPDao;
 import com.mmontes.model.entity.TIP.*;
 import com.mmontes.service.external.AmazonService;
 import com.mmontes.util.dto.TIPDto;
+import com.mmontes.util.exception.AmazonServiceExeption;
 import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,7 +22,7 @@ public class TIPServiceImpl implements TIPService {
     @Autowired
     private TIPDao tipDao;
 
-    public TIP create(String type, String name, String description, String photoUrl, String photoContent, String infoUrl, String geom) {
+    public TIP create(String type, String name, String description, String photoUrl, String photoContent, String infoUrl, Geometry geom) throws AmazonServiceExeption {
 
         TIP tip = null;
         if (type.equals(MONUMENT_DISCRIMINATOR)){
@@ -43,8 +45,13 @@ public class TIPServiceImpl implements TIPService {
         if (photoUrl != null){
             tip.setPhotoUrl(photoUrl);
         }else{
-            String url = AmazonService.uploadFile(name,".png",photoContent);
-            tip.setPhotoUrl(url);
+            String url = null;
+            try {
+                url = AmazonService.uploadFile(name, ".png", photoContent);
+                tip.setPhotoUrl(url);
+            } catch (Exception e) {
+                throw new AmazonServiceExeption();
+            }
         }
         if (infoUrl != null){
             tip.setInfoUrl(infoUrl);

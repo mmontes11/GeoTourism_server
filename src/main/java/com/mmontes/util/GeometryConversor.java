@@ -1,4 +1,4 @@
-package com.mmontes.util.gis;
+package com.mmontes.util;
 
 public class GeometryConversor {
 }

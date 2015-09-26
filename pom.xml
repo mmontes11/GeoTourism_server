@@ -8,8 +8,24 @@
     <name>GeoTourism</name>
     <url>http://maven.apache.org</url>
 
-    <!-- Package versions -->
     <properties>
+        <!-- JDBC properties -->
+        <jdbc.url>jdbc:postgresql://localhost:5432/geotourism</jdbc.url>
+        <jdbc.url.test>jdbc:postgresql://localhost:5432/test</jdbc.url.test>
+        <jdbc.driverClassName>org.postgresql.Driver</jdbc.driverClassName>
+        <!-- Data source properties -->
+        <dataSource.user>admin</dataSource.user>
+        <dataSource.password>admin</dataSource.password>
+        <testDataSource.user>${dataSource.user}</testDataSource.user>
+        <testDataSource.password>${dataSource.password}</testDataSource.password>
+        <!-- DB scripts properties -->
+        <db.script.createdb>src/db/db.sql</db.script.createdb>
+        <db.script.testdata>src/db/testData.sql</db.script.testdata>
+        <!-- Encoding -->
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <!-- Package versions -->
+        <postgresql.driver.groupId>org.postgresql</postgresql.driver.groupId>
+        <postgresql.driver.artifactId>postgresql</postgresql.driver.artifactId>
         <postgresql.driver.version>9.3-1100-jdbc41</postgresql.driver.version>
         <slf4j.version>1.6.6</slf4j.version>
         <javassist.version>3.15.0-GA</javassist.version>
@@ -18,13 +34,18 @@
         <spring.version>3.1.2.RELEASE</spring.version>
         <junit.version>4.11</junit.version>
         <aws.sdk.version>1.9.6</aws.sdk.version>
+        <!-- Plugin versions -->
+        <mavenCompilerPlugin.version>2.3.2</mavenCompilerPlugin.version>
+        <mavenResourcesPlugin.version>2.5</mavenResourcesPlugin.version>
+        <sqlMavenPlugin.version>1.5</sqlMavenPlugin.version>
+        <mavenAssemblyPlugin.version>2.$2.1</mavenAssemblyPlugin.version>
     </properties>
 
     <dependencies>
         <!-- PostgreSQL driver -->
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
+            <groupId>${postgresql.driver.groupId}</groupId>
+            <artifactId>${postgresql.driver.artifactId}</artifactId>
             <version>${postgresql.driver.version}</version>
         </dependency>
         <!-- SLF4J (required by Hibernate) -->
@@ -116,4 +137,100 @@
         </repository>
     </repositories>
 
+    <build>
+        <resources>
+            <!-- Apply filtering to files matching the following expressions in src/main/resources. -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>spring-config.xml</include>
+                    <include>hibernate-config.xml</include>
+                </includes>
+            </resource>
+            <!-- Continue considering resources the files in src/main/resources, but
+				without applying filtering. -->
+            <resource>
+                <directory>src/main/resources</directory>
+            </resource>
+        </resources>
+        <testResources>
+            <!-- Apply filtering to files matching the following expressions in src/test/resources. -->
+            <testResource>
+                <directory>src/test/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>spring-config-test.xml</include>
+                </includes>
+            </testResource>
+            <!-- Continue considering resources the files in src/test/resources, but
+                without applying filtering. -->
+            <testResource>
+                <directory>src/test/resources</directory>
+            </testResource>
+        </testResources>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${mavenCompilerPlugin.version}</version>
+                <configuration>
+                    <verbose>true</verbose>
+                    <source>1.8</source>
+                    <target>1.8</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                    <showDeprecation>true</showDeprecation>
+                    <showWarnings>true</showWarnings>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>${mavenResourcesPlugin.version}</version>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>sql-maven-plugin</artifactId>
+                <version>${sqlMavenPlugin.version}</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>${postgresql.driver.groupId}</groupId>
+                        <artifactId>${postgresql.driver.artifactId}</artifactId>
+                        <version>${postgresql.driver.version}</version>
+                    </dependency>
+                </dependencies>
+                <!-- common configuration shared by all executions -->
+                <configuration>
+                    <driver>${jdbc.driverClassName}</driver>
+                    <url>${jdbc.url}</url>
+                    <username>${dataSource.user}</username>
+                    <password>${dataSource.password}</password>
+                    <autocommit>true</autocommit>
+                    <srcFiles>
+                        <srcFile>${db.script.createdb}</srcFile>
+                    </srcFiles>
+                </configuration>
+                <executions>
+                    <execution>
+                        <id>create-tables-and-data-for-testing</id>
+                        <phase>process-test-resources</phase>
+                        <goals>
+                            <goal>execute</goal>
+                        </goals>
+                        <configuration>
+                            <driver>${jdbc.driverClassName}</driver>
+                            <url>${jdbc.url.test}</url>
+                            <username>${testDataSource.password}</username>
+                            <password>${testDataSource.password}</password>
+                            <autocommit>true</autocommit>
+                            <srcFiles>
+                                <srcFile>${db.script.createdb}</srcFile>
+                                <srcFile>${db.script.testdata}</srcFile>
+                            </srcFiles>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

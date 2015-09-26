@@ -1,7 +1,4 @@
-package com.mmontes.service.test;
-
-import static com.mmontes.util.GlobalNames.SPRING_CONFIG_FILE;
-import static org.junit.Assert.*;
+package com.mmontes.test.service;
 
 import com.mmontes.model.dao.AdminDao;
 import com.mmontes.model.entity.Admin;
@@ -13,8 +10,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.mmontes.util.GlobalNames.SPRING_CONFIG_FILE;
+import static com.mmontes.test.util.GlobalNames.SPRING_CONFIG_TEST_FILE;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { SPRING_CONFIG_FILE })
+@ContextConfiguration(locations = { SPRING_CONFIG_FILE,SPRING_CONFIG_TEST_FILE })
 @Transactional
 public class AdminServiceTest {
 
@@ -29,6 +31,6 @@ public class AdminServiceTest {
         Admin admin = new Admin("test", "test");
         adminDao.save(admin);
         assertTrue(adminService.checkPassword("test", "test"));
-        assertFalse(adminService.checkPassword("test","other"));
+        assertFalse(adminService.checkPassword("test", "other"));
     }
 }

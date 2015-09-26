@@ -17,7 +17,7 @@
             base-package="com.mmontes"/>
 
     <!-- Properties -->
-    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+    <bean id="dbProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
                 <value>properties/datasource.properties</value>

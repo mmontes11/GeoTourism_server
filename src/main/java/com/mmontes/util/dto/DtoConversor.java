@@ -3,6 +3,7 @@ package com.mmontes.util.dto;
 import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.model.entity.Comment;
 import com.mmontes.model.entity.User;
+import com.mmontes.model.util.TIPUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,7 +15,7 @@ public class DtoConversor {
     public static TIPDto TIP2TIPDto(TIP tip){
         TIPDto tipDto = new TIPDto();
         tipDto.setId(tip.getId());
-        tipDto.setType(getType(tip));
+        tipDto.setType(TIPUtils.getType(tip));
         tipDto.setName(tip.getName());
         tipDto.setDescription(tip.getDescription());
         tipDto.setGeom(tip.getGeom());

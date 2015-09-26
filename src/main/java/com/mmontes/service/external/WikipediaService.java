@@ -1,13 +1,13 @@
 package com.mmontes.service.external;
 
 import com.mmontes.util.XMLParser;
-import com.sun.deploy.net.URLEncoder;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 
 public class WikipediaService {
 
@@ -33,9 +33,5 @@ public class WikipediaService {
         Document document = XMLParser.parseXml(connnection.getInputStream());
         Element node = (Element) document.getElementsByTagName("page").item(0);
         return node.getAttribute("fullurl");
-    }
-
-    public static void main(String[] args) throws Exception {
-        System.out.println(WikipediaService.getWikipediaUrl("en","Times Square"));
     }
 }

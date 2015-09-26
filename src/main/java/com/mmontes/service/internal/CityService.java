@@ -1,10 +1,9 @@
-package com.mmontes.model.dao;
+package com.mmontes.service.internal;
 
 import com.mmontes.model.entity.City;
-import com.mmontes.model.util.dao.GenericDao;
 import com.vividsolutions.jts.geom.Geometry;
 
-public interface CityDao extends GenericDao<City,Long>{
+public interface CityService {
 
     City getCityFromLocation(Geometry location);
 }

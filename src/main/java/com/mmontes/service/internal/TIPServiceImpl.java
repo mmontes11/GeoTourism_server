@@ -1,12 +1,16 @@
 package com.mmontes.service.internal;
 
 import com.mmontes.model.dao.TIPDao;
+import com.mmontes.model.entity.City;
 import com.mmontes.model.entity.TIP.*;
 import com.mmontes.service.external.AmazonService;
+import com.mmontes.service.external.WikipediaService;
+import com.mmontes.util.dto.DtoConversor;
 import com.mmontes.util.dto.TIPDto;
 import com.mmontes.util.exception.AmazonServiceExeption;
+import com.mmontes.util.exception.TIPLocationException;
+import com.mmontes.util.exception.WikipediaServiceException;
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,7 +26,10 @@ public class TIPServiceImpl implements TIPService {
     @Autowired
     private TIPDao tipDao;
 
-    public TIP create(String type, String name, String description, String photoUrl, String photoContent, String infoUrl, Geometry geom) throws AmazonServiceExeption {
+    @Autowired
+    private CityService cityService;
+
+    public TIPDto create(String type, String name, String description, String photoUrl, String photoContent, String infoUrl, Geometry geom) throws AmazonServiceExeption, TIPLocationException, WikipediaServiceException {
 
         TIP tip = null;
         if (type.equals(MONUMENT_DISCRIMINATOR)){
@@ -42,6 +49,7 @@ public class TIPServiceImpl implements TIPService {
         }
         tip.setName(name);
         tip.setDescription(description);
+        tip.setGeom(geom);
         if (photoUrl != null){
             tip.setPhotoUrl(photoUrl);
         }else{
@@ -53,12 +61,28 @@ public class TIPServiceImpl implements TIPService {
                 throw new AmazonServiceExeption();
             }
         }
+        City city = cityService.getCityFromLocation(geom);
+        if (city != null){
+            tip.setCity(city);
+        }else{
+            throw new TIPLocationException();
+        }
         if (infoUrl != null){
             tip.setInfoUrl(infoUrl);
         }else{
-            //WikipediService
+            String regionDomain = city.getRegion().getDomain();
+            String countryDomain = city.getRegion().getCountry().getDomain();
+            String domain = regionDomain != null? regionDomain : countryDomain;
+            String url = null;
+            try {
+                url = WikipediaService.getWikipediaUrl(domain,name);
+                tip.setInfoUrl(url);
+            } catch (Exception e) {
+                throw new WikipediaServiceException();
+            }
         }
-        return null;
+        tipDao.save(tip);
+        return DtoConversor.TIP2TIPDto(tip);
     }
 
     public void edit(Long TIPId, String type, String name, String description, String photoUrl, String infoUrl, Geometry geom) {

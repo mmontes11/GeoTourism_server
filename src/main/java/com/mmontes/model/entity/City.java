@@ -9,11 +9,11 @@ import javax.persistence.*;
 @Table(name = "city")
 public class City {
 
+    private static final String CITY_ID_GENERATOR = "CityIdGenerator";
     private Long id;
     private String name;
     private Geometry geom;
     private Region region;
-    private static final String CITY_ID_GENERATOR = "CityIdGenerator";
 
     public City() {
     }

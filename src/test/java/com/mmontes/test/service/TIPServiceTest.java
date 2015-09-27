@@ -11,6 +11,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -140,7 +141,7 @@ public class TIPServiceTest {
             towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, null, null, geom);
 
             name = "Santiago de Compostela cathedral";
-            description = "Human patrimony";
+            description = "Human Patrimony";
             geom = GeometryConversor.geometryFromGeoJSON(POINT_CATEDRAL_SANTIAGO_GEOJSON);
             santiagoCathedral = tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, null, null, geom);
         } catch (Exception e) {
@@ -150,12 +151,32 @@ public class TIPServiceTest {
         Geometry location = GeometryConversor.geometryFromGeoJSON(POINT_ALAMEDA_GEOJSON);
         List<TIPDto> tipDtos = tipService.find(null, location, null, null, null, null);
 
-        assertEquals(1,tipDtos.size());
+        assertEquals(1, tipDtos.size());
         assertEquals(santiagoCathedral.getId(),tipDtos.get(0).getId());
     }
 
     @Test
     public void finTipsFromFarCity(){
+        TIPDto towerHercules = null;
+        TIPDto santiagoCathedral = null;
+        try {
+            String name = "Tower of Hercules";
+            String description = "Human Patrimony";
+            Geometry geom = GeometryConversor.geometryFromGeoJSON(POINT_TORRE_HERCULES_GEOJSON);
+            tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, null, null, geom);
 
+            name = "Santiago de Compostela cathedral";
+            description = "Human Patrimony";
+            geom = GeometryConversor.geometryFromGeoJSON(POINT_CATEDRAL_SANTIAGO_GEOJSON);
+            tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, null, null, geom);
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+
+        Geometry location = GeometryConversor.geometryFromGeoJSON(POINT_STATUE_OF_LIBERTRY_GEOJSON);
+        List<TIPDto> tipDtos = tipService.find(null, location, null, null, null, null);
+
+        assertTrue(tipDtos.isEmpty());
     }
 }

@@ -15,30 +15,32 @@ import static com.mmontes.util.Constants.*;
 public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements TIPDao {
 
     public List<TIP> find(Geometry location, String type, Long cityId, List<Long> facebookUserIds, Double radius) {
-        Criteria criteria = null;
+        String queryString = "SELECT tip ";
         if (type == null) {
-            criteria = getSession().createCriteria(TIP.class);
+            queryString += "FROM TIP tip ";
         }else{
             if (type.equals(MONUMENT_DISCRIMINATOR)){
-                criteria = getSession().createCriteria(Monument.class);
+                queryString += "FROM Monument tip ";
             }
             if (type.equals(NATURAL_SPACE_DISCRIMINATOR)){
-                criteria = getSession().createCriteria(NaturalSpace.class);
+                queryString += "FROM NaturalSpace tip ";
             }
             if (type.equals(HOTEL_DISCRIMINATOR)){
-                criteria = getSession().createCriteria(Hotel.class);
+                queryString += "FROM Hotel tip " ;
             }
             if (type.equals(RESTAURANT_DISCRIMINATOR)){
-                criteria = getSession().createCriteria(Restaurant.class);
+                queryString += "FROM Restaurant tip ";
             }
         }
-        if (location != null) {
-            double r = radius != null? radius : SEARCH_RADIUS_METRES;
-            location.setSRID(SRID_DWITHIN);
-            criteria.add(SpatialRestrictions.havingSRID("geom",SRID_DWITHIN));
-            criteria.add(SpatialRestrictions.distanceWithin("geom",location,1000000));
-        }
-        return criteria.list();
+        queryString += "WHERE dwithin(transform(tip.geom,:srid), transform(:location,:srid), :radius) = true ";
+
+        double r = radius != null? radius : SEARCH_RADIUS_METRES;
+        return getSession()
+                .createQuery(queryString)
+                .setParameter("srid",SRID_DWITHIN)
+                .setParameter("location",location)
+                .setParameter("radius",r)
+                .list();
     }
 
     public void markAsFavourite(Long TIPId, Long facebookUserId) {

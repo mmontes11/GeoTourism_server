@@ -10,8 +10,8 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.mmontes.util.GlobalNames.SPRING_CONFIG_FILE;
-import static com.mmontes.test.util.GlobalNames.SPRING_CONFIG_TEST_FILE;
+import static com.mmontes.util.Constants.SPRING_CONFIG_FILE;
+import static com.mmontes.test.util.Constants.SPRING_CONFIG_TEST_FILE;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 

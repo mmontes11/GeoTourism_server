@@ -1,9 +1,9 @@
 package com.mmontes.model.util;
 
-import static com.mmontes.util.GlobalNames.HOTEL_DISCRIMINATOR;
-import static com.mmontes.util.GlobalNames.MONUMENT_DISCRIMINATOR;
-import static com.mmontes.util.GlobalNames.NATURAL_SPACE_DISCRIMINATOR;
-import static com.mmontes.util.GlobalNames.RESTAURANT_DISCRIMINATOR;
+import static com.mmontes.util.Constants.HOTEL_DISCRIMINATOR;
+import static com.mmontes.util.Constants.MONUMENT_DISCRIMINATOR;
+import static com.mmontes.util.Constants.NATURAL_SPACE_DISCRIMINATOR;
+import static com.mmontes.util.Constants.RESTAURANT_DISCRIMINATOR;
 
 import com.mmontes.model.entity.TIP.*;
 

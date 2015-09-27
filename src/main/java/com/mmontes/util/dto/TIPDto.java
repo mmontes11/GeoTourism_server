@@ -7,6 +7,7 @@ public class TIPDto {
 
     private Long id;
     private String type;
+    private String typeName;
     private String name;
     private String description;
     private Geometry geom;

@@ -8,8 +8,6 @@ import com.mmontes.model.util.TIPUtils;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mmontes.model.util.TIPUtils.getType;
-
 public class DtoConversor {
 
     public static TIPDto TIP2TIPDto(TIP tip){

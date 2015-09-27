@@ -3,7 +3,7 @@ package com.mmontes.model.entity.TIP;
 import com.mmontes.model.entity.City;
 import com.vividsolutions.jts.geom.Geometry;
 
-import static com.mmontes.util.GlobalNames.NATURAL_SPACE_DISCRIMINATOR;
+import static com.mmontes.util.Constants.NATURAL_SPACE_DISCRIMINATOR;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;

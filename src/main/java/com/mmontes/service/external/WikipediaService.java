@@ -19,7 +19,6 @@ public class WikipediaService {
             return null;
         }
         String url = "https://" + domain + ".wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=" + encodedName + "&format=xml&gsrprop=snippet&prop=info&inprop=url";
-        System.out.println(url);
         URL obj = new URL(url);
         HttpURLConnection connnection = (HttpURLConnection) obj.openConnection();
         connnection.setRequestMethod("GET");

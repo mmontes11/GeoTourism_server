@@ -1,6 +1,6 @@
 package com.mmontes.model.entity.TIP;
 
-import static com.mmontes.util.GlobalNames.HOTEL_DISCRIMINATOR;
+import static com.mmontes.util.Constants.HOTEL_DISCRIMINATOR;
 
 import com.mmontes.model.entity.City;
 import com.vividsolutions.jts.geom.Geometry;

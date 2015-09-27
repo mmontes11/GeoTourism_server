@@ -35,6 +35,7 @@
         <junit.version>4.11</junit.version>
         <aws.sdk.version>1.9.6</aws.sdk.version>
         <geotools.version>15-SNAPSHOT</geotools.version>
+        <commons-validator.version>1.4.0</commons-validator.version>
         <!-- Plugin versions -->
         <mavenCompilerPlugin.version>2.3.2</mavenCompilerPlugin.version>
         <mavenResourcesPlugin.version>2.5</mavenResourcesPlugin.version>
@@ -136,6 +137,12 @@
             <groupId>org.geotools</groupId>
             <artifactId>gt-geojson</artifactId>
             <version>${geotools.version}</version>
+        </dependency>
+        <!-- Commons Validator-->
+        <dependency>
+            <groupId>commons-validator</groupId>
+            <artifactId>commons-validator</artifactId>
+            <version>${commons-validator.version}</version>
         </dependency>
     </dependencies>
 

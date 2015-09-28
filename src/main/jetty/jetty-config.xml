@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configure class="org.eclipse.jetty.webapp.WebAppContext">
+    <New id="GeoTourism" class="org.eclipse.jetty.plus.jndi.Resource">
+        <Arg>${dataSource.jndiName}</Arg>
+        <Arg>
+            <New class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+                <Set name="driverClassName">${dataSource.driverClassName}</Set>
+                <Set name="url">${dataSource.url}</Set>
+                <Set name="username">${dataSource.user}</Set>
+                <Set name="password">${dataSource.password}</Set>
+            </New>
+        </Arg>
+    </New>
+</Configure>

@@ -17,6 +17,7 @@
             base-package="com.mmontes"/>
 
     <!-- Properties -->
+    <!--
     <bean id="dbProperties" class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
         <property name="locations">
             <list>
@@ -25,6 +26,7 @@
             </list>
         </property>
     </bean>
+    -->
 
     <!-- Database Configuration -->
     <import resource="db/datasource.xml"/>

@@ -7,9 +7,9 @@
 
     <bean id="dataSource"
           class="org.springframework.jdbc.datasource.DriverManagerDataSource"
-          p:driverClassName="${jdbc.driverClassName}"
-          p:url="${jdbc.url}"
-          p:username="${jdbc.username}"
-          p:password="${jdbc.password}"/>
+          p:driverClassName="org.postgresql.Driver"
+          p:url="jdbc:postgresql://localhost:5432/geotourism"
+          p:username="admin"
+          p:password="admin"/>
 
 </beans>

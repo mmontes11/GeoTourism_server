@@ -3,24 +3,29 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.mmontes</groupId>
     <artifactId>GeoTourism</artifactId>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <version>1.0-SNAPSHOT</version>
     <name>GeoTourism</name>
     <url>http://maven.apache.org</url>
 
     <properties>
-        <!-- JDBC properties -->
-        <jdbc.url>jdbc:postgresql://localhost:5432/geotourism</jdbc.url>
-        <jdbc.url.test>jdbc:postgresql://localhost:5432/test</jdbc.url.test>
-        <jdbc.driverClassName>org.postgresql.Driver</jdbc.driverClassName>
         <!-- Data source properties -->
+        <dataSource.url>jdbc:postgresql://localhost:5432/geotourism</dataSource.url>
         <dataSource.user>admin</dataSource.user>
         <dataSource.password>admin</dataSource.password>
+        <dataSource.driverClassName>org.postgresql.Driver</dataSource.driverClassName>
+        <dataSource.jndiName>jdbc/geotourism</dataSource.jndiName>
+        <testDataSource.url>jdbc:postgresql://localhost:5432/test</testDataSource.url>
         <testDataSource.user>${dataSource.user}</testDataSource.user>
         <testDataSource.password>${dataSource.password}</testDataSource.password>
         <!-- DB scripts properties -->
         <db.script.createdb>src/db/db.sql</db.script.createdb>
         <db.script.testdata>src/db/testData.sql</db.script.testdata>
+        <!-- Hibernate configuration -->
+        <hibernate.dialect>org.hibernate.spatial.dialect.postgis.PostgisDialect</hibernate.dialect>
+        <hibernate.show_sql>true</hibernate.show_sql>
+        <hibernate.format_sql>true</hibernate.format_sql>
+        <hibernate.connection.pool_size>10</hibernate.connection.pool_size>
         <!-- Encoding -->
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <!-- Package versions -->
@@ -36,11 +41,13 @@
         <aws.sdk.version>1.9.6</aws.sdk.version>
         <geotools.version>15-SNAPSHOT</geotools.version>
         <commons-validator.version>1.4.0</commons-validator.version>
+        <jackson.version>1.9.10</jackson.version>
         <!-- Plugin versions -->
         <mavenCompilerPlugin.version>2.3.2</mavenCompilerPlugin.version>
         <mavenResourcesPlugin.version>2.5</mavenResourcesPlugin.version>
         <sqlMavenPlugin.version>1.5</sqlMavenPlugin.version>
         <mavenAssemblyPlugin.version>2.$2.1</mavenAssemblyPlugin.version>
+        <jettyMavenPlugin>9.2.11.v20150529</jettyMavenPlugin>
     </properties>
 
     <dependencies>
@@ -144,6 +151,12 @@
             <artifactId>commons-validator</artifactId>
             <version>${commons-validator.version}</version>
         </dependency>
+        <!-- Jackson -->
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
     </dependencies>
 
     <repositories>
@@ -172,6 +185,10 @@
             <id>JBOSS</id>
             <url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
         </repository>
+        <repository>
+            <id>Composite Jetty9 P2 repo</id>
+            <url>http://download.eclipse.org/jetty/updates/jetty-bundles-9.x</url>
+        </repository>
     </repositories>
 
     <build>
@@ -189,6 +206,15 @@
 				without applying filtering. -->
             <resource>
                 <directory>src/main/resources</directory>
+            </resource>
+            <!-- Filter Jetty configuration -->
+            <resource>
+                <directory>src/main/jetty</directory>
+                <includes>
+                    <include>jetty-config.xml</include>
+                </includes>
+                <targetPath>../jetty</targetPath>
+                <filtering>true</filtering>
             </resource>
         </resources>
         <testResources>
@@ -238,8 +264,8 @@
                 </dependencies>
                 <!-- common configuration shared by all executions -->
                 <configuration>
-                    <driver>${jdbc.driverClassName}</driver>
-                    <url>${jdbc.url}</url>
+                    <driver>${dataSource.driverClassName}</driver>
+                    <url>${dataSource.url}</url>
                     <username>${dataSource.user}</username>
                     <password>${dataSource.password}</password>
                     <autocommit>true</autocommit>
@@ -255,8 +281,8 @@
                             <goal>execute</goal>
                         </goals>
                         <configuration>
-                            <driver>${jdbc.driverClassName}</driver>
-                            <url>${jdbc.url.test}</url>
+                            <driver>${dataSource.driverClassName}</driver>
+                            <url>${dataSource.url}</url>
                             <username>${testDataSource.password}</username>
                             <password>${testDataSource.password}</password>
                             <autocommit>true</autocommit>
@@ -267,6 +293,35 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <!-- Jetty configuration-->
+            <plugin>
+                <groupId>org.eclipse.jetty</groupId>
+                <artifactId>jetty-maven-plugin</artifactId>
+                <version>${jettyMavenPlugin}</version>
+                <configuration>
+                    <webAppConfig>
+                        <contextPath>/${project.artifactId}</contextPath>
+                        <jettyEnvXml>target/jetty/jetty-config.xml</jettyEnvXml>
+                    </webAppConfig>
+                    <scanIntervalSeconds>10</scanIntervalSeconds>
+                    <httpConnector>
+                        <port>9090</port>
+                    </httpConnector>
+                </configuration>
+                <dependencies>
+                    <dependency>
+                        <groupId>${postgresql.driver.groupId}</groupId>
+                        <artifactId>${postgresql.driver.artifactId}</artifactId>
+                        <version>${postgresql.driver.version}</version>
+                    </dependency>
+                    <dependency>
+                        <groupId>org.springframework</groupId>
+                        <artifactId>spring-jdbc</artifactId>
+                        <version>${spring.version}</version>
+                        <scope>runtime</scope>
+                    </dependency>
+                </dependencies>
             </plugin>
         </plugins>
     </build>

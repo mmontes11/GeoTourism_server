@@ -8,10 +8,10 @@
     <!--  Data source. -->
     <bean id="dataSource"
           class="org.springframework.jdbc.datasource.SingleConnectionDataSource"
-          p:driverClassName="${jdbc.driverClassName}"
-          p:url="${jdbc.url.test}"
-          p:username="${jdbc.username.test}"
-          p:password="${jdbc.password.test}"
+          p:driverClassName="org.postgresql.Driver"
+          p:url="jdbc:postgresql://localhost:5432/test"
+          p:username="admin"
+          p:password="admin"
           p:suppressClose="true" />
 
 </beans>

@@ -304,6 +304,7 @@
                         <contextPath>/${project.artifactId}</contextPath>
                         <jettyEnvXml>target/jetty/jetty-config.xml</jettyEnvXml>
                     </webAppConfig>
+                    <reload>manual</reload>
                     <scanIntervalSeconds>10</scanIntervalSeconds>
                     <httpConnector>
                         <port>9090</port>

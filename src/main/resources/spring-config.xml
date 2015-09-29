@@ -30,32 +30,10 @@
           p:targetDataSource-ref="dataSource"/>
 
     <!-- Hibernate session factory -->
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-        <property name="dataSource" ref="dataSourceProxy"/>
-        <property name="hibernateProperties">
-            <props>
-                <prop key="hibernate.dialect">org.hibernate.spatial.dialect.postgis.PostgisDialect</prop>
-                <prop key="hibernate.show_sql">true</prop>
-                <prop key="hibernate.format_sql">true</prop>
-                <prop key="hibernate.connection.pool_size">10</prop>
-            </props>
-        </property>
-        <property name="annotatedClasses">
-            <list>
-                <value>com.mmontes.model.entity.TIP.TIP</value>
-                <value>com.mmontes.model.entity.TIP.Monument</value>
-                <value>com.mmontes.model.entity.TIP.NaturalSpace</value>
-                <value>com.mmontes.model.entity.TIP.Hotel</value>
-                <value>com.mmontes.model.entity.TIP.Restaurant</value>
-                <value>com.mmontes.model.entity.City</value>
-                <value>com.mmontes.model.entity.Region</value>
-                <value>com.mmontes.model.entity.Country</value>
-                <value>com.mmontes.model.entity.Admin</value>
-                <value>com.mmontes.model.entity.Comment</value>
-                <value>com.mmontes.model.entity.User</value>
-            </list>
-        </property>
-    </bean>
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
+          p:dataSource-ref="dataSourceProxy"
+          p:configLocation="classpath:/hibernate-config.xml"/>
 
     <!-- Transaction manager for a single Hibernate SessionFactory.  -->
     <bean id="transactionManager"

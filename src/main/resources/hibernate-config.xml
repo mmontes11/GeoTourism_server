@@ -1,0 +1,24 @@
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+    <session-factory>
+        <property name="hibernate.dialect">org.hibernate.spatial.dialect.postgis.PostgisDialect</property>
+        <property name="hibernate.show_sql">true</property>
+        <property name="hibernate.format_sql">true</property>
+        <property name="hibernate.use_sql_comments">true</property>
+        <property name="hibernate.connection.pool_size">10</property>
+
+        <mapping class="com.mmontes.model.entity.TIP.TIP"/>
+        <mapping class="com.mmontes.model.entity.TIP.TIP"/>
+        <mapping class="com.mmontes.model.entity.TIP.Monument"/>
+        <mapping class="com.mmontes.model.entity.TIP.NaturalSpace"/>
+        <mapping class="com.mmontes.model.entity.TIP.Hotel"/>
+        <mapping class="com.mmontes.model.entity.TIP.Restaurant"/>
+        <mapping class="com.mmontes.model.entity.City"/>
+        <mapping class="com.mmontes.model.entity.Region"/>
+        <mapping class="com.mmontes.model.entity.Country"/>
+        <mapping class="com.mmontes.model.entity.Admin"/>
+        <mapping class="com.mmontes.model.entity.Comment"/>
+        <mapping class="com.mmontes.model.entity.User"/>
+    </session-factory>
+</hibernate-configuration>

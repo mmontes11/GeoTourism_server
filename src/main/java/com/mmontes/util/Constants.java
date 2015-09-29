@@ -2,7 +2,7 @@ package com.mmontes.util;
 
 public class Constants {
 
-    public static final String SPRING_CONFIG_FILE = "classpath:spring-config.xml" ;
+    public static final String SPRING_CONFIG_FILE = "classpath:/spring-config.xml" ;
 
     public static final String MONUMENT_DISCRIMINATOR = "M";
     public static final String NATURAL_SPACE_DISCRIMINATOR = "NS";

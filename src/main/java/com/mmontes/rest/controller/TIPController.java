@@ -17,7 +17,12 @@ public class TIPController {
     private TIPService tipService;
 
     @RequestMapping( value = "", method= RequestMethod.GET)
-    public void find(Long facebookUserId, String location, String type, Long cityId, Integer favouritedBy, Double radius){
+    public void find(Long facebookUserId,
+                     String location,
+                     String type,
+                     Long cityId,
+                     Integer favouritedBy,
+                     Double radius){
 
     }
 }

@@ -3,10 +3,7 @@ package com.mmontes.test.service;
 import com.mmontes.service.internal.TIPService;
 import com.mmontes.util.GeometryConversor;
 import com.mmontes.util.dto.TIPDto;
-import com.mmontes.util.exception.AmazonServiceExeption;
-import com.mmontes.util.exception.InvalidTIPUrlException;
-import com.mmontes.util.exception.TIPLocationException;
-import com.mmontes.util.exception.WikipediaServiceException;
+import com.mmontes.util.exception.*;
 import com.vividsolutions.jts.geom.Geometry;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -35,7 +32,7 @@ public class TIPServiceTest {
         try {
             String name = "Tower of Hercules";
             String description = "Human Patrimony";
-            Geometry geom = GeometryConversor.geometryFromGeoJSON(POINT_TORRE_HERCULES_GEOJSON);
+            Geometry geom = GeometryConversor.pointFromText(POINT_TORRE_HERCULES);
             TIPDto tipDto = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, null, null, geom);
 
             assertEquals(MONUMENT_DISCRIMINATOR, tipDto.getType());
@@ -51,7 +48,7 @@ public class TIPServiceTest {
 
             name = "Alameda Park";
             description = "Green zone";
-            geom = GeometryConversor.geometryFromGeoJSON(POINT_ALAMEDA_GEOJSON);
+            geom = GeometryConversor.pointFromText(POINT_ALAMEDA);
             tipDto = tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, null, null, geom);
 
             assertEquals(NATURAL_SPACE_DISCRIMINATOR, tipDto.getType());
@@ -65,7 +62,7 @@ public class TIPServiceTest {
             assertEquals(NAME_REGION_GALICIA, tipDto.getRegion());
             assertEquals(NAME_COUNTRY_ESPANA, tipDto.getCountry());
 
-        } catch (AmazonServiceExeption | TIPLocationException | WikipediaServiceException | InvalidTIPUrlException e) {
+        } catch (GeometryParsingException | AmazonServiceExeption | TIPLocationException | WikipediaServiceException | InvalidTIPUrlException e) {
             e.printStackTrace();
             fail();
         }
@@ -75,8 +72,8 @@ public class TIPServiceTest {
     public void createFindTIP(){
         String name = "Santiago de Compostela cathedral";
         String description = "Human patrimony";
-        Geometry geom = GeometryConversor.geometryFromGeoJSON(POINT_CATEDRAL_SANTIAGO_GEOJSON);
         try {
+            Geometry geom = GeometryConversor.pointFromText(POINT_CATEDRAL_SANTIAGO);
             TIPDto tipDto = tipService.create(MONUMENT_DISCRIMINATOR, name, description, null, null, null, null, geom);
             List<TIPDto> tipDtos = tipService.find(null, geom, MONUMENT_DISCRIMINATOR, null, null, null);
 
@@ -95,7 +92,7 @@ public class TIPServiceTest {
             assertEquals(tipDto.getRegion(), result.getRegion());
             assertEquals(tipDto.getCountry(), result.getCountry());
 
-        } catch (AmazonServiceExeption | InvalidTIPUrlException | WikipediaServiceException | TIPLocationException e) {
+        } catch (GeometryParsingException | AmazonServiceExeption | InvalidTIPUrlException | WikipediaServiceException | TIPLocationException e) {
             e.printStackTrace();
             fail();
         }
@@ -105,10 +102,10 @@ public class TIPServiceTest {
     public void creatTIPinNonCreatedCity() throws TIPLocationException {
         String name = "Liberty Statue";
         String description = "NY symbol";
-        Geometry geom = GeometryConversor.geometryFromGeoJSON(POINT_STATUE_OF_LIBERTRY_GEOJSON);
         try {
+            Geometry geom = GeometryConversor.pointFromText(POINT_STATUE_OF_LIBERTRY);
             tipService.create(MONUMENT_DISCRIMINATOR, name, description, null, null, null, null, geom);
-        } catch (AmazonServiceExeption | WikipediaServiceException | InvalidTIPUrlException e) {
+        } catch (GeometryParsingException | AmazonServiceExeption | WikipediaServiceException | InvalidTIPUrlException e) {
             e.printStackTrace();
             fail();
         }
@@ -119,7 +116,7 @@ public class TIPServiceTest {
     public void uploadAmazonS3() {
         String name = "Santiago de Compostela cathedral";
         String description = "Human patrimony";
-        Geometry geom = GeometryConversor.geometryFromGeoJSON(POINT_CATEDRAL_SANTIAGO_GEOJSON);
+        Geometry geom = GeometryConversor.pointFromText(POINT_CATEDRAL_SANTIAGO);
         String content = "This is a test file";
         try {
             TIPDto tipDto = tipService.create(MONUMENT_DISCRIMINATOR,name,description,null,content,".txt",null,geom);
@@ -134,21 +131,22 @@ public class TIPServiceTest {
     public void findTipsOfCurrentCity(){
         TIPDto towerHercules = null;
         TIPDto santiagoCathedral = null;
+        Geometry location = null;
         try {
             String name = "Tower of Hercules";
             String description = "Human Patrimony";
-            Geometry geom = GeometryConversor.geometryFromGeoJSON(POINT_TORRE_HERCULES_GEOJSON);
+            Geometry geom = GeometryConversor.pointFromText(POINT_TORRE_HERCULES);
             towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, null, null, geom);
 
             name = "Santiago de Compostela cathedral";
             description = "Human Patrimony";
-            geom = GeometryConversor.geometryFromGeoJSON(POINT_CATEDRAL_SANTIAGO_GEOJSON);
+            geom = GeometryConversor.pointFromText(POINT_CATEDRAL_SANTIAGO);
             santiagoCathedral = tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, null, null, geom);
-        } catch (Exception e) {
+            location = GeometryConversor.pointFromText(POINT_ALAMEDA);
+        } catch (GeometryParsingException | AmazonServiceExeption | WikipediaServiceException | InvalidTIPUrlException | TIPLocationException e) {
             e.printStackTrace();
             fail();
         }
-        Geometry location = GeometryConversor.geometryFromGeoJSON(POINT_ALAMEDA_GEOJSON);
         List<TIPDto> tipDtos = tipService.find(null, location, null, null, null, null);
 
         assertEquals(1, tipDtos.size());
@@ -159,22 +157,22 @@ public class TIPServiceTest {
     public void finTipsFromFarCity(){
         TIPDto towerHercules = null;
         TIPDto santiagoCathedral = null;
+        Geometry location = null;
         try {
             String name = "Tower of Hercules";
             String description = "Human Patrimony";
-            Geometry geom = GeometryConversor.geometryFromGeoJSON(POINT_TORRE_HERCULES_GEOJSON);
+            Geometry geom = GeometryConversor.pointFromText(POINT_TORRE_HERCULES);
             tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, null, null, geom);
 
             name = "Santiago de Compostela cathedral";
             description = "Human Patrimony";
-            geom = GeometryConversor.geometryFromGeoJSON(POINT_CATEDRAL_SANTIAGO_GEOJSON);
+            geom = GeometryConversor.pointFromText(POINT_CATEDRAL_SANTIAGO);
             tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, null, null, geom);
-        } catch (Exception e) {
+            location = GeometryConversor.pointFromText(POINT_STATUE_OF_LIBERTRY);
+        } catch (GeometryParsingException | AmazonServiceExeption | WikipediaServiceException | InvalidTIPUrlException | TIPLocationException e) {
             e.printStackTrace();
             fail();
         }
-
-        Geometry location = GeometryConversor.geometryFromGeoJSON(POINT_STATUE_OF_LIBERTRY_GEOJSON);
         List<TIPDto> tipDtos = tipService.find(null, location, null, null, null, null);
 
         assertTrue(tipDtos.isEmpty());

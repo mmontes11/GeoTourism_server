@@ -23,7 +23,6 @@ import java.util.List;
 import static com.mmontes.util.Constants.*;
 
 @Service("TIPService")
-@Transactional
 public class TIPServiceImpl implements TIPService {
 
     @Autowired
@@ -32,6 +31,7 @@ public class TIPServiceImpl implements TIPService {
     @Autowired
     private CityService cityService;
 
+    @Transactional
     public TIPDto create(String type, String name, String description, String photoUrl, String photoContent, String extension, String infoUrl, Geometry geom) throws AmazonServiceExeption, TIPLocationException, WikipediaServiceException, InvalidTIPUrlException {
 
         TIP tip = null;
@@ -60,7 +60,7 @@ public class TIPServiceImpl implements TIPService {
             tip.setPhotoUrl(photoUrl);
         }else{
             if (photoContent != null){
-                String url = null;
+                String url;
                 try {
                     url = AmazonService.uploadFile(name, extension, photoContent);
                     tip.setPhotoUrl(url);
@@ -84,7 +84,7 @@ public class TIPServiceImpl implements TIPService {
                 String regionDomain = city.getRegion().getDomain();
                 String countryDomain = city.getRegion().getCountry().getDomain();
                 String domain = regionDomain != null? regionDomain : countryDomain;
-                String url = null;
+                String url;
                 try {
                     url = WikipediaService.getWikipediaUrl(domain,name);
                     tip.setInfoUrl(url);
@@ -116,6 +116,7 @@ public class TIPServiceImpl implements TIPService {
 
     }
 
+    @Transactional
     public List<TIPDto> find(Long facebookUserId, Geometry location, String type, Long cityId, Integer favouritedBy, Double radius) {
         List<TIP> tips = tipDao.find(location,type,cityId,null,radius);
         return DtoConversor.ListTIP2ListTIPDto(tips);

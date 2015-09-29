@@ -4,7 +4,7 @@ import com.mmontes.model.entity.City;
 import com.mmontes.service.internal.CityService;
 import com.mmontes.util.GeometryConversor;
 import com.mmontes.util.exception.GeometryParsingException;
-import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.Point;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class CityServiceTest {
 
     @Test
     public void getCityFromPoint() {
-        Geometry cityGeometry;
+        Point cityGeometry;
         try {
             cityGeometry = GeometryConversor.pointFromText(POINT_TORRE_HERCULES);
             City city = cityService.getCityFromLocation(cityGeometry);

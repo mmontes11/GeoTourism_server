@@ -27,10 +27,10 @@ public class GeometryConversor {
         }
     }
 
-    public static Geometry pointFromText (String pointText) throws GeometryParsingException {
-        String[] coordinates = pointText.split(",");
+    public static Point pointFromText (String pointString) throws GeometryParsingException {
+        String[] coordinates = pointString.split(",");
         if (coordinates.length != 2){
-            throw new GeometryParsingException(pointText);
+            throw new GeometryParsingException(pointString);
         }
         Double x;
         Double y;
@@ -38,7 +38,7 @@ public class GeometryConversor {
             x = Double.parseDouble(coordinates[0]);
             y = Double.parseDouble(coordinates[1]);
         }catch(NumberFormatException e){
-            throw new GeometryParsingException(pointText);
+            throw new GeometryParsingException(pointString);
         }
         Coordinate coordinate = new Coordinate(x,y);
         GeometryFactory geometryFactory = new GeometryFactory();

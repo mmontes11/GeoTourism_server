@@ -2,7 +2,7 @@ package com.mmontes.test.util;
 
 public final class Constants {
 
-    public static final String SPRING_CONFIG_TEST_FILE = "classpath:/spring/spring-config-test.xml";
+    public static final String SPRING_CONFIG_TEST_FILE = "classpath:spring-config-test.xml";
 
     public static final String NAME_REGION_GALICIA = "Galicia";
     public static final String NAME_COUNTRY_ESPANA = "España";

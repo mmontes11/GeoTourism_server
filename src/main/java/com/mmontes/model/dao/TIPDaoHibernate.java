@@ -6,6 +6,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import org.hibernate.Criteria;
 import org.hibernate.spatial.criterion.SpatialRestrictions;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 

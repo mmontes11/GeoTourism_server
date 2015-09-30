@@ -4,6 +4,7 @@ import com.mmontes.model.entity.TIP.*;
 import com.mmontes.model.util.dao.GenericDaoHibernate;
 import com.vividsolutions.jts.geom.Geometry;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.spatial.criterion.SpatialRestrictions;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,15 +34,18 @@ public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements T
                 queryString += "FROM Restaurant tip ";
             }
         }
-        queryString += "WHERE dwithin(transform(tip.geom,:srid), transform(:location,:srid), :radius) = true ";
+        if (location != null){
+            queryString += "WHERE dwithin(transform(tip.geom,:srid), transform(:location,:srid), :radius) = true ";
+        }
 
-        double r = radius != null? radius : SEARCH_RADIUS_METRES;
-        return getSession()
-                .createQuery(queryString)
-                .setParameter("srid",SRID_DWITHIN)
-                .setParameter("location",location)
-                .setParameter("radius",r)
-                .list();
+        Query query = getSession().createQuery(queryString);
+        if (location != null){
+            double r = radius != null ? radius : SEARCH_RADIUS_METRES;
+            query.setParameter("srid",SRID_DWITHIN)
+                    .setParameter("location", location)
+                    .setParameter("radius",r);
+        }
+        return query.list();
     }
 
     public void markAsFavourite(Long TIPId, Long facebookUserId) {

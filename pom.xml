@@ -267,16 +267,6 @@
                     </dependency>
                 </dependencies>
                 <!-- common configuration shared by all executions -->
-                <configuration>
-                    <driver>${dataSource.driverClassName}</driver>
-                    <url>${dataSource.url}</url>
-                    <username>${dataSource.user}</username>
-                    <password>${dataSource.password}</password>
-                    <autocommit>true</autocommit>
-                    <srcFiles>
-                        <srcFile>${db.script.createdb}</srcFile>
-                    </srcFiles>
-                </configuration>
                 <executions>
                     <execution>
                         <id>create-tables-and-data-for-testing</id>

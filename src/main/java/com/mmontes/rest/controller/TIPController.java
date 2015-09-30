@@ -56,7 +56,7 @@ public class TIPController {
     }
 
     @RequestMapping(value = "/tip", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<String>
+    public ResponseEntity<List<TIPDto>>
         find(@RequestParam(value = "facebookUserId", required = false) Long facebookUserId,
              @RequestParam(value = "locationString", required = false) String locationString,
              @RequestParam(value = "type", required = false) String type,
@@ -83,8 +83,8 @@ public class TIPController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        List<TIPDto> tip = tipService.find(facebookUserId, location, type, cityId, favouritedBy, radius);
+        List<TIPDto> tips = tipService.find(facebookUserId, location, type, cityId, favouritedBy, radius);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(tips,HttpStatus.OK);
     }
 }

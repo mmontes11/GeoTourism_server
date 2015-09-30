@@ -2,7 +2,7 @@ package com.mmontes.test.service;
 
 import com.mmontes.model.dao.AdminDao;
 import com.mmontes.model.entity.Admin;
-import com.mmontes.service.internal.AdminService;
+import com.mmontes.model.service.internal.AdminService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,16 +1,13 @@
 package com.mmontes.util.dto;
 
 
-import com.vividsolutions.jts.geom.Geometry;
-
 public class TIPDto {
 
     private Long id;
     private String type;
-    private String typeName;
     private String name;
     private String description;
-    private Geometry geom;
+    private String geom;
     private String address;
     private String photoUrl;
     private String inforUrl;
@@ -22,7 +19,7 @@ public class TIPDto {
     public TIPDto() {
     }
 
-    public TIPDto(Long id, String type, String name, String description, Geometry geom, String address, String photoUrl, String inforUrl, String googleMapsUrl, String city, String region, String country) {
+    public TIPDto(Long id, String type, String name, String description, String geom, String address, String photoUrl, String inforUrl, String googleMapsUrl, String city, String region, String country) {
         this.id = id;
         this.type = type;
         this.name = name;
@@ -69,11 +66,11 @@ public class TIPDto {
         this.description = description;
     }
 
-    public Geometry getGeom() {
+    public String getGeom() {
         return geom;
     }
 
-    public void setGeom(Geometry geom) {
+    public void setGeom(String geom) {
         this.geom = geom;
     }
 

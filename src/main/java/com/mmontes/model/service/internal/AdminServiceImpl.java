@@ -1,4 +1,4 @@
-package com.mmontes.service.internal;
+package com.mmontes.model.service.internal;
 
 import com.mmontes.model.dao.AdminDao;
 import com.mmontes.model.entity.Admin;

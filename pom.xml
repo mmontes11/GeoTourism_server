@@ -43,11 +43,14 @@
         <commons-validator.version>1.4.0</commons-validator.version>
         <jackson.version>1.9.10</jackson.version>
         <!-- Plugin versions -->
+        <mavenSurefirePlugin.version>2.18.1</mavenSurefirePlugin.version>
         <mavenCompilerPlugin.version>2.3.2</mavenCompilerPlugin.version>
         <mavenResourcesPlugin.version>2.5</mavenResourcesPlugin.version>
         <sqlMavenPlugin.version>1.5</sqlMavenPlugin.version>
         <mavenAssemblyPlugin.version>2.$2.1</mavenAssemblyPlugin.version>
         <jettyMavenPlugin>9.2.11.v20150529</jettyMavenPlugin>
+        <!-- Skip tests -->
+        <skipTests>false</skipTests>
     </properties>
 
     <dependencies>
@@ -232,6 +235,7 @@
                 <directory>src/test/resources</directory>
             </testResource>
         </testResources>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -293,6 +297,14 @@
                         </configuration>
                     </execution>
                 </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <version>2.18.1</version>
+                <configuration>
+                    <skipTests>${skipTests}</skipTests>
+                </configuration>
             </plugin>
             <!-- Jetty configuration-->
             <plugin>

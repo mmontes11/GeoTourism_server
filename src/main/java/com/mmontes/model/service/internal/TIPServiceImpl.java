@@ -1,11 +1,11 @@
-package com.mmontes.service.internal;
+package com.mmontes.model.service.internal;
 
 import com.mmontes.model.dao.TIPDao;
 import com.mmontes.model.entity.City;
 import com.mmontes.model.entity.TIP.*;
-import com.mmontes.service.external.AmazonService;
-import com.mmontes.service.external.GoogleMapsService;
-import com.mmontes.service.external.WikipediaService;
+import com.mmontes.model.service.external.AmazonService;
+import com.mmontes.model.service.external.GoogleMapsService;
+import com.mmontes.model.service.external.WikipediaService;
 import com.mmontes.util.URLvalidator;
 import com.mmontes.util.dto.DtoConversor;
 import com.mmontes.util.dto.TIPDto;
@@ -23,6 +23,7 @@ import java.util.List;
 import static com.mmontes.util.Constants.*;
 
 @Service("TIPService")
+@Transactional
 public class TIPServiceImpl implements TIPService {
 
     @Autowired
@@ -31,7 +32,6 @@ public class TIPServiceImpl implements TIPService {
     @Autowired
     private CityService cityService;
 
-    @Transactional
     public TIPDto create(String type, String name, String description, String photoUrl, String photoContent, String extension, String infoUrl, Geometry geom) throws AmazonServiceExeption, TIPLocationException, WikipediaServiceException, InvalidTIPUrlException {
 
         TIP tip = null;
@@ -69,7 +69,6 @@ public class TIPServiceImpl implements TIPService {
                 }
             }
         }
-
         City city = cityService.getCityFromLocation(geom);
         if (city != null){
             tip.setCity(city);
@@ -116,7 +115,6 @@ public class TIPServiceImpl implements TIPService {
 
     }
 
-    @Transactional
     public List<TIPDto> find(Long facebookUserId, Geometry location, String type, Long cityId, Integer favouritedBy, Double radius) {
         List<TIP> tips = tipDao.find(location,type,cityId,null,radius);
         return DtoConversor.ListTIP2ListTIPDto(tips);

@@ -1,4 +1,4 @@
-package com.mmontes.service.external;
+package com.mmontes.model.service.external;
 
 import com.mmontes.util.XMLParser;
 import org.w3c.dom.Document;
@@ -12,7 +12,7 @@ import java.net.URLEncoder;
 public class WikipediaService {
 
     public static String getWikipediaUrl(String domain, String name) throws Exception {
-        String encodedName = "";
+        String encodedName;
         try {
             encodedName = URLEncoder.encode(name, "UTF-8");
         } catch (UnsupportedEncodingException e) {

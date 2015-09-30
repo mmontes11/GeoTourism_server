@@ -4,6 +4,7 @@ import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.model.entity.Comment;
 import com.mmontes.model.entity.User;
 import com.mmontes.model.util.TIPUtils;
+import com.mmontes.util.GeometryConversor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,19 +12,15 @@ import java.util.List;
 public class DtoConversor {
 
     public static TIPDto TIP2TIPDto(TIP tip){
-        TIPDto tipDto = new TIPDto();
-        tipDto.setId(tip.getId());
-        tipDto.setType(TIPUtils.getType(tip));
-        tipDto.setName(tip.getName());
-        tipDto.setDescription(tip.getDescription());
-        tipDto.setGeom(tip.getGeom());
-        tipDto.setAddress(tip.getAddress());
-        tipDto.setPhotoUrl(tip.getPhotoUrl());
-        tipDto.setInforUrl(tip.getInfoUrl());
-        tipDto.setGoogleMapsUrl(tip.getGoogleMapsUrl());
-        tipDto.setCity(tip.getCity().getName());
-        tipDto.setRegion(tip.getCity().getRegion().getName());
-        tipDto.setCountry(tip.getCity().getRegion().getCountry().getName());
+        String type = TIPUtils.getType(tip);
+        String geom = GeometryConversor.wktFromGeometry(tip.getGeom());
+        String cityName = tip.getCity().getName();
+        String regionName = tip.getCity().getRegion().getName();
+        String countryName = tip.getCity().getRegion().getCountry().getName();
+
+        TIPDto tipDto = new TIPDto(tip.getId(),type,tip.getName(),tip.getDescription(), geom, tip.getAddress(),
+                                    tip.getPhotoUrl(),tip.getInfoUrl(),tip.getGoogleMapsUrl(),
+                                    cityName,regionName,countryName);
         return tipDto;
     }
 

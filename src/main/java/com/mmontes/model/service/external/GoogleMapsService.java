@@ -1,4 +1,4 @@
-package com.mmontes.service.external;
+package com.mmontes.model.service.external;
 
 import com.vividsolutions.jts.geom.Coordinate;
 

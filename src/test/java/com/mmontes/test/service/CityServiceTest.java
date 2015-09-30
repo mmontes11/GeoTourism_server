@@ -1,7 +1,7 @@
 package com.mmontes.test.service;
 
 import com.mmontes.model.entity.City;
-import com.mmontes.service.internal.CityService;
+import com.mmontes.model.service.internal.CityService;
 import com.mmontes.util.GeometryConversor;
 import com.mmontes.util.exception.GeometryParsingException;
 import com.vividsolutions.jts.geom.Point;

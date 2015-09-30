@@ -1,7 +1,6 @@
-package com.mmontes.service.internal;
+package com.mmontes.model.service.internal;
 
 
-import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.util.dto.TIPDto;
 import com.mmontes.util.exception.AmazonServiceExeption;
 import com.mmontes.util.exception.InvalidTIPUrlException;
@@ -15,9 +14,14 @@ public interface TIPService {
 
     TIPDto create(String type, String name, String description, String photoUrl, String photoContent, String extension, String infoUrl, Geometry geom)
             throws AmazonServiceExeption, TIPLocationException, WikipediaServiceException, InvalidTIPUrlException;
+
     void edit(Long TIPId, String type, String name, String description, String photoUrl, String infoUrl, Geometry geom);
+
     TIPDto findById(Long TIPId);
+
     boolean exists(Long TIPId);
+
     void remove(Long TIPId);
+
     List<TIPDto> find(Long facebookUserId, Geometry location, String type, Long cityId, Integer favouritedBy, Double radius);
 }

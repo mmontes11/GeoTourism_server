@@ -35,13 +35,14 @@
         <slf4j.version>1.6.6</slf4j.version>
         <javassist.version>3.15.0-GA</javassist.version>
         <cglib.version>2.2</cglib.version>
-        <hibernate.version>4.0</hibernate.version>
-        <spring.version>4.2.1.RELEASE</spring.version>
+        <hibernate.version>5.0.2.Final</hibernate.version>
+        <spring.version>4.0.2.RELEASE</spring.version>
         <junit.version>4.11</junit.version>
         <aws.sdk.version>1.9.6</aws.sdk.version>
         <geotools.version>15-SNAPSHOT</geotools.version>
         <commons-validator.version>1.4.0</commons-validator.version>
         <jackson.version>1.9.10</jackson.version>
+        <jswonwebtoken.version>0.4</jswonwebtoken.version>
         <!-- Plugin versions -->
         <mavenSurefirePlugin.version>2.18.1</mavenSurefirePlugin.version>
         <mavenCompilerPlugin.version>2.3.2</mavenCompilerPlugin.version>
@@ -119,6 +120,16 @@
             <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>org.springframework.security</groupId>
+            <artifactId>spring-security-web</artifactId>
+            <version>${spring.version}</version>
+        </dependency>
+        <dependency>
+             <groupId>org.springframework.security</groupId>
+             <artifactId>spring-security-config</artifactId>
+             <version>${spring.version}</version>
+        </dependency>
         <!-- JUnit -->
         <dependency>
             <groupId>junit</groupId>
@@ -159,6 +170,12 @@
             <groupId>org.codehaus.jackson</groupId>
             <artifactId>jackson-mapper-asl</artifactId>
             <version>${jackson.version}</version>
+        </dependency>
+        <!-- JJSONWebToken -->
+        <dependency>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jswonwebtoken.version}</version>
         </dependency>
     </dependencies>
 

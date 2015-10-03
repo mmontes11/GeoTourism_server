@@ -1,5 +1,5 @@
-<web-app id="GeoTourism" version="2.4"
-         xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="GeoTourism"
+         version="2.4" xmlns="http://java.sun.com/xml/ns/j2ee"
          xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee
 	http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
 
@@ -9,10 +9,6 @@
         <param-name>contextConfigLocation</param-name>
         <param-value>classpath:/spring-config.xml</param-value>
     </context-param>
-
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
 
     <filter>
         <filter-name>openSessionInView</filter-name>
@@ -38,5 +34,9 @@
         <servlet-name>REST</servlet-name>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
+
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
 
 </web-app>

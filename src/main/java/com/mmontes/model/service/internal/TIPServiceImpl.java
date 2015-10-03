@@ -2,7 +2,7 @@ package com.mmontes.model.service.internal;
 
 import com.mmontes.model.dao.TIPDao;
 import com.mmontes.model.entity.City;
-import com.mmontes.model.entity.TIP.*;
+import com.mmontes.model.entity.TIP;
 import com.mmontes.model.service.external.AmazonService;
 import com.mmontes.model.service.external.GoogleMapsService;
 import com.mmontes.model.service.external.WikipediaService;
@@ -34,23 +34,8 @@ public class TIPServiceImpl implements TIPService {
 
     public TIPDto create(String type, String name, String description, String photoUrl, String photoContent, String extension, String infoUrl, Geometry geom) throws AmazonServiceExeption, TIPLocationException, WikipediaServiceException, InvalidTIPUrlException {
 
-        TIP tip = null;
-        if (type.equals(MONUMENT_DISCRIMINATOR)){
-            tip = new Monument();
-        }
-        if (type.equals(NATURAL_SPACE_DISCRIMINATOR)){
-            tip = new NaturalSpace();
-        }
-        if (type.equals(HOTEL_DISCRIMINATOR)){
-            tip = new Hotel();
-        }
-        if (type.equals(RESTAURANT_DISCRIMINATOR)){
-            tip = new Restaurant();
-        }
-        if (tip == null){
-            tip = new TIP();
-        }
-
+        TIP tip = new TIP();
+        tip.setType(type);
         tip.setName(name);
         tip.setDescription(description);
         tip.setGeom(geom);
@@ -59,7 +44,7 @@ public class TIPServiceImpl implements TIPService {
         if (photoUrl != null){
             tip.setPhotoUrl(photoUrl);
         }else{
-            if (photoContent != null){
+            if (photoContent != null && extension != null){
                 String url;
                 try {
                     url = AmazonService.uploadFile(name, extension, photoContent);
@@ -69,6 +54,7 @@ public class TIPServiceImpl implements TIPService {
                 }
             }
         }
+
         City city = cityService.getCityFromLocation(geom);
         if (city != null){
             tip.setCity(city);

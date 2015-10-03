@@ -1,6 +1,6 @@
 package com.mmontes.util.dto;
 
-import com.mmontes.model.entity.TIP.TIP;
+import com.mmontes.model.entity.TIP;
 import com.mmontes.model.entity.Comment;
 import com.mmontes.model.entity.User;
 import com.mmontes.model.util.TIPUtils;
@@ -12,7 +12,7 @@ import java.util.List;
 public class DtoConversor {
 
     public static TIPDto TIP2TIPDto(TIP tip){
-        String type = TIPUtils.getType(tip);
+        String type = tip.getType();
         String geom = GeometryConversor.wktFromGeometry(tip.getGeom());
         String cityName = tip.getCity().getName();
         String regionName = tip.getCity().getRegion().getName();

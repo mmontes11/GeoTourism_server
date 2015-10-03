@@ -1,4 +1,4 @@
-package com.mmontes.model.entity.TIP;
+package com.mmontes.model.entity;
 
 import com.mmontes.model.entity.City;
 import com.vividsolutions.jts.geom.Geometry;
@@ -9,10 +9,6 @@ import javax.persistence.*;
 @Entity
 @Table(name = "tip")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
-@DiscriminatorColumn(
-        name="type",
-        discriminatorType = DiscriminatorType.STRING
-)
 public class TIP {
 
     private Long id;
@@ -61,6 +57,15 @@ public class TIP {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Column(name = "type")
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Column(name = "geom")

@@ -17,7 +17,7 @@ public class AdminServiceImpl implements AdminService{
     public boolean checkPassword(String username, String password) {
         try {
             Admin admin = adminDao.findByUsername(username);
-            return adminDao.checkPassword(username,password);
+            return adminDao.checkPassword(admin.getUsername(),password);
         } catch (InstanceNotFoundException e) {
             e.printStackTrace();
             return false;

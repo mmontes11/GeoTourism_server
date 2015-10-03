@@ -10,6 +10,15 @@
         <param-value>classpath:/spring-config.xml</param-value>
     </context-param>
 
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <filter>
+        <filter-name>adminSecurityFilter</filter-name>
+        <filter-class>com.mmontes.rest.security.AdminSecurityFilter</filter-class>
+    </filter>
+
     <filter>
         <filter-name>openSessionInView</filter-name>
         <filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
@@ -18,6 +27,11 @@
             <param-value>sessionFactory</param-value>
         </init-param>
     </filter>
+
+    <filter-mapping>
+        <filter-name>adminSecurityFilter</filter-name>
+        <url-pattern>/admin/*</url-pattern>
+    </filter-mapping>
 
     <filter-mapping>
         <filter-name>openSessionInView</filter-name>
@@ -34,9 +48,5 @@
         <servlet-name>REST</servlet-name>
         <url-pattern>/*</url-pattern>
     </servlet-mapping>
-
-    <listener>
-        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
-    </listener>
 
 </web-app>

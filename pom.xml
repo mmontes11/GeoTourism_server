@@ -35,14 +35,16 @@
         <slf4j.version>1.6.6</slf4j.version>
         <javassist.version>3.15.0-GA</javassist.version>
         <cglib.version>2.2</cglib.version>
-        <hibernate.version>5.0.2.Final</hibernate.version>
+        <hibernate.version>4.0</hibernate.version>
         <spring.version>4.0.2.RELEASE</spring.version>
+        <jjwt.version>0.5.1</jjwt.version>
         <junit.version>4.11</junit.version>
         <aws.sdk.version>1.9.6</aws.sdk.version>
         <geotools.version>15-SNAPSHOT</geotools.version>
-        <commons-validator.version>1.4.0</commons-validator.version>
-        <jackson.version>1.9.10</jackson.version>
-        <jswonwebtoken.version>0.4</jswonwebtoken.version>
+        <commons.io.version>2.4</commons.io.version>
+        <commons.validator.version>1.4.0</commons.validator.version>
+        <jackson.version>2.4.2</jackson.version>
+        <servlet.api>3.0.1</servlet.api>
         <!-- Plugin versions -->
         <mavenSurefirePlugin.version>2.18.1</mavenSurefirePlugin.version>
         <mavenCompilerPlugin.version>2.3.2</mavenCompilerPlugin.version>
@@ -51,7 +53,7 @@
         <mavenAssemblyPlugin.version>2.$2.1</mavenAssemblyPlugin.version>
         <jettyMavenPlugin>9.2.11.v20150529</jettyMavenPlugin>
         <!-- Skip tests -->
-        <skipTests>false</skipTests>
+        <skipTests>true</skipTests>
     </properties>
 
     <dependencies>
@@ -120,15 +122,11 @@
             <version>${spring.version}</version>
             <scope>test</scope>
         </dependency>
+        <!-- JJSONWebtoken -->
         <dependency>
-            <groupId>org.springframework.security</groupId>
-            <artifactId>spring-security-web</artifactId>
-            <version>${spring.version}</version>
-        </dependency>
-        <dependency>
-             <groupId>org.springframework.security</groupId>
-             <artifactId>spring-security-config</artifactId>
-             <version>${spring.version}</version>
+            <groupId>io.jsonwebtoken</groupId>
+            <artifactId>jjwt</artifactId>
+            <version>${jjwt.version}</version>
         </dependency>
         <!-- JUnit -->
         <dependency>
@@ -159,23 +157,30 @@
             <artifactId>gt-geojson</artifactId>
             <version>${geotools.version}</version>
         </dependency>
+        <!-- Commons io -->
+        <dependency>
+            <groupId>commons-io</groupId>
+            <artifactId>commons-io</artifactId>
+            <version>${commons.io.version}</version>
+        </dependency>
         <!-- Commons Validator-->
         <dependency>
             <groupId>commons-validator</groupId>
             <artifactId>commons-validator</artifactId>
-            <version>${commons-validator.version}</version>
+            <version>${commons.validator.version}</version>
         </dependency>
         <!-- Jackson -->
         <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
             <version>${jackson.version}</version>
         </dependency>
-        <!-- JJSONWebToken -->
+        <!-- Servlet API -->
         <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>${jswonwebtoken.version}</version>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>${servlet.api}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
@@ -260,8 +265,8 @@
                 <version>${mavenCompilerPlugin.version}</version>
                 <configuration>
                     <verbose>true</verbose>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>1.7</source>
+                    <target>1.7</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
                     <showDeprecation>true</showDeprecation>
                     <showWarnings>true</showWarnings>

@@ -18,4 +18,11 @@ public class CityServiceImpl implements CityService{
     public City getCityFromLocation(Geometry location) {
         return cityDao.getCityFromLocation(location);
     }
+
+    @Override
+    public boolean isLocatedInExistingCity(Geometry location) {
+        return (cityDao.getCityFromLocation(location) != null);
+    }
+
+
 }

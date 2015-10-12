@@ -55,36 +55,5 @@ public class TIPController {
         return new ResponseEntity<>(ResponseFactory.geCreatedResponse(tipDto.getId()), HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/tip", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<List<TIPDto>>
-        find(@RequestParam(value = "facebookUserId", required = false) Long facebookUserId,
-             @RequestParam(value = "locationString", required = false) String locationString,
-             @RequestParam(value = "type", required = false) String type,
-             @RequestParam(value = "cityId", required = false) Long cityId,
-             @RequestParam(value = "favouritedBy", required = false) Integer favouritedBy,
-             @RequestParam(value = "radius", required = false) Double radius) {
 
-        System.out.println("Find TIPs:");
-        System.out.println(facebookUserId);
-        System.out.println(locationString);
-        System.out.println(type);
-        System.out.println(cityId);
-        System.out.println(favouritedBy);
-        System.out.println(radius);
-
-        //TODO: validate params
-
-        Point location = null;
-        try {
-            if (locationString != null) {
-                location = GeometryConversor.pointFromText(locationString);
-            }
-        } catch (GeometryParsingException e) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-
-        List<TIPDto> tips = tipService.find(facebookUserId, location, type, cityId, favouritedBy, radius);
-
-        return new ResponseEntity<>(tips,HttpStatus.OK);
-    }
 }

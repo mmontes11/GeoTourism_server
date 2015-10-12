@@ -7,15 +7,8 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.io.WKTReader;
 import com.vividsolutions.jts.io.WKTWriter;
-import org.geotools.geojson.GeoJSON;
-import org.geotools.geojson.geom.GeometryJSON;
-import org.geotools.geometry.text.WKTParser;
 
-import java.io.IOException;
-import java.io.Reader;
-import java.io.StringReader;
-
-import static com.mmontes.util.Constants.SRID_INSERT;
+import static com.mmontes.util.Constants.SRID;
 
 public class GeometryConversor {
 
@@ -24,7 +17,7 @@ public class GeometryConversor {
         Geometry geometry;
         try {
             geometry = wktReader.read(wkt);
-            geometry.setSRID(SRID_INSERT);
+            geometry.setSRID(SRID);
             return geometry;
         } catch (com.vividsolutions.jts.io.ParseException e) {
             throw new GeometryParsingException(e.getMessage());
@@ -52,33 +45,9 @@ public class GeometryConversor {
         Coordinate coordinate = new Coordinate(x, y);
         GeometryFactory geometryFactory = new GeometryFactory();
         Point point = geometryFactory.createPoint(coordinate);
-        point.setSRID(SRID_INSERT);
+        point.setSRID(SRID);
         return point;
     }
-/*
-    public static Geometry geometryFromGeoJSON(GeoJSON geoJSON) throws GeometryParsingException {
-        GeometryJSON geometryJSON = new GeometryJSON();
-        try {
-            Geometry geometry = geometryJSON.read(geoJSON);
-            geometry.setSRID(SRID_INSERT);
-            return geometry;
-        } catch (IOException e) {
-            throw new GeometryParsingException(e.getMessage());
-        }
-    }
-
-    public static Geometry geometryFromGeoJSONText(String geoJSON) throws GeometryParsingException {
-        GeometryJSON geometryJSON = new GeometryJSON();
-        Reader reader = new StringReader(geoJSON);
-        try {
-            Geometry geometry = geometryJSON.read(reader);
-            geometry.setSRID(SRID_INSERT);
-            return geometry;
-        } catch (IOException e) {
-            throw new GeometryParsingException(geoJSON);
-        }
-    }
-*/
 
 }
 

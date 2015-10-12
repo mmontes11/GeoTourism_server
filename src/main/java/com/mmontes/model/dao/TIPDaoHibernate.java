@@ -2,6 +2,7 @@ package com.mmontes.model.dao;
 
 import com.mmontes.model.entity.TIP;
 import com.mmontes.model.util.dao.GenericDaoHibernate;
+import com.mmontes.util.GeometryConversor;
 import com.vividsolutions.jts.geom.Geometry;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
@@ -15,33 +16,25 @@ public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements T
 
     public List<TIP> find(Geometry location, String type, Long cityId, List<Long> facebookUserIds, Double radius) {
 
-        boolean filterByLocation = false;
         boolean filterByType = false;
-        boolean filterByCity= false;
-        boolean filterByFacebookUsers = false;
+        boolean filterByLocation = false;
 
-        String queryString = "SELECT tip FROM TIP tip ";
+        String queryString = "SELECT * FROM tip ";
         if (type != null){
-            queryString += "WHERE type = :type ";
+            queryString += "WHERE type = '"+type+"' ";
             filterByType = true;
         }
         if (location != null){
-            String filterLocationString = "dwithin(transform(tip.geom,:srid), transform(:location,:srid), :radius) = true ";
+            String locationWKT = GeometryConversor.wktFromGeometry(location);
+            Double r = radius != null ? radius : SEARCH_RADIUS_METRES;
+            String filterLocationString = "ST_DWithin(ST_GeographyFromText(ST_AsText(geom)), ST_GeographyFromText('"+locationWKT+"'), "+r+")";
+
             queryString += filterByType? "AND " + filterLocationString : "WHERE " + filterLocationString;
             queryString += " ";
             filterByLocation= true;
         }
 
-        Query query = getSession().createQuery(queryString);
-        if (filterByType){
-            query.setParameter("type",type);
-        }
-        if (filterByLocation){
-            double r = radius != null ? radius : SEARCH_RADIUS_METRES;
-            query.setParameter("srid",SRID_DWITHIN)
-                    .setParameter("location", location)
-                    .setParameter("radius",r);
-        }
+        Query query = getSession().createSQLQuery(queryString).addEntity(TIP.class);
         return query.list();
     }
 

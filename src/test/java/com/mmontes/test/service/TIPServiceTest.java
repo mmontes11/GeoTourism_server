@@ -8,6 +8,7 @@ import com.vividsolutions.jts.geom.Point;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,6 +69,7 @@ public class TIPServiceTest {
     }
 
     @Test
+    @Rollback(false)
     public void createFindTIP(){
         String name = "Santiago de Compostela cathedral";
         String description = "Human patrimony";

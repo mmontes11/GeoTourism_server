@@ -1,6 +1,5 @@
 package com.mmontes.model.entity;
 
-import com.mmontes.model.entity.City;
 import com.vividsolutions.jts.geom.Geometry;
 import org.hibernate.annotations.Type;
 
@@ -8,9 +7,9 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "tip")
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 public class TIP {
 
+    private static final String TIP_ID_GENERATOR = "TIPIdGenerator";
     private Long id;
     private String name;
     private String type;
@@ -21,12 +20,11 @@ public class TIP {
     private String infoUrl;
     private String googleMapsUrl;
     private City city;
-    private static final String TIP_ID_GENERATOR = "TIPIdGenerator";
 
     public TIP() {
     }
 
-    public TIP(String name, String type, Geometry geom, String address, String description, String photoUrl, String infoUrl, String googleMapsUrl, City city) {
+    public TIP(Long id, String name, String type, Geometry geom, String address, String description, String photoUrl, String infoUrl, String googleMapsUrl, City city) {
         this.name = name;
         this.type = type;
         this.geom = geom;

@@ -24,7 +24,7 @@ public class TIPsController {
     @RequestMapping(value = "/tips", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<List<TIPDto>>
     find(@RequestParam(value = "facebookUserId", required = false) Long facebookUserId,
-         @RequestParam(value = "locationString", required = false) String locationString,
+         @RequestParam(value = "location", required = false) String locationString,
          @RequestParam(value = "type", required = false) String type,
          @RequestParam(value = "cityId", required = false) Long cityId,
          @RequestParam(value = "favouritedBy", required = false) Integer favouritedBy,

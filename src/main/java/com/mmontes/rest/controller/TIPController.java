@@ -1,22 +1,22 @@
 package com.mmontes.rest.controller;
 
+import com.mmontes.model.service.internal.TIPService;
 import com.mmontes.model.util.TIPUtils;
 import com.mmontes.rest.request.TIPRequest;
 import com.mmontes.rest.response.ResponseFactory;
-import com.mmontes.model.service.internal.TIPService;
 import com.mmontes.util.GeometryConversor;
 import com.mmontes.util.dto.TIPDto;
 import com.mmontes.util.exception.GeometryParsingException;
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.Point;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class TIPController {
@@ -26,7 +26,7 @@ public class TIPController {
 
     @RequestMapping(value = "/admin/tip", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<JSONObject>
-        create(@RequestBody TIPRequest tipRequest) {
+    create(@RequestBody TIPRequest tipRequest) {
 
         System.out.println("Create TIP:");
         System.out.println(tipRequest);

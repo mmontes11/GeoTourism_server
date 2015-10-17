@@ -51,6 +51,6 @@ public class TIPsController {
 
         List<TIPDto> tips = tipService.find(facebookUserId, location, type, cityId, favouritedBy, radius);
 
-        return new ResponseEntity<>(tips,HttpStatus.OK);
+        return new ResponseEntity<>(tips, HttpStatus.OK);
     }
 }

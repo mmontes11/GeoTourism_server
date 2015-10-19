@@ -32,7 +32,7 @@ public class TIPServiceImpl implements TIPService {
     @Autowired
     private CityService cityService;
 
-    public TIPDto create(String type, String name, String description, String photoUrl, String photoContent, String extension, String infoUrl, Geometry geom) throws AmazonServiceExeption, TIPLocationException, WikipediaServiceException, InvalidTIPUrlException {
+    public TIPDto create(String type, String name, String description, String photoUrl, String photoContent, String photoName, String infoUrl, Geometry geom) throws AmazonServiceExeption, TIPLocationException, WikipediaServiceException, InvalidTIPUrlException {
 
         TIP tip = new TIP();
         tip.setType(type);
@@ -44,10 +44,10 @@ public class TIPServiceImpl implements TIPService {
         if (photoUrl != null){
             tip.setPhotoUrl(photoUrl);
         }else{
-            if (photoContent != null && extension != null){
+            if (photoContent != null && photoName != null){
                 String url;
                 try {
-                    url = AmazonService.uploadFile(name, extension, photoContent);
+                    url = AmazonService.uploadFile(name, photoName, photoContent);
                     tip.setPhotoUrl(url);
                 } catch (Exception e) {
                     throw new AmazonServiceExeption();

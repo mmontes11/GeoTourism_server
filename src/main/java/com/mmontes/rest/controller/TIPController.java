@@ -26,9 +26,6 @@ public class TIPController {
     public ResponseEntity<TIPDto>
     create(@RequestBody TIPRequest tipRequest) {
 
-        System.out.println("Create TIP:");
-        System.out.println(tipRequest);
-
         if (!TIPUtils.isValidType(tipRequest.getType()) ||
                 tipRequest.getName() == null || tipRequest.getName().isEmpty() ||
                 tipRequest.getGeometry() == null || tipRequest.getGeometry().isEmpty()) {
@@ -44,7 +41,7 @@ public class TIPController {
         TIPDto tipDto;
         try {
             tipDto = tipService.create(tipRequest.getType(), tipRequest.getName(), tipRequest.getDescription(),
-                    tipRequest.getPhotoUrl(), tipRequest.getPhotoContent(), tipRequest.getExtension(),
+                    tipRequest.getPhotoUrl(), tipRequest.getPhotoContent(), tipRequest.getPhotoName(),
                     tipRequest.getInfoUrl(), geometry);
         } catch (Exception e) {
             e.printStackTrace();

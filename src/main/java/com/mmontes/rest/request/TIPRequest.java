@@ -7,20 +7,20 @@ public class TIPRequest {
     String description;
     String photoUrl;
     String photoContent;
-    String extension;
+    String photoName;
     String infoUrl;
     String geometry;
 
     public TIPRequest() {
     }
 
-    public TIPRequest(String type, String name, String description, String photoUrl, String photoContent, String extension, String infoUrl, String geometry) {
+    public TIPRequest(String type, String name, String description, String photoUrl, String photoContent, String photoName, String infoUrl, String geometry) {
         this.type = type;
         this.name = name;
         this.description = description;
         this.photoUrl = photoUrl;
         this.photoContent = photoContent;
-        this.extension = extension;
+        this.photoName = photoName;
         this.infoUrl = infoUrl;
         this.geometry = geometry;
     }
@@ -65,12 +65,12 @@ public class TIPRequest {
         this.photoContent = photoContent;
     }
 
-    public String getExtension() {
-        return extension;
+    public String getPhotoName() {
+        return photoName;
     }
 
-    public void setExtension(String extension) {
-        this.extension = extension;
+    public void setPhotoName(String photoName) {
+        this.photoName = photoName;
     }
 
     public String getInfoUrl() {
@@ -97,7 +97,7 @@ public class TIPRequest {
                 ", description='" + description + '\'' +
                 ", photoUrl='" + photoUrl + '\'' +
                 ", photoContent='" + photoContent + '\'' +
-                ", extension='" + extension + '\'' +
+                ", photoName='" + photoName + '\'' +
                 ", infoUrl='" + infoUrl + '\'' +
                 ", geom='" + geometry + '\'' +
                 '}';

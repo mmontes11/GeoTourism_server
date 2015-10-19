@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface TIPService {
 
-    TIPDto create(String type, String name, String description, String photoUrl, String photoContent, String extension, String infoUrl, Geometry geom)
+    TIPDto create(String type, String name, String description, String photoUrl, String photoContent, String photoName, String infoUrl, Geometry geom)
             throws AmazonServiceExeption, TIPLocationException, WikipediaServiceException, InvalidTIPUrlException;
 
     void edit(Long TIPId, String type, String name, String description, String photoUrl, String infoUrl, Geometry geom);

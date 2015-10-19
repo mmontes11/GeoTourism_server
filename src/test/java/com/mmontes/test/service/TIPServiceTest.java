@@ -120,7 +120,7 @@ public class TIPServiceTest {
         Geometry geom = GeometryConversor.pointFromText(POINT_CATEDRAL_SANTIAGO);
         String content = "This is a test file";
         try {
-            TIPDto tipDto = tipService.create(MONUMENT_DISCRIMINATOR,name,description,null,content,".txt",null,geom);
+            TIPDto tipDto = tipService.create(MONUMENT_DISCRIMINATOR,name,description,null,content,"a.txt",null,geom);
         } catch (AmazonServiceExeption | InvalidTIPUrlException | WikipediaServiceException | TIPLocationException e) {
             e.printStackTrace();
             fail();

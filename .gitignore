@@ -4,5 +4,6 @@
 *.war
 *.ear
 
+Constants.java
 target/
 .idea/

@@ -62,7 +62,7 @@ public class TIPServiceTest {
             assertEquals(NAME_REGION_GALICIA, tipDto.getRegion());
             assertEquals(NAME_COUNTRY_ESPANA, tipDto.getCountry());
 
-        } catch (GeometryParsingException | AmazonServiceExeption | TIPLocationException | WikipediaServiceException | InvalidTIPUrlException e) {
+        } catch (GeometryParsingException | GoogleMapsServiceException | AmazonServiceExeption | TIPLocationException | WikipediaServiceException | InvalidTIPUrlException e) {
             e.printStackTrace();
             fail();
         }
@@ -93,7 +93,7 @@ public class TIPServiceTest {
             assertEquals(tipDto.getRegion(), result.getRegion());
             assertEquals(tipDto.getCountry(), result.getCountry());
 
-        } catch (GeometryParsingException | AmazonServiceExeption | InvalidTIPUrlException | WikipediaServiceException | TIPLocationException e) {
+        } catch (GeometryParsingException | GoogleMapsServiceException | AmazonServiceExeption | InvalidTIPUrlException | WikipediaServiceException | TIPLocationException e) {
             e.printStackTrace();
             fail();
         }
@@ -106,27 +106,12 @@ public class TIPServiceTest {
         try {
             Point geom = GeometryConversor.pointFromText(POINT_STATUE_OF_LIBERTRY);
             tipService.create(MONUMENT_DISCRIMINATOR, name, description, null, null, null, null, geom);
-        } catch (GeometryParsingException | AmazonServiceExeption | WikipediaServiceException | InvalidTIPUrlException e) {
+        } catch (GeometryParsingException | GoogleMapsServiceException | AmazonServiceExeption | WikipediaServiceException | InvalidTIPUrlException e) {
             e.printStackTrace();
             fail();
         }
     }
 
-    /*
-    @Test
-    public void uploadAmazonS3() {
-        String name = "Santiago de Compostela cathedral";
-        String description = "Human patrimony";
-        Geometry geom = GeometryConversor.pointFromText(POINT_CATEDRAL_SANTIAGO);
-        String content = "This is a test file";
-        try {
-            TIPDto tipDto = tipService.create(MONUMENT_DISCRIMINATOR,name,description,null,content,"a.txt",null,geom);
-        } catch (AmazonServiceExeption | InvalidTIPUrlException | WikipediaServiceException | TIPLocationException e) {
-            e.printStackTrace();
-            fail();
-        }
-    }
-    */
 
     @Test
     public void findTipsOfCurrentCity(){
@@ -144,7 +129,7 @@ public class TIPServiceTest {
             geom = GeometryConversor.pointFromText(POINT_CATEDRAL_SANTIAGO);
             santiagoCathedral = tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, null, null, geom);
             location = GeometryConversor.pointFromText(POINT_ALAMEDA);
-        } catch (GeometryParsingException | AmazonServiceExeption | WikipediaServiceException | InvalidTIPUrlException | TIPLocationException e) {
+        } catch (GeometryParsingException | GoogleMapsServiceException | AmazonServiceExeption | WikipediaServiceException | InvalidTIPUrlException | TIPLocationException e) {
             e.printStackTrace();
             fail();
         }
@@ -170,7 +155,7 @@ public class TIPServiceTest {
             geom = GeometryConversor.pointFromText(POINT_CATEDRAL_SANTIAGO);
             tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, null, null, geom);
             location = GeometryConversor.pointFromText(POINT_STATUE_OF_LIBERTRY);
-        } catch (GeometryParsingException | AmazonServiceExeption | WikipediaServiceException | InvalidTIPUrlException | TIPLocationException e) {
+        } catch (GeometryParsingException | GoogleMapsServiceException | AmazonServiceExeption | WikipediaServiceException | InvalidTIPUrlException | TIPLocationException e) {
             e.printStackTrace();
             fail();
         }

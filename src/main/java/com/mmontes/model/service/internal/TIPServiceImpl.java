@@ -9,10 +9,8 @@ import com.mmontes.model.service.external.WikipediaService;
 import com.mmontes.util.URLvalidator;
 import com.mmontes.util.dto.DtoConversor;
 import com.mmontes.util.dto.TIPDto;
-import com.mmontes.util.exception.AmazonServiceExeption;
-import com.mmontes.util.exception.InvalidTIPUrlException;
-import com.mmontes.util.exception.TIPLocationException;
-import com.mmontes.util.exception.WikipediaServiceException;
+import com.mmontes.util.exception.*;
+import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,14 +30,23 @@ public class TIPServiceImpl implements TIPService {
     @Autowired
     private CityService cityService;
 
-    public TIPDto create(String type, String name, String description, String photoUrl, String photoContent, String photoName, String infoUrl, Geometry geom) throws AmazonServiceExeption, TIPLocationException, WikipediaServiceException, InvalidTIPUrlException {
+    public TIPDto
+    create(String type, String name, String description, String photoUrl, String photoContent, String photoName, String infoUrl, Geometry geom)
+            throws AmazonServiceExeption, TIPLocationException, WikipediaServiceException, InvalidTIPUrlException, GoogleMapsServiceException {
 
         TIP tip = new TIP();
         tip.setType(type);
         tip.setName(name);
         tip.setDescription(description);
         tip.setGeom(geom);
-        tip.setGoogleMapsUrl(GoogleMapsService.getTIPGoogleMapsUrl(tip.getGeom().getCoordinate()));
+
+        Coordinate coordinate = tip.getGeom().getCoordinate();
+        tip.setGoogleMapsUrl(GoogleMapsService.getTIPGoogleMapsUrl(coordinate));
+        try {
+            tip.setAddress(GoogleMapsService.getAddress(coordinate));
+        } catch (Exception e) {
+            throw new GoogleMapsServiceException();
+        }
 
         if (photoUrl != null){
             tip.setPhotoUrl(photoUrl);

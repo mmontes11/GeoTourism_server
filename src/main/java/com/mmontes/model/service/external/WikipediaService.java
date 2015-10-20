@@ -26,7 +26,7 @@ public class WikipediaService {
 
         int responseCode = connnection.getResponseCode();
         if (responseCode >= 400) {
-            throw new Exception("Request Error");
+            throw new Exception("Request to Wikipedia failed");
         }
 
         Document document = XMLParser.parseXml(connnection.getInputStream());

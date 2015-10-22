@@ -45,6 +45,7 @@ public class TIPServiceImpl implements TIPService {
         try {
             tip.setAddress(GoogleMapsService.getAddress(coordinate));
         } catch (Exception e) {
+            e.printStackTrace();
             throw new GoogleMapsServiceException();
         }
 

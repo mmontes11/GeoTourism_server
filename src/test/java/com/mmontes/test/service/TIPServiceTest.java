@@ -40,7 +40,7 @@ public class TIPServiceTest {
             assertEquals(description, tipDto.getDescription());
             assertNotNull(tipDto.getGeom());
             assertEquals(VALID_TIP_PHOTO_URL, tipDto.getPhotoUrl());
-            assertNotNull(tipDto.getInforUrl());
+            assertNotNull(tipDto.getInfoUrl());
             assertNotNull(tipDto.getGoogleMapsUrl());
             assertEquals(NAME_CITY_A_CORUNA, tipDto.getCity());
             assertEquals(NAME_REGION_GALICIA, tipDto.getRegion());
@@ -56,7 +56,7 @@ public class TIPServiceTest {
             assertEquals(description, tipDto.getDescription());
             assertNotNull(tipDto.getGeom());
             assertEquals(VALID_TIP_PHOTO_URL, tipDto.getPhotoUrl());
-            assertNotNull(tipDto.getInforUrl());
+            assertNotNull(tipDto.getInfoUrl());
             assertNotNull(tipDto.getGoogleMapsUrl());
             assertEquals(NAME_CITY_SANTIAGO, tipDto.getCity());
             assertEquals(NAME_REGION_GALICIA, tipDto.getRegion());
@@ -87,7 +87,7 @@ public class TIPServiceTest {
             assertEquals(tipDto.getGeom(), result.getGeom());
             assertEquals(tipDto.getDescription(), result.getDescription());
             assertEquals(tipDto.getPhotoUrl(), result.getPhotoUrl());
-            assertEquals(tipDto.getInforUrl(), result.getInforUrl());
+            assertEquals(tipDto.getInfoUrl(), result.getInfoUrl());
             assertEquals(tipDto.getGoogleMapsUrl(), result.getGoogleMapsUrl());
             assertEquals(tipDto.getCity(), result.getCity());
             assertEquals(tipDto.getRegion(), result.getRegion());

@@ -3,6 +3,7 @@ package com.mmontes.model.service.external;
 import com.amazonaws.util.json.JSONObject;
 import com.mmontes.util.Constants;
 import com.mmontes.util.JSONParser;
+import com.mmontes.util.exception.GoogleMapsServiceException;
 import com.vividsolutions.jts.geom.Coordinate;
 
 import java.net.HttpURLConnection;
@@ -24,7 +25,7 @@ public class GoogleMapsService {
 
         int responseCode = connnection.getResponseCode();
         if (responseCode >= 400) {
-            throw new Exception("Request to Google Maps failed");
+            throw new GoogleMapsServiceException();
         }
 
         JSONObject obj = JSONParser.parseJSON(connnection.getInputStream());

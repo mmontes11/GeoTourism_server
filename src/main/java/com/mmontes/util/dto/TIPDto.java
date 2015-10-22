@@ -10,7 +10,7 @@ public class TIPDto {
     private String geom;
     private String address;
     private String photoUrl;
-    private String inforUrl;
+    private String infoUrl;
     private String googleMapsUrl;
     private String city;
     private String region;
@@ -27,7 +27,7 @@ public class TIPDto {
         this.geom = geom;
         this.address = address;
         this.photoUrl = photoUrl;
-        this.inforUrl = inforUrl;
+        this.infoUrl = inforUrl;
         this.googleMapsUrl = googleMapsUrl;
         this.city = city;
         this.region = region;
@@ -90,12 +90,12 @@ public class TIPDto {
         this.photoUrl = photoUrl;
     }
 
-    public String getInforUrl() {
-        return inforUrl;
+    public String getInfoUrl() {
+        return infoUrl;
     }
 
-    public void setInforUrl(String inforUrl) {
-        this.inforUrl = inforUrl;
+    public void setInfoUrl(String infoUrl) {
+        this.infoUrl = infoUrl;
     }
 
     public String getGoogleMapsUrl() {

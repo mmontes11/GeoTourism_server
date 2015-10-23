@@ -97,16 +97,16 @@ public class TIPServiceImpl implements TIPService {
 
     }
 
-    public TIPDto findById(Long TIPId) {
-        return null;
+    public TIPDto findById(Long TIPId) throws InstanceNotFoundException {
+        return DtoConversor.TIP2TIPDto(tipDao.findById(TIPId));
     }
 
     public boolean exists(Long TIPId) {
-        return false;
+        return tipDao.exists(TIPId);
     }
 
-    public void remove(Long TIPId) {
-
+    public void remove(Long TIPId) throws InstanceNotFoundException {
+        tipDao.remove(TIPId);
     }
 
     public List<TIPDto> find(Long facebookUserId, Geometry location, String type, Long cityId, Integer favouritedBy, Double radius) {

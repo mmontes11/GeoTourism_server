@@ -25,6 +25,7 @@ public class GoogleMapsService {
 
         int responseCode = connnection.getResponseCode();
         if (responseCode >= 400) {
+            System.out.println(requestUrl);
             throw new GoogleMapsServiceException();
         }
 

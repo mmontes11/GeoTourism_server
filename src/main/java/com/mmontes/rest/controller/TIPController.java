@@ -6,15 +6,13 @@ import com.mmontes.rest.request.TIPRequest;
 import com.mmontes.util.GeometryConversor;
 import com.mmontes.util.dto.TIPDto;
 import com.mmontes.util.exception.GeometryParsingException;
+import com.mmontes.util.exception.InstanceNotFoundException;
 import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class TIPController {
@@ -48,5 +46,16 @@ public class TIPController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(tipDto, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/admin/tip/{TIPId}", method = RequestMethod.DELETE)
+    public ResponseEntity
+    delete(@PathVariable Long TIPId) {
+        try {
+            tipService.remove(TIPId);
+        } catch (InstanceNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

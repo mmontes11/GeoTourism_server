@@ -14,11 +14,11 @@ public interface TIPService {
 
     void edit(Long TIPId, String type, String name, String description, String photoUrl, String infoUrl, Geometry geom);
 
-    TIPDto findById(Long TIPId);
+    TIPDto findById(Long TIPId) throws InstanceNotFoundException;
 
     boolean exists(Long TIPId);
 
-    void remove(Long TIPId);
+    void remove(Long TIPId) throws InstanceNotFoundException;
 
     List<TIPDto> find(Long facebookUserId, Geometry location, String type, Long cityId, Integer favouritedBy, Double radius);
 }

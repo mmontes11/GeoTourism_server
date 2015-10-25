@@ -6,6 +6,7 @@ import com.mmontes.model.entity.TIP;
 import com.mmontes.model.service.external.AmazonService;
 import com.mmontes.model.service.external.GoogleMapsService;
 import com.mmontes.model.service.external.WikipediaService;
+import com.mmontes.rest.request.TIPPatchRequest;
 import com.mmontes.util.URLvalidator;
 import com.mmontes.util.dto.DtoConversor;
 import com.mmontes.util.dto.TIPDto;
@@ -52,10 +53,10 @@ public class TIPServiceImpl implements TIPService {
         if (photoUrl != null){
             tip.setPhotoUrl(photoUrl);
         }else{
-            if (photoContent != null && photoName != null){
+            if (photoName != null && photoContent != null){
                 String url;
                 try {
-                    url = AmazonService.uploadFile(name, photoName, photoContent);
+                    url = AmazonService.uploadFile(photoName, photoContent);
                     tip.setPhotoUrl(url);
                 } catch (Exception e) {
                     throw new AmazonServiceExeption();
@@ -93,10 +94,6 @@ public class TIPServiceImpl implements TIPService {
         return DtoConversor.TIP2TIPDto(tip);
     }
 
-    public void edit(Long TIPId, String type, String name, String description, String photoUrl, String infoUrl, Geometry geom) {
-
-    }
-
     public TIPDto findById(Long TIPId) throws InstanceNotFoundException {
         return DtoConversor.TIP2TIPDto(tipDao.findById(TIPId));
     }
@@ -112,5 +109,27 @@ public class TIPServiceImpl implements TIPService {
     public List<TIPDto> find(Long facebookUserId, Geometry location, String type, Long cityId, Integer favouritedBy, Double radius) {
         List<TIP> tips = tipDao.find(location,type,cityId,null,radius);
         return DtoConversor.ListTIP2ListTIPDto(tips);
+    }
+
+    public void edit(Long TIPId, TIPPatchRequest newData) throws InstanceNotFoundException, AmazonServiceExeption {
+        TIP tip = tipDao.findById(TIPId);
+        tip.setType(newData.getType());
+        tip.setName(newData.getName());
+        tip.setDescription(newData.getDescription());
+        tip.setInfoUrl(newData.getInfoUrl());
+        if (newData.getPhotoUrl() != null){
+            tip.setPhotoUrl(newData.getPhotoUrl());
+        }else{
+            if (newData.getPhotoName() != null && newData.getPhotoContent() != null){
+                String url;
+                try {
+                    url = AmazonService.uploadFile(newData.getPhotoName(), newData.getPhotoContent());
+                    tip.setPhotoUrl(url);
+                } catch (Exception e) {
+                    throw new AmazonServiceExeption();
+                }
+            }
+        }
+        tipDao.save(tip);
     }
 }

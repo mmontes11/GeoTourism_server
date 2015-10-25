@@ -2,9 +2,11 @@ package com.mmontes.rest.controller;
 
 import com.mmontes.model.service.internal.TIPService;
 import com.mmontes.model.util.TIPUtils;
+import com.mmontes.rest.request.TIPPatchRequest;
 import com.mmontes.rest.request.TIPRequest;
 import com.mmontes.util.GeometryConversor;
 import com.mmontes.util.dto.TIPDto;
+import com.mmontes.util.exception.AmazonServiceExeption;
 import com.mmontes.util.exception.GeometryParsingException;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import com.vividsolutions.jts.geom.Geometry;
@@ -48,6 +50,18 @@ public class TIPController {
         return new ResponseEntity<>(tipDto, HttpStatus.CREATED);
     }
 
+    @RequestMapping(value = "/admin/tip/{TIPId}", method = RequestMethod.GET)
+    public ResponseEntity<TIPDto>
+    find(@PathVariable Long TIPId) {
+        TIPDto tipDto;
+        try {
+            tipDto = tipService.findById(TIPId);
+        } catch (InstanceNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(tipDto, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/admin/tip/{TIPId}", method = RequestMethod.DELETE)
     public ResponseEntity
     delete(@PathVariable Long TIPId) {
@@ -55,6 +69,21 @@ public class TIPController {
             tipService.remove(TIPId);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/admin/tip/{TIPId}", method = RequestMethod.PATCH)
+    public ResponseEntity
+    patch(@PathVariable Long TIPId,
+          @RequestBody TIPPatchRequest tipPatchRequest ) {
+        try {
+            tipService.edit(TIPId, tipPatchRequest);
+        } catch (InstanceNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (AmazonServiceExeption e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }

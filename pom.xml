@@ -201,6 +201,10 @@
             <id>boundless</id>
             <name>Boundless Maven Repository</name>
             <url>http://repo.boundlessgeo.com/main</url>
+            <releases>
+                <enabled>true</enabled>
+                <updatePolicy>never</updatePolicy>
+            </releases>
         </repository>
         <repository>
             <id>Hibernate Spatial repo</id>

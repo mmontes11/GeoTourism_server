@@ -15,7 +15,7 @@ import static com.mmontes.util.Constants.AMAZON_S3_ROOT_URL;
 
 public class AmazonService {
 
-    public static String uploadFile (String name,String photoName,String fileContent) throws IOException {
+    public static String uploadFile (String photoName,String fileContent) throws IOException {
 
         String[] parts = fileContent.split("data:")[1].split(";base64,");
         String contentType = parts[0];

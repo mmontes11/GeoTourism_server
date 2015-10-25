@@ -3,7 +3,6 @@ package com.mmontes.util.dto;
 import com.mmontes.model.entity.TIP;
 import com.mmontes.model.entity.Comment;
 import com.mmontes.model.entity.User;
-import com.mmontes.model.util.TIPUtils;
 import com.mmontes.util.GeometryConversor;
 
 import java.util.ArrayList;
@@ -18,18 +17,25 @@ public class DtoConversor {
         String regionName = tip.getCity().getRegion().getName();
         String countryName = tip.getCity().getRegion().getCountry().getName();
 
-        TIPDto tipDto = new TIPDto(tip.getId(),type,tip.getName(),tip.getDescription(), geom, tip.getAddress(),
+        return new TIPDto(tip.getId(),type,tip.getName(),tip.getDescription(), geom, tip.getAddress(),
                                     tip.getPhotoUrl(),tip.getInfoUrl(),tip.getGoogleMapsUrl(),
                                     cityName,regionName,countryName);
-        return tipDto;
     }
 
-    public static List<TIPDto> ListTIP2ListTIPDto(List<TIP> TIPs){
-        List<TIPDto> TIPDtos = new ArrayList<TIPDto>();
-        for(TIP tip : TIPs){
+    public static List<TIPDto> ListTIP2ListTIPDto(List<TIP> tips){
+        List<TIPDto> TIPDtos = new ArrayList<>();
+        for(TIP tip : tips){
             TIPDtos.add(DtoConversor.TIP2TIPDto(tip));
         }
         return TIPDtos;
+    }
+
+    public static TIPSearchDto TIP2TIPSearchDto(TIP tip){
+        return null;
+    }
+
+    public static List<TIPSearchDto> ListTIP2ListSearchDto(List<TIP> tips){
+        return null;
     }
 
     public static UserDto User2UserDto(User user){
@@ -42,7 +48,7 @@ public class DtoConversor {
     }
 
     public static List<UserDto> ListUser2ListUserDto(List<User> users){
-        List<UserDto> userDtos = new ArrayList<UserDto>();
+        List<UserDto> userDtos = new ArrayList<>();
         for(User user : users){
             userDtos.add(DtoConversor.User2UserDto(user));
         }
@@ -57,7 +63,7 @@ public class DtoConversor {
     }
 
     public static List<CommentDto> ListComment2ListCommentDto(List<Comment> comments){
-        List<CommentDto> commentDtos = new ArrayList<CommentDto>();
+        List<CommentDto> commentDtos = new ArrayList<>();
         for (Comment comment : comments){
             commentDtos.add(DtoConversor.Comment2CommentDto(comment));
         }

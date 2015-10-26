@@ -50,7 +50,7 @@ public class TIPServiceImpl implements TIPService {
             throw new GoogleMapsServiceException();
         }
 
-        if (photoUrl != null){
+        if (photoUrl != null && !photoUrl.equals("")){
             tip.setPhotoUrl(photoUrl);
         }else{
             if (photoName != null && photoContent != null){
@@ -111,13 +111,13 @@ public class TIPServiceImpl implements TIPService {
         return DtoConversor.ListTIP2ListTIPDto(tips);
     }
 
-    public void edit(Long TIPId, TIPPatchRequest newData) throws InstanceNotFoundException, AmazonServiceExeption {
+    public TIPDto edit(Long TIPId, TIPPatchRequest newData) throws InstanceNotFoundException, AmazonServiceExeption {
         TIP tip = tipDao.findById(TIPId);
         tip.setType(newData.getType());
         tip.setName(newData.getName());
         tip.setDescription(newData.getDescription());
         tip.setInfoUrl(newData.getInfoUrl());
-        if (newData.getPhotoUrl() != null){
+        if (newData.getPhotoUrl() != null && !newData.getPhotoUrl().equals("")){
             tip.setPhotoUrl(newData.getPhotoUrl());
         }else{
             if (newData.getPhotoName() != null && newData.getPhotoContent() != null){
@@ -131,5 +131,6 @@ public class TIPServiceImpl implements TIPService {
             }
         }
         tipDao.save(tip);
+        return DtoConversor.TIP2TIPDto(tip);
     }
 }

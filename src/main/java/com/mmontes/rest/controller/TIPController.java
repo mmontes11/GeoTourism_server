@@ -77,14 +77,15 @@ public class TIPController {
     public ResponseEntity
     patch(@PathVariable Long TIPId,
           @RequestBody TIPPatchRequest tipPatchRequest ) {
+        TIPDto tipDto;
         try {
-            tipService.edit(TIPId, tipPatchRequest);
+            tipDto = tipService.edit(TIPId, tipPatchRequest);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (AmazonServiceExeption e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(tipDto,HttpStatus.OK);
     }
 }

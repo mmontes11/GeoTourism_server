@@ -2,7 +2,8 @@ package com.mmontes.test.service;
 
 import com.mmontes.model.service.internal.TIPService;
 import com.mmontes.util.GeometryConversor;
-import com.mmontes.util.dto.TIPDto;
+import com.mmontes.util.dto.TIPDetailsDto;
+import com.mmontes.util.dto.TIPSearchDto;
 import com.mmontes.util.exception.*;
 import com.vividsolutions.jts.geom.Point;
 import org.junit.Test;
@@ -33,34 +34,34 @@ public class TIPServiceTest {
             String name = "Tower of Hercules";
             String description = "Human Patrimony";
             Point geom = GeometryConversor.pointFromText(POINT_TORRE_HERCULES);
-            TIPDto tipDto = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, null, null, geom);
+            TIPDetailsDto tipDetailsDto = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, null, null, geom);
 
-            assertEquals(MONUMENT_DISCRIMINATOR, tipDto.getType());
-            assertEquals(name, tipDto.getName());
-            assertEquals(description, tipDto.getDescription());
-            assertNotNull(tipDto.getGeom());
-            assertEquals(VALID_TIP_PHOTO_URL, tipDto.getPhotoUrl());
-            assertNotNull(tipDto.getInfoUrl());
-            assertNotNull(tipDto.getGoogleMapsUrl());
-            assertEquals(NAME_CITY_A_CORUNA, tipDto.getCity());
-            assertEquals(NAME_REGION_GALICIA, tipDto.getRegion());
-            assertEquals(NAME_COUNTRY_ESPANA, tipDto.getCountry());
+            assertEquals(MONUMENT_DISCRIMINATOR, tipDetailsDto.getType());
+            assertEquals(name, tipDetailsDto.getName());
+            assertEquals(description, tipDetailsDto.getDescription());
+            assertNotNull(tipDetailsDto.getGeom());
+            assertEquals(VALID_TIP_PHOTO_URL, tipDetailsDto.getPhotoUrl());
+            assertNotNull(tipDetailsDto.getInfoUrl());
+            assertNotNull(tipDetailsDto.getGoogleMapsUrl());
+            assertEquals(NAME_CITY_A_CORUNA, tipDetailsDto.getCity());
+            assertEquals(NAME_REGION_GALICIA, tipDetailsDto.getRegion());
+            assertEquals(NAME_COUNTRY_ESPANA, tipDetailsDto.getCountry());
 
             name = "Alameda Park";
             description = "Green zone";
             geom = GeometryConversor.pointFromText(POINT_ALAMEDA);
-            tipDto = tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, null, null, geom);
+            tipDetailsDto = tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, null, null, geom);
 
-            assertEquals(NATURAL_SPACE_DISCRIMINATOR, tipDto.getType());
-            assertEquals(name, tipDto.getName());
-            assertEquals(description, tipDto.getDescription());
-            assertNotNull(tipDto.getGeom());
-            assertEquals(VALID_TIP_PHOTO_URL, tipDto.getPhotoUrl());
-            assertNotNull(tipDto.getInfoUrl());
-            assertNotNull(tipDto.getGoogleMapsUrl());
-            assertEquals(NAME_CITY_SANTIAGO, tipDto.getCity());
-            assertEquals(NAME_REGION_GALICIA, tipDto.getRegion());
-            assertEquals(NAME_COUNTRY_ESPANA, tipDto.getCountry());
+            assertEquals(NATURAL_SPACE_DISCRIMINATOR, tipDetailsDto.getType());
+            assertEquals(name, tipDetailsDto.getName());
+            assertEquals(description, tipDetailsDto.getDescription());
+            assertNotNull(tipDetailsDto.getGeom());
+            assertEquals(VALID_TIP_PHOTO_URL, tipDetailsDto.getPhotoUrl());
+            assertNotNull(tipDetailsDto.getInfoUrl());
+            assertNotNull(tipDetailsDto.getGoogleMapsUrl());
+            assertEquals(NAME_CITY_SANTIAGO, tipDetailsDto.getCity());
+            assertEquals(NAME_REGION_GALICIA, tipDetailsDto.getRegion());
+            assertEquals(NAME_COUNTRY_ESPANA, tipDetailsDto.getCountry());
 
         } catch (GeometryParsingException | GoogleMapsServiceException | AmazonServiceExeption | TIPLocationException | WikipediaServiceException | InvalidTIPUrlException e) {
             e.printStackTrace();
@@ -75,24 +76,12 @@ public class TIPServiceTest {
         String description = "Human patrimony";
         try {
             Point geom = GeometryConversor.pointFromText(POINT_CATEDRAL_SANTIAGO);
-            TIPDto tipDto = tipService.create(MONUMENT_DISCRIMINATOR, name, description, null, null, null, null, geom);
-            List<TIPDto> tipDtos = tipService.find(null, geom, MONUMENT_DISCRIMINATOR, null, null, null);
+            TIPDetailsDto tipDetailsDto = tipService.create(MONUMENT_DISCRIMINATOR, name, description, null, null, null, null, geom);
+            List<TIPSearchDto> tipSearchDtos = tipService.find(null, geom, MONUMENT_DISCRIMINATOR, null, null, null);
 
-            assertEquals(1,tipDtos.size());
-            TIPDto result = tipDtos.get(0);
-            assertEquals(tipDto.getId(),result.getId());
-            assertEquals(tipDto.getType(),result.getType());
-            assertEquals(tipDto.getName(), result.getName());
-            assertEquals(tipDto.getDescription(), result.getDescription());
-            assertEquals(tipDto.getGeom(), result.getGeom());
-            assertEquals(tipDto.getDescription(), result.getDescription());
-            assertEquals(tipDto.getPhotoUrl(), result.getPhotoUrl());
-            assertEquals(tipDto.getInfoUrl(), result.getInfoUrl());
-            assertEquals(tipDto.getGoogleMapsUrl(), result.getGoogleMapsUrl());
-            assertEquals(tipDto.getCity(), result.getCity());
-            assertEquals(tipDto.getRegion(), result.getRegion());
-            assertEquals(tipDto.getCountry(), result.getCountry());
-
+            assertEquals(1, tipSearchDtos.size());
+            TIPSearchDto result = tipSearchDtos.get(0);
+            assertEquals(tipDetailsDto.getId(),result.getId());
         } catch (GeometryParsingException | GoogleMapsServiceException | AmazonServiceExeption | InvalidTIPUrlException | WikipediaServiceException | TIPLocationException e) {
             e.printStackTrace();
             fail();
@@ -115,8 +104,8 @@ public class TIPServiceTest {
 
     @Test
     public void findTipsOfCurrentCity(){
-        TIPDto towerHercules = null;
-        TIPDto santiagoCathedral = null;
+        TIPDetailsDto towerHercules = null;
+        TIPDetailsDto santiagoCathedral = null;
         Point location = null;
         try {
             String name = "Tower of Hercules";
@@ -133,16 +122,16 @@ public class TIPServiceTest {
             e.printStackTrace();
             fail();
         }
-        List<TIPDto> tipDtos = tipService.find(null, location, null, null, null, null);
+        List<TIPSearchDto> tipSearchDtos = tipService.find(null, location, null, null, null, null);
 
-        assertEquals(1, tipDtos.size());
-        assertEquals(santiagoCathedral.getId(),tipDtos.get(0).getId());
+        assertEquals(1, tipSearchDtos.size());
+        assertEquals(santiagoCathedral.getId(), tipSearchDtos.get(0).getId());
     }
 
     @Test
     public void finTipsFromFarCity(){
-        TIPDto towerHercules = null;
-        TIPDto santiagoCathedral = null;
+        TIPDetailsDto towerHercules = null;
+        TIPDetailsDto santiagoCathedral = null;
         Point location = null;
         try {
             String name = "Tower of Hercules";
@@ -159,8 +148,8 @@ public class TIPServiceTest {
             e.printStackTrace();
             fail();
         }
-        List<TIPDto> tipDtos = tipService.find(null, location, null, null, null, null);
+        List<TIPSearchDto> tipSearchDtos = tipService.find(null, location, null, null, null, null);
 
-        assertTrue(tipDtos.isEmpty());
+        assertTrue(tipSearchDtos.isEmpty());
     }
 }

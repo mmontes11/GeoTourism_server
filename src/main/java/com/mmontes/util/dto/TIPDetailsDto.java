@@ -1,7 +1,7 @@
 package com.mmontes.util.dto;
 
 
-public class TIPDto {
+public class TIPDetailsDto {
 
     private Long id;
     private String type;
@@ -16,10 +16,10 @@ public class TIPDto {
     private String region;
     private String country;
 
-    public TIPDto() {
+    public TIPDetailsDto() {
     }
 
-    public TIPDto(Long id, String type, String name, String description, String geom, String address, String photoUrl, String inforUrl, String googleMapsUrl, String city, String region, String country) {
+    public TIPDetailsDto(Long id, String type, String name, String description, String geom, String address, String photoUrl, String inforUrl, String googleMapsUrl, String city, String region, String country) {
         this.id = id;
         this.type = type;
         this.name = name;

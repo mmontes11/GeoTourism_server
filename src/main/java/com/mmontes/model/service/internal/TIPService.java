@@ -2,7 +2,8 @@ package com.mmontes.model.service.internal;
 
 
 import com.mmontes.rest.request.TIPPatchRequest;
-import com.mmontes.util.dto.TIPDto;
+import com.mmontes.util.dto.TIPDetailsDto;
+import com.mmontes.util.dto.TIPSearchDto;
 import com.mmontes.util.exception.*;
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -10,16 +11,16 @@ import java.util.List;
 
 public interface TIPService {
 
-    TIPDto create(String type, String name, String description, String photoUrl, String photoContent, String photoName, String infoUrl, Geometry geom)
+    TIPDetailsDto create(String type, String name, String description, String photoUrl, String photoContent, String photoName, String infoUrl, Geometry geom)
             throws AmazonServiceExeption, TIPLocationException, WikipediaServiceException, InvalidTIPUrlException, GoogleMapsServiceException;
 
-    TIPDto findById(Long TIPId) throws InstanceNotFoundException;
+    TIPDetailsDto findById(Long TIPId) throws InstanceNotFoundException;
 
     boolean exists(Long TIPId);
 
     void remove(Long TIPId) throws InstanceNotFoundException;
 
-    List<TIPDto> find(Long facebookUserId, Geometry location, String type, Long cityId, Integer favouritedBy, Double radius);
+    List<TIPSearchDto> find(Long facebookUserId, Geometry location, String type, Long cityId, Integer favouritedBy, Double radius);
 
-    TIPDto edit(Long TIPId, TIPPatchRequest newData) throws InstanceNotFoundException, AmazonServiceExeption;
+    TIPDetailsDto edit(Long TIPId, TIPPatchRequest newData) throws InstanceNotFoundException, AmazonServiceExeption;
 }

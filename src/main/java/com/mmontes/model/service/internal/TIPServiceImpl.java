@@ -9,7 +9,8 @@ import com.mmontes.model.service.external.WikipediaService;
 import com.mmontes.rest.request.TIPPatchRequest;
 import com.mmontes.util.URLvalidator;
 import com.mmontes.util.dto.DtoConversor;
-import com.mmontes.util.dto.TIPDto;
+import com.mmontes.util.dto.TIPDetailsDto;
+import com.mmontes.util.dto.TIPSearchDto;
 import com.mmontes.util.exception.*;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -31,7 +32,7 @@ public class TIPServiceImpl implements TIPService {
     @Autowired
     private CityService cityService;
 
-    public TIPDto
+    public TIPDetailsDto
     create(String type, String name, String description, String photoUrl, String photoContent, String photoName, String infoUrl, Geometry geom)
             throws AmazonServiceExeption, TIPLocationException, WikipediaServiceException, InvalidTIPUrlException, GoogleMapsServiceException {
 
@@ -91,11 +92,11 @@ public class TIPServiceImpl implements TIPService {
         URLvalidator.checkURLs(tip);
 
         tipDao.save(tip);
-        return DtoConversor.TIP2TIPDto(tip);
+        return DtoConversor.TIP2TIPDetailsDto(tip);
     }
 
-    public TIPDto findById(Long TIPId) throws InstanceNotFoundException {
-        return DtoConversor.TIP2TIPDto(tipDao.findById(TIPId));
+    public TIPDetailsDto findById(Long TIPId) throws InstanceNotFoundException {
+        return DtoConversor.TIP2TIPDetailsDto(tipDao.findById(TIPId));
     }
 
     public boolean exists(Long TIPId) {
@@ -106,12 +107,12 @@ public class TIPServiceImpl implements TIPService {
         tipDao.remove(TIPId);
     }
 
-    public List<TIPDto> find(Long facebookUserId, Geometry location, String type, Long cityId, Integer favouritedBy, Double radius) {
+    public List<TIPSearchDto> find(Long facebookUserId, Geometry location, String type, Long cityId, Integer favouritedBy, Double radius) {
         List<TIP> tips = tipDao.find(location,type,cityId,null,radius);
-        return DtoConversor.ListTIP2ListTIPDto(tips);
+        return DtoConversor.ListTIP2ListSearchDto(tips);
     }
 
-    public TIPDto edit(Long TIPId, TIPPatchRequest newData) throws InstanceNotFoundException, AmazonServiceExeption {
+    public TIPDetailsDto edit(Long TIPId, TIPPatchRequest newData) throws InstanceNotFoundException, AmazonServiceExeption {
         TIP tip = tipDao.findById(TIPId);
         tip.setType(newData.getType());
         tip.setName(newData.getName());
@@ -131,6 +132,6 @@ public class TIPServiceImpl implements TIPService {
             }
         }
         tipDao.save(tip);
-        return DtoConversor.TIP2TIPDto(tip);
+        return DtoConversor.TIP2TIPDetailsDto(tip);
     }
 }

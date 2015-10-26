@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletException;
+import java.util.Calendar;
 import java.util.Date;
 
 @RestController
@@ -32,11 +33,16 @@ public class AdminController {
                 !adminService.checkPassword(adminLogin.getUsername(),adminLogin.getPassword())){
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
         }
+        Calendar now = Calendar.getInstance();
+        Calendar expiration = Calendar.getInstance();
+        expiration.setTimeInMillis(now.getTimeInMillis() + Constants.TOKEN_EXPIRATION_IN_MILIS);
+
         String token =
         Jwts.builder()
                 .setSubject(adminLogin.getUsername())
-                .setIssuedAt(new Date())
-                .signWith(SignatureAlgorithm.HS256, Constants.TOKEN_SECRET_KEY)
+                .setIssuedAt(now.getTime())
+                .setExpiration(expiration.getTime())
+                .signWith(SignatureAlgorithm.HS512, Constants.TOKEN_SECRET_KEY)
                 .compact();
 
         return new ResponseEntity<>(new AdminLoginResponse(token), HttpStatus.OK);

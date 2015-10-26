@@ -10,32 +10,31 @@ import java.util.List;
 
 public class DtoConversor {
 
-    public static TIPDto TIP2TIPDto(TIP tip){
+    public static TIPDetailsDto TIP2TIPDetailsDto(TIP tip){
         String type = tip.getType();
         String geom = GeometryConversor.wktFromGeometry(tip.getGeom());
         String cityName = tip.getCity().getName();
         String regionName = tip.getCity().getRegion().getName();
         String countryName = tip.getCity().getRegion().getCountry().getName();
 
-        return new TIPDto(tip.getId(),type,tip.getName(),tip.getDescription(), geom, tip.getAddress(),
+        return new TIPDetailsDto(tip.getId(),type,tip.getName(),tip.getDescription(), geom, tip.getAddress(),
                                     tip.getPhotoUrl(),tip.getInfoUrl(),tip.getGoogleMapsUrl(),
                                     cityName,regionName,countryName);
     }
 
-    public static List<TIPDto> ListTIP2ListTIPDto(List<TIP> tips){
-        List<TIPDto> TIPDtos = new ArrayList<>();
-        for(TIP tip : tips){
-            TIPDtos.add(DtoConversor.TIP2TIPDto(tip));
-        }
-        return TIPDtos;
-    }
-
     public static TIPSearchDto TIP2TIPSearchDto(TIP tip){
-        return null;
+        Long id = tip.getId();
+        String geom = GeometryConversor.wktFromGeometry(tip.getGeom());
+
+        return new TIPSearchDto(id,geom);
     }
 
     public static List<TIPSearchDto> ListTIP2ListSearchDto(List<TIP> tips){
-        return null;
+        List<TIPSearchDto> tipSearchDtos = new ArrayList<>();
+        for (TIP tip : tips){
+            tipSearchDtos.add(DtoConversor.TIP2TIPSearchDto(tip));
+        }
+        return tipSearchDtos;
     }
 
     public static UserDto User2UserDto(User user){

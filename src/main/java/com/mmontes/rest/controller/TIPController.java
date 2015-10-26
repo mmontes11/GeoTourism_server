@@ -5,7 +5,7 @@ import com.mmontes.model.util.TIPUtils;
 import com.mmontes.rest.request.TIPPatchRequest;
 import com.mmontes.rest.request.TIPRequest;
 import com.mmontes.util.GeometryConversor;
-import com.mmontes.util.dto.TIPDto;
+import com.mmontes.util.dto.TIPDetailsDto;
 import com.mmontes.util.exception.AmazonServiceExeption;
 import com.mmontes.util.exception.GeometryParsingException;
 import com.mmontes.util.exception.InstanceNotFoundException;
@@ -23,7 +23,7 @@ public class TIPController {
     private TIPService tipService;
 
     @RequestMapping(value = "/admin/tip", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<TIPDto>
+    public ResponseEntity<TIPDetailsDto>
     create(@RequestBody TIPRequest tipRequest) {
 
         if (!TIPUtils.isValidType(tipRequest.getType()) ||
@@ -38,28 +38,28 @@ public class TIPController {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        TIPDto tipDto;
+        TIPDetailsDto tipDetailsDto;
         try {
-            tipDto = tipService.create(tipRequest.getType(), tipRequest.getName(), tipRequest.getDescription(),
+            tipDetailsDto = tipService.create(tipRequest.getType(), tipRequest.getName(), tipRequest.getDescription(),
                     tipRequest.getPhotoUrl(), tipRequest.getPhotoContent(), tipRequest.getPhotoName(),
                     tipRequest.getInfoUrl(), geometry);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(tipDto, HttpStatus.CREATED);
+        return new ResponseEntity<>(tipDetailsDto, HttpStatus.CREATED);
     }
 
     @RequestMapping(value = "/admin/tip/{TIPId}", method = RequestMethod.GET)
-    public ResponseEntity<TIPDto>
+    public ResponseEntity<TIPDetailsDto>
     find(@PathVariable Long TIPId) {
-        TIPDto tipDto;
+        TIPDetailsDto tipDetailsDto;
         try {
-            tipDto = tipService.findById(TIPId);
+            tipDetailsDto = tipService.findById(TIPId);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(tipDto, HttpStatus.OK);
+        return new ResponseEntity<>(tipDetailsDto, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/admin/tip/{TIPId}", method = RequestMethod.DELETE)
@@ -77,15 +77,15 @@ public class TIPController {
     public ResponseEntity
     patch(@PathVariable Long TIPId,
           @RequestBody TIPPatchRequest tipPatchRequest ) {
-        TIPDto tipDto;
+        TIPDetailsDto tipDetailsDto;
         try {
-            tipDto = tipService.edit(TIPId, tipPatchRequest);
+            tipDetailsDto = tipService.edit(TIPId, tipPatchRequest);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (AmazonServiceExeption e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(tipDto,HttpStatus.OK);
+        return new ResponseEntity<>(tipDetailsDto,HttpStatus.OK);
     }
 }

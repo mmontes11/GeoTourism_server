@@ -2,7 +2,8 @@ package com.mmontes.rest.controller;
 
 import com.mmontes.model.service.internal.TIPService;
 import com.mmontes.util.GeometryConversor;
-import com.mmontes.util.dto.TIPDto;
+import com.mmontes.util.dto.TIPDetailsDto;
+import com.mmontes.util.dto.TIPSearchDto;
 import com.mmontes.util.exception.GeometryParsingException;
 import com.vividsolutions.jts.geom.Point;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +23,7 @@ public class TIPsController {
     private TIPService tipService;
 
     @RequestMapping(value = "/tips", method = RequestMethod.GET, produces = "application/json")
-    public ResponseEntity<List<TIPDto>>
+    public ResponseEntity<List<TIPSearchDto>>
     find(@RequestParam(value = "facebookUserId", required = false) Long facebookUserId,
          @RequestParam(value = "location", required = false) String locationString,
          @RequestParam(value = "type", required = false) String type,
@@ -49,7 +50,7 @@ public class TIPsController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        List<TIPDto> tips = tipService.find(facebookUserId, location, type, cityId, favouritedBy, radius);
+        List<TIPSearchDto> tips = tipService.find(facebookUserId, location, type, cityId, favouritedBy, radius);
 
         return new ResponseEntity<>(tips, HttpStatus.OK);
     }

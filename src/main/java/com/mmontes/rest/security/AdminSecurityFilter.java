@@ -24,7 +24,9 @@ public class AdminSecurityFilter extends GenericFilterBean {
         if (!request.getMethod().equals("OPTIONS")) {
             final String authHeader = request.getHeader("Authorization");
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-                throw new ServletException("Missing or invalid Authorization header.");
+                final HttpServletResponse response = (HttpServletResponse) res;
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                return;
             }
             final String token = authHeader.substring("Bearer ".length());
             try {

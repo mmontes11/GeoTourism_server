@@ -5,6 +5,7 @@ import com.mmontes.util.GeometryConversor;
 import com.mmontes.util.dto.TIPDetailsDto;
 import com.mmontes.util.dto.TIPSearchDto;
 import com.mmontes.util.exception.*;
+import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +34,7 @@ public class TIPServiceTest {
         try {
             String name = "Tower of Hercules";
             String description = "Human Patrimony";
-            Point geom = GeometryConversor.pointFromText(POINT_TORRE_HERCULES);
+            Point geom = (Point) GeometryConversor.geometryFromWKT(POINT_TORRE_HERCULES);
             TIPDetailsDto tipDetailsDto = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, null, null, geom);
 
             assertEquals(MONUMENT_DISCRIMINATOR, tipDetailsDto.getType());
@@ -49,7 +50,7 @@ public class TIPServiceTest {
 
             name = "Alameda Park";
             description = "Green zone";
-            geom = GeometryConversor.pointFromText(POINT_ALAMEDA);
+            geom = (Point) GeometryConversor.geometryFromWKT(POINT_ALAMEDA);
             tipDetailsDto = tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, null, null, geom);
 
             assertEquals(NATURAL_SPACE_DISCRIMINATOR, tipDetailsDto.getType());
@@ -75,9 +76,9 @@ public class TIPServiceTest {
         String name = "Santiago de Compostela cathedral";
         String description = "Human patrimony";
         try {
-            Point geom = GeometryConversor.pointFromText(POINT_CATEDRAL_SANTIAGO);
+            Point geom = (Point) GeometryConversor.geometryFromWKT(POINT_CATEDRAL_SANTIAGO);
             TIPDetailsDto tipDetailsDto = tipService.create(MONUMENT_DISCRIMINATOR, name, description, null, null, null, null, geom);
-            List<TIPSearchDto> tipSearchDtos = tipService.find(null, geom, MONUMENT_DISCRIMINATOR, null, null, null);
+            List<TIPSearchDto> tipSearchDtos = tipService.find(null, null, MONUMENT_DISCRIMINATOR, null, null, null);
 
             assertEquals(1, tipSearchDtos.size());
             TIPSearchDto result = tipSearchDtos.get(0);
@@ -93,7 +94,7 @@ public class TIPServiceTest {
         String name = "Liberty Statue";
         String description = "NY symbol";
         try {
-            Point geom = GeometryConversor.pointFromText(POINT_STATUE_OF_LIBERTRY);
+            Point geom = (Point) GeometryConversor.geometryFromWKT(POINT_STATUE_OF_LIBERTRY);
             tipService.create(MONUMENT_DISCRIMINATOR, name, description, null, null, null, null, geom);
         } catch (GeometryParsingException | GoogleMapsServiceException | AmazonServiceExeption | WikipediaServiceException | InvalidTIPUrlException e) {
             e.printStackTrace();
@@ -106,23 +107,23 @@ public class TIPServiceTest {
     public void findTipsOfCurrentCity(){
         TIPDetailsDto towerHercules = null;
         TIPDetailsDto santiagoCathedral = null;
-        Point location = null;
+        Geometry bounds = null;
         try {
             String name = "Tower of Hercules";
             String description = "Human Patrimony";
-            Point geom = GeometryConversor.pointFromText(POINT_TORRE_HERCULES);
+            Point geom = (Point) GeometryConversor.geometryFromWKT(POINT_TORRE_HERCULES);
             towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, null, null, geom);
 
             name = "Santiago de Compostela cathedral";
             description = "Human Patrimony";
-            geom = GeometryConversor.pointFromText(POINT_CATEDRAL_SANTIAGO);
-            santiagoCathedral = tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, null, null, geom);
-            location = GeometryConversor.pointFromText(POINT_ALAMEDA);
+            geom = (Point) GeometryConversor.geometryFromWKT(POINT_CATEDRAL_SANTIAGO);
+            santiagoCathedral = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, null, null, geom);
+            bounds = GeometryConversor.geometryFromWKT(BOUNDS_SANTIAGO_DE_COMPOSTELA);
         } catch (GeometryParsingException | GoogleMapsServiceException | AmazonServiceExeption | WikipediaServiceException | InvalidTIPUrlException | TIPLocationException e) {
             e.printStackTrace();
             fail();
         }
-        List<TIPSearchDto> tipSearchDtos = tipService.find(null, location, null, null, null, null);
+        List<TIPSearchDto> tipSearchDtos = tipService.find(null, bounds, null, null, null, null);
 
         assertEquals(1, tipSearchDtos.size());
         assertEquals(santiagoCathedral.getId(), tipSearchDtos.get(0).getId());
@@ -132,23 +133,23 @@ public class TIPServiceTest {
     public void finTipsFromFarCity(){
         TIPDetailsDto towerHercules = null;
         TIPDetailsDto santiagoCathedral = null;
-        Point location = null;
+        Geometry bounds = null;
         try {
             String name = "Tower of Hercules";
             String description = "Human Patrimony";
-            Point geom = GeometryConversor.pointFromText(POINT_TORRE_HERCULES);
+            Point geom = (Point) GeometryConversor.geometryFromWKT(POINT_TORRE_HERCULES);
             tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, null, null, geom);
 
             name = "Santiago de Compostela cathedral";
             description = "Human Patrimony";
-            geom = GeometryConversor.pointFromText(POINT_CATEDRAL_SANTIAGO);
+            geom = (Point) GeometryConversor.geometryFromWKT(POINT_CATEDRAL_SANTIAGO);
             tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, null, null, geom);
-            location = GeometryConversor.pointFromText(POINT_STATUE_OF_LIBERTRY);
+            bounds = GeometryConversor.geometryFromWKT(BOUNDS_NEW_YORK);
         } catch (GeometryParsingException | GoogleMapsServiceException | AmazonServiceExeption | WikipediaServiceException | InvalidTIPUrlException | TIPLocationException e) {
             e.printStackTrace();
             fail();
         }
-        List<TIPSearchDto> tipSearchDtos = tipService.find(null, location, null, null, null, null);
+        List<TIPSearchDto> tipSearchDtos = tipService.find(null, bounds, null, null, null, null);
 
         assertTrue(tipSearchDtos.isEmpty());
     }

@@ -23,7 +23,7 @@ public class CityController {
     isLocatedInExistingCity(@RequestParam(value = "location", required = true) String locationString) {
         Geometry geometry;
         try {
-            geometry = GeometryConversor.pointFromText(locationString);
+            geometry = GeometryConversor.geometryFromWKT(locationString);
         } catch (GeometryParsingException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

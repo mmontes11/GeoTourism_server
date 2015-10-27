@@ -31,7 +31,7 @@ public class AdminSecurityFilter extends GenericFilterBean {
             final String token = authHeader.substring("Bearer ".length());
             try {
                 Jwts.parser().setSigningKey(Constants.TOKEN_SECRET_KEY).parse(token).getBody();
-            } catch (final SignatureException e) {
+            } catch (Exception e) {
                 final HttpServletResponse response = (HttpServletResponse) res;
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 return;

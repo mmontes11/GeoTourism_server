@@ -28,19 +28,19 @@ public class CityServiceTest {
     public void getCityFromPoint() {
         Point cityGeometry;
         try {
-            cityGeometry = GeometryConversor.pointFromText(POINT_TORRE_HERCULES);
+            cityGeometry = (Point) GeometryConversor.geometryFromWKT(POINT_TORRE_HERCULES);
             City city = cityService.getCityFromLocation(cityGeometry);
             assertNotNull(city);
             assertEquals(NAME_CITY_A_CORUNA, city.getName());
             assertEquals(GL_DOMAIN, city.getRegion().getDomain());
 
-            cityGeometry = GeometryConversor.pointFromText(POINT_CATEDRAL_SANTIAGO);
+            cityGeometry = (Point) GeometryConversor.geometryFromWKT(POINT_CATEDRAL_SANTIAGO);
             city = cityService.getCityFromLocation(cityGeometry);
             assertNotNull(city);
             assertEquals(NAME_CITY_SANTIAGO, city.getName());
             assertEquals(GL_DOMAIN, city.getRegion().getDomain());
 
-            cityGeometry = GeometryConversor.pointFromText(POINT_STATUE_OF_LIBERTRY);
+            cityGeometry = (Point) GeometryConversor.geometryFromWKT(POINT_STATUE_OF_LIBERTRY);
             city = cityService.getCityFromLocation(cityGeometry);
             assertNull(city);
         } catch (GeometryParsingException e) {

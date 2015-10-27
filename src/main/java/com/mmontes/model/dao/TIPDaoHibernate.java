@@ -9,12 +9,10 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-import static com.mmontes.util.Constants.*;
-
 @Repository("TIPDao")
 public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements TIPDao {
 
-    public List<TIP> find(Geometry location, String type, Long cityId, List<Long> facebookUserIds, Double radius) {
+    public List<TIP> find(Geometry bounds, String type, Long cityId, List<Long> facebookUserIds, Double radius) {
 
         boolean filterByType = false;
         boolean filterByLocation = false;
@@ -24,10 +22,9 @@ public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements T
             queryString += "WHERE type = '"+type+"' ";
             filterByType = true;
         }
-        if (location != null){
-            String locationWKT = GeometryConversor.wktFromGeometry(location);
-            Double r = radius != null ? radius : SEARCH_RADIUS_METRES;
-            String filterLocationString = "ST_DWithin(ST_GeographyFromText(ST_AsText(geom)), ST_GeographyFromText('"+locationWKT+"'), "+r+")";
+        if (bounds != null){
+            String boundsWKT = GeometryConversor.wktFromGeometry(bounds);
+            String filterLocationString = "ST_Intersects(ST_GeographyFromText('"+boundsWKT+"'), ST_GeographyFromText(ST_AsText(geom)))";
 
             queryString += filterByType? "AND " + filterLocationString : "WHERE " + filterLocationString;
             queryString += " ";

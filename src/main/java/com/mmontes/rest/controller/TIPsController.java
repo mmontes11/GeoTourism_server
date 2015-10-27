@@ -2,10 +2,9 @@ package com.mmontes.rest.controller;
 
 import com.mmontes.model.service.internal.TIPService;
 import com.mmontes.util.GeometryConversor;
-import com.mmontes.util.dto.TIPDetailsDto;
 import com.mmontes.util.dto.TIPSearchDto;
 import com.mmontes.util.exception.GeometryParsingException;
-import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.geom.Polygon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +24,7 @@ public class TIPsController {
     @RequestMapping(value = "/tips", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<List<TIPSearchDto>>
     find(@RequestParam(value = "facebookUserId", required = false) Long facebookUserId,
-         @RequestParam(value = "location", required = false) String locationString,
+         @RequestParam(value = "bounds", required = false) String boundsWKT,
          @RequestParam(value = "type", required = false) String type,
          @RequestParam(value = "cityId", required = false) Long cityId,
          @RequestParam(value = "favouritedBy", required = false) Integer favouritedBy,
@@ -33,24 +32,23 @@ public class TIPsController {
 
         System.out.println("Find TIPs:");
         System.out.println(facebookUserId);
-        System.out.println(locationString);
+        System.out.println(boundsWKT);
         System.out.println(type);
         System.out.println(cityId);
         System.out.println(favouritedBy);
         System.out.println(radius);
 
         //TODO: validate params
-
-        Point location = null;
+        Polygon bounds = null;
         try {
-            if (locationString != null) {
-                location = GeometryConversor.pointFromText(locationString);
+            if (boundsWKT != null) {
+                bounds = (Polygon) GeometryConversor.geometryFromWKT(boundsWKT);
             }
         } catch (GeometryParsingException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        List<TIPSearchDto> tips = tipService.find(facebookUserId, location, type, cityId, favouritedBy, radius);
+        List<TIPSearchDto> tips = tipService.find(facebookUserId, bounds, type, cityId, favouritedBy, radius);
 
         return new ResponseEntity<>(tips, HttpStatus.OK);
     }

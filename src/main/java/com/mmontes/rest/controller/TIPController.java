@@ -50,7 +50,7 @@ public class TIPController {
         return new ResponseEntity<>(tipDetailsDto, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/admin/tip/{TIPId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/tip/{TIPId}", method = RequestMethod.GET)
     public ResponseEntity<TIPDetailsDto>
     find(@PathVariable Long TIPId) {
         TIPDetailsDto tipDetailsDto;

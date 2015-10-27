@@ -29,25 +29,5 @@ public class GeometryConversor {
         return wktWriter.write(geometry);
     }
 
-    public static Point pointFromText(String pointString) throws GeometryParsingException {
-        String[] coordinates = pointString.split(",");
-        if (coordinates.length != 2) {
-            throw new GeometryParsingException(pointString);
-        }
-        Double x;
-        Double y;
-        try {
-            x = Double.parseDouble(coordinates[0]);
-            y = Double.parseDouble(coordinates[1]);
-        } catch (NumberFormatException e) {
-            throw new GeometryParsingException(pointString);
-        }
-        Coordinate coordinate = new Coordinate(x, y);
-        GeometryFactory geometryFactory = new GeometryFactory();
-        Point point = geometryFactory.createPoint(coordinate);
-        point.setSRID(SRID);
-        return point;
-    }
-
 }
 

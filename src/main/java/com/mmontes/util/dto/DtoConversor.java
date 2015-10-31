@@ -14,12 +14,9 @@ public class DtoConversor {
         String type = tip.getType();
         String geom = GeometryConversor.wktFromGeometry(tip.getGeom());
         String cityName = tip.getCity().getName();
-        String regionName = tip.getCity().getRegion().getName();
-        String countryName = tip.getCity().getRegion().getCountry().getName();
 
         return new TIPDetailsDto(tip.getId(),type,tip.getName(),tip.getDescription(), geom, tip.getAddress(),
-                                    tip.getPhotoUrl(),tip.getInfoUrl(),tip.getGoogleMapsUrl(),
-                                    cityName,regionName,countryName);
+                                    tip.getPhotoUrl(),tip.getInfoUrl(),tip.getGoogleMapsUrl(), cityName);
     }
 
     public static TIPSearchDto TIP2TIPSearchDto(TIP tip){

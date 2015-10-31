@@ -13,13 +13,11 @@ public class TIPDetailsDto {
     private String infoUrl;
     private String googleMapsUrl;
     private String city;
-    private String region;
-    private String country;
 
     public TIPDetailsDto() {
     }
 
-    public TIPDetailsDto(Long id, String type, String name, String description, String geom, String address, String photoUrl, String inforUrl, String googleMapsUrl, String city, String region, String country) {
+    public TIPDetailsDto(Long id, String type, String name, String description, String geom, String address, String photoUrl, String inforUrl, String googleMapsUrl, String city) {
         this.id = id;
         this.type = type;
         this.name = name;
@@ -30,8 +28,6 @@ public class TIPDetailsDto {
         this.infoUrl = inforUrl;
         this.googleMapsUrl = googleMapsUrl;
         this.city = city;
-        this.region = region;
-        this.country = country;
     }
 
     public Long getId() {
@@ -112,21 +108,5 @@ public class TIPDetailsDto {
 
     public void setCity(String city) {
         this.city = city;
-    }
-
-    public String getRegion() {
-        return region;
-    }
-
-    public void setRegion(String region) {
-        this.region = region;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public void setCountry(String country) {
-        this.country = country;
     }
 }

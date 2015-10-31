@@ -1,4 +1,4 @@
-package com.mmontes.model.service.external;
+package com.mmontes.service;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3Client;

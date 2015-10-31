@@ -1,6 +1,6 @@
 package com.mmontes.rest.controller;
 
-import com.mmontes.model.service.internal.AdminService;
+import com.mmontes.model.service.AdminService;
 import com.mmontes.rest.request.AdminLoginRequest;
 import com.mmontes.rest.response.AdminLoginResponse;
 import com.mmontes.util.Constants;
@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletException;
 import java.util.Calendar;
-import java.util.Date;
 
 @RestController
 public class AdminController {

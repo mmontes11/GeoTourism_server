@@ -1,4 +1,4 @@
-package com.mmontes.model.service.external;
+package com.mmontes.service;
 
 import com.mmontes.util.XMLParser;
 import org.w3c.dom.Document;

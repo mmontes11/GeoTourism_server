@@ -1,4 +1,4 @@
-package com.mmontes.model.service.internal;
+package com.mmontes.model.service;
 
 public interface AdminService {
 

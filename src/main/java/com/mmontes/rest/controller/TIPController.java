@@ -1,6 +1,6 @@
 package com.mmontes.rest.controller;
 
-import com.mmontes.model.service.internal.TIPService;
+import com.mmontes.model.service.TIPService;
 import com.mmontes.model.util.TIPUtils;
 import com.mmontes.rest.request.TIPPatchRequest;
 import com.mmontes.rest.request.TIPRequest;

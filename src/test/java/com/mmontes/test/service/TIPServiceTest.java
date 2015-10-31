@@ -1,6 +1,6 @@
 package com.mmontes.test.service;
 
-import com.mmontes.model.service.internal.TIPService;
+import com.mmontes.model.service.TIPService;
 import com.mmontes.util.GeometryConversor;
 import com.mmontes.util.dto.TIPDetailsDto;
 import com.mmontes.util.dto.TIPSearchDto;

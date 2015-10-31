@@ -1,11 +1,10 @@
-package com.mmontes.model.service.internal;
+package com.mmontes.model.service;
 
 import com.mmontes.model.dao.TIPDao;
 import com.mmontes.model.entity.City;
 import com.mmontes.model.entity.TIP;
-import com.mmontes.model.service.external.AmazonService;
-import com.mmontes.model.service.external.GoogleMapsService;
-import com.mmontes.model.service.external.WikipediaService;
+import com.mmontes.service.AmazonService;
+import com.mmontes.service.GoogleMapsService;
 import com.mmontes.rest.request.TIPPatchRequest;
 import com.mmontes.util.URLvalidator;
 import com.mmontes.util.dto.DtoConversor;
@@ -19,8 +18,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-
-import static com.mmontes.util.Constants.*;
 
 @Service("TIPService")
 @Transactional

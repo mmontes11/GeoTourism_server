@@ -1,6 +1,6 @@
 package com.mmontes.rest.controller;
 
-import com.mmontes.model.service.internal.CityService;
+import com.mmontes.model.service.CityService;
 import com.mmontes.util.GeometryConversor;
 import com.mmontes.util.exception.GeometryParsingException;
 import com.vividsolutions.jts.geom.Geometry;

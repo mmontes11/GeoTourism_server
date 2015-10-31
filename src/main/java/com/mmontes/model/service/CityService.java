@@ -1,4 +1,4 @@
-package com.mmontes.model.service.internal;
+package com.mmontes.model.service;
 
 import com.mmontes.model.entity.City;
 import com.vividsolutions.jts.geom.Geometry;

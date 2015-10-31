@@ -1,4 +1,4 @@
-package com.mmontes.model.service.external;
+package com.mmontes.service;
 
 import com.amazonaws.util.json.JSONObject;
 import com.mmontes.util.Constants;

@@ -10,8 +10,6 @@
 
         <mapping class="com.mmontes.model.entity.TIP"/>
         <mapping class="com.mmontes.model.entity.City"/>
-        <mapping class="com.mmontes.model.entity.Region"/>
-        <mapping class="com.mmontes.model.entity.Country"/>
         <mapping class="com.mmontes.model.entity.Admin"/>
         <mapping class="com.mmontes.model.entity.Comment"/>
         <mapping class="com.mmontes.model.entity.User"/>

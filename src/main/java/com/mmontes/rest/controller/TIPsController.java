@@ -1,6 +1,6 @@
 package com.mmontes.rest.controller;
 
-import com.mmontes.model.service.internal.TIPService;
+import com.mmontes.model.service.TIPService;
 import com.mmontes.util.GeometryConversor;
 import com.mmontes.util.dto.TIPSearchDto;
 import com.mmontes.util.exception.GeometryParsingException;

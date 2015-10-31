@@ -32,13 +32,11 @@ public class CityServiceTest {
             City city = cityService.getCityFromLocation(cityGeometry);
             assertNotNull(city);
             assertEquals(NAME_CITY_A_CORUNA, city.getName());
-            assertEquals(GL_DOMAIN, city.getRegion().getDomain());
 
             cityGeometry = (Point) GeometryConversor.geometryFromWKT(POINT_CATEDRAL_SANTIAGO);
             city = cityService.getCityFromLocation(cityGeometry);
             assertNotNull(city);
             assertEquals(NAME_CITY_SANTIAGO, city.getName());
-            assertEquals(GL_DOMAIN, city.getRegion().getDomain());
 
             cityGeometry = (Point) GeometryConversor.geometryFromWKT(POINT_STATUE_OF_LIBERTRY);
             city = cityService.getCityFromLocation(cityGeometry);

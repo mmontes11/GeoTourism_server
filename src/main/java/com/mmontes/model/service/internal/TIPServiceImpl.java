@@ -74,19 +74,6 @@ public class TIPServiceImpl implements TIPService {
 
         if (infoUrl != null){
             tip.setInfoUrl(infoUrl);
-        }else{
-            if (type.equals(MONUMENT_DISCRIMINATOR) || type.equals(NATURAL_SPACE_DISCRIMINATOR)){
-                String regionDomain = city.getRegion().getDomain();
-                String countryDomain = city.getRegion().getCountry().getDomain();
-                String domain = regionDomain != null? regionDomain : countryDomain;
-                String url;
-                try {
-                    url = WikipediaService.getWikipediaUrl(domain,name);
-                    tip.setInfoUrl(url);
-                } catch (Exception e) {
-                    throw new WikipediaServiceException();
-                }
-            }
         }
 
         URLvalidator.checkURLs(tip);

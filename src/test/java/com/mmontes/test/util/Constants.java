@@ -4,8 +4,6 @@ public final class Constants {
 
     public static final String SPRING_CONFIG_TEST_FILE = "classpath:/spring-config-test.xml";
 
-    public static final String NAME_REGION_GALICIA = "Galicia";
-    public static final String NAME_COUNTRY_ESPANA = "España";
     public static final String NAME_CITY_A_CORUNA = "A Coruña";
     public static final String NAME_CITY_SANTIAGO  = "Santiago de Compostela";
 
@@ -20,6 +18,7 @@ public final class Constants {
     public static final String GL_DOMAIN = "gl";
 
     public static final String VALID_TIP_PHOTO_URL = "http://images.travelnow.com/hotels/2000000/1100000/1094700/1094622/1094622_37_b.jpg";
+    public static final String VALID_TIP_INFO_URL = "http://www.puntodeinteres.es/";
 
     private Constants() {}
 }

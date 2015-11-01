@@ -1,24 +1,29 @@
 package com.mmontes.service;
 
+import com.mmontes.rest.response.WikipediaResult;
 import com.mmontes.util.XMLParser;
 import org.w3c.dom.Document;
-import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
 
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 
 public class WikipediaService {
 
-    public static String getWikipediaUrl(String domain, String name) throws Exception {
+    public static List<WikipediaResult> search(String language, String keywords) throws Exception {
         String encodedName;
         try {
-            encodedName = URLEncoder.encode(name, "UTF-8");
+            encodedName = URLEncoder.encode(keywords, "UTF-8");
         } catch (UnsupportedEncodingException e) {
             return null;
         }
-        String url = "https://" + domain + ".wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=" + encodedName + "&format=xml&gsrprop=snippet&prop=info&inprop=url";
+        String url = "https://" + language + ".wikipedia.org/w/api.php?action=query&generator=search&gsrsearch="
+                + encodedName + "&format=xml&gsrprop=snippet&prop=info&inprop=url";
         URL obj = new URL(url);
         HttpURLConnection connnection = (HttpURLConnection) obj.openConnection();
         connnection.setRequestMethod("GET");
@@ -30,7 +35,16 @@ public class WikipediaService {
         }
 
         Document document = XMLParser.parseXml(connnection.getInputStream());
-        Element node = (Element) document.getElementsByTagName("page").item(0);
-        return node.getAttribute("fullurl");
+        NodeList nodes = document.getElementsByTagName("page");
+        List<WikipediaResult> results = new ArrayList<>();
+
+        for (int i = 0; i < nodes.getLength(); i++) {
+            Node node = nodes.item(i);
+            WikipediaResult result = new WikipediaResult();
+            result.setTitle(node.getAttributes().getNamedItem("title").getNodeValue());
+            result.setUrl(node.getAttributes().getNamedItem("fullurl").getNodeValue());
+            results.add(result);
+        }
+        return results;
     }
 }

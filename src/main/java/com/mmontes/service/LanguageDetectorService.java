@@ -14,7 +14,6 @@ public class LanguageDetectorService {
     public static String getLanguage(String keywords) throws Exception {
         String encodedKeywords = URLEncoder.encode(keywords, "UTF-8");
         String url = Constants.LANGUAGE_DETECTION_BASE_URL + "&q=" + encodedKeywords;
-        System.out.println(url);
         URL obj = new URL(url);
         HttpURLConnection connnection = (HttpURLConnection) obj.openConnection();
         connnection.setRequestMethod("GET");

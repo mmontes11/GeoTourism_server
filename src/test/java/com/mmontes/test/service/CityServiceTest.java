@@ -38,7 +38,7 @@ public class CityServiceTest {
             assertNotNull(city);
             assertEquals(NAME_CITY_SANTIAGO, city.getName());
 
-            cityGeometry = (Point) GeometryConversor.geometryFromWKT(POINT_STATUE_OF_LIBERTRY);
+            cityGeometry = (Point) GeometryConversor.geometryFromWKT(POINT_ALHAMBRA);
             city = cityService.getCityFromLocation(cityGeometry);
             assertNull(city);
         } catch (GeometryParsingException e) {

@@ -25,10 +25,9 @@ public class TIPsController {
     public ResponseEntity<List<TIPSearchDto>>
     find(@RequestParam(value = "facebookUserId", required = false) Long facebookUserId,
          @RequestParam(value = "bounds", required = false) String boundsWKT,
-         @RequestParam(value = "type", required = false) String type,
+         @RequestParam(value = "type", required = false) Long type,
          @RequestParam(value = "cityId", required = false) Long cityId,
-         @RequestParam(value = "favouritedBy", required = false) Integer favouritedBy,
-         @RequestParam(value = "radius", required = false) Double radius) {
+         @RequestParam(value = "favouritedBy", required = false) Integer favouritedBy) {
 
         System.out.println("Find TIPs:");
         System.out.println(facebookUserId);
@@ -36,7 +35,6 @@ public class TIPsController {
         System.out.println(type);
         System.out.println(cityId);
         System.out.println(favouritedBy);
-        System.out.println(radius);
 
         //TODO: validate params
         Polygon bounds = null;
@@ -48,7 +46,7 @@ public class TIPsController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        List<TIPSearchDto> tips = tipService.find(facebookUserId, bounds, type, cityId, favouritedBy, radius);
+        List<TIPSearchDto> tips = tipService.find(facebookUserId, bounds, type, cityId, favouritedBy);
 
         return new ResponseEntity<>(tips, HttpStatus.OK);
     }

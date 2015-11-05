@@ -19,7 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 import static com.mmontes.test.util.Constants.*;
-import static com.mmontes.util.Constants.*;
+import static com.mmontes.util.Constants.SPRING_CONFIG_FILE;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -82,7 +82,7 @@ public class TIPServiceTest {
 
             assertEquals(1, tipSearchDtos.size());
             TIPSearchDto result = tipSearchDtos.get(0);
-            assertEquals(tipDetailsDto.getId(),result.getId());
+            assertEquals(tipDetailsDto.getId(), result.getId());
         } catch (Exception e) {
             e.printStackTrace();
             fail();
@@ -91,10 +91,10 @@ public class TIPServiceTest {
 
     @Test(expected = TIPLocationException.class)
     public void creatTIPinNonCreatedCity() throws TIPLocationException {
-        String name = "Liberty Statue";
-        String description = "NY symbol";
+        String name = "Alhambra";
+        String description = "Patrimonio de la humanidad";
         try {
-            Point geom = (Point) GeometryConversor.geometryFromWKT(POINT_STATUE_OF_LIBERTRY);
+            Point geom = (Point) GeometryConversor.geometryFromWKT(POINT_ALHAMBRA);
             tipService.create(MONUMENT_DISCRIMINATOR, name, description, null, null, geom);
         } catch (InvalidTIPUrlException | GeometryParsingException | InstanceNotFoundException | GoogleMapsServiceException e) {
             e.printStackTrace();
@@ -129,8 +129,6 @@ public class TIPServiceTest {
 
     @Test
     public void finTipsFromFarCity(){
-        TIPDetailsDto towerHercules = null;
-        TIPDetailsDto santiagoCathedral = null;
         Geometry bounds = null;
         try {
             String name = "Tower of Hercules";
@@ -138,10 +136,11 @@ public class TIPServiceTest {
             Point geom = (Point) GeometryConversor.geometryFromWKT(POINT_TORRE_HERCULES);
             tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, geom);
 
-            name = "Santiago de Compostela cathedral";
-            description = "Human Patrimony";
-            geom = (Point) GeometryConversor.geometryFromWKT(POINT_CATEDRAL_SANTIAGO);
+            name = "Alameda Santiago de Compostela";
+            description = "Sitio verde";
+            geom = (Point) GeometryConversor.geometryFromWKT(POINT_ALAMEDA);
             tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, geom);
+
             bounds = GeometryConversor.geometryFromWKT(BOUNDS_NEW_YORK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -150,5 +149,61 @@ public class TIPServiceTest {
         List<TIPSearchDto> tipSearchDtos = tipService.find(null, bounds, null, null, null);
 
         assertTrue(tipSearchDtos.isEmpty());
+    }
+
+    @Test
+    public void findTipsByType() {
+        TIPDetailsDto towerHercules = null;
+        try {
+            String name = "Tower of Hercules";
+            String description = "Human Patrimony";
+            Point geom = (Point) GeometryConversor.geometryFromWKT(POINT_TORRE_HERCULES);
+            towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, geom);
+
+            name = "Alameda Santiago de Compostela";
+            description = "Sitio verde";
+            geom = (Point) GeometryConversor.geometryFromWKT(POINT_ALAMEDA);
+            tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, geom);
+
+            List<TIPSearchDto> tipSearchDtos = tipService.find(null, null, MONUMENT_DISCRIMINATOR, null, null);
+
+            assertEquals(1, tipSearchDtos.size());
+            assertEquals(towerHercules.getId(), tipSearchDtos.get(0).getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    public void findTipsByBoundsAndType() {
+        TIPDetailsDto towerHercules = null;
+        Geometry bounds = null;
+        try {
+            String name = "Tower of Hercules";
+            String description = "Human Patrimony";
+            Point geom = (Point) GeometryConversor.geometryFromWKT(POINT_TORRE_HERCULES);
+            towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, geom);
+
+            name = "Alameda Santiago de Compostela";
+            description = "Sitio verde";
+            geom = (Point) GeometryConversor.geometryFromWKT(POINT_ALAMEDA);
+            tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, geom);
+
+            name = "Liberty Statue";
+            description = "NY symbol";
+            geom = (Point) GeometryConversor.geometryFromWKT(POINT_STATUE_OF_LIBERTRY);
+            tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, geom);
+
+            bounds = GeometryConversor.geometryFromWKT(BOUNDS_GALICIA);
+
+            List<TIPSearchDto> tipSearchDtos = tipService.find(null, bounds, MONUMENT_DISCRIMINATOR, null, null);
+
+            assertEquals(1, tipSearchDtos.size());
+            assertEquals(towerHercules.getId(), tipSearchDtos.get(0).getId());
+        } catch (Exception e){
+            e.printStackTrace();
+            fail();
+        }
     }
 }

@@ -12,14 +12,14 @@ import java.util.List;
 @Repository("TIPDao")
 public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements TIPDao {
 
-    public List<TIP> find(Geometry bounds, String type, Long cityId, List<Long> facebookUserIds, Double radius) {
+    public List<TIP> find(Geometry bounds, Long typeId, Long cityId, List<Long> facebookUserIds) {
 
         boolean filterByType = false;
         boolean filterByLocation = false;
 
         String queryString = "SELECT * FROM tip ";
-        if (type != null){
-            queryString += "WHERE type = '"+type+"' ";
+        if (typeId != null){
+            queryString += "WHERE typeid = '"+typeId+"' ";
             filterByType = true;
         }
         if (bounds != null){

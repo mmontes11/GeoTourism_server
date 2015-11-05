@@ -11,8 +11,8 @@ import java.util.List;
 
 public interface TIPService {
 
-    TIPDetailsDto create(String type, String name, String description, String photoUrl, String photoContent, String photoName, String infoUrl, Geometry geom)
-            throws AmazonServiceExeption, TIPLocationException, WikipediaServiceException, InvalidTIPUrlException, GoogleMapsServiceException;
+    TIPDetailsDto create(Long typeId, String name, String description, String photoUrl, String infoUrl, Geometry geom)
+            throws TIPLocationException, InvalidTIPUrlException, GoogleMapsServiceException, InstanceNotFoundException;
 
     TIPDetailsDto findById(Long TIPId) throws InstanceNotFoundException;
 
@@ -20,7 +20,7 @@ public interface TIPService {
 
     void remove(Long TIPId) throws InstanceNotFoundException;
 
-    List<TIPSearchDto> find(Long facebookUserId, Geometry location, String type, Long cityId, Integer favouritedBy, Double radius);
+    List<TIPSearchDto> find(Long facebookUserId, Geometry location, Long type, Long cityId, Integer favouritedBy);
 
-    TIPDetailsDto edit(Long TIPId, TIPPatchRequest newData) throws InstanceNotFoundException, AmazonServiceExeption;
+    TIPDetailsDto edit(Long TIPId, TIPPatchRequest newData) throws InstanceNotFoundException;
 }

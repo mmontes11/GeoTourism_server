@@ -1,12 +1,10 @@
 package com.mmontes.rest.controller;
 
 import com.mmontes.model.service.TIPService;
-import com.mmontes.model.util.TIPUtils;
 import com.mmontes.rest.request.TIPPatchRequest;
 import com.mmontes.rest.request.TIPRequest;
 import com.mmontes.util.GeometryConversor;
 import com.mmontes.util.dto.TIPDetailsDto;
-import com.mmontes.util.exception.AmazonServiceExeption;
 import com.mmontes.util.exception.GeometryParsingException;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import com.vividsolutions.jts.geom.Geometry;
@@ -26,8 +24,7 @@ public class TIPController {
     public ResponseEntity<TIPDetailsDto>
     create(@RequestBody TIPRequest tipRequest) {
 
-        if (!TIPUtils.isValidType(tipRequest.getType()) ||
-                tipRequest.getName() == null || tipRequest.getName().isEmpty() ||
+        if (tipRequest.getName() == null || tipRequest.getName().isEmpty() ||
                 tipRequest.getGeometry() == null || tipRequest.getGeometry().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
@@ -41,8 +38,7 @@ public class TIPController {
         TIPDetailsDto tipDetailsDto;
         try {
             tipDetailsDto = tipService.create(tipRequest.getType(), tipRequest.getName(), tipRequest.getDescription(),
-                    tipRequest.getPhotoUrl(), tipRequest.getPhotoContent(), tipRequest.getPhotoName(),
-                    tipRequest.getInfoUrl(), geometry);
+                    tipRequest.getPhotoUrl(), tipRequest.getInfoUrl(), geometry);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -82,9 +78,6 @@ public class TIPController {
             tipDetailsDto = tipService.edit(TIPId, tipPatchRequest);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (AmazonServiceExeption e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(tipDetailsDto,HttpStatus.OK);
     }

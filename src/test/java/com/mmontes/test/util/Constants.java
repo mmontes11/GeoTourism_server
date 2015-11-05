@@ -4,6 +4,11 @@ public final class Constants {
 
     public static final String SPRING_CONFIG_TEST_FILE = "classpath:/spring-config-test.xml";
 
+    public static final Long MONUMENT_DISCRIMINATOR = 1L;
+    public static final Long NATURAL_SPACE_DISCRIMINATOR = 2L;
+    public static final Long HOTEL_DISCRIMINATOR = 3L;
+    public static final Long RESTAURANT_DISCRIMINATOR = 4L;
+
     public static final String NAME_CITY_A_CORUNA = "A Coruña";
     public static final String NAME_CITY_SANTIAGO  = "Santiago de Compostela";
 

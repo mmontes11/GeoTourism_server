@@ -2,7 +2,7 @@ package com.mmontes.rest.request;
 
 public class TIPPatchRequest {
 
-    private String type;
+    private Long type;
     private String name;
     private String description;
     private String infoUrl;
@@ -14,7 +14,7 @@ public class TIPPatchRequest {
     public TIPPatchRequest() {
     }
 
-    public TIPPatchRequest(String type, String name, String description, String infoUrl, String address, String photoUrl, String photoContent, String photoName) {
+    public TIPPatchRequest(Long type, String name, String description, String infoUrl, String address, String photoUrl, String photoContent, String photoName) {
         this.type = type;
         this.name = name;
         this.description = description;
@@ -25,11 +25,11 @@ public class TIPPatchRequest {
         this.photoName = photoName;
     }
 
-    public String getType() {
+    public Long getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Long type) {
         this.type = type;
     }
 

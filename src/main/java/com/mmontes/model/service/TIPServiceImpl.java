@@ -1,9 +1,9 @@
 package com.mmontes.model.service;
 
 import com.mmontes.model.dao.TIPDao;
+import com.mmontes.model.dao.TIPtypeDao;
 import com.mmontes.model.entity.City;
 import com.mmontes.model.entity.TIP;
-import com.mmontes.service.AmazonService;
 import com.mmontes.service.GoogleMapsService;
 import com.mmontes.rest.request.TIPPatchRequest;
 import com.mmontes.util.URLvalidator;
@@ -27,17 +27,22 @@ public class TIPServiceImpl implements TIPService {
     private TIPDao tipDao;
 
     @Autowired
+    private TIPtypeDao tipTypeDao;
+
+    @Autowired
     private CityService cityService;
 
     public TIPDetailsDto
-    create(String type, String name, String description, String photoUrl, String photoContent, String photoName, String infoUrl, Geometry geom)
-            throws AmazonServiceExeption, TIPLocationException, WikipediaServiceException, InvalidTIPUrlException, GoogleMapsServiceException {
+    create(Long typeId, String name, String description, String photoUrl, String infoUrl, Geometry geom)
+            throws TIPLocationException, InvalidTIPUrlException, GoogleMapsServiceException, InstanceNotFoundException {
 
         TIP tip = new TIP();
-        tip.setType(type);
+        tip.setType(tipTypeDao.findById(typeId));
         tip.setName(name);
         tip.setDescription(description);
         tip.setGeom(geom);
+        tip.setPhotoUrl(photoUrl);
+        tip.setInfoUrl(infoUrl);
 
         Coordinate coordinate = tip.getGeom().getCoordinate();
         tip.setGoogleMapsUrl(GoogleMapsService.getTIPGoogleMapsUrl(coordinate));
@@ -48,29 +53,11 @@ public class TIPServiceImpl implements TIPService {
             throw new GoogleMapsServiceException();
         }
 
-        if (photoUrl != null && !photoUrl.equals("")){
-            tip.setPhotoUrl(photoUrl);
-        }else{
-            if (photoName != null && photoContent != null){
-                String url;
-                try {
-                    url = AmazonService.uploadFile(photoName, photoContent);
-                    tip.setPhotoUrl(url);
-                } catch (Exception e) {
-                    throw new AmazonServiceExeption();
-                }
-            }
-        }
-
         City city = cityService.getCityFromLocation(geom);
         if (city != null){
             tip.setCity(city);
         }else{
             throw new TIPLocationException();
-        }
-
-        if (infoUrl != null){
-            tip.setInfoUrl(infoUrl);
         }
 
         URLvalidator.checkURLs(tip);
@@ -91,30 +78,20 @@ public class TIPServiceImpl implements TIPService {
         tipDao.remove(TIPId);
     }
 
-    public List<TIPSearchDto> find(Long facebookUserId, Geometry bounds, String type, Long cityId, Integer favouritedBy, Double radius) {
-        List<TIP> tips = tipDao.find(bounds,type,cityId,null,radius);
+    public List<TIPSearchDto> find(Long facebookUserId, Geometry bounds, Long type, Long cityId, Integer favouritedBy) {
+        List<TIP> tips = tipDao.find(bounds,type,cityId,null);
         return DtoConversor.ListTIP2ListSearchDto(tips);
     }
 
-    public TIPDetailsDto edit(Long TIPId, TIPPatchRequest newData) throws InstanceNotFoundException, AmazonServiceExeption {
+    public TIPDetailsDto edit(Long TIPId, TIPPatchRequest newData) throws InstanceNotFoundException {
         TIP tip = tipDao.findById(TIPId);
-        tip.setType(newData.getType());
+        tip.setType(tipTypeDao.findById(newData.getType()));
         tip.setName(newData.getName());
         tip.setDescription(newData.getDescription());
         tip.setInfoUrl(newData.getInfoUrl());
         tip.setAddress(newData.getAddress());
         if (newData.getPhotoUrl() != null && !newData.getPhotoUrl().equals("")){
             tip.setPhotoUrl(newData.getPhotoUrl());
-        }else{
-            if (newData.getPhotoName() != null && newData.getPhotoContent() != null){
-                String url;
-                try {
-                    url = AmazonService.uploadFile(newData.getPhotoName(), newData.getPhotoContent());
-                    tip.setPhotoUrl(url);
-                } catch (Exception e) {
-                    throw new AmazonServiceExeption();
-                }
-            }
         }
         tipDao.save(tip);
         return DtoConversor.TIP2TIPDetailsDto(tip);

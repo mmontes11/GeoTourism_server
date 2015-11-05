@@ -8,6 +8,6 @@ import java.util.List;
 
 public interface TIPDao extends GenericDao<TIP, Long>{
 
-    List<TIP> find(Geometry bounds,String type,Long cityId,List<Long> facebookUserIds,Double radius);
+    List<TIP> find(Geometry bounds,Long type,Long cityId,List<Long> facebookUserIds);
     void markAsFavourite(Long TIPId, Long facebookUserId);
 }

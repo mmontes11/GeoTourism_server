@@ -2,34 +2,30 @@ package com.mmontes.rest.request;
 
 public class TIPRequest {
 
-    String type;
-    String name;
-    String description;
-    String photoUrl;
-    String photoContent;
-    String photoName;
-    String infoUrl;
-    String geometry;
+    private Long type;
+    private String name;
+    private String description;
+    private String photoUrl;
+    private String infoUrl;
+    private String geometry;
 
     public TIPRequest() {
     }
 
-    public TIPRequest(String type, String name, String description, String photoUrl, String photoContent, String photoName, String infoUrl, String geometry) {
+    public TIPRequest(Long type, String name, String description, String photoUrl,String infoUrl, String geometry) {
         this.type = type;
         this.name = name;
         this.description = description;
         this.photoUrl = photoUrl;
-        this.photoContent = photoContent;
-        this.photoName = photoName;
         this.infoUrl = infoUrl;
         this.geometry = geometry;
     }
 
-    public String getType() {
+    public Long getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(Long type) {
         this.type = type;
     }
 
@@ -57,22 +53,6 @@ public class TIPRequest {
         this.photoUrl = photoUrl;
     }
 
-    public String getPhotoContent() {
-        return photoContent;
-    }
-
-    public void setPhotoContent(String photoContent) {
-        this.photoContent = photoContent;
-    }
-
-    public String getPhotoName() {
-        return photoName;
-    }
-
-    public void setPhotoName(String photoName) {
-        this.photoName = photoName;
-    }
-
     public String getInfoUrl() {
         return infoUrl;
     }
@@ -92,14 +72,12 @@ public class TIPRequest {
     @Override
     public String toString() {
         return "TIPRequest{" +
-                "type='" + type + '\'' +
+                "type=" + type +
                 ", name='" + name + '\'' +
                 ", description='" + description + '\'' +
                 ", photoUrl='" + photoUrl + '\'' +
-                ", photoContent='" + photoContent + '\'' +
-                ", photoName='" + photoName + '\'' +
                 ", infoUrl='" + infoUrl + '\'' +
-                ", geom='" + geometry + '\'' +
+                ", geometry='" + geometry + '\'' +
                 '}';
     }
 }

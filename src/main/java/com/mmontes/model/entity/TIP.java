@@ -11,8 +11,8 @@ public class TIP {
 
     private static final String TIP_ID_GENERATOR = "TIPIdGenerator";
     private Long id;
+    private TIPtype type;
     private String name;
-    private String type;
     private Geometry geom;
     private String address;
     private String description;
@@ -22,18 +22,6 @@ public class TIP {
     private City city;
 
     public TIP() {
-    }
-
-    public TIP(Long id, String name, String type, Geometry geom, String address, String description, String photoUrl, String infoUrl, String googleMapsUrl, City city) {
-        this.name = name;
-        this.type = type;
-        this.geom = geom;
-        this.address = address;
-        this.description = description;
-        this.photoUrl = photoUrl;
-        this.infoUrl = infoUrl;
-        this.googleMapsUrl = googleMapsUrl;
-        this.city = city;
     }
 
     @Column(name = "id")
@@ -48,6 +36,16 @@ public class TIP {
         this.id = id;
     }
 
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "typeid")
+    public TIPtype getType() {
+        return type;
+    }
+
+    public void setType(TIPtype type) {
+        this.type = type;
+    }
+
     @Column(name = "name")
     public String getName() {
         return name;
@@ -55,15 +53,6 @@ public class TIP {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    @Column(name = "type")
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     @Column(name = "geom")

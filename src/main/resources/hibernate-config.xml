@@ -9,6 +9,7 @@
         <property name="hibernate.connection.pool_size">10</property>
 
         <mapping class="com.mmontes.model.entity.TIP"/>
+        <mapping class="com.mmontes.model.entity.TIPtype"/>
         <mapping class="com.mmontes.model.entity.City"/>
         <mapping class="com.mmontes.model.entity.Admin"/>
         <mapping class="com.mmontes.model.entity.Comment"/>

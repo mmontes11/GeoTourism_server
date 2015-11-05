@@ -11,7 +11,7 @@ import java.util.List;
 public class DtoConversor {
 
     public static TIPDetailsDto TIP2TIPDetailsDto(TIP tip){
-        String type = tip.getType();
+        String type = tip.getType().getName();
         String geom = GeometryConversor.wktFromGeometry(tip.getGeom());
         String cityName = tip.getCity().getName();
 

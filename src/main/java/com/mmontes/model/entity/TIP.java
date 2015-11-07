@@ -36,7 +36,7 @@ public class TIP {
         this.id = id;
     }
 
-    @OneToOne(optional = false, fetch = FetchType.EAGER)
+    @OneToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "typeid")
     public TIPtype getType() {
         return type;
@@ -110,7 +110,7 @@ public class TIP {
         this.googleMapsUrl = googleMapsUrl;
     }
 
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "cityid")
     public City getCity() {
         return city;

@@ -1,7 +1,9 @@
 package com.mmontes.test.service;
 
 import com.mmontes.model.dao.TIPtypeDao;
+import com.mmontes.model.entity.TIPtype;
 import com.mmontes.model.service.TIPService;
+import com.mmontes.model.service.TIPtypeService;
 import com.mmontes.util.GeometryConversor;
 import com.mmontes.util.dto.TIPDetailsDto;
 import com.mmontes.util.dto.TIPSearchDto;
@@ -26,10 +28,13 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { SPRING_CONFIG_FILE, SPRING_CONFIG_TEST_FILE })
 @Transactional
-public class TIPServiceTest {
+public class TIPTest {
 
     @Autowired
     private TIPService tipService;
+
+    @Autowired
+    private TIPtypeService tipTypeService;
 
     @Autowired
     private TIPtypeDao tiPtypeDao;
@@ -42,29 +47,26 @@ public class TIPServiceTest {
             Point geom = (Point) GeometryConversor.geometryFromWKT(POINT_TORRE_HERCULES);
             TIPDetailsDto tipDetailsDto = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom);
 
-            assertEquals(tiPtypeDao.findById(MONUMENT_DISCRIMINATOR), tipDetailsDto.getType());
+            assertEquals(MONUMENT_DISCRIMINATOR, tipDetailsDto.getType());
             assertEquals(name, tipDetailsDto.getName());
             assertEquals(description, tipDetailsDto.getDescription());
             assertNotNull(tipDetailsDto.getGeom());
             assertEquals(VALID_TIP_PHOTO_URL, tipDetailsDto.getPhotoUrl());
             assertEquals(VALID_TIP_INFO_URL, tipDetailsDto.getInfoUrl());
             assertNotNull(tipDetailsDto.getGoogleMapsUrl());
-            assertEquals(NAME_CITY_A_CORUNA, tipDetailsDto.getCity().getName());
 
             name = "Alameda Park";
             description = "Green zone";
             geom = (Point) GeometryConversor.geometryFromWKT(POINT_ALAMEDA);
             tipDetailsDto = tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom);
 
-            assertEquals(tiPtypeDao.findById(NATURAL_SPACE_DISCRIMINATOR), tipDetailsDto.getType());
+            assertEquals(NATURAL_SPACE_DISCRIMINATOR, tipDetailsDto.getType());
             assertEquals(name, tipDetailsDto.getName());
             assertEquals(description, tipDetailsDto.getDescription());
             assertNotNull(tipDetailsDto.getGeom());
             assertEquals(VALID_TIP_PHOTO_URL, tipDetailsDto.getPhotoUrl());
             assertEquals(VALID_TIP_INFO_URL, tipDetailsDto.getInfoUrl());
             assertNotNull(tipDetailsDto.getGoogleMapsUrl());
-            assertEquals(NAME_CITY_SANTIAGO, tipDetailsDto.getCity().getName());
-
         } catch (Exception e) {
             e.printStackTrace();
             fail();
@@ -319,6 +321,6 @@ public class TIPServiceTest {
 
     @Test
     public void getAllTIPtypes(){
-        assertEquals(4,tipService.findAllTypes().size());
+        assertEquals(4, tipTypeService.findAllTypes().size());
     }
 }

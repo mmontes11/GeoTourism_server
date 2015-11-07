@@ -4,15 +4,9 @@ import org.json.simple.JSONObject;
 
 public class ResponseFactory {
 
-    public static JSONObject geCreatedResponse(Long id){
+    public static JSONObject getCustomJSON(String field,String value){
         JSONObject json = new JSONObject();
-        json.put("ID",id);
-        return json;
-    }
-
-    public static JSONObject getErrorResponse(String errorMessage){
-        JSONObject json = new JSONObject();
-        json.put("error",errorMessage);
+        json.put(field,value);
         return json;
     }
 }

@@ -9,6 +9,10 @@ public final class Constants {
     public static final Long HOTEL_DISCRIMINATOR = 3L;
     public static final Long RESTAURANT_DISCRIMINATOR = 4L;
 
+    public static final Long A_CORUNA_ID = 1L;
+    public static final Long SANTIAGO_ID = 2L;
+    public static final Long A_LARACHA_ID = 3L;
+    public static final Long NEW_YORK_ID = 4L;
     public static final String NAME_CITY_A_CORUNA = "A Coruña";
     public static final String NAME_CITY_SANTIAGO  = "Santiago de Compostela";
 

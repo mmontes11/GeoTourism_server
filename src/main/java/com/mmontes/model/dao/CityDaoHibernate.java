@@ -1,7 +1,7 @@
 package com.mmontes.model.dao;
 
 import com.mmontes.model.entity.City;
-import com.mmontes.model.util.dao.GenericDaoHibernate;
+import com.mmontes.model.util.genericdao.GenericDaoHibernate;
 import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.stereotype.Repository;
 

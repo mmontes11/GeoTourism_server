@@ -25,15 +25,15 @@ public class TIPsController {
     public ResponseEntity<List<TIPSearchDto>>
     find(@RequestParam(value = "facebookUserId", required = false) Long facebookUserId,
          @RequestParam(value = "bounds", required = false) String boundsWKT,
-         @RequestParam(value = "type", required = false) Long type,
-         @RequestParam(value = "cityId", required = false) Long cityId,
+         @RequestParam(value = "type", required = false) List<Long> typeIds,
+         @RequestParam(value = "cityId", required = false) List<Long> cityIds,
          @RequestParam(value = "favouritedBy", required = false) Integer favouritedBy) {
 
         System.out.println("Find TIPs:");
         System.out.println(facebookUserId);
         System.out.println(boundsWKT);
-        System.out.println(type);
-        System.out.println(cityId);
+        System.out.println(typeIds);
+        System.out.println(cityIds);
         System.out.println(favouritedBy);
 
         //TODO: validate params
@@ -46,7 +46,7 @@ public class TIPsController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
 
-        List<TIPSearchDto> tips = tipService.find(facebookUserId, bounds, type, cityId, favouritedBy);
+        List<TIPSearchDto> tips = tipService.find(facebookUserId, bounds, typeIds, cityIds, favouritedBy);
 
         return new ResponseEntity<>(tips, HttpStatus.OK);
     }

@@ -78,8 +78,8 @@ public class TIPServiceImpl implements TIPService {
         tipDao.remove(TIPId);
     }
 
-    public List<TIPSearchDto> find(Long facebookUserId, Geometry bounds, Long type, Long cityId, Integer favouritedBy) {
-        List<TIP> tips = tipDao.find(bounds,type,cityId,null);
+    public List<TIPSearchDto> find(Long facebookUserId, Geometry bounds, List<Long> typeIds, List<Long> cityIds, Integer favouritedBy) {
+        List<TIP> tips = tipDao.find(bounds,typeIds,cityIds,null);
         return DtoConversor.ListTIP2ListSearchDto(tips);
     }
 

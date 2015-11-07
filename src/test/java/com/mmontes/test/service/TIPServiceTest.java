@@ -16,6 +16,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.mmontes.test.util.Constants.*;
@@ -78,7 +79,10 @@ public class TIPServiceTest {
         try {
             Point geom = (Point) GeometryConversor.geometryFromWKT(POINT_CATEDRAL_SANTIAGO);
             TIPDetailsDto tipDetailsDto = tipService.create(MONUMENT_DISCRIMINATOR, name, description, null, null, geom);
-            List<TIPSearchDto> tipSearchDtos = tipService.find(null, null, MONUMENT_DISCRIMINATOR, null, null);
+            ArrayList<Long> typeIds = new ArrayList<Long>() {{
+                add(MONUMENT_DISCRIMINATOR);
+            }};
+            List<TIPSearchDto> tipSearchDtos = tipService.find(null, null, typeIds, null, null);
 
             assertEquals(1, tipSearchDtos.size());
             TIPSearchDto result = tipSearchDtos.get(0);
@@ -152,7 +156,7 @@ public class TIPServiceTest {
     }
 
     @Test
-    public void findTipsByType() {
+    public void findTipsByTypes() {
         TIPDetailsDto towerHercules = null;
         try {
             String name = "Tower of Hercules";
@@ -165,10 +169,21 @@ public class TIPServiceTest {
             geom = (Point) GeometryConversor.geometryFromWKT(POINT_ALAMEDA);
             tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, geom);
 
-            List<TIPSearchDto> tipSearchDtos = tipService.find(null, null, MONUMENT_DISCRIMINATOR, null, null);
+            ArrayList<Long> typeIds = new ArrayList<Long>() {{
+                add(MONUMENT_DISCRIMINATOR);
+            }};
+            List<TIPSearchDto> tipSearchDtos = tipService.find(null, null, typeIds, null, null);
 
             assertEquals(1, tipSearchDtos.size());
             assertEquals(towerHercules.getId(), tipSearchDtos.get(0).getId());
+
+            typeIds = new ArrayList<Long>() {{
+                add(MONUMENT_DISCRIMINATOR);
+                add(NATURAL_SPACE_DISCRIMINATOR);
+            }};
+            tipSearchDtos = tipService.find(null, null, typeIds, null, null);
+
+            assertEquals(2, tipSearchDtos.size());
         } catch (Exception e) {
             e.printStackTrace();
             fail();
@@ -176,9 +191,8 @@ public class TIPServiceTest {
     }
 
     @Test
-    public void findTipsByBoundsAndType() {
+    public void findTipsByCities() {
         TIPDetailsDto towerHercules = null;
-        Geometry bounds = null;
         try {
             String name = "Tower of Hercules";
             String description = "Human Patrimony";
@@ -190,17 +204,113 @@ public class TIPServiceTest {
             geom = (Point) GeometryConversor.geometryFromWKT(POINT_ALAMEDA);
             tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, geom);
 
+            name = "Catedral Santiago de Compostela";
+            description = "Sitio de peregrinacion";
+            geom = (Point) GeometryConversor.geometryFromWKT(POINT_CATEDRAL_SANTIAGO);
+            tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, geom);
+
+            ArrayList<Long> cityIds = new ArrayList<Long>() {{
+                add(A_CORUNA_ID);
+            }};
+            List<TIPSearchDto> tipSearchDtos = tipService.find(null, null, null, cityIds, null);
+
+            assertEquals(1, tipSearchDtos.size());
+            assertEquals(towerHercules.getId(), tipSearchDtos.get(0).getId());
+
+            cityIds = new ArrayList<Long>() {{
+                add(SANTIAGO_ID);
+            }};
+            tipSearchDtos = tipService.find(null, null, null, cityIds, null);
+
+            assertEquals(2, tipSearchDtos.size());
+
+            cityIds = new ArrayList<Long>() {{
+                add(A_CORUNA_ID);
+                add(SANTIAGO_ID);
+            }};
+            tipSearchDtos = tipService.find(null, null, null, cityIds, null);
+
+            assertEquals(3, tipSearchDtos.size());
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    public void findTipsByBoundTypesCities() {
+        TIPDetailsDto towerHercules = null;
+        Geometry boundsGalicia = null;
+        Geometry boundsNY = null;
+        try {
+            String name = "Tower of Hercules";
+            String description = "Human Patrimony";
+            Point geom = (Point) GeometryConversor.geometryFromWKT(POINT_TORRE_HERCULES);
+            towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, geom);
+
+            name = "Alameda Santiago de Compostela";
+            description = "Sitio verde";
+            geom = (Point) GeometryConversor.geometryFromWKT(POINT_ALAMEDA);
+            tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, geom);
+
+            name = "Catedral Santiago de Compostela";
+            description = "Sitio de peregrinacion";
+            geom = (Point) GeometryConversor.geometryFromWKT(POINT_CATEDRAL_SANTIAGO);
+            tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, geom);
+
             name = "Liberty Statue";
             description = "NY symbol";
             geom = (Point) GeometryConversor.geometryFromWKT(POINT_STATUE_OF_LIBERTRY);
             tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, geom);
 
-            bounds = GeometryConversor.geometryFromWKT(BOUNDS_GALICIA);
+            boundsGalicia = GeometryConversor.geometryFromWKT(BOUNDS_GALICIA);
+            boundsNY = GeometryConversor.geometryFromWKT(BOUNDS_NEW_YORK);
 
-            List<TIPSearchDto> tipSearchDtos = tipService.find(null, bounds, MONUMENT_DISCRIMINATOR, null, null);
-
+            ArrayList<Long> typeIds = new ArrayList<Long>() {{
+                add(MONUMENT_DISCRIMINATOR);
+            }};
+            ArrayList<Long> cityIds = new ArrayList<Long>() {{
+                add(A_CORUNA_ID);
+            }};
+            List<TIPSearchDto> tipSearchDtos = tipService.find(null, boundsGalicia, typeIds, cityIds, null);
             assertEquals(1, tipSearchDtos.size());
             assertEquals(towerHercules.getId(), tipSearchDtos.get(0).getId());
+
+            typeIds = new ArrayList<Long>() {{
+                add(MONUMENT_DISCRIMINATOR);
+            }};
+            cityIds = new ArrayList<Long>() {{
+                add(NEW_YORK_ID);
+            }};
+            tipSearchDtos = tipService.find(null, boundsNY, typeIds, cityIds, null);
+            assertEquals(1, tipSearchDtos.size());
+
+            typeIds = new ArrayList<Long>() {{
+                add(MONUMENT_DISCRIMINATOR);
+            }};
+            cityIds = new ArrayList<Long>() {{
+                add(A_CORUNA_ID);
+            }};
+            tipSearchDtos = tipService.find(null, boundsNY, typeIds, cityIds, null);
+            assertEquals(0, tipSearchDtos.size());
+
+            typeIds = new ArrayList<Long>() {{
+                add(NATURAL_SPACE_DISCRIMINATOR);
+            }};
+            cityIds = new ArrayList<Long>() {{
+                add(NEW_YORK_ID);
+            }};
+            tipSearchDtos = tipService.find(null, boundsNY, typeIds, cityIds, null);
+            assertEquals(0, tipSearchDtos.size());
+
+            typeIds = new ArrayList<Long>() {{
+                add(NATURAL_SPACE_DISCRIMINATOR);
+            }};
+            cityIds = new ArrayList<Long>() {{
+                add(SANTIAGO_ID);
+            }};
+            tipSearchDtos = tipService.find(null, boundsGalicia, typeIds, cityIds, null);
+            assertEquals(1, tipSearchDtos.size());
         } catch (Exception e){
             e.printStackTrace();
             fail();

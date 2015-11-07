@@ -97,9 +97,4 @@ public class TIPServiceImpl implements TIPService {
         tipDao.save(tip);
         return DtoConversor.TIP2TIPDetailsDto(tip);
     }
-
-    @Override
-    public List<TIPtype> findAllTypes() {
-        return tipTypeDao.findAll();
-    }
 }

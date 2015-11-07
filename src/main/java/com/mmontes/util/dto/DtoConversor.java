@@ -9,12 +9,10 @@ import java.util.List;
 public class DtoConversor {
 
     public static TIPDetailsDto TIP2TIPDetailsDto(TIP tip){
-        TIPtype type = tip.getType();
         String geom = GeometryConversor.wktFromGeometry(tip.getGeom());
-        CityDto cityDto = DtoConversor.City2CityDto(tip.getCity());
 
-        return new TIPDetailsDto(tip.getId(),type,tip.getName(),tip.getDescription(), geom, tip.getAddress(),
-                tip.getPhotoUrl(), tip.getInfoUrl(), tip.getGoogleMapsUrl(), cityDto);
+        return new TIPDetailsDto(tip.getId(),tip.getType().getId(),tip.getName(),tip.getDescription(), geom, tip.getAddress(),
+                tip.getPhotoUrl(), tip.getInfoUrl(), tip.getGoogleMapsUrl());
     }
 
     public static TIPSearchDto TIP2TIPSearchDto(TIP tip){

@@ -1,12 +1,10 @@
 package com.mmontes.util.dto;
 
 
-import com.mmontes.model.entity.TIPtype;
-
 public class TIPDetailsDto {
 
     private Long id;
-    private TIPtype type;
+    private Long type;
     private String name;
     private String description;
     private String geom;
@@ -14,12 +12,11 @@ public class TIPDetailsDto {
     private String photoUrl;
     private String infoUrl;
     private String googleMapsUrl;
-    private CityDto city;
 
     public TIPDetailsDto() {
     }
 
-    public TIPDetailsDto(Long id, TIPtype type, String name, String description, String geom, String address, String photoUrl, String inforUrl, String googleMapsUrl, CityDto city) {
+    public TIPDetailsDto(Long id, Long type, String name, String description, String geom, String address, String photoUrl, String inforUrl, String googleMapsUrl) {
         this.id = id;
         this.type = type;
         this.name = name;
@@ -29,7 +26,6 @@ public class TIPDetailsDto {
         this.photoUrl = photoUrl;
         this.infoUrl = inforUrl;
         this.googleMapsUrl = googleMapsUrl;
-        this.city = city;
     }
 
     public Long getId() {
@@ -40,11 +36,11 @@ public class TIPDetailsDto {
         this.id = id;
     }
 
-    public TIPtype getType() {
+    public Long getType() {
         return type;
     }
 
-    public void setType(TIPtype type) {
+    public void setType(Long type) {
         this.type = type;
     }
 
@@ -102,13 +98,5 @@ public class TIPDetailsDto {
 
     public void setGoogleMapsUrl(String googleMapsUrl) {
         this.googleMapsUrl = googleMapsUrl;
-    }
-
-    public CityDto getCity() {
-        return city;
-    }
-
-    public void setCity(CityDto city) {
-        this.city = city;
     }
 }

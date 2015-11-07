@@ -1,9 +1,6 @@
 package com.mmontes.util.dto;
 
-import com.mmontes.model.entity.City;
-import com.mmontes.model.entity.Comment;
-import com.mmontes.model.entity.TIP;
-import com.mmontes.model.entity.User;
+import com.mmontes.model.entity.*;
 import com.mmontes.util.GeometryConversor;
 
 import java.util.ArrayList;
@@ -12,7 +9,7 @@ import java.util.List;
 public class DtoConversor {
 
     public static TIPDetailsDto TIP2TIPDetailsDto(TIP tip){
-        String type = tip.getType().getName();
+        TIPtype type = tip.getType();
         String geom = GeometryConversor.wktFromGeometry(tip.getGeom());
         CityDto cityDto = DtoConversor.City2CityDto(tip.getCity());
 

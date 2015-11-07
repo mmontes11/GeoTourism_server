@@ -1,10 +1,12 @@
 package com.mmontes.util.dto;
 
 
+import com.mmontes.model.entity.TIPtype;
+
 public class TIPDetailsDto {
 
     private Long id;
-    private String type;
+    private TIPtype type;
     private String name;
     private String description;
     private String geom;
@@ -17,7 +19,7 @@ public class TIPDetailsDto {
     public TIPDetailsDto() {
     }
 
-    public TIPDetailsDto(Long id, String type, String name, String description, String geom, String address, String photoUrl, String inforUrl, String googleMapsUrl, CityDto city) {
+    public TIPDetailsDto(Long id, TIPtype type, String name, String description, String geom, String address, String photoUrl, String inforUrl, String googleMapsUrl, CityDto city) {
         this.id = id;
         this.type = type;
         this.name = name;
@@ -38,11 +40,11 @@ public class TIPDetailsDto {
         this.id = id;
     }
 
-    public String getType() {
+    public TIPtype getType() {
         return type;
     }
 
-    public void setType(String type) {
+    public void setType(TIPtype type) {
         this.type = type;
     }
 

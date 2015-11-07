@@ -123,7 +123,7 @@ CREATE TABLE RouteTIP(
 );
 
 DELETE FROM TIPtype;
-INSERT INTO TIPtype VALUES(1,'Monuments');
-INSERT INTO TIPtype VALUES(2,'Natural Spaces');
-INSERT INTO TIPtype VALUES(3,'Hotels');
-INSERT INTO TIPtype VALUES(4,'Restaurants');
+INSERT INTO TIPtype VALUES(1,'Monument');
+INSERT INTO TIPtype VALUES(2,'Natural Space');
+INSERT INTO TIPtype VALUES(3,'Hotel');
+INSERT INTO TIPtype VALUES(4,'Restaurant');

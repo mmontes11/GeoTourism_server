@@ -42,7 +42,7 @@ public class TIPServiceTest {
             Point geom = (Point) GeometryConversor.geometryFromWKT(POINT_TORRE_HERCULES);
             TIPDetailsDto tipDetailsDto = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom);
 
-            assertEquals(tiPtypeDao.findById(MONUMENT_DISCRIMINATOR).getName(), tipDetailsDto.getType());
+            assertEquals(tiPtypeDao.findById(MONUMENT_DISCRIMINATOR), tipDetailsDto.getType());
             assertEquals(name, tipDetailsDto.getName());
             assertEquals(description, tipDetailsDto.getDescription());
             assertNotNull(tipDetailsDto.getGeom());
@@ -56,7 +56,7 @@ public class TIPServiceTest {
             geom = (Point) GeometryConversor.geometryFromWKT(POINT_ALAMEDA);
             tipDetailsDto = tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom);
 
-            assertEquals(tiPtypeDao.findById(NATURAL_SPACE_DISCRIMINATOR).getName(), tipDetailsDto.getType());
+            assertEquals(tiPtypeDao.findById(NATURAL_SPACE_DISCRIMINATOR), tipDetailsDto.getType());
             assertEquals(name, tipDetailsDto.getName());
             assertEquals(description, tipDetailsDto.getDescription());
             assertNotNull(tipDetailsDto.getGeom());

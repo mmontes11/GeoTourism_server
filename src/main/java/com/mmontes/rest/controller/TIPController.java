@@ -1,5 +1,6 @@
 package com.mmontes.rest.controller;
 
+import com.mmontes.model.entity.TIPtype;
 import com.mmontes.model.service.TIPService;
 import com.mmontes.rest.request.TIPPatchRequest;
 import com.mmontes.rest.request.TIPRequest;
@@ -13,6 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class TIPController {
@@ -80,5 +83,12 @@ public class TIPController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(tipDetailsDto,HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/tip/types", method = RequestMethod.GET)
+    public ResponseEntity<List<TIPtype>>
+    findAllTIPtypes() {
+        List<TIPtype> types = tipService.findAllTypes();
+        return new ResponseEntity<>(types, HttpStatus.OK);
     }
 }

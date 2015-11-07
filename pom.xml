@@ -20,6 +20,7 @@
         <testDataSource.password>${dataSource.password}</testDataSource.password>
         <!-- DB scripts properties -->
         <db.script.createdb>src/db/db.sql</db.script.createdb>
+        <db.script.admin>src/db/admin.sql</db.script.admin>
         <db.script.testdata>src/db/testData.sql</db.script.testdata>
         <!-- Hibernate configuration -->
         <hibernate.dialect>org.hibernate.spatial.dialect.postgis.PostgisDialect</hibernate.dialect>
@@ -337,6 +338,7 @@
                     <onError>continue</onError>
                     <srcFiles>
                         <srcFile>${db.script.createdb}</srcFile>
+                        <srcFile>${db.script.admin}</srcFile>
                         <srcFile>${db.script.testdata}</srcFile>
                     </srcFiles>
                 </configuration>

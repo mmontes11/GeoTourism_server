@@ -4,6 +4,7 @@
 *.war
 *.ear
 
+admin.sql
 Constants.java
 target/
 .idea/

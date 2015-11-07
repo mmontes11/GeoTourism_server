@@ -25,8 +25,8 @@ public class TIPsController {
     public ResponseEntity<List<TIPSearchDto>>
     find(@RequestParam(value = "facebookUserId", required = false) Long facebookUserId,
          @RequestParam(value = "bounds", required = false) String boundsWKT,
-         @RequestParam(value = "type", required = false) List<Long> typeIds,
-         @RequestParam(value = "cityId", required = false) List<Long> cityIds,
+         @RequestParam(value = "types", required = false) List<Long> typeIds,
+         @RequestParam(value = "cities", required = false) List<Long> cityIds,
          @RequestParam(value = "favouritedBy", required = false) Integer favouritedBy) {
 
         System.out.println("Find TIPs:");

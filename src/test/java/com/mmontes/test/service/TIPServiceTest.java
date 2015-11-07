@@ -49,7 +49,7 @@ public class TIPServiceTest {
             assertEquals(VALID_TIP_PHOTO_URL, tipDetailsDto.getPhotoUrl());
             assertEquals(VALID_TIP_INFO_URL, tipDetailsDto.getInfoUrl());
             assertNotNull(tipDetailsDto.getGoogleMapsUrl());
-            assertEquals(NAME_CITY_A_CORUNA, tipDetailsDto.getCity());
+            assertEquals(NAME_CITY_A_CORUNA, tipDetailsDto.getCity().getName());
 
             name = "Alameda Park";
             description = "Green zone";
@@ -63,7 +63,7 @@ public class TIPServiceTest {
             assertEquals(VALID_TIP_PHOTO_URL, tipDetailsDto.getPhotoUrl());
             assertEquals(VALID_TIP_INFO_URL, tipDetailsDto.getInfoUrl());
             assertNotNull(tipDetailsDto.getGoogleMapsUrl());
-            assertEquals(NAME_CITY_SANTIAGO, tipDetailsDto.getCity());
+            assertEquals(NAME_CITY_SANTIAGO, tipDetailsDto.getCity().getName());
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -315,5 +315,10 @@ public class TIPServiceTest {
             e.printStackTrace();
             fail();
         }
+    }
+
+    @Test
+    public void getAllTIPtypes(){
+        assertEquals(4,tipService.findAllTypes().size());
     }
 }

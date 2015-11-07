@@ -1,7 +1,8 @@
 package com.mmontes.util.dto;
 
-import com.mmontes.model.entity.TIP;
+import com.mmontes.model.entity.City;
 import com.mmontes.model.entity.Comment;
+import com.mmontes.model.entity.TIP;
 import com.mmontes.model.entity.User;
 import com.mmontes.util.GeometryConversor;
 
@@ -13,10 +14,10 @@ public class DtoConversor {
     public static TIPDetailsDto TIP2TIPDetailsDto(TIP tip){
         String type = tip.getType().getName();
         String geom = GeometryConversor.wktFromGeometry(tip.getGeom());
-        String cityName = tip.getCity().getName();
+        CityDto cityDto = DtoConversor.City2CityDto(tip.getCity());
 
         return new TIPDetailsDto(tip.getId(),type,tip.getName(),tip.getDescription(), geom, tip.getAddress(),
-                                    tip.getPhotoUrl(),tip.getInfoUrl(),tip.getGoogleMapsUrl(), cityName);
+                tip.getPhotoUrl(), tip.getInfoUrl(), tip.getGoogleMapsUrl(), cityDto);
     }
 
     public static TIPSearchDto TIP2TIPSearchDto(TIP tip){
@@ -32,6 +33,21 @@ public class DtoConversor {
             tipSearchDtos.add(DtoConversor.TIP2TIPSearchDto(tip));
         }
         return tipSearchDtos;
+    }
+
+    public static CityDto City2CityDto(City city) {
+        CityDto cityDto = new CityDto();
+        cityDto.setId(city.getId());
+        cityDto.setName(city.getName());
+        return cityDto;
+    }
+
+    public static List<CityDto> ListCity2ListCityDto(List<City> cities) {
+        List<CityDto> cityDtos = new ArrayList<>();
+        for (City c : cities) {
+            cityDtos.add(DtoConversor.City2CityDto(c));
+        }
+        return cityDtos;
     }
 
     public static UserDto User2UserDto(User user){

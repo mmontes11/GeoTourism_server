@@ -5,6 +5,8 @@ import com.mmontes.model.util.genericdao.GenericDaoHibernate;
 import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository("cityDao")
 public class CityDaoHibernate extends GenericDaoHibernate<City,Long> implements CityDao{
 
@@ -14,5 +16,11 @@ public class CityDaoHibernate extends GenericDaoHibernate<City,Long> implements 
                         .createQuery(queryString)
                         .setParameter("location", location)
                         .uniqueResult();
+    }
+
+    @Override
+    public List<City> findAll() {
+        String queryString = "SELECT c FROM City c";
+        return (List<City>) getSession().createQuery(queryString).list();
     }
 }

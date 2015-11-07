@@ -4,6 +4,7 @@ import com.mmontes.model.dao.TIPDao;
 import com.mmontes.model.dao.TIPtypeDao;
 import com.mmontes.model.entity.City;
 import com.mmontes.model.entity.TIP;
+import com.mmontes.model.entity.TIPtype;
 import com.mmontes.service.GoogleMapsService;
 import com.mmontes.rest.request.TIPPatchRequest;
 import com.mmontes.util.URLvalidator;
@@ -95,5 +96,10 @@ public class TIPServiceImpl implements TIPService {
         }
         tipDao.save(tip);
         return DtoConversor.TIP2TIPDetailsDto(tip);
+    }
+
+    @Override
+    public List<TIPtype> findAllTypes() {
+        return tipTypeDao.findAll();
     }
 }

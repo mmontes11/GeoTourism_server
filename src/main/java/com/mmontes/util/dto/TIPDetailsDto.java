@@ -12,12 +12,12 @@ public class TIPDetailsDto {
     private String photoUrl;
     private String infoUrl;
     private String googleMapsUrl;
-    private String city;
+    private CityDto city;
 
     public TIPDetailsDto() {
     }
 
-    public TIPDetailsDto(Long id, String type, String name, String description, String geom, String address, String photoUrl, String inforUrl, String googleMapsUrl, String city) {
+    public TIPDetailsDto(Long id, String type, String name, String description, String geom, String address, String photoUrl, String inforUrl, String googleMapsUrl, CityDto city) {
         this.id = id;
         this.type = type;
         this.name = name;
@@ -102,11 +102,11 @@ public class TIPDetailsDto {
         this.googleMapsUrl = googleMapsUrl;
     }
 
-    public String getCity() {
+    public CityDto getCity() {
         return city;
     }
 
-    public void setCity(String city) {
+    public void setCity(CityDto city) {
         this.city = city;
     }
 }

@@ -46,4 +46,9 @@ public class CityServiceTest {
             fail();
         }
     }
+
+    @Test
+    public void getAllCities(){
+        assertEquals(4,cityService.findAll().size());
+    }
 }

@@ -40,7 +40,7 @@
         <spring.version>4.0.2.RELEASE</spring.version>
         <jjwt.version>0.5.1</jjwt.version>
         <junit.version>4.11</junit.version>
-        <aws.sdk.version>1.9.6</aws.sdk.version>
+        <aws.sdk.version>1.2.1</aws.sdk.version>
         <geotools.version>15-SNAPSHOT</geotools.version>
         <commons.io.version>2.4</commons.io.version>
         <commons.validator.version>1.4.0</commons.validator.version>
@@ -55,6 +55,8 @@
         <jettyMavenPlugin>9.2.11.v20150529</jettyMavenPlugin>
         <!-- Skip tests -->
         <skipTests>false</skipTests>
+        <!-- Repositories-->
+        <updatePolity>daily</updatePolity>
     </properties>
 
     <dependencies>
@@ -191,11 +193,11 @@
             <url>http://download.java.net/maven/2</url>
             <snapshots>
                 <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
+                <updatePolicy>${updatePolity}</updatePolicy>
             </snapshots>
             <releases>
                 <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
+                <updatePolicy>${updatePolity}</updatePolicy>
             </releases>
         </repository>
         <repository>
@@ -203,7 +205,7 @@
             <url>http://download.osgeo.org/webdav/geotools</url>
             <releases>
                 <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
+                <updatePolicy>${updatePolity}</updatePolicy>
             </releases>
         </repository>
         <repository>
@@ -212,11 +214,11 @@
             <url>http://repo.boundlessgeo.com/main</url>
             <snapshots>
                 <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
+                <updatePolicy>${updatePolity}</updatePolicy>
             </snapshots>
             <releases>
                 <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
+                <updatePolicy>${updatePolity}</updatePolicy>
             </releases>
         </repository>
         <repository>
@@ -224,11 +226,11 @@
             <url>http://www.hibernatespatial.org/repository</url>
             <snapshots>
                 <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
+                <updatePolicy>${updatePolity}</updatePolicy>
             </snapshots>
             <releases>
                 <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
+                <updatePolicy>${updatePolity}</updatePolicy>
             </releases>
         </repository>
         <repository>
@@ -236,11 +238,11 @@
             <url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
             <snapshots>
                 <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
+                <updatePolicy>${updatePolity}</updatePolicy>
             </snapshots>
             <releases>
                 <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
+                <updatePolicy>${updatePolity}</updatePolicy>
             </releases>
         </repository>
         <repository>
@@ -248,11 +250,11 @@
             <url>http://download.eclipse.org/jetty/updates/jetty-bundles-9.x</url>
             <snapshots>
                 <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
+                <updatePolicy>${updatePolity}</updatePolicy>
             </snapshots>
             <releases>
                 <enabled>true</enabled>
-                <updatePolicy>never</updatePolicy>
+                <updatePolicy>${updatePolity}</updatePolicy>
             </releases>
         </repository>
     </repositories>
@@ -298,7 +300,6 @@
                 <directory>src/test/resources</directory>
             </testResource>
         </testResources>
-
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

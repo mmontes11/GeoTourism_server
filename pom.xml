@@ -45,7 +45,8 @@
         <commons.io.version>2.4</commons.io.version>
         <commons.validator.version>1.4.0</commons.validator.version>
         <jackson.version>2.4.2</jackson.version>
-        <servlet.api>3.0.1</servlet.api>
+        <servlet.api.version>3.0.1</servlet.api.version>
+        <commons.fileupload.version>1.2.1</commons.fileupload.version>
         <!-- Plugin versions -->
         <mavenSurefirePlugin.version>2.18.1</mavenSurefirePlugin.version>
         <mavenCompilerPlugin.version>2.3.2</mavenCompilerPlugin.version>
@@ -54,7 +55,7 @@
         <mavenAssemblyPlugin.version>2.$2.1</mavenAssemblyPlugin.version>
         <jettyMavenPlugin>9.2.11.v20150529</jettyMavenPlugin>
         <!-- Skip tests -->
-        <skipTests>false</skipTests>
+        <skipTests>true</skipTests>
         <!-- Repositories-->
         <updatePolity>daily</updatePolity>
     </properties>
@@ -182,8 +183,14 @@
         <dependency>
             <groupId>javax.servlet</groupId>
             <artifactId>javax.servlet-api</artifactId>
-            <version>${servlet.api}</version>
+            <version>${servlet.api.version}</version>
             <scope>provided</scope>
+        </dependency>
+        <!-- Commons File Upload -->
+        <dependency>
+            <groupId>commons-fileupload</groupId>
+            <artifactId>commons-fileupload</artifactId>
+            <version>${commons.fileupload.version}</version>
         </dependency>
     </dependencies>
     <repositories>

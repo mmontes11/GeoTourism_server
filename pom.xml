@@ -139,7 +139,7 @@
             <version>${junit.version}</version>
             <scope>test</scope>
         </dependency>
-        <!-- Amazon Web Services SDK -->
+        <!-- Amazon Web Services -->
         <dependency>
             <groupId>com.amazonaws</groupId>
             <artifactId>aws-java-sdk</artifactId>

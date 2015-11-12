@@ -16,7 +16,7 @@ import java.io.IOException;
 @RestController
 public class PhotoController {
 
-    @RequestMapping(value = "/admin/upload")
+    @RequestMapping(value = "/admin/photo")
     public ResponseEntity
     upload(@RequestParam("file") MultipartFile multiPartFile) {
         String url;

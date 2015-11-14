@@ -1,4 +1,4 @@
-package com.mmontes.rest.security;
+package com.mmontes.rest.filter;
 
 import org.springframework.stereotype.Component;
 

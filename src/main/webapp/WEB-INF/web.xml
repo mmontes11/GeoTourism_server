@@ -16,12 +16,12 @@
 
     <filter>
         <filter-name>CORSFilter</filter-name>
-        <filter-class>com.mmontes.rest.security.CORSFilter</filter-class>
+        <filter-class>com.mmontes.rest.filter.CORSFilter</filter-class>
     </filter>
 
     <filter>
         <filter-name>adminSecurityFilter</filter-name>
-        <filter-class>com.mmontes.rest.security.AdminSecurityFilter</filter-class>
+        <filter-class>com.mmontes.rest.filter.AdminFilter</filter-class>
     </filter>
 
     <filter>

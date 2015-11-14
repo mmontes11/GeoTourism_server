@@ -1,8 +1,7 @@
-package com.mmontes.rest.security;
+package com.mmontes.rest.filter;
 
 import com.mmontes.util.Constants;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureException;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -13,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class AdminSecurityFilter extends GenericFilterBean {
+public class AdminFilter extends GenericFilterBean {
 
     @Override
     public void doFilter(final ServletRequest req,

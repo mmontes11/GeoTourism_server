@@ -50,7 +50,6 @@ public class DtoConversor {
         userDto.setFacebookUserId(user.getFacebookUserId());
         userDto.setFacebookProfilePhotoUrl(user.getFacebookProfilePhotoUrl());
         userDto.setName(user.getName());
-        userDto.setSurname(user.getSurname());
         return null;
     }
 

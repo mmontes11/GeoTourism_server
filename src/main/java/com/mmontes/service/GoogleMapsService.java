@@ -21,11 +21,9 @@ public class GoogleMapsService {
         URL url = new URL(requestUrl);
         HttpURLConnection connnection = (HttpURLConnection) url.openConnection();
         connnection.setRequestMethod("GET");
-        connnection.setRequestProperty("User-Agent", "Mozilla/5.0");
 
         int responseCode = connnection.getResponseCode();
         if (responseCode >= 400) {
-            System.out.println(requestUrl);
             throw new GoogleMapsServiceException();
         }
 

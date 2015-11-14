@@ -5,16 +5,14 @@ public class UserDto {
     private Long facebookUserId;
     private String facebookProfilePhotoUrl;
     private String name;
-    private String surname;
 
     public UserDto() {
     }
 
-    public UserDto(Long facebookUserId, String facebookProfilePhotoUrl, String name, String surname) {
+    public UserDto(Long facebookUserId, String facebookProfilePhotoUrl, String name) {
         this.facebookUserId = facebookUserId;
         this.facebookProfilePhotoUrl = facebookProfilePhotoUrl;
         this.name = name;
-        this.surname = surname;
     }
 
     public Long getFacebookUserId() {
@@ -39,13 +37,5 @@ public class UserDto {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getSurname() {
-        return surname;
-    }
-
-    public void setSurname(String surname) {
-        this.surname = surname;
     }
 }

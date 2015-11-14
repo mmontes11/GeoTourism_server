@@ -22,7 +22,6 @@ CREATE INDEX City_Geometry_Gix ON City USING GIST (geom);
 CREATE TABLE "user"(
   id SERIAL,
   name VARCHAR(50),
-  surname VARCHAR(50),
   registrationDate TIMESTAMP,
   facebookUserId INTEGER,
   facebookProfilePhotoUrl VARCHAR(100),

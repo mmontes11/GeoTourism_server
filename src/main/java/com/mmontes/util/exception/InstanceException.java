@@ -1,6 +1,5 @@
 package com.mmontes.util.exception;
 
-@SuppressWarnings("serial")
 public abstract class InstanceException extends Exception {
 
     private Object key;

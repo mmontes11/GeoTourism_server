@@ -25,37 +25,32 @@ public class FacebookService {
         this.accessToken = accessToken;
         this.userID = userID;
         this.rootUrl = Constants.FB_ROOT_URL;
-        this.urlParams = "?access_token=" + this.accessToken + "&format=json";
+        this.urlParams = "?access_token=" + this.accessToken + "&format=json&redirect=false";
     }
 
-    public HashMap<String, String> getUser() throws FacebookServiceException, IOException, JSONException {
-        HashMap<String, String> user = new HashMap<>();
-
-        String requestUrl = this.rootUrl + "/" + this.userID + this.urlParams;
+    private HttpURLConnection getConnection(String requestUrl) throws IOException, FacebookServiceException {
         URL url = new URL(requestUrl);
-        HttpURLConnection connnection = (HttpURLConnection) url.openConnection();
-        connnection.setRequestMethod("GET");
-        int responseCode = connnection.getResponseCode();
+        HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+        connection.setRequestMethod("GET");
+        int responseCode = connection.getResponseCode();
         if (responseCode >= 400) {
             throw new FacebookServiceException();
         }
+        return connection;
+    }
 
-        JSONObject obj = JSONParser.parseJSON(connnection.getInputStream());
-        user.put("name", obj.getString("name"));
+    public String getUser() throws FacebookServiceException, IOException, JSONException {
+        String requestUrl = this.rootUrl + "/" + this.userID + this.urlParams;
+        HttpURLConnection connection = getConnection(requestUrl);
+        JSONObject obj = JSONParser.parseJSON(connection.getInputStream());
+        return obj.getString("name");
+    }
 
-        requestUrl = this.rootUrl + "/" + this.userID + "/picture" + this.urlParams;
-        url = new URL(requestUrl);
-        connnection = (HttpURLConnection) url.openConnection();
-        connnection.setRequestMethod("GET");
-        responseCode = connnection.getResponseCode();
-        if (responseCode >= 400) {
-            throw new FacebookServiceException();
-        }
-
-        obj = JSONParser.parseJSON(connnection.getInputStream());
-        user.put("facebookProfilePhotoUrl", obj.getString("url"));
-
-        return user;
+    public String getUserProfilePhoto() throws IOException, FacebookServiceException, JSONException {
+        String requestUrl = this.rootUrl + "/" + this.userID + "/picture" + this.urlParams;
+        HttpURLConnection connection = getConnection(requestUrl);
+        JSONObject obj = JSONParser.parseJSON(connection.getInputStream());
+        return obj.getJSONObject("data").getString("url");
     }
 
 }

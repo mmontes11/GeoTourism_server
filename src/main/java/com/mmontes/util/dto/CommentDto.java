@@ -3,12 +3,12 @@ package com.mmontes.util.dto;
 public class CommentDto {
 
     private String commentText;
-    private UserDto user;
+    private UserAccountDto user;
 
     public CommentDto() {
     }
 
-    public CommentDto(String commentText, UserDto user) {
+    public CommentDto(String commentText, UserAccountDto user) {
         this.commentText = commentText;
         this.user = user;
     }
@@ -21,11 +21,11 @@ public class CommentDto {
         this.commentText = commentText;
     }
 
-    public UserDto getUser() {
+    public UserAccountDto getUser() {
         return user;
     }
 
-    public void setUser(UserDto user) {
+    public void setUser(UserAccountDto user) {
         this.user = user;
     }
 }

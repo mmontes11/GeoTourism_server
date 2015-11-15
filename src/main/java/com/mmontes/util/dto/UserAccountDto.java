@@ -1,15 +1,15 @@
 package com.mmontes.util.dto;
 
-public class UserDto {
+public class UserAccountDto {
 
     private Long facebookUserId;
     private String facebookProfilePhotoUrl;
     private String name;
 
-    public UserDto() {
+    public UserAccountDto() {
     }
 
-    public UserDto(Long facebookUserId, String facebookProfilePhotoUrl, String name) {
+    public UserAccountDto(Long facebookUserId, String facebookProfilePhotoUrl, String name) {
         this.facebookUserId = facebookUserId;
         this.facebookProfilePhotoUrl = facebookProfilePhotoUrl;
         this.name = name;

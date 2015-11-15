@@ -1,4 +1,4 @@
-package com.mmontes.test.service;
+package com.mmontes.test.model.service;
 
 import com.mmontes.model.entity.City;
 import com.mmontes.model.service.CityService;
@@ -19,7 +19,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {SPRING_CONFIG_FILE, SPRING_CONFIG_TEST_FILE})
 @Transactional
-public class CityTest {
+public class CityServiceTest {
 
     @Autowired
     private CityService cityService;

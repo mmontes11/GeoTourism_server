@@ -8,7 +8,7 @@ public class Comment {
     private Long id;
     private String commentText;
     private Calendar commentDate;
-    private User user;
+    private UserAccount user;
     private static final String  COMMENT_ID_GENERATOR = "CommentIdGenerator";
 
     public Comment() {
@@ -52,11 +52,11 @@ public class Comment {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "userid")
-    public User getUser() {
+    public UserAccount getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(UserAccount user) {
         this.user = user;
     }
 }

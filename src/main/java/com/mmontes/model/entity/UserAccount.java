@@ -4,20 +4,20 @@ import javax.persistence.*;
 import java.util.Calendar;
 
 @Entity
-@Table(name = "user")
-public class User {
+@Table(name = "useraccount")
+public class UserAccount {
 
-    private static final String USER_ID_GENERATOR = "UserIdGenerator";
+    private static final String USERACCOUNT_ID_GENERATOR = "UserAccountIdGenerator";
     private Long id;
     private String name;
     private Calendar registrationDate;
     private Long facebookUserId;
     private String facebookProfilePhotoUrl;
 
-    public User() {
+    public UserAccount() {
     }
 
-    public User(String name, Calendar registrationDate, Long facebookUserId, String facebookProfilePhotoUrl) {
+    public UserAccount(String name, Calendar registrationDate, Long facebookUserId, String facebookProfilePhotoUrl) {
         this.name = name;
         this.registrationDate = registrationDate;
         this.facebookUserId = facebookUserId;
@@ -26,8 +26,8 @@ public class User {
 
     @Column(name = "id")
     @Id
-    @SequenceGenerator(name = USER_ID_GENERATOR, sequenceName = "user_id_seq")
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = USER_ID_GENERATOR)
+    @SequenceGenerator(name = USERACCOUNT_ID_GENERATOR, sequenceName = "useraccount_id_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = USERACCOUNT_ID_GENERATOR)
     public Long getId() {
         return id;
     }

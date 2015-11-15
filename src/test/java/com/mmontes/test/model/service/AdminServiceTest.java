@@ -1,4 +1,4 @@
-package com.mmontes.test.service;
+package com.mmontes.test.model.service;
 
 import com.mmontes.model.dao.AdminDao;
 import com.mmontes.model.entity.Admin;
@@ -18,7 +18,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = { SPRING_CONFIG_FILE,SPRING_CONFIG_TEST_FILE })
 @Transactional
-public class AdminTest {
+public class AdminServiceTest {
 
     @Autowired
     private AdminDao adminDao;

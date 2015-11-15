@@ -45,26 +45,26 @@ public class DtoConversor {
         return cityDtos;
     }
 
-    public static UserDto User2UserDto(User user){
-        UserDto userDto = new UserDto();
-        userDto.setFacebookUserId(user.getFacebookUserId());
-        userDto.setFacebookProfilePhotoUrl(user.getFacebookProfilePhotoUrl());
-        userDto.setName(user.getName());
-        return null;
+    public static UserAccountDto UserAccount2UserAccountDto(UserAccount user){
+        UserAccountDto userAccountDto = new UserAccountDto();
+        userAccountDto.setFacebookUserId(user.getFacebookUserId());
+        userAccountDto.setFacebookProfilePhotoUrl(user.getFacebookProfilePhotoUrl());
+        userAccountDto.setName(user.getName());
+        return userAccountDto;
     }
 
-    public static List<UserDto> ListUser2ListUserDto(List<User> users){
-        List<UserDto> userDtos = new ArrayList<>();
-        for(User user : users){
-            userDtos.add(DtoConversor.User2UserDto(user));
+    public static List<UserAccountDto> ListUser2ListUserDto(List<UserAccount> users){
+        List<UserAccountDto> userAccountDtos = new ArrayList<>();
+        for(UserAccount user : users){
+            userAccountDtos.add(DtoConversor.UserAccount2UserAccountDto(user));
         }
-        return userDtos;
+        return userAccountDtos;
     }
 
     public static CommentDto Comment2CommentDto(Comment comment){
         CommentDto commentDto = new CommentDto();
         commentDto.setCommentText(comment.getCommentText());
-        commentDto.setUser(DtoConversor.User2UserDto(comment.getUser()));
+        commentDto.setUser(DtoConversor.UserAccount2UserAccountDto(comment.getUser()));
         return commentDto;
     }
 

@@ -29,6 +29,9 @@ public final class Constants {
     public static final String VALID_TIP_PHOTO_URL = "http://images.travelnow.com/hotels/2000000/1100000/1094700/1094622/1094622_37_b.jpg";
     public static final String VALID_TIP_INFO_URL = "http://www.puntodeinteres.es/";
 
+    public static final Long NON_EXISTING_FACEBOOK_USER_ID = 1L;
+    public static final Long CREATE_FACEBOOK_USER_ID = 2L;
+
     private Constants() {}
 }
 

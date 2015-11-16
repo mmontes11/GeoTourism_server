@@ -21,6 +21,6 @@ public class CitiesController {
     public ResponseEntity<List<CityDto>>
     findAllCities() {
         List<CityDto> cities = cityService.findAll();
-        return new ResponseEntity<>(cities, HttpStatus.MULTI_STATUS.OK);
+        return new ResponseEntity<>(cities, HttpStatus.OK);
     }
 }

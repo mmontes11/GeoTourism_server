@@ -3,15 +3,13 @@ package com.mmontes.service;
 import com.amazonaws.util.json.JSONException;
 import com.amazonaws.util.json.JSONObject;
 import com.mmontes.util.Constants;
+import com.mmontes.util.HashUtils;
 import com.mmontes.util.JSONParser;
 import com.mmontes.util.exception.FacebookServiceException;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
 import java.net.URL;
-import java.util.HashMap;
 
 public class FacebookService {
 
@@ -24,8 +22,9 @@ public class FacebookService {
     public FacebookService(String accessToken, Long userID) {
         this.accessToken = accessToken;
         this.userID = userID;
+        this.appSecretProof = HashUtils.hmacDigest(this.accessToken,Constants.FB_APP_SECRET,"HmacSHA256");
         this.rootUrl = Constants.FB_ROOT_URL;
-        this.urlParams = "?access_token=" + this.accessToken + "&format=json&redirect=false";
+        this.urlParams = "?access_token=" + this.accessToken + "&appsecret_proof=" + this.appSecretProof + "&format=json&redirect=false";
     }
 
     private HttpURLConnection getConnection(String requestUrl) throws IOException, FacebookServiceException {

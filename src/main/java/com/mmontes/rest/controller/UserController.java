@@ -29,7 +29,10 @@ public class UserController {
         HashMap<String, Object> result;
         try {
             result = userAccountService.createOrRetrieveUser(userRequest.getAccessToken(), userRequest.getUserID());
-        } catch (FacebookServiceException | JSONException | IOException e) {
+        } catch (FacebookServiceException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }catch(JSONException | IOException e){
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }

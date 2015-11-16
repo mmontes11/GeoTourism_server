@@ -2,17 +2,13 @@ package com.mmontes.rest.controller;
 
 import com.amazonaws.util.json.JSONException;
 import com.mmontes.model.service.UserAccountService;
-import com.mmontes.rest.request.UserRequest;
 import com.mmontes.util.dto.UserAccountDto;
 import com.mmontes.util.exception.FacebookServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -23,12 +19,13 @@ public class UserController {
     @Autowired
     private UserAccountService userAccountService;
 
-    @RequestMapping(value = "/user", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/user", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserAccountDto>
-    createOrRetrieveUser(@RequestBody UserRequest userRequest) {
+    createOrRetrieveUser(@RequestHeader(value="AuthorizationFB") String accessToken,
+                         @RequestParam(value = "facebookUserId", required = true) Long facebookUserId) {
         HashMap<String, Object> result;
         try {
-            result = userAccountService.createOrRetrieveUser(userRequest.getAccessToken(), userRequest.getUserID());
+            result = userAccountService.createOrRetrieveUser(accessToken, facebookUserId);
         } catch (FacebookServiceException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);

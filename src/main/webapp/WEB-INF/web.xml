@@ -18,12 +18,14 @@
         <filter-name>CORSFilter</filter-name>
         <filter-class>com.mmontes.rest.filter.CORSFilter</filter-class>
     </filter>
-
     <filter>
-        <filter-name>adminSecurityFilter</filter-name>
+        <filter-name>AdminFilter</filter-name>
         <filter-class>com.mmontes.rest.filter.AdminFilter</filter-class>
     </filter>
-
+    <filter>
+        <filter-name>SocialFilter</filter-name>
+        <filter-class>com.mmontes.rest.filter.SocialFilter</filter-class>
+    </filter>
     <filter>
         <filter-name>openSessionInView</filter-name>
         <filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
@@ -32,17 +34,18 @@
             <param-value>sessionFactory</param-value>
         </init-param>
     </filter>
-
     <filter-mapping>
         <filter-name>CORSFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-
     <filter-mapping>
-        <filter-name>adminSecurityFilter</filter-name>
+        <filter-name>AdminFilter</filter-name>
         <url-pattern>/admin/*</url-pattern>
     </filter-mapping>
-
+    <filter-mapping>
+        <filter-name>SocialFilter</filter-name>
+        <url-pattern>/social/*</url-pattern>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>openSessionInView</filter-name>
         <url-pattern>/*</url-pattern>
@@ -53,7 +56,6 @@
         <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>REST</servlet-name>
         <url-pattern>/*</url-pattern>

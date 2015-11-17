@@ -2,6 +2,8 @@ package com.mmontes.model.entity;
 
 import javax.persistence.*;
 import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "useraccount")
@@ -13,6 +15,7 @@ public class UserAccount {
     private Calendar registrationDate;
     private Long facebookUserId;
     private String facebookProfilePhotoUrl;
+    private Set<TIP> favouriteTIPs = new HashSet<>(0);
 
     public UserAccount() {
     }
@@ -71,5 +74,14 @@ public class UserAccount {
 
     public void setFacebookProfilePhotoUrl(String facebookProfilePhotoUrl) {
         this.facebookProfilePhotoUrl = facebookProfilePhotoUrl;
+    }
+
+    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "favouritedBy")
+    public Set<TIP> getFavouriteTIPs() {
+        return favouriteTIPs;
+    }
+
+    public void setFavouriteTIPs(Set<TIP> favouriteTIPs) {
+        this.favouriteTIPs = favouriteTIPs;
     }
 }

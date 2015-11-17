@@ -8,5 +8,6 @@ import java.util.List;
 public interface TIPtypeService {
 
     List<TIPtype> findAllTypes();
+    
     String findTypeName(Long TIPtypeId) throws InstanceNotFoundException;
 }

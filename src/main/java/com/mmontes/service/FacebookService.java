@@ -38,6 +38,11 @@ public class FacebookService {
         return connection;
     }
 
+    public void validateAuth() throws IOException, FacebookServiceException {
+        String requestUrl = this.rootUrl + "/" + this.userID + this.urlParams;
+        getConnection(requestUrl);
+    }
+
     public String getUser() throws FacebookServiceException, IOException, JSONException {
         String requestUrl = this.rootUrl + "/" + this.userID + this.urlParams;
         HttpURLConnection connection = getConnection(requestUrl);

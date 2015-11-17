@@ -4,6 +4,8 @@ import com.vividsolutions.jts.geom.Geometry;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "tip")
@@ -20,6 +22,7 @@ public class TIP {
     private String infoUrl;
     private String googleMapsUrl;
     private City city;
+    private Set<UserAccount> favouritedBy = new HashSet<>(0);
 
     public TIP() {
     }
@@ -118,5 +121,24 @@ public class TIP {
 
     public void setCity(City city) {
         this.city = city;
+    }
+
+
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "tipuseraccount",
+            joinColumns = {
+                    @JoinColumn(name = "tipid", nullable = false, updatable = false)
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "userid", nullable = false, updatable = false)
+            }
+    )
+    public Set<UserAccount> getFavouritedBy() {
+        return favouritedBy;
+    }
+
+    public void setFavouritedBy(Set<UserAccount> favouritedBy) {
+        this.favouritedBy = favouritedBy;
     }
 }

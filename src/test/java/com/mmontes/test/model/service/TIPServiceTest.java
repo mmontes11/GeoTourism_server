@@ -1,6 +1,6 @@
 package com.mmontes.test.model.service;
 
-import com.mmontes.model.dao.TIPtypeDao;
+import com.mmontes.model.dao.TIPDao;
 import com.mmontes.model.service.TIPService;
 import com.mmontes.model.service.TIPtypeService;
 import com.mmontes.util.GeometryConversor;
@@ -24,18 +24,18 @@ import static com.mmontes.util.Constants.SPRING_CONFIG_FILE;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { SPRING_CONFIG_FILE, SPRING_CONFIG_TEST_FILE })
+@ContextConfiguration(locations = {SPRING_CONFIG_FILE, SPRING_CONFIG_TEST_FILE})
 @Transactional
 public class TIPServiceTest {
+
+    @Autowired
+    private TIPDao tipDao;
 
     @Autowired
     private TIPService tipService;
 
     @Autowired
     private TIPtypeService tipTypeService;
-
-    @Autowired
-    private TIPtypeDao tiPtypeDao;
 
     @Test
     public void createBasicTIPs() {
@@ -72,7 +72,7 @@ public class TIPServiceTest {
     }
 
     @Test
-    public void createFindTIP(){
+    public void createFindTIP() {
         String name = "Santiago de Compostela cathedral";
         String description = "Human patrimony";
         try {
@@ -106,7 +106,7 @@ public class TIPServiceTest {
 
 
     @Test
-    public void findTipsOfCurrentCity(){
+    public void findTipsOfCurrentCity() {
         TIPDetailsDto santiagoCathedral = null;
         Geometry bounds = null;
         try {
@@ -131,7 +131,7 @@ public class TIPServiceTest {
     }
 
     @Test
-    public void finTipsFromFarCity(){
+    public void finTipsFromFarCity() {
         Geometry bounds = null;
         try {
             String name = "Tower of Hercules";
@@ -156,7 +156,7 @@ public class TIPServiceTest {
 
     @Test
     public void findTipsByTypes() {
-        TIPDetailsDto towerHercules = null;
+        TIPDetailsDto towerHercules ;
         try {
             String name = "Tower of Hercules";
             String description = "Human Patrimony";
@@ -191,7 +191,7 @@ public class TIPServiceTest {
 
     @Test
     public void findTipsByCities() {
-        TIPDetailsDto towerHercules = null;
+        TIPDetailsDto towerHercules;
         try {
             String name = "Tower of Hercules";
             String description = "Human Patrimony";
@@ -238,9 +238,9 @@ public class TIPServiceTest {
 
     @Test
     public void findTipsByBoundTypesCities() {
-        TIPDetailsDto towerHercules = null;
-        Geometry boundsGalicia = null;
-        Geometry boundsNY = null;
+        TIPDetailsDto towerHercules;
+        Geometry boundsGalicia;
+        Geometry boundsNY;
         try {
             String name = "Tower of Hercules";
             String description = "Human Patrimony";
@@ -310,14 +310,15 @@ public class TIPServiceTest {
             }};
             tipSearchDtos = tipService.find(null, boundsGalicia, typeIds, cityIds, null);
             assertEquals(1, tipSearchDtos.size());
-        } catch (Exception e){
+        } catch (Exception e) {
             e.printStackTrace();
             fail();
         }
     }
 
     @Test
-    public void getAllTIPtypes(){
+    public void getAllTIPtypes() {
         assertEquals(4, tipTypeService.findAllTypes().size());
     }
+
 }

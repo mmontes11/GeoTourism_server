@@ -19,9 +19,10 @@
         <testDataSource.user>${dataSource.user}</testDataSource.user>
         <testDataSource.password>${dataSource.password}</testDataSource.password>
         <!-- DB scripts properties -->
-        <db.script.createdb>src/db/db.sql</db.script.createdb>
+        <db.script.createDB>src/db/db.sql</db.script.createDB>
         <db.script.admin>src/db/admin.sql</db.script.admin>
-        <db.script.testdata>src/db/testData.sql</db.script.testdata>
+        <db.script.cities>src/db/cities.sql</db.script.cities>
+        <db.script.testData>src/db/testData.sql</db.script.testData>
         <!-- Hibernate configuration -->
         <hibernate.dialect>org.hibernate.spatial.dialect.postgis.PostgisDialect</hibernate.dialect>
         <hibernate.show_sql>true</hibernate.show_sql>
@@ -345,9 +346,9 @@
                     <autocommit>true</autocommit>
                     <onError>continue</onError>
                     <srcFiles>
-                        <srcFile>${db.script.createdb}</srcFile>
+                        <srcFile>${db.script.createDB}</srcFile>
                         <srcFile>${db.script.admin}</srcFile>
-                        <srcFile>${db.script.testdata}</srcFile>
+                        <srcFile>${db.script.cities}</srcFile>
                     </srcFiles>
                 </configuration>
                 <executions>
@@ -364,8 +365,9 @@
                             <autocommit>true</autocommit>
                             <onError>continue</onError>
                             <srcFiles>
-                                <srcFile>${db.script.createdb}</srcFile>
-                                <srcFile>${db.script.testdata}</srcFile>
+                                <srcFile>${db.script.createDB}</srcFile>
+                                <srcFile>${db.script.cities}</srcFile>
+                                <srcFile>${db.script.testData}</srcFile>
                             </srcFiles>
                         </configuration>
                     </execution>

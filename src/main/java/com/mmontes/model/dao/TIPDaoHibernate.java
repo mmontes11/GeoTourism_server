@@ -1,6 +1,7 @@
 package com.mmontes.model.dao;
 
 import com.mmontes.model.entity.TIP;
+import com.mmontes.model.entity.UserAccount;
 import com.mmontes.model.util.QueryUtils;
 import com.mmontes.model.util.genericdao.GenericDaoHibernate;
 import com.mmontes.util.GeometryConversor;

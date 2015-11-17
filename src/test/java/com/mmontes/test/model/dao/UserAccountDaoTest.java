@@ -31,16 +31,9 @@ public class UserAccountDaoTest {
     }
 
     @Test
-    public void createAndFindUser(){
-        UserAccount ua = new UserAccount();
-        ua.setName("");
-        ua.setRegistrationDate(Calendar.getInstance());
-        ua.setFacebookProfilePhotoUrl("");
-        ua.setFacebookUserId(CREATE_FACEBOOK_USER_ID);
-        userAccountDao.save(ua);
-
+    public void findExistingFindUser(){
         try {
-            assertEquals(ua,userAccountDao.findByFBUserID(CREATE_FACEBOOK_USER_ID));
+            userAccountDao.findByFBUserID(EXISTING_FACEBOOK_USER_ID);
         } catch (InstanceNotFoundException e) {
             fail();
         }

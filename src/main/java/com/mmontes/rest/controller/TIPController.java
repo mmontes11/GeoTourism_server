@@ -1,11 +1,8 @@
 package com.mmontes.rest.controller;
 
-import com.mmontes.model.entity.TIPtype;
 import com.mmontes.model.service.TIPService;
-import com.mmontes.model.service.TIPtypeService;
 import com.mmontes.rest.request.TIPPatchRequest;
 import com.mmontes.rest.request.TIPRequest;
-import com.mmontes.rest.response.ResponseFactory;
 import com.mmontes.util.GeometryConversor;
 import com.mmontes.util.dto.TIPDetailsDto;
 import com.mmontes.util.exception.GeometryParsingException;
@@ -17,16 +14,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 public class TIPController {
 
     @Autowired
     private TIPService tipService;
-
-    @Autowired
-    private TIPtypeService tiPtypeService;
 
     @RequestMapping(value = "/admin/tip", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TIPDetailsDto>
@@ -80,32 +72,14 @@ public class TIPController {
     @RequestMapping(value = "/admin/tip/{TIPId}", method = RequestMethod.PATCH)
     public ResponseEntity
     patch(@PathVariable Long TIPId,
-          @RequestBody TIPPatchRequest tipPatchRequest ) {
+          @RequestBody TIPPatchRequest tipPatchRequest) {
         TIPDetailsDto tipDetailsDto;
         try {
             tipDetailsDto = tipService.edit(TIPId, tipPatchRequest);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
-        return new ResponseEntity<>(tipDetailsDto,HttpStatus.OK);
+        return new ResponseEntity<>(tipDetailsDto, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/tip/types", method = RequestMethod.GET)
-    public ResponseEntity<List<TIPtype>>
-    findAllTIPtypes() {
-        List<TIPtype> types = tiPtypeService.findAllTypes();
-        return new ResponseEntity<>(types, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/tip/type/{TIPtypeId}", method = RequestMethod.GET)
-    public ResponseEntity
-    getTypeName(@PathVariable Long TIPtypeId) {
-        String name;
-        try {
-            name = tiPtypeService.findTypeName(TIPtypeId);
-        } catch (InstanceNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-        return new ResponseEntity<>(ResponseFactory.getCustomJSON("name",name), HttpStatus.OK);
-    }
 }

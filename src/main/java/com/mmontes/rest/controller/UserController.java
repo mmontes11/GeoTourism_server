@@ -19,7 +19,7 @@ public class UserController {
     @Autowired
     private UserAccountService userAccountService;
 
-    @RequestMapping(value = "/user", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/social/user", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserAccountDto>
     createOrRetrieveUser(@RequestHeader(value="AuthorizationFB") String accessToken,
                          @RequestParam(value = "facebookUserId", required = true) Long facebookUserId) {
@@ -28,7 +28,7 @@ public class UserController {
             result = userAccountService.createOrRetrieveUser(accessToken, facebookUserId);
         } catch (FacebookServiceException e) {
             e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }catch(JSONException | IOException e){
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

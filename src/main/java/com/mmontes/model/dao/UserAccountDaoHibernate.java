@@ -10,7 +10,6 @@ public class UserAccountDaoHibernate extends GenericDaoHibernate<UserAccount, Lo
     @Override
     public UserAccount findByFBUserID(Long FBUserID) throws InstanceNotFoundException {
         String queryString = "SELECT ua FROM UserAccount ua WHERE ua.facebookUserId = :id";
-        System.out.println(queryString);
         UserAccount user = (UserAccount) getSession().createQuery(queryString)
                                 .setParameter("id", FBUserID)
                                 .uniqueResult();

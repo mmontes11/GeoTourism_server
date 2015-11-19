@@ -3,12 +3,15 @@ package com.mmontes.model.entity;
 import javax.persistence.*;
 import java.util.Calendar;
 
+@Entity
+@Table(name = "comment")
 public class Comment {
 
     private Long id;
     private String commentText;
     private Calendar commentDate;
-    private UserAccount user;
+    private UserAccount userAccount;
+    private TIP tip;
     private static final String  COMMENT_ID_GENERATOR = "CommentIdGenerator";
 
     public Comment() {
@@ -52,11 +55,22 @@ public class Comment {
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     @JoinColumn(name = "userid")
-    public UserAccount getUser() {
-        return user;
+    public UserAccount getUserAccount() {
+        return userAccount;
     }
 
-    public void setUser(UserAccount user) {
-        this.user = user;
+    public void setUserAccount(UserAccount userAccount) {
+        this.userAccount = userAccount;
+    }
+
+
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JoinColumn(name = "tipid")
+    public TIP getTip() {
+        return tip;
+    }
+
+    public void setTip(TIP tip) {
+        this.tip = tip;
     }
 }

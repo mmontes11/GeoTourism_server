@@ -53,7 +53,7 @@ public class DtoConversor {
         return userAccountDto;
     }
 
-    public static List<UserAccountDto> ListUser2ListUserDto(List<UserAccount> users){
+    public static List<UserAccountDto> ListUserAccount2ListUserAccountDto(List<UserAccount> users){
         List<UserAccountDto> userAccountDtos = new ArrayList<>();
         for(UserAccount user : users){
             userAccountDtos.add(DtoConversor.UserAccount2UserAccountDto(user));
@@ -63,8 +63,9 @@ public class DtoConversor {
 
     public static CommentDto Comment2CommentDto(Comment comment){
         CommentDto commentDto = new CommentDto();
+        commentDto.setId(comment.getId());
         commentDto.setCommentText(comment.getCommentText());
-        commentDto.setUser(DtoConversor.UserAccount2UserAccountDto(comment.getUser()));
+        commentDto.setUser(DtoConversor.UserAccount2UserAccountDto(comment.getUserAccount()));
         return commentDto;
     }
 

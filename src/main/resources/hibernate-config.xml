@@ -14,5 +14,6 @@
         <mapping class="com.mmontes.model.entity.Admin"/>
         <mapping class="com.mmontes.model.entity.Comment"/>
         <mapping class="com.mmontes.model.entity.UserAccount"/>
+        <mapping class="com.mmontes.model.entity.Rating"/>
     </session-factory>
 </hibernate-configuration>

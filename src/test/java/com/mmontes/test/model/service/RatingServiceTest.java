@@ -2,7 +2,7 @@ package com.mmontes.test.model.service;
 
 import com.mmontes.model.dao.TIPDao;
 import com.mmontes.model.entity.TIP;
-import com.mmontes.model.service.CommentService;
+import com.mmontes.model.service.RatingService;
 import com.mmontes.model.service.TIPService;
 import com.mmontes.util.GeometryConversor;
 import com.mmontes.util.dto.TIPDetailsDto;
@@ -21,10 +21,10 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {SPRING_CONFIG_FILE, SPRING_CONFIG_TEST_FILE})
 @Transactional
-public class CommentServiceTest {
+public class RatingServiceTest {
 
     @Autowired
-    private CommentService commentService;
+    private RatingService ratingService;
 
     @Autowired
     private TIPDao tipDao;
@@ -33,24 +33,26 @@ public class CommentServiceTest {
     private TIPService tipService;
 
     @Test
-    public void addComments() {
+    public void rateAndGetAverage() {
         try {
             Point geom = (Point) GeometryConversor.geometryFromWKT(POINT_TORRE_HERCULES);
             TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom);
             TIP tip = tipDao.findById(towerHercules.getId());
 
-            commentService.comment("Nice", EXISTING_FACEBOOK_USER_ID, tip.getId());
-            commentService.comment("Ugly", EXISTING_FACEBOOK_USER_ID, tip.getId());
+            Double average = ratingService.rate(10.0D, tip.getId(), EXISTING_FACEBOOK_USER_ID);
+            assertEquals(Double.valueOf(10.0D),average);
+            assertEquals(Double.valueOf(10.0D),ratingService.getAverageRate(tip.getId()));
 
-            assertEquals(2, tip.getComments().size());
+            average = ratingService.rate(5.0D, tip.getId(), EXISTING_FACEBOOK_USER_ID);
+            assertEquals(Double.valueOf(5.0D), average);
+            assertEquals(Double.valueOf(5.0D), ratingService.getAverageRate(tip.getId()));
 
-            commentService.comment("Nice", EXISTING_FACEBOOK_USER_ID2, tip.getId());
-            commentService.comment("Ugly", EXISTING_FACEBOOK_USER_ID2, tip.getId());
-
-            assertEquals(4, tip.getComments().size());
+            average = ratingService.rate(10.0D, tip.getId(), EXISTING_FACEBOOK_USER_ID2);
+            assertEquals(Double.valueOf(7.5D), average);
+            assertEquals(Double.valueOf(7.5D), ratingService.getAverageRate(tip.getId()));
         } catch (Exception e) {
             e.printStackTrace();
+            fail();
         }
-
     }
 }

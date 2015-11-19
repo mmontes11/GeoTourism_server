@@ -82,7 +82,7 @@ CREATE TABLE Comment(
 
 CREATE TABLE Rating(
   id SERIAL,
-  ratingValue TEXT,
+  ratingValue NUMERIC,
   ratingDate TIMESTAMP,
   TIPId INTEGER,
   userId INTEGER,

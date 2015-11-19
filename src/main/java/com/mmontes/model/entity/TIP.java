@@ -24,6 +24,7 @@ public class TIP {
     private City city;
     private Set<UserAccount> favouritedBy = new HashSet<>(0);
     private Set<Comment> comments = new HashSet<>(0);
+    private Set<Rating> ratings = new HashSet<>(0);
 
     public TIP() {
     }
@@ -150,5 +151,15 @@ public class TIP {
 
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
+    }
+
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "tip")
+    public Set<Rating> getRatings() {
+        return ratings;
+    }
+
+    public void setRatings(Set<Rating> ratings) {
+        this.ratings = ratings;
     }
 }

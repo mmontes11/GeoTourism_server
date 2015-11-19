@@ -14,7 +14,7 @@ public class TIPcommentController {
     @Autowired
     private CommentService commentService;
 
-    @RequestMapping(value = "/social/tip/{TIPId}/comment", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/social/tip/{TIPId}/comment", method = RequestMethod.POST)
     public ResponseEntity
     createComment(@PathVariable Long TIPId,
                   @RequestParam(value = "facebookUserId", required = true) Long facebookUserId,

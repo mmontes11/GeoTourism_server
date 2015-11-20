@@ -40,6 +40,9 @@ public class TIPServiceImpl implements TIPService {
     @Autowired
     private DtoService dtoService;
 
+    @Autowired
+    private GoogleMapsService googleMapsService;
+
     public TIPDetailsDto
     create(Long typeId, String name, String description, String photoUrl, String infoUrl, Geometry geom)
             throws TIPLocationException, InvalidTIPUrlException, GoogleMapsServiceException, InstanceNotFoundException {
@@ -53,9 +56,9 @@ public class TIPServiceImpl implements TIPService {
         tip.setInfoUrl(infoUrl);
 
         Coordinate coordinate = tip.getGeom().getCoordinate();
-        tip.setGoogleMapsUrl(GoogleMapsService.getTIPGoogleMapsUrl(coordinate));
+        tip.setGoogleMapsUrl(googleMapsService.getTIPGoogleMapsUrl(coordinate));
         try {
-            tip.setAddress(GoogleMapsService.getAddress(coordinate));
+            tip.setAddress(googleMapsService.getAddress(coordinate));
         } catch (Exception e) {
             e.printStackTrace();
             throw new GoogleMapsServiceException();

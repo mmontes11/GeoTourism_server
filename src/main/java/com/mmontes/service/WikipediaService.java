@@ -2,6 +2,7 @@ package com.mmontes.service;
 
 import com.mmontes.rest.response.WikipediaResult;
 import com.mmontes.util.XMLParser;
+import org.springframework.stereotype.Service;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -13,9 +14,13 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
+@Service("WikipediaService")
 public class WikipediaService {
 
-    public static List<WikipediaResult> search(String language, String keywords) throws Exception {
+    public WikipediaService() {
+    }
+
+    public List<WikipediaResult> search(String language, String keywords) throws Exception {
         String encodedName;
         try {
             encodedName = URLEncoder.encode(keywords, "UTF-8");

@@ -5,17 +5,22 @@ import com.mmontes.util.Constants;
 import com.mmontes.util.JSONParser;
 import com.mmontes.util.exception.GoogleMapsServiceException;
 import com.vividsolutions.jts.geom.Coordinate;
+import org.springframework.stereotype.Service;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+@Service("GoogleMapsService")
 public class GoogleMapsService {
 
-    public static String getTIPGoogleMapsUrl(Coordinate coordinate){
+    public GoogleMapsService() {
+    }
+
+    public String getTIPGoogleMapsUrl(Coordinate coordinate){
         return "http://maps.google.com/maps?q=loc:"+coordinate.y+","+coordinate.x;
     }
 
-    public static String getAddress(Coordinate coordinate) throws Exception {
+    public String getAddress(Coordinate coordinate) throws Exception {
         String requestUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=" + coordinate.y + "," + coordinate.x + "&key=" + Constants.GOOGLE_MAPS_KEY;
 
         URL url = new URL(requestUrl);

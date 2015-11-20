@@ -6,11 +6,14 @@ import com.mmontes.util.Constants;
 import com.mmontes.util.HashUtils;
 import com.mmontes.util.JSONParser;
 import com.mmontes.util.exception.FacebookServiceException;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+
+@Service("FacebookService")
 public class FacebookService {
 
     private String accessToken;
@@ -19,7 +22,10 @@ public class FacebookService {
     private String rootUrl;
     private String urlParams;
 
-    public FacebookService(String accessToken, Long userID) {
+    public FacebookService() {
+    }
+
+    public void setParams(String accessToken, Long userID) {
         this.accessToken = accessToken;
         this.userID = userID;
         this.appSecretProof = HashUtils.hmacDigest(this.accessToken,Constants.FB_APP_SECRET,"HmacSHA256");

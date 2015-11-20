@@ -24,6 +24,9 @@ public class TIPController {
     @Autowired
     private TIPService tipService;
 
+    @Autowired
+    private FacebookService facebookService;
+
     @RequestMapping(value = "/admin/tip", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TIPDetailsDto>
     create(@RequestBody TIPRequest tipRequest) {
@@ -57,9 +60,9 @@ public class TIPController {
          @RequestParam(value = "facebookUserId", required = false) Long facebookUserId) {
 
         if (accessToken != null && facebookUserId != null){
-            FacebookService fs = new FacebookService(accessToken,facebookUserId);
+            facebookService.setParams(accessToken, facebookUserId);
             try {
-                fs.validateAuth();
+                facebookService.validateAuth();
             } catch (FacebookServiceException e) {
                 e.printStackTrace();
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -97,9 +100,9 @@ public class TIPController {
           @RequestParam(value = "facebookUserId", required = false) Long facebookUserId) {
 
         if (accessToken != null && facebookUserId != null){
-            FacebookService fs = new FacebookService(accessToken,facebookUserId);
+            facebookService.setParams(accessToken,facebookUserId);
             try {
-                fs.validateAuth();
+                facebookService.validateAuth();
             } catch (FacebookServiceException e) {
                 e.printStackTrace();
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);

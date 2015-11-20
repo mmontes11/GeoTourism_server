@@ -4,14 +4,19 @@ package com.mmontes.service;
 import com.amazonaws.util.json.JSONObject;
 import com.mmontes.util.Constants;
 import com.mmontes.util.JSONParser;
+import org.springframework.stereotype.Service;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 
+@Service("LanguageDetectorService")
 public class LanguageDetectorService {
 
-    public static String getLanguage(String keywords) throws Exception {
+    public LanguageDetectorService() {
+    }
+
+    public String getLanguage(String keywords) throws Exception {
         String encodedKeywords = URLEncoder.encode(keywords, "UTF-8");
         String url = Constants.LANGUAGE_DETECTION_BASE_URL + "&q=" + encodedKeywords;
         URL obj = new URL(url);

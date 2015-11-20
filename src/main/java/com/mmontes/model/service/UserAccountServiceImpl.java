@@ -25,21 +25,24 @@ public class UserAccountServiceImpl implements UserAccountService {
     @Autowired
     private DtoService dtoService;
 
+    @Autowired
+    private FacebookService facebookService;
+
     @Override
     public HashMap<String, Object> createOrRetrieveUser(String accessToken, Long userID) throws JSONException, IOException, FacebookServiceException {
         HashMap<String, Object> result = new HashMap<>();
         UserAccount userAccount;
-        FacebookService fs = new FacebookService(accessToken, userID);
+        facebookService.setParams(accessToken, userID);
         try {
             userAccount = userDao.findByFBUserID(userID);
-            userAccount.setFacebookProfilePhotoUrl(fs.getUserProfilePhoto());
+            userAccount.setFacebookProfilePhotoUrl(facebookService.getUserProfilePhoto());
             result.put("created", false);
         } catch (InstanceNotFoundException e) {
             userAccount = new UserAccount();
             userAccount.setRegistrationDate(Calendar.getInstance());
             userAccount.setFacebookUserId(userID);
-            userAccount.setName(fs.getUser());
-            userAccount.setFacebookProfilePhotoUrl(fs.getUserProfilePhoto());
+            userAccount.setName(facebookService.getUser());
+            userAccount.setFacebookProfilePhotoUrl(facebookService.getUserProfilePhoto());
             userDao.save(userAccount);
             result.put("created", true);
         }

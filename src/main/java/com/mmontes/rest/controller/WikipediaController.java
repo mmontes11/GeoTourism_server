@@ -3,6 +3,7 @@ package com.mmontes.rest.controller;
 import com.mmontes.rest.response.WikipediaResult;
 import com.mmontes.service.LanguageDetectorService;
 import com.mmontes.service.WikipediaService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,18 +17,24 @@ import java.util.List;
 @RestController
 public class WikipediaController {
 
+    @Autowired
+    private LanguageDetectorService languageDetectorService;
+
+    @Autowired
+    private WikipediaService wikipediaService;
+
     @RequestMapping(value = "/admin/wikipedia", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<List<WikipediaResult>>
     getLanguage (@RequestParam(value = "keywords", required = true) String keywords){
         String language;
         List<WikipediaResult> results = new ArrayList<>();
         try {
-            language = LanguageDetectorService.getLanguage(keywords);
+            language = languageDetectorService.getLanguage(keywords);
         } catch (Exception e) {
             return new ResponseEntity<>(results, HttpStatus.OK);
         }
         try {
-            results = WikipediaService.search(language,keywords);
+            results = wikipediaService.search(language,keywords);
         } catch (Exception e) {
             return new ResponseEntity<>(results, HttpStatus.OK);
         }

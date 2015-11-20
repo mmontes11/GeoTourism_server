@@ -3,7 +3,7 @@ package com.mmontes.model.service;
 import com.mmontes.model.dao.CityDao;
 import com.mmontes.model.entity.City;
 import com.mmontes.util.dto.CityDto;
-import com.mmontes.util.dto.DtoConversor;
+import com.mmontes.util.dto.DtoService;
 import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +18,9 @@ public class CityServiceImpl implements CityService{
     @Autowired
     private CityDao cityDao;
 
+    @Autowired
+    private DtoService dtoService;
+
 
     public City getCityFromLocation(Geometry location) {
         return cityDao.getCityFromLocation(location);
@@ -30,7 +33,7 @@ public class CityServiceImpl implements CityService{
 
     @Override
     public List<CityDto> findAll() {
-        return DtoConversor.ListCity2ListCityDto(cityDao.findAll());
+        return dtoService.ListCity2ListCityDto(cityDao.findAll());
     }
 
 

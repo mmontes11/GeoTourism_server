@@ -5,6 +5,7 @@ import com.mmontes.model.entity.TIP;
 import com.mmontes.model.service.CommentService;
 import com.mmontes.model.service.TIPService;
 import com.mmontes.util.GeometryConversor;
+import com.mmontes.util.dto.CommentDto;
 import com.mmontes.util.dto.TIPDetailsDto;
 import com.vividsolutions.jts.geom.Point;
 import org.junit.Test;
@@ -13,6 +14,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 import static com.mmontes.test.util.Constants.*;
 import static com.mmontes.util.Constants.SPRING_CONFIG_FILE;
@@ -39,15 +42,15 @@ public class CommentServiceTest {
             TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom);
             TIP tip = tipDao.findById(towerHercules.getId());
 
-            commentService.comment("Nice", EXISTING_FACEBOOK_USER_ID, tip.getId());
-            commentService.comment("Ugly", EXISTING_FACEBOOK_USER_ID, tip.getId());
+            List<CommentDto> commentDtos = commentService.comment("Nice", EXISTING_FACEBOOK_USER_ID, tip.getId());
+            commentDtos = commentService.comment("Ugly", EXISTING_FACEBOOK_USER_ID, tip.getId());
 
-            assertEquals(2, tip.getComments().size());
+            assertEquals(2, commentDtos.size());
 
-            commentService.comment("Nice", EXISTING_FACEBOOK_USER_ID2, tip.getId());
-            commentService.comment("Ugly", EXISTING_FACEBOOK_USER_ID2, tip.getId());
+            commentDtos = commentService.comment("Nice", EXISTING_FACEBOOK_USER_ID2, tip.getId());
+            commentDtos = commentService.comment("Ugly", EXISTING_FACEBOOK_USER_ID2, tip.getId());
 
-            assertEquals(4, tip.getComments().size());
+            assertEquals(4, commentDtos.size());
         } catch (Exception e) {
             e.printStackTrace();
         }

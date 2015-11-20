@@ -21,7 +21,7 @@ public class AdminFilter extends GenericFilterBean {
 
         final HttpServletRequest request = (HttpServletRequest) req;
         if (!request.getMethod().equals("OPTIONS")) {
-            final String authHeader = request.getHeader("Authorization");
+            String authHeader = request.getHeader("Authorization");
             if (authHeader == null || !authHeader.startsWith("Bearer ")) {
                 final HttpServletResponse response = (HttpServletResponse) res;
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

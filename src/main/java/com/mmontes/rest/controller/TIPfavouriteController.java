@@ -16,24 +16,21 @@ public class TIPfavouriteController {
 
     @RequestMapping(value = "/social/tip/{TIPId}/favourite", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity
-    createFavourite(@PathVariable Long TIPId,
+    favourite(@PathVariable Long TIPId,
                     @RequestParam(value = "facebookUserId", required = true) Long facebookUserId,
-                    @RequestBody Object body) {
-        try {
-            favouriteService.markAsFavourite(TIPId, facebookUserId);
-            return new ResponseEntity(HttpStatus.CREATED);
-        } catch (InstanceNotFoundException e) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
-        }
-    }
+                    @RequestParam(value = "favouriteValue", required = true) boolean favouriteValue) {
 
-    @RequestMapping(value = "/social/tip/{TIPId}/favourite", method = RequestMethod.DELETE)
-    public ResponseEntity
-    deleteFavourite(@PathVariable Long TIPId,
-                    @RequestParam(value = "facebookUserId", required = true) Long facebookUserId) {
         try {
-            favouriteService.deleteFavourite(TIPId, facebookUserId);
-            return new ResponseEntity(HttpStatus.OK);
+            if (!favouriteService.isFavourite(TIPId,facebookUserId) && favouriteValue){
+                favouriteService.markAsFavourite(TIPId, facebookUserId);
+                return new ResponseEntity(HttpStatus.CREATED);
+            } else {
+                if (favouriteService.isFavourite(TIPId,facebookUserId) && !favouriteValue){
+                    favouriteService.deleteFavourite(TIPId, facebookUserId);
+                    return new ResponseEntity(HttpStatus.OK);
+                }
+            }
+            return new ResponseEntity(HttpStatus.NOT_MODIFIED);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }

@@ -14,12 +14,12 @@ public class RatingDaoHibernate extends GenericDaoHibernate<Rating, Long> implem
     }
 
     @Override
-    public Rating getUserTIPRate(Long TIPId, Long userID) throws InstanceNotFoundException {
-        String queryString = "SELECT r FROM Rating r WHERE r.tip.id = :tipid AND r.userAccount.id = :userid";
-        Rating rating = (Rating) getSession().createQuery(queryString).setParameter("tipid",TIPId).setParameter("userid",userID).uniqueResult();
+    public Rating getUserTIPRate(Long TIPId, Long facebookUserId) throws InstanceNotFoundException {
+        String queryString = "SELECT r FROM Rating r WHERE r.tip.id = :tipid AND r.userAccount.facebookUserId = :userid";
+        Rating rating = (Rating) getSession().createQuery(queryString).setParameter("tipid",TIPId).setParameter("userid",facebookUserId).uniqueResult();
 
         if (rating == null){
-            throw new InstanceNotFoundException(userID,Rating.class.getName());
+            throw new InstanceNotFoundException(facebookUserId,Rating.class.getName());
         }else{
             return rating;
         }

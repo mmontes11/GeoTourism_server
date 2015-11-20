@@ -1,6 +1,8 @@
 package com.mmontes.util.dto;
 
 
+import java.util.List;
+
 public class TIPDetailsDto {
 
     private Long id;
@@ -12,11 +14,18 @@ public class TIPDetailsDto {
     private String photoUrl;
     private String infoUrl;
     private String googleMapsUrl;
+    private Double averageRate;
+    private Double myRate;
+    private List<UserAccountDto> favouritedBy;
+    private Boolean myFavourite;
+    private List<CommentDto> comments;
 
     public TIPDetailsDto() {
     }
 
-    public TIPDetailsDto(Long id, Long type, String name, String description, String geom, String address, String photoUrl, String inforUrl, String googleMapsUrl) {
+    public TIPDetailsDto(Long id, Long type, String name, String description, String geom, String address, String photoUrl, String infoUrl,
+                         String googleMapsUrl, Double averageRate, Double myRate, List<UserAccountDto> favouritedBy, Boolean myFavourite,
+                         List<CommentDto> comments) {
         this.id = id;
         this.type = type;
         this.name = name;
@@ -24,8 +33,13 @@ public class TIPDetailsDto {
         this.geom = geom;
         this.address = address;
         this.photoUrl = photoUrl;
-        this.infoUrl = inforUrl;
+        this.infoUrl = infoUrl;
         this.googleMapsUrl = googleMapsUrl;
+        this.averageRate = averageRate;
+        this.myRate = myRate;
+        this.favouritedBy = favouritedBy;
+        this.myFavourite = myFavourite;
+        this.comments = comments;
     }
 
     public Long getId() {
@@ -98,5 +112,45 @@ public class TIPDetailsDto {
 
     public void setGoogleMapsUrl(String googleMapsUrl) {
         this.googleMapsUrl = googleMapsUrl;
+    }
+
+    public Double getAverageRate() {
+        return averageRate;
+    }
+
+    public void setAverageRate(Double averageRate) {
+        this.averageRate = averageRate;
+    }
+
+    public Double getMyRate() {
+        return myRate;
+    }
+
+    public void setMyRate(Double myRate) {
+        this.myRate = myRate;
+    }
+
+    public List<UserAccountDto> getFavouritedBy() {
+        return favouritedBy;
+    }
+
+    public void setFavouritedBy(List<UserAccountDto> favouritedBy) {
+        this.favouritedBy = favouritedBy;
+    }
+
+    public Boolean getMyFavourite() {
+        return myFavourite;
+    }
+
+    public void setMyFavourite(Boolean myFavourite) {
+        this.myFavourite = myFavourite;
+    }
+
+    public List<CommentDto> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentDto> comments) {
+        this.comments = comments;
     }
 }

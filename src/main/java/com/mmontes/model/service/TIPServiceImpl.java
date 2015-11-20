@@ -5,12 +5,11 @@ import com.mmontes.model.dao.TIPtypeDao;
 import com.mmontes.model.dao.UserAccountDao;
 import com.mmontes.model.entity.City;
 import com.mmontes.model.entity.TIP;
-import com.mmontes.model.entity.TIPtype;
 import com.mmontes.model.entity.UserAccount;
 import com.mmontes.service.GoogleMapsService;
 import com.mmontes.rest.request.TIPPatchRequest;
 import com.mmontes.util.URLvalidator;
-import com.mmontes.util.dto.DtoConversor;
+import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.dto.TIPDetailsDto;
 import com.mmontes.util.dto.TIPSearchDto;
 import com.mmontes.util.exception.*;
@@ -34,6 +33,12 @@ public class TIPServiceImpl implements TIPService {
 
     @Autowired
     private CityService cityService;
+
+    @Autowired
+    private UserAccountDao userAccountDao;
+
+    @Autowired
+    private DtoService dtoService;
 
     public TIPDetailsDto
     create(Long typeId, String name, String description, String photoUrl, String infoUrl, Geometry geom)
@@ -66,11 +71,15 @@ public class TIPServiceImpl implements TIPService {
         URLvalidator.checkURLs(tip);
 
         tipDao.save(tip);
-        return DtoConversor.TIP2TIPDetailsDto(tip);
+        return dtoService.TIP2TIPDetailsDto(tip,null);
     }
 
-    public TIPDetailsDto findById(Long TIPId) throws InstanceNotFoundException {
-        return DtoConversor.TIP2TIPDetailsDto(tipDao.findById(TIPId));
+    public TIPDetailsDto findById(Long TIPId,Long facebooUserId) throws InstanceNotFoundException {
+        UserAccount userAccount = null;
+        if (facebooUserId != null){
+            userAccount = userAccountDao.findByFBUserID(facebooUserId);
+        }
+        return dtoService.TIP2TIPDetailsDto(tipDao.findById(TIPId),userAccount);
     }
 
     public boolean exists(Long TIPId) {
@@ -83,11 +92,15 @@ public class TIPServiceImpl implements TIPService {
 
     public List<TIPSearchDto> find(Long facebookUserId, Geometry bounds, List<Long> typeIds, List<Long> cityIds, Integer favouritedBy) {
         List<TIP> tips = tipDao.find(bounds,typeIds,cityIds,null);
-        return DtoConversor.ListTIP2ListSearchDto(tips);
+        return dtoService.ListTIP2ListSearchDto(tips);
     }
 
-    public TIPDetailsDto edit(Long TIPId, TIPPatchRequest newData) throws InstanceNotFoundException {
+    public TIPDetailsDto edit(Long TIPId, Long facebooUserId, TIPPatchRequest newData) throws InstanceNotFoundException {
         TIP tip = tipDao.findById(TIPId);
+        UserAccount userAccount = null;
+        if (facebooUserId != null){
+            userAccount = userAccountDao.findByFBUserID(facebooUserId);
+        }
         tip.setType(tipTypeDao.findById(newData.getType()));
         tip.setName(newData.getName());
         tip.setDescription(newData.getDescription());
@@ -97,7 +110,7 @@ public class TIPServiceImpl implements TIPService {
             tip.setPhotoUrl(newData.getPhotoUrl());
         }
         tipDao.save(tip);
-        return DtoConversor.TIP2TIPDetailsDto(tip);
+        return dtoService.TIP2TIPDetailsDto(tip,userAccount);
     }
 
 

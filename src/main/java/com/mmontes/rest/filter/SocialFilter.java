@@ -21,8 +21,14 @@ public class SocialFilter extends GenericFilterBean {
 
         final HttpServletRequest request = (HttpServletRequest) req;
         if (!request.getMethod().equals("OPTIONS")) {
-            final String accessToken = request.getHeader("AuthorizationFB");
-            final Long facebookUserId = Long.valueOf(request.getParameter("facebookUserId"));
+            String accessToken = request.getHeader("AuthorizationFB");
+            String facebookUserIdString = request.getParameter("facebookUserId");
+            Long facebookUserId;
+            try{
+                facebookUserId = Long.parseLong(facebookUserIdString);
+            } catch(NumberFormatException | NullPointerException e) {
+                facebookUserId = null;
+            }
             if (accessToken == null || facebookUserId == null) {
                 final HttpServletResponse response = (HttpServletResponse) res;
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);

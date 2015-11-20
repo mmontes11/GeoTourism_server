@@ -3,8 +3,10 @@ package com.mmontes.rest.controller;
 import com.mmontes.model.service.TIPService;
 import com.mmontes.rest.request.TIPPatchRequest;
 import com.mmontes.rest.request.TIPRequest;
+import com.mmontes.service.FacebookService;
 import com.mmontes.util.GeometryConversor;
 import com.mmontes.util.dto.TIPDetailsDto;
+import com.mmontes.util.exception.FacebookServiceException;
 import com.mmontes.util.exception.GeometryParsingException;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import com.vividsolutions.jts.geom.Geometry;
@@ -13,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 
 @RestController
 public class TIPController {
@@ -48,10 +52,26 @@ public class TIPController {
 
     @RequestMapping(value = "/tip/{TIPId}", method = RequestMethod.GET)
     public ResponseEntity<TIPDetailsDto>
-    find(@PathVariable Long TIPId) {
+    find(@PathVariable Long TIPId,
+         @RequestHeader(value="AuthorizationFB", required = false) String accessToken,
+         @RequestParam(value = "facebookUserId", required = false) Long facebookUserId) {
+
+        if (accessToken != null && facebookUserId != null){
+            FacebookService fs = new FacebookService(accessToken,facebookUserId);
+            try {
+                fs.validateAuth();
+            } catch (FacebookServiceException e) {
+                e.printStackTrace();
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+
         TIPDetailsDto tipDetailsDto;
         try {
-            tipDetailsDto = tipService.findById(TIPId);
+            tipDetailsDto = tipService.findById(TIPId,facebookUserId);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -72,10 +92,26 @@ public class TIPController {
     @RequestMapping(value = "/admin/tip/{TIPId}", method = RequestMethod.PATCH)
     public ResponseEntity
     patch(@PathVariable Long TIPId,
-          @RequestBody TIPPatchRequest tipPatchRequest) {
+          @RequestBody TIPPatchRequest tipPatchRequest,
+          @RequestHeader(value="AuthorizationFB", required = false) String accessToken,
+          @RequestParam(value = "facebookUserId", required = false) Long facebookUserId) {
+
+        if (accessToken != null && facebookUserId != null){
+            FacebookService fs = new FacebookService(accessToken,facebookUserId);
+            try {
+                fs.validateAuth();
+            } catch (FacebookServiceException e) {
+                e.printStackTrace();
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
+
         TIPDetailsDto tipDetailsDto;
         try {
-            tipDetailsDto = tipService.edit(TIPId, tipPatchRequest);
+            tipDetailsDto = tipService.edit(TIPId, facebookUserId, tipPatchRequest);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

@@ -28,7 +28,9 @@ public class PhotoController {
             try {
                 File file = FileUtils.multipart2File(multiPartFile);
                 url = amazonService.uploadS3(file);
+                file.delete();
             } catch (IOException e) {
+                e.printStackTrace();
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }else{

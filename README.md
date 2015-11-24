@@ -18,7 +18,7 @@ Its architecture consists in the following parts:
   * [Leafleaf](http://leafletjs.com/)
   * 
 * Back End:
-  * [PostgreSQL](www.postgresql.org)
+  * [PostgreSQL](http://www.postgresql.org/)
   * [PostGIS](http://postgis.net/)
   * [Hibernate Spatial](http://www.hibernatespatial.org/)
   * [Spring](https://spring.io/)

@@ -15,8 +15,7 @@ Its architecture consists in the following parts:
   * [Angular Material](https://material.angularjs.org)
   * [Material Design Lite](http://www.getmdl.io/)
   * [RequireJS](http://requirejs.org/)
-  * [Leafleaf](http://leafletjs.com/)
-  * 
+  * [Leaflet](http://leafletjs.com/)
 * Back End:
   * [PostgreSQL](http://www.postgresql.org/)
   * [PostGIS](http://postgis.net/)

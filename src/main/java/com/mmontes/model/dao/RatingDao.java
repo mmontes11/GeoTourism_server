@@ -7,5 +7,5 @@ import com.mmontes.util.exception.InstanceNotFoundException;
 public interface RatingDao extends GenericDao<Rating,Long> {
 
     Double getAverageRate(Long TIPId);
-    Rating getUserTIPRate(Long TIPId,Long userAccountID) throws InstanceNotFoundException;
+    Rating getUserTIPRate(Long TIPId,Long userAccountID);
 }

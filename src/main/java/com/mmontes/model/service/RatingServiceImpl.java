@@ -31,33 +31,33 @@ public class RatingServiceImpl implements RatingService{
         TIP tip = tipDao.findById(TIPId);
         UserAccount userAccount = userAccountDao.findByFBUserID(facebookUserId);
 
-        Rating rating;
-        try {
-            rating = ratingDao.getUserTIPRate(TIPId,facebookUserId);
-        } catch (InstanceNotFoundException e) {
+        Rating rating = ratingDao.getUserTIPRate(TIPId,facebookUserId);
+        if (rating == null){
             rating = new Rating();
         }
         rating.setTip(tip);
         rating.setUserAccount(userAccount);
         rating.setRatingValue(ratingValue);
         rating.setRatingDate(Calendar.getInstance());
-
         ratingDao.save(rating);
 
         tip.getRatings().add(rating);
-
         tipDao.save(tip);
 
         return ratingDao.getAverageRate(tip.getId());
     }
 
     @Override
-    public Double getAverageRate(Long TIPId) {
+    public Double getAverageRate(Long TIPId) throws InstanceNotFoundException {
+        tipDao.findById(TIPId);
         return ratingDao.getAverageRate(TIPId);
     }
 
     @Override
     public Double getUserTIPRate(Long TIPId, Long facebookUserId) throws InstanceNotFoundException {
-        return ratingDao.getUserTIPRate(TIPId,facebookUserId).getRatingValue();
+        tipDao.findById(TIPId);
+        userAccountDao.findByFBUserID(facebookUserId);
+        Rating rating = ratingDao.getUserTIPRate(TIPId, facebookUserId);
+        return rating != null? rating.getRatingValue() : null;
     }
 }

@@ -40,7 +40,8 @@ public class DtoService {
 
         if (userAccount != null){
             tipDetailsDto.setAverageRate(ratingService.getAverageRate(tip.getId()));
-            tipDetailsDto.setMyRate(ratingService.getUserTIPRate(tip.getId(), userAccount.getFacebookUserId()));
+            Double ratingValue = ratingService.getUserTIPRate(tip.getId(), userAccount.getFacebookUserId());
+            tipDetailsDto.setMyRate(ratingValue);
 
             List<UserAccountDto> accountDtos = ListUserAccount2ListUserAccountDto(new ArrayList<>(tip.getFavouritedBy()));
             tipDetailsDto.setFavouritedBy(accountDtos);

@@ -56,7 +56,7 @@
         <mavenAssemblyPlugin.version>2.$2.1</mavenAssemblyPlugin.version>
         <jettyMavenPlugin>9.2.11.v20150529</jettyMavenPlugin>
         <!-- Skip tests -->
-        <skipTests>false</skipTests>
+        <skipTests>true</skipTests>
         <!-- Repositories-->
         <updatePolity>daily</updatePolity>
     </properties>

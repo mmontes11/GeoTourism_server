@@ -126,7 +126,7 @@ public class TIP {
     }
 
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinTable(
             name = "tipuseraccount",
             joinColumns = {

@@ -14,17 +14,21 @@ public class UserAccount {
     private String name;
     private Calendar registrationDate;
     private Long facebookUserId;
+    private String facebookProfileUrl;
     private String facebookProfilePhotoUrl;
     private Set<TIP> favouriteTIPs = new HashSet<>(0);
 
     public UserAccount() {
     }
 
-    public UserAccount(String name, Calendar registrationDate, Long facebookUserId, String facebookProfilePhotoUrl) {
+    public UserAccount(Long id, String name, Calendar registrationDate, Long facebookUserId, String facebookProfileUrl, String facebookProfilePhotoUrl, Set<TIP> favouriteTIPs) {
+        this.id = id;
         this.name = name;
         this.registrationDate = registrationDate;
         this.facebookUserId = facebookUserId;
+        this.facebookProfileUrl = facebookProfileUrl;
         this.facebookProfilePhotoUrl = facebookProfilePhotoUrl;
+        this.favouriteTIPs = favouriteTIPs;
     }
 
     @Column(name = "id")
@@ -65,6 +69,15 @@ public class UserAccount {
 
     public void setFacebookUserId(Long facebookUserId) {
         this.facebookUserId = facebookUserId;
+    }
+
+    @Column(name = "facebookprofileurl")
+    public String getFacebookProfileUrl() {
+        return facebookProfileUrl;
+    }
+
+    public void setFacebookProfileUrl(String facebookProfileUrl) {
+        this.facebookProfileUrl = facebookProfileUrl;
     }
 
     @Column(name = "facebookprofilephotourl")

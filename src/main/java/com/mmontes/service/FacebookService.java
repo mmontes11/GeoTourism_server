@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 
 
 @Service("FacebookService")
@@ -49,11 +50,14 @@ public class FacebookService {
         getConnection(requestUrl);
     }
 
-    public String getUser() throws FacebookServiceException, IOException, JSONException {
-        String requestUrl = this.rootUrl + "/" + this.userID + this.urlParams;
+    public HashMap<String,String> getUserDetails() throws FacebookServiceException, IOException, JSONException {
+        String requestUrl = this.rootUrl + "/" + this.userID + this.urlParams+"&fields=name,link";
         HttpURLConnection connection = getConnection(requestUrl);
         JSONObject obj = JSONParser.parseJSON(connection.getInputStream());
-        return obj.getString("name");
+        HashMap<String,String> details = new HashMap<>();
+        details.put("name",obj.getString("name"));
+        details.put("link",obj.getString("link"));
+        return details;
     }
 
     public String getUserProfilePhoto() throws IOException, FacebookServiceException, JSONException {

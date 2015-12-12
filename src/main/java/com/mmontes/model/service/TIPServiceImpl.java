@@ -115,6 +115,4 @@ public class TIPServiceImpl implements TIPService {
         tipDao.save(tip);
         return dtoService.TIP2TIPDetailsDto(tip,userAccount);
     }
-
-
 }

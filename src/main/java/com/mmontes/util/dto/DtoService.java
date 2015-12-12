@@ -43,8 +43,7 @@ public class DtoService {
             Double ratingValue = ratingService.getUserTIPRate(tip.getId(), userAccount.getFacebookUserId());
             tipDetailsDto.setMyRate(ratingValue);
 
-            List<UserAccountDto> accountDtos = ListUserAccount2ListUserAccountDto(new ArrayList<>(tip.getFavouritedBy()));
-            tipDetailsDto.setFavouritedBy(accountDtos);
+            tipDetailsDto.setFavouritedBy(favouriteService.getFavourites(tip.getId()));
             tipDetailsDto.setMyFavourite(favouriteService.isFavourite(tip.getId(), userAccount.getFacebookUserId()));
 
             List<CommentDto> commentDtos = ListComment2ListCommentDto(new ArrayList<>(tip.getComments()));
@@ -86,6 +85,7 @@ public class DtoService {
     public UserAccountDto UserAccount2UserAccountDto(UserAccount user){
         UserAccountDto userAccountDto = new UserAccountDto();
         userAccountDto.setFacebookUserId(user.getFacebookUserId());
+        userAccountDto.setFacebookProfileUrl(user.getFacebookProfileUrl());
         userAccountDto.setFacebookProfilePhotoUrl(user.getFacebookProfilePhotoUrl());
         userAccountDto.setName(user.getName());
         return userAccountDto;

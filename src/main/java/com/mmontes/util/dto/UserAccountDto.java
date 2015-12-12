@@ -3,14 +3,16 @@ package com.mmontes.util.dto;
 public class UserAccountDto {
 
     private Long facebookUserId;
+    private String facebookProfileUrl;
     private String facebookProfilePhotoUrl;
     private String name;
 
     public UserAccountDto() {
     }
 
-    public UserAccountDto(Long facebookUserId, String facebookProfilePhotoUrl, String name) {
+    public UserAccountDto(Long facebookUserId, String facebookProfileUrl, String facebookProfilePhotoUrl, String name) {
         this.facebookUserId = facebookUserId;
+        this.facebookProfileUrl = facebookProfileUrl;
         this.facebookProfilePhotoUrl = facebookProfilePhotoUrl;
         this.name = name;
     }
@@ -21,6 +23,14 @@ public class UserAccountDto {
 
     public void setFacebookUserId(Long facebookUserId) {
         this.facebookUserId = facebookUserId;
+    }
+
+    public String getFacebookProfileUrl() {
+        return facebookProfileUrl;
+    }
+
+    public void setFacebookProfileUrl(String facebookProfileUrl) {
+        this.facebookProfileUrl = facebookProfileUrl;
     }
 
     public String getFacebookProfilePhotoUrl() {

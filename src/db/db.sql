@@ -24,6 +24,7 @@ CREATE TABLE UserAccount(
   name VARCHAR(50),
   registrationDate TIMESTAMP,
   facebookUserId BIGINT,
+  facebookProfileUrl TEXT,
   facebookProfilePhotoUrl TEXT,
   CONSTRAINT UserAccount_PK PRIMARY KEY(id)
 );

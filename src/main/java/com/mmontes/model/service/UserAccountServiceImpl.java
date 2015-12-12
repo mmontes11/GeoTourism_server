@@ -41,7 +41,9 @@ public class UserAccountServiceImpl implements UserAccountService {
             userAccount = new UserAccount();
             userAccount.setRegistrationDate(Calendar.getInstance());
             userAccount.setFacebookUserId(userID);
-            userAccount.setName(facebookService.getUser());
+            HashMap<String,String> details = facebookService.getUserDetails();
+            userAccount.setName(details.get("name"));
+            userAccount.setFacebookProfileUrl(details.get("link"));
             userAccount.setFacebookProfilePhotoUrl(facebookService.getUserProfilePhoto());
             userDao.save(userAccount);
             result.put("created", true);

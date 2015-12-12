@@ -1,6 +1,9 @@
 package com.mmontes.model.service;
 
+import com.mmontes.util.dto.UserAccountDto;
 import com.mmontes.util.exception.InstanceNotFoundException;
+
+import java.util.List;
 
 public interface FavouriteService {
 
@@ -9,4 +12,6 @@ public interface FavouriteService {
     void deleteFavourite(Long TIPId, Long facebookUserId) throws InstanceNotFoundException;
 
     boolean isFavourite(Long TIPId, Long facebookUserId) throws InstanceNotFoundException;
+
+    List<UserAccountDto> getFavourites(Long TIPId) throws InstanceNotFoundException;
 }

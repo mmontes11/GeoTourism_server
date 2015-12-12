@@ -1,12 +1,16 @@
 package com.mmontes.rest.controller;
 
 import com.mmontes.model.service.FavouriteService;
+import com.mmontes.util.dto.UserAccountDto;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 public class TIPfavouriteController {
@@ -15,24 +19,28 @@ public class TIPfavouriteController {
     private FavouriteService favouriteService;
 
     @RequestMapping(value = "/social/tip/{TIPId}/favourite", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity
+    public ResponseEntity<List<UserAccountDto>>
     favourite(@PathVariable Long TIPId,
                     @RequestParam(value = "facebookUserId", required = true) Long facebookUserId,
                     @RequestParam(value = "favouriteValue", required = true) boolean favouriteValue) {
-
         try {
+            HttpStatus status = null;
             if (!favouriteService.isFavourite(TIPId,facebookUserId) && favouriteValue){
                 favouriteService.markAsFavourite(TIPId, facebookUserId);
-                return new ResponseEntity(HttpStatus.CREATED);
+                status = HttpStatus.CREATED;
             } else {
                 if (favouriteService.isFavourite(TIPId,facebookUserId) && !favouriteValue){
                     favouriteService.deleteFavourite(TIPId, facebookUserId);
-                    return new ResponseEntity(HttpStatus.OK);
+                    status = HttpStatus.OK;
                 }
             }
-            return new ResponseEntity(HttpStatus.NOT_MODIFIED);
+            if (status == null){
+                status = HttpStatus.NOT_MODIFIED;
+            }
+            List<UserAccountDto> userAccountDtos = favouriteService.getFavourites(TIPId);
+            return new ResponseEntity<>(userAccountDtos,status);
         } catch (InstanceNotFoundException e) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }

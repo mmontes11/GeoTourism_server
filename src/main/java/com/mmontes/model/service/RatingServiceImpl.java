@@ -58,6 +58,6 @@ public class RatingServiceImpl implements RatingService{
         tipDao.findById(TIPId);
         userAccountDao.findByFBUserID(facebookUserId);
         Rating rating = ratingDao.getUserTIPRate(TIPId, facebookUserId);
-        return rating != null? rating.getRatingValue() : null;
+        return rating != null? rating.getRatingValue() : 0.0D;
     }
 }

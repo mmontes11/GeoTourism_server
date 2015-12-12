@@ -1,6 +1,7 @@
 package com.mmontes.util.dto;
 
 import com.mmontes.model.entity.*;
+import com.mmontes.model.service.CommentService;
 import com.mmontes.model.service.FavouriteService;
 import com.mmontes.model.service.RatingService;
 import com.mmontes.service.FacebookService;
@@ -14,6 +15,9 @@ import java.util.List;
 
 @Service("dtoService")
 public class DtoService {
+
+    @Autowired
+    private CommentService commentService;
 
     @Autowired
     private RatingService ratingService;
@@ -46,8 +50,7 @@ public class DtoService {
             tipDetailsDto.setFavouritedBy(favouriteService.getFavourites(tip.getId()));
             tipDetailsDto.setMyFavourite(favouriteService.isFavourite(tip.getId(), userAccount.getFacebookUserId()));
 
-            List<CommentDto> commentDtos = ListComment2ListCommentDto(new ArrayList<>(tip.getComments()));
-            tipDetailsDto.setComments(commentDtos);
+            tipDetailsDto.setComments(commentService.getComments(tip.getId()));
         }
         return tipDetailsDto;
     }

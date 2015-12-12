@@ -50,6 +50,11 @@ public class CommentServiceImpl implements CommentService {
 
         tipDao.save(tip);
 
-        return dtoService.ListComment2ListCommentDto(new ArrayList<>(tip.getComments()));
+        return getComments(tip.getId());
+    }
+
+    @Override
+    public List<CommentDto> getComments(Long TIPId) {
+        return dtoService.ListComment2ListCommentDto(commentDao.getComments(TIPId));
     }
 }

@@ -8,4 +8,5 @@ import java.util.List;
 public interface CommentService {
 
     List<CommentDto> comment(String commentText,Long facebookUserId, Long TIPId) throws InstanceNotFoundException;
+    List<CommentDto> getComments(Long TIPId);
 }

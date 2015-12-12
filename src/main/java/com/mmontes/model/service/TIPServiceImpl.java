@@ -109,9 +109,7 @@ public class TIPServiceImpl implements TIPService {
         tip.setDescription(newData.getDescription());
         tip.setInfoUrl(newData.getInfoUrl());
         tip.setAddress(newData.getAddress());
-        if (newData.getPhotoUrl() != null && !newData.getPhotoUrl().equals("")){
-            tip.setPhotoUrl(newData.getPhotoUrl());
-        }
+        tip.setPhotoUrl(newData.getPhotoUrl());
         tipDao.save(tip);
         return dtoService.TIP2TIPDetailsDto(tip,userAccount);
     }

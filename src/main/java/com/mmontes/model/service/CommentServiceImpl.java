@@ -57,4 +57,14 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentDto> getComments(Long TIPId) {
         return dtoService.ListComment2ListCommentDto(commentDao.getComments(TIPId));
     }
+
+    @Override
+    public List<CommentDto> deleteComment(Long commentId, Long TIPId, Long facebookUserId) throws InstanceNotFoundException {
+        Comment comment = commentDao.findComment(commentId,TIPId,facebookUserId);
+        if (comment == null){
+            throw new InstanceNotFoundException(commentId,Comment.class.getName());
+        }
+        commentDao.remove(comment.getId());
+        return getComments(TIPId);
+    }
 }

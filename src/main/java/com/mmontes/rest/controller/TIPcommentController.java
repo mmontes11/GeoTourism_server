@@ -27,7 +27,20 @@ public class TIPcommentController {
             List<CommentDto> commentDtos = commentService.comment(commentText,facebookUserId,TIPId);
             return new ResponseEntity<>(commentDtos,HttpStatus.CREATED);
         } catch (InstanceNotFoundException e) {
-            return new ResponseEntity(HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(value = "/social/tip/{TIPId}/comment/{commentId}", method = RequestMethod.DELETE)
+    public ResponseEntity<List<CommentDto>>
+    deleteComment(@PathVariable Long TIPId,
+                  @PathVariable Long commentId,
+                  @RequestParam(value = "facebookUserId", required = true) Long facebookUserId){
+        try {
+            List<CommentDto> commentDtos = commentService.deleteComment(commentId,TIPId,facebookUserId);
+            return new ResponseEntity<>(commentDtos,HttpStatus.OK);
+        } catch (InstanceNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
 }

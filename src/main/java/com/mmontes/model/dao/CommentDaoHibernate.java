@@ -14,4 +14,15 @@ public class CommentDaoHibernate extends GenericDaoHibernate<Comment, Long> impl
         String queryString = "SELECT c FROM Comment c WHERE c.tip.id = :id ORDER BY c.commentDate DESC";
         return (List<Comment>) getSession().createQuery(queryString).setParameter("id",TIPId).list();
     }
+
+    @Override
+    public Comment findComment(Long commentId, Long TIPId, Long facebookUserId) {
+        String queryString = "SELECT c FROM Comment c WHERE c.id = :commentId AND c.tip.id = :TIPId AND c.userAccount.facebookUserId = :facebookUserId";
+        return (Comment) getSession()
+                            .createQuery(queryString)
+                            .setParameter("commentId", commentId)
+                            .setParameter("TIPId", TIPId)
+                            .setParameter("facebookUserId", facebookUserId)
+                            .uniqueResult();
+    }
 }

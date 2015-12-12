@@ -7,5 +7,6 @@ import java.util.List;
 
 public interface CommentDao extends GenericDao<Comment,Long>{
 
-    List getComments(Long TIPId);
+    List<Comment> getComments(Long TIPId);
+    Comment findComment(Long commentId,Long TIPId,Long facebookUserId);
 }

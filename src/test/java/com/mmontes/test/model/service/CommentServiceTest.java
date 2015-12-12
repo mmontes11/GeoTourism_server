@@ -7,6 +7,8 @@ import com.mmontes.model.service.TIPService;
 import com.mmontes.util.GeometryConversor;
 import com.mmontes.util.dto.CommentDto;
 import com.mmontes.util.dto.TIPDetailsDto;
+import com.mmontes.util.exception.InstanceException;
+import com.mmontes.util.exception.InstanceNotFoundException;
 import com.vividsolutions.jts.geom.Point;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -36,7 +38,7 @@ public class CommentServiceTest {
     private TIPService tipService;
 
     @Test
-    public void addComments() {
+    public void addDeleteComments() {
         try {
             Point geom = (Point) GeometryConversor.geometryFromWKT(POINT_TORRE_HERCULES);
             TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom);
@@ -51,9 +53,32 @@ public class CommentServiceTest {
             commentDtos = commentService.comment("Ugly", EXISTING_FACEBOOK_USER_ID2, tip.getId());
 
             assertEquals(4, commentDtos.size());
+
+            commentService.deleteComment(commentDtos.get(0).getId(), tip.getId(), EXISTING_FACEBOOK_USER_ID);
+
+            assertEquals(3, commentDtos.size());
         } catch (Exception e) {
             e.printStackTrace();
         }
+    }
 
+    @Test(expected = InstanceException.class)
+    public void deleteInvalidComment() throws InstanceNotFoundException {
+        TIP tip = null;
+        try {
+            Point geom = (Point) GeometryConversor.geometryFromWKT(POINT_TORRE_HERCULES);
+            TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom);
+            tip = tipDao.findById(towerHercules.getId());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        List<CommentDto> commentDtos = null;
+        try {
+            commentDtos = commentService.comment("Nice", EXISTING_FACEBOOK_USER_ID,tip.getId());
+            assertEquals(1, commentDtos.size());
+        } catch (InstanceNotFoundException e) {
+            e.printStackTrace();
+        }
+        commentService.deleteComment(commentDtos.get(0).getId(),tip.getId(),EXISTING_FACEBOOK_USER_ID2);
     }
 }

@@ -19,6 +19,7 @@ public class CityDaoHibernate extends GenericDaoHibernate<City,Long> implements 
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<City> findAll() {
         String queryString = "SELECT c FROM City c";
         return (List<City>) getSession().createQuery(queryString).list();

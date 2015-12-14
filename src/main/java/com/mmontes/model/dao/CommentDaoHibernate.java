@@ -10,6 +10,7 @@ import java.util.List;
 public class CommentDaoHibernate extends GenericDaoHibernate<Comment, Long> implements CommentDao {
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<Comment> getComments(Long TIPId) {
         String queryString = "SELECT c FROM Comment c WHERE c.tip.id = :id ORDER BY c.commentDate DESC";
         return (List<Comment>) getSession().createQuery(queryString).setParameter("id",TIPId).list();

@@ -1,9 +1,12 @@
 package com.mmontes.model.dao;
 
 import com.mmontes.model.entity.UserAccount;
+import com.mmontes.model.util.QueryUtils;
 import com.mmontes.model.util.genericdao.GenericDaoHibernate;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository("UserDao")
 public class UserAccountDaoHibernate extends GenericDaoHibernate<UserAccount, Long> implements UserAccountDao {
@@ -18,5 +21,13 @@ public class UserAccountDaoHibernate extends GenericDaoHibernate<UserAccount, Lo
         } else {
             return user;
         }
+    }
+
+    @Override
+    @SuppressWarnings("unchecked")
+    public List<UserAccount> findUserAccountsByFBUserIDs(List<Long> FBUserIDs) {
+        String friendFBIds = QueryUtils.getINvalues(FBUserIDs);
+        String queryString = "SELECT ua FROM UserAccount ua WHERE ua.facebookUserId IN "+friendFBIds;
+        return (List<UserAccount>) getSession().createQuery(queryString).list();
     }
 }

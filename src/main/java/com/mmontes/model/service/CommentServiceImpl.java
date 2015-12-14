@@ -13,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -37,19 +36,14 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentDto> comment(String commentText, Long facebookUserId, Long TIPId) throws InstanceNotFoundException {
         UserAccount userAccount = userAccountDao.findByFBUserID(facebookUserId);
         TIP tip = tipDao.findById(TIPId);
-
         Comment comment = new Comment();
         comment.setUserAccount(userAccount);
         comment.setTip(tip);
         comment.setCommentText(commentText);
         comment.setCommentDate(Calendar.getInstance());
-
         commentDao.save(comment);
-
         tip.getComments().add(comment);
-
         tipDao.save(tip);
-
         return getComments(tip.getId());
     }
 
@@ -60,9 +54,9 @@ public class CommentServiceImpl implements CommentService {
 
     @Override
     public List<CommentDto> deleteComment(Long commentId, Long TIPId, Long facebookUserId) throws InstanceNotFoundException {
-        Comment comment = commentDao.findComment(commentId,TIPId,facebookUserId);
-        if (comment == null){
-            throw new InstanceNotFoundException(commentId,Comment.class.getName());
+        Comment comment = commentDao.findComment(commentId, TIPId, facebookUserId);
+        if (comment == null) {
+            throw new InstanceNotFoundException(commentId, Comment.class.getName());
         }
         commentDao.remove(comment.getId());
         return getComments(TIPId);

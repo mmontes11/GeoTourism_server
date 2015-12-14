@@ -16,19 +16,19 @@ public class UserAccount {
     private Long facebookUserId;
     private String facebookProfileUrl;
     private String facebookProfilePhotoUrl;
-    private Set<TIP> favouriteTIPs = new HashSet<>(0);
+    private Set<UserAccount> friends = new HashSet<>();
 
     public UserAccount() {
     }
 
-    public UserAccount(Long id, String name, Calendar registrationDate, Long facebookUserId, String facebookProfileUrl, String facebookProfilePhotoUrl, Set<TIP> favouriteTIPs) {
+    public UserAccount(Long id, String name, Calendar registrationDate, Long facebookUserId, String facebookProfileUrl, String facebookProfilePhotoUrl, Set<UserAccount> friends) {
         this.id = id;
         this.name = name;
         this.registrationDate = registrationDate;
         this.facebookUserId = facebookUserId;
         this.facebookProfileUrl = facebookProfileUrl;
         this.facebookProfilePhotoUrl = facebookProfilePhotoUrl;
-        this.favouriteTIPs = favouriteTIPs;
+        this.friends = friends;
     }
 
     @Column(name = "id")
@@ -89,12 +89,21 @@ public class UserAccount {
         this.facebookProfilePhotoUrl = facebookProfilePhotoUrl;
     }
 
-    @ManyToMany(fetch = FetchType.LAZY, mappedBy = "favouritedBy")
-    public Set<TIP> getFavouriteTIPs() {
-        return favouriteTIPs;
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @JoinTable(
+            name = "useraccountuseraccount",
+            joinColumns = {
+                    @JoinColumn(name = "userAccountId", nullable = false, updatable = false)
+            },
+            inverseJoinColumns = {
+                    @JoinColumn(name = "friendId", nullable = false, updatable = false)
+            }
+    )
+    public Set<UserAccount> getFriends() {
+        return friends;
     }
 
-    public void setFavouriteTIPs(Set<TIP> favouriteTIPs) {
-        this.favouriteTIPs = favouriteTIPs;
+    public void setFriends(Set<UserAccount> friends) {
+        this.friends = friends;
     }
 }

@@ -1,5 +1,6 @@
 package com.mmontes.service;
 
+import com.amazonaws.util.json.JSONArray;
 import com.amazonaws.util.json.JSONException;
 import com.amazonaws.util.json.JSONObject;
 import com.mmontes.util.Constants;
@@ -11,7 +12,9 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 
 @Service("FacebookService")
@@ -65,6 +68,18 @@ public class FacebookService {
         HttpURLConnection connection = getConnection(requestUrl);
         JSONObject obj = JSONParser.parseJSON(connection.getInputStream());
         return obj.getJSONObject("data").getString("url");
+    }
+
+    public List<Long> getUserFriends() throws IOException, FacebookServiceException, JSONException {
+        String requestUrl = this.rootUrl + "/" + this.userID + "/friends" + this.urlParams;
+        HttpURLConnection connection = getConnection(requestUrl);
+        JSONObject obj = JSONParser.parseJSON(connection.getInputStream());
+        JSONArray friends = obj.getJSONArray("data");
+        List<Long> friendsFBIds = new ArrayList<>();
+        for(int i = 0; i<friends.length(); i++){
+            friendsFBIds.add(((JSONObject) friends.get(i)).getLong("id"));
+        }
+        return friendsFBIds;
     }
 
 }

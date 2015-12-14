@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.List;
 
 @Service("UserService")
 @Transactional
@@ -29,25 +30,28 @@ public class UserAccountServiceImpl implements UserAccountService {
     private FacebookService facebookService;
 
     @Override
+    @SuppressWarnings("unchecked")
     public HashMap<String, Object> createOrRetrieveUser(String accessToken, Long userID) throws JSONException, IOException, FacebookServiceException {
         HashMap<String, Object> result = new HashMap<>();
         UserAccount userAccount;
         facebookService.setParams(accessToken, userID);
         try {
             userAccount = userDao.findByFBUserID(userID);
-            userAccount.setFacebookProfilePhotoUrl(facebookService.getUserProfilePhoto());
             result.put("created", false);
         } catch (InstanceNotFoundException e) {
             userAccount = new UserAccount();
             userAccount.setRegistrationDate(Calendar.getInstance());
             userAccount.setFacebookUserId(userID);
-            HashMap<String,String> details = facebookService.getUserDetails();
-            userAccount.setName(details.get("name"));
-            userAccount.setFacebookProfileUrl(details.get("link"));
-            userAccount.setFacebookProfilePhotoUrl(facebookService.getUserProfilePhoto());
-            userDao.save(userAccount);
             result.put("created", true);
         }
+        HashMap<String,String> details = facebookService.getUserDetails();
+        userAccount.setName(details.get("name"));
+        userAccount.setFacebookProfileUrl(details.get("link"));
+        userAccount.setFacebookProfilePhotoUrl(facebookService.getUserProfilePhoto());
+        userAccount.getFriends().clear();
+        List<UserAccount> friends = userDao.findUserAccountsByFBUserIDs(facebookService.getUserFriends());
+        userAccount.getFriends().addAll(friends);
+        userDao.save(userAccount);
         result.put("userAccountDto", dtoService.UserAccount2UserAccountDto(userAccount));
         return result;
     }

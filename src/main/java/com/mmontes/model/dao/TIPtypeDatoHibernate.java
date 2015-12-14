@@ -10,6 +10,7 @@ import java.util.List;
 public class TIPtypeDatoHibernate extends GenericDaoHibernate<TIPtype,Long> implements TIPtypeDao{
 
     @Override
+    @SuppressWarnings("unchecked")
     public List<TIPtype> findAll() {
         String queryString = "SELECT tt FROM TIPtype tt";
         return (List<TIPtype>) getSession().createQuery(queryString).list();

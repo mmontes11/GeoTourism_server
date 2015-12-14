@@ -22,9 +22,9 @@ public class TIP {
     private String infoUrl;
     private String googleMapsUrl;
     private City city;
-    private Set<UserAccount> favouritedBy = new HashSet<>(0);
-    private Set<Comment> comments = new HashSet<>(0);
-    private Set<Rating> ratings = new HashSet<>(0);
+    private Set<UserAccount> favouritedBy = new HashSet<>();
+    private Set<Comment> comments = new HashSet<>();
+    private Set<Rating> ratings = new HashSet<>();
 
     public TIP() {
     }
@@ -152,7 +152,6 @@ public class TIP {
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
     }
-
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "tip")
     public Set<Rating> getRatings() {

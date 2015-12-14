@@ -1,4 +1,5 @@
 DROP TABLE IF EXISTS City CASCADE;
+DROP TABLE IF EXISTS UserAccountUserAccount CASCADE;
 DROP TABLE IF EXISTS UserAccount CASCADE;
 DROP TABLE IF EXISTS Admin CASCADE;
 DROP TABLE IF EXISTS Route CASCADE;
@@ -26,7 +27,17 @@ CREATE TABLE UserAccount(
   facebookUserId BIGINT,
   facebookProfileUrl TEXT,
   facebookProfilePhotoUrl TEXT,
-  CONSTRAINT UserAccount_PK PRIMARY KEY(id)
+  CONSTRAINT UserAccount_PK PRIMARY KEY(id),
+  CONSTRAINT UserAccount_UNIQUE UNIQUE(facebookUserId)
+);
+
+CREATE TABLE UserAccountUserAccount(
+  id SERIAL,
+  userAccountId INTEGER,
+  friendId INTEGER,
+  CONSTRAINT UserAccountUserAccount_PK PRIMARY KEY (id),
+  CONSTRAINT UserAccountUserAccount_UserAccount_FK FOREIGN KEY (userAccountId) REFERENCES UserAccount(id),
+  CONSTRAINT UserAccountUserAccount_Friend_FK FOREIGN KEY (friendId) REFERENCES UserAccount(id)
 );
 
 CREATE TABLE Admin(

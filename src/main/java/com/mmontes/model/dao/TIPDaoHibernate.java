@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.StringJoiner;
 
 @Repository("TIPDao")
+@SuppressWarnings("unchecked")
 public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements TIPDao {
 
     public List<TIP> find(Geometry bounds,  List<Long> typeIds, List<Long> cityIds, List<Long> facebookUserIds) {

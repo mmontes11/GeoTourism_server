@@ -81,7 +81,7 @@ public class TIPServiceTest {
             ArrayList<Long> typeIds = new ArrayList<Long>() {{
                 add(MONUMENT_DISCRIMINATOR);
             }};
-            List<TIPSearchDto> tipSearchDtos = tipService.find(null, null, typeIds, null, null);
+            List<TIPSearchDto> tipSearchDtos = tipService.find(null, typeIds, null, null, null, null);
 
             assertEquals(1, tipSearchDtos.size());
             TIPSearchDto result = tipSearchDtos.get(0);
@@ -124,7 +124,12 @@ public class TIPServiceTest {
             e.printStackTrace();
             fail();
         }
-        List<TIPSearchDto> tipSearchDtos = tipService.find(null, bounds, null, null, null);
+        List<TIPSearchDto> tipSearchDtos = null;
+        try {
+            tipSearchDtos = tipService.find(bounds, null, null, null, null, null);
+        } catch (InstanceNotFoundException e) {
+            fail();
+        }
 
         assertEquals(1, tipSearchDtos.size());
         assertEquals(santiagoCathedral.getId(), tipSearchDtos.get(0).getId());
@@ -149,7 +154,12 @@ public class TIPServiceTest {
             e.printStackTrace();
             fail();
         }
-        List<TIPSearchDto> tipSearchDtos = tipService.find(null, bounds, null, null, null);
+        List<TIPSearchDto> tipSearchDtos = null;
+        try {
+            tipSearchDtos = tipService.find(bounds, null, null, null, null, null);
+        } catch (InstanceNotFoundException e) {
+            fail();
+        }
 
         assertTrue(tipSearchDtos.isEmpty());
     }
@@ -171,7 +181,7 @@ public class TIPServiceTest {
             ArrayList<Long> typeIds = new ArrayList<Long>() {{
                 add(MONUMENT_DISCRIMINATOR);
             }};
-            List<TIPSearchDto> tipSearchDtos = tipService.find(null, null, typeIds, null, null);
+            List<TIPSearchDto> tipSearchDtos = tipService.find(null, typeIds, null, null, null, null);
 
             assertEquals(1, tipSearchDtos.size());
             assertEquals(towerHercules.getId(), tipSearchDtos.get(0).getId());
@@ -180,7 +190,7 @@ public class TIPServiceTest {
                 add(MONUMENT_DISCRIMINATOR);
                 add(NATURAL_SPACE_DISCRIMINATOR);
             }};
-            tipSearchDtos = tipService.find(null, null, typeIds, null, null);
+            tipSearchDtos = tipService.find(null, typeIds, null, null, null, null);
 
             assertEquals(2, tipSearchDtos.size());
         } catch (Exception e) {
@@ -211,7 +221,7 @@ public class TIPServiceTest {
             ArrayList<Long> cityIds = new ArrayList<Long>() {{
                 add(A_CORUNA_ID);
             }};
-            List<TIPSearchDto> tipSearchDtos = tipService.find(null, null, null, cityIds, null);
+            List<TIPSearchDto> tipSearchDtos = tipService.find(null, null, cityIds, null, null, null);
 
             assertEquals(1, tipSearchDtos.size());
             assertEquals(towerHercules.getId(), tipSearchDtos.get(0).getId());
@@ -219,7 +229,7 @@ public class TIPServiceTest {
             cityIds = new ArrayList<Long>() {{
                 add(SANTIAGO_ID);
             }};
-            tipSearchDtos = tipService.find(null, null, null, cityIds, null);
+            tipSearchDtos = tipService.find(null, null, cityIds, null, null, null);
 
             assertEquals(2, tipSearchDtos.size());
 
@@ -227,7 +237,7 @@ public class TIPServiceTest {
                 add(A_CORUNA_ID);
                 add(SANTIAGO_ID);
             }};
-            tipSearchDtos = tipService.find(null, null, null, cityIds, null);
+            tipSearchDtos = tipService.find(null, null, cityIds, null, null, null);
 
             assertEquals(3, tipSearchDtos.size());
         } catch (Exception e) {
@@ -271,7 +281,7 @@ public class TIPServiceTest {
             ArrayList<Long> cityIds = new ArrayList<Long>() {{
                 add(A_CORUNA_ID);
             }};
-            List<TIPSearchDto> tipSearchDtos = tipService.find(null, boundsGalicia, typeIds, cityIds, null);
+            List<TIPSearchDto> tipSearchDtos = tipService.find(boundsGalicia, typeIds, cityIds, null, null, null);
             assertEquals(1, tipSearchDtos.size());
             assertEquals(towerHercules.getId(), tipSearchDtos.get(0).getId());
 
@@ -281,7 +291,7 @@ public class TIPServiceTest {
             cityIds = new ArrayList<Long>() {{
                 add(NEW_YORK_ID);
             }};
-            tipSearchDtos = tipService.find(null, boundsNY, typeIds, cityIds, null);
+            tipSearchDtos = tipService.find(boundsNY, typeIds, cityIds, null, null, null);
             assertEquals(1, tipSearchDtos.size());
 
             typeIds = new ArrayList<Long>() {{
@@ -290,7 +300,7 @@ public class TIPServiceTest {
             cityIds = new ArrayList<Long>() {{
                 add(A_CORUNA_ID);
             }};
-            tipSearchDtos = tipService.find(null, boundsNY, typeIds, cityIds, null);
+            tipSearchDtos = tipService.find(boundsNY, typeIds, cityIds, null, null, null);
             assertEquals(0, tipSearchDtos.size());
 
             typeIds = new ArrayList<Long>() {{
@@ -299,7 +309,7 @@ public class TIPServiceTest {
             cityIds = new ArrayList<Long>() {{
                 add(NEW_YORK_ID);
             }};
-            tipSearchDtos = tipService.find(null, boundsNY, typeIds, cityIds, null);
+            tipSearchDtos = tipService.find(boundsNY, typeIds, cityIds, null, null, null);
             assertEquals(0, tipSearchDtos.size());
 
             typeIds = new ArrayList<Long>() {{
@@ -308,7 +318,7 @@ public class TIPServiceTest {
             cityIds = new ArrayList<Long>() {{
                 add(SANTIAGO_ID);
             }};
-            tipSearchDtos = tipService.find(null, boundsGalicia, typeIds, cityIds, null);
+            tipSearchDtos = tipService.find(boundsGalicia, typeIds, cityIds, null, null, null);
             assertEquals(1, tipSearchDtos.size());
         } catch (Exception e) {
             e.printStackTrace();

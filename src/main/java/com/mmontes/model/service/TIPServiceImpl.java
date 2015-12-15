@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("TIPService")
@@ -82,7 +83,7 @@ public class TIPServiceImpl implements TIPService {
         if (facebooUserId != null){
             userAccount = userAccountDao.findByFBUserID(facebooUserId);
         }
-        return dtoService.TIP2TIPDetailsDto(tipDao.findById(TIPId),userAccount);
+        return dtoService.TIP2TIPDetailsDto(tipDao.findById(TIPId), userAccount);
     }
 
     public boolean exists(Long TIPId) {
@@ -93,8 +94,23 @@ public class TIPServiceImpl implements TIPService {
         tipDao.remove(TIPId);
     }
 
-    public List<TIPSearchDto> find(Long facebookUserId, Geometry bounds, List<Long> typeIds, List<Long> cityIds, Integer favouritedBy) {
-        List<TIP> tips = tipDao.find(bounds,typeIds,cityIds,null);
+    public List<TIPSearchDto> find( Geometry bounds, List<Long> typeIds, List<Long> cityIds, Integer favouritedBy, Long facebookUserId, List<Long> friendsFacebookUserIds) throws InstanceNotFoundException {
+        List<Long> facebookUserIds = new ArrayList<>();
+        if (favouritedBy != null){
+            if (favouritedBy == 0){
+                facebookUserIds.add(facebookUserId);
+            } else if (favouritedBy == 1){
+                if (friendsFacebookUserIds != null && !friendsFacebookUserIds.isEmpty()){
+                    facebookUserIds.addAll(friendsFacebookUserIds);
+                }else{
+                    UserAccount userAccount = userAccountDao.findByFBUserID(facebookUserId);
+                    for (UserAccount user : userAccount.getFriends()){
+                        facebookUserIds.add(user.getFacebookUserId());
+                    }
+                }
+            }
+        }
+        List<TIP> tips = tipDao.find(bounds,typeIds,cityIds,facebookUserIds);
         return dtoService.ListTIP2ListSearchDto(tips);
     }
 

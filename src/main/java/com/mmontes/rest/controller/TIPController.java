@@ -67,7 +67,6 @@ public class TIPController {
                 e.printStackTrace();
                 return new ResponseEntity<>(HttpStatus.FORBIDDEN);
             } catch (IOException e) {
-                e.printStackTrace();
                 return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }

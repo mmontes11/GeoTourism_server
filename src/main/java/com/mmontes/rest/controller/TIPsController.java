@@ -1,18 +1,19 @@
 package com.mmontes.rest.controller;
 
 import com.mmontes.model.service.TIPService;
+import com.mmontes.service.FacebookService;
 import com.mmontes.util.GeometryConversor;
 import com.mmontes.util.dto.TIPSearchDto;
+import com.mmontes.util.exception.FacebookServiceException;
 import com.mmontes.util.exception.GeometryParsingException;
+import com.mmontes.util.exception.InstanceNotFoundException;
 import com.vividsolutions.jts.geom.Polygon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -21,22 +22,31 @@ public class TIPsController {
     @Autowired
     private TIPService tipService;
 
+    @Autowired
+    private FacebookService facebookService;
+
     @RequestMapping(value = "/tips", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<List<TIPSearchDto>>
-    find(@RequestParam(value = "facebookUserId", required = false) Long facebookUserId,
-         @RequestParam(value = "bounds", required = false) String boundsWKT,
+    find(@RequestParam(value = "bounds", required = false) String boundsWKT,
          @RequestParam(value = "types", required = false) List<Long> typeIds,
          @RequestParam(value = "cities", required = false) List<Long> cityIds,
-         @RequestParam(value = "favouritedBy", required = false) Integer favouritedBy) {
+         @RequestParam(value = "favouritedBy", required = false) Integer favouritedBy,
+         @RequestHeader(value="AuthorizationFB", required = false) String accessToken,
+         @RequestParam(value = "facebookUserId", required = false) Long facebookUserId,
+         @RequestParam(value = "friends", required = false) List<Long> friendsFacebookUserIds) {
 
-        System.out.println("Find TIPs:");
-        System.out.println(facebookUserId);
-        System.out.println(boundsWKT);
-        System.out.println(typeIds);
-        System.out.println(cityIds);
-        System.out.println(favouritedBy);
-
-        //TODO: validate params
+        if (accessToken != null && facebookUserId != null){
+            facebookService.setParams(accessToken, facebookUserId);
+            try {
+                facebookService.validateAuth();
+            } catch (FacebookServiceException e) {
+                e.printStackTrace();
+                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            } catch (IOException e) {
+                e.printStackTrace();
+                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        }
         Polygon bounds = null;
         try {
             if (boundsWKT != null) {
@@ -45,9 +55,15 @@ public class TIPsController {
         } catch (GeometryParsingException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-
-        List<TIPSearchDto> tips = tipService.find(facebookUserId, bounds, typeIds, cityIds, favouritedBy);
-
+        if (favouritedBy != null && favouritedBy != 0 && favouritedBy != 1){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        List<TIPSearchDto> tips = null;
+        try {
+            tips = tipService.find(bounds, typeIds, cityIds, favouritedBy, facebookUserId, friendsFacebookUserIds);
+        } catch (InstanceNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
         return new ResponseEntity<>(tips, HttpStatus.OK);
     }
 }

@@ -25,8 +25,8 @@ public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements T
 
         String queryString = "SELECT * FROM tip t ";
         if (filterByFacebookUserIds){
-            queryString += "JOIN tipuseraccount tu ON t.tipid = tu.tipid ";
-            queryString += "JOIN useraccount u ON tu.userid = u.userid ";
+            queryString += "JOIN tipuseraccount tu ON t.id = tu.tipid ";
+            queryString += "JOIN useraccount u ON tu.userid = u.id ";
         }
 
         if (bounds != null){

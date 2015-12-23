@@ -31,9 +31,7 @@ public class GoogleMapsService {
         if (responseCode >= 400) {
             throw new GoogleMapsServiceException();
         }
-
         JSONObject obj = JSONParser.parseJSON(connnection.getInputStream());
-
         return obj.getJSONArray("results").getJSONObject(0).getString("formatted_address");
     }
 }

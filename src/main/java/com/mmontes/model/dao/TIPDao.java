@@ -1,7 +1,6 @@
 package com.mmontes.model.dao;
 
-import com.mmontes.model.entity.TIP;
-import com.mmontes.model.entity.UserAccount;
+import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.model.util.genericdao.GenericDao;
 import com.vividsolutions.jts.geom.Geometry;
 

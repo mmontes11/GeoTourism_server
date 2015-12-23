@@ -1,5 +1,7 @@
 package com.mmontes.model.entity;
 
+import com.mmontes.model.entity.TIP.TIP;
+
 import javax.persistence.*;
 import java.util.Calendar;
 

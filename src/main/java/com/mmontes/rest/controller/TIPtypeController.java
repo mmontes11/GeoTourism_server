@@ -1,6 +1,6 @@
 package com.mmontes.rest.controller;
 
-import com.mmontes.model.entity.TIPtype;
+import com.mmontes.model.entity.TIP.TIPtype;
 import com.mmontes.model.service.TIPtypeService;
 import com.mmontes.rest.response.ResponseFactory;
 import com.mmontes.util.exception.InstanceNotFoundException;

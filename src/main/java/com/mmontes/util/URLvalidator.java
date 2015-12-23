@@ -1,7 +1,7 @@
 package com.mmontes.util;
 
 
-import com.mmontes.model.entity.TIP;
+import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.util.exception.InvalidTIPUrlException;
 
 import java.io.IOException;

@@ -26,7 +26,7 @@ public class AdminController {
 
     @RequestMapping(value = "/logIn", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<AdminLoginResponse>
-        login(@RequestBody  AdminLoginRequest adminLogin) throws ServletException {
+    login(@RequestBody  AdminLoginRequest adminLogin) throws ServletException {
 
         if (adminLogin.getUsername() == null || adminLogin.getPassword() == null ||
                 !adminService.checkPassword(adminLogin.getUsername(),adminLogin.getPassword())){
@@ -45,5 +45,11 @@ public class AdminController {
                 .compact();
 
         return new ResponseEntity<>(new AdminLoginResponse(token), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/admin", method = RequestMethod.GET)
+    public ResponseEntity
+    validateToken(){
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }

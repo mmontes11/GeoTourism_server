@@ -1,10 +1,10 @@
 package com.mmontes.util.dto;
 
 import com.mmontes.model.entity.*;
+import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.model.service.CommentService;
 import com.mmontes.model.service.FavouriteService;
 import com.mmontes.model.service.RatingService;
-import com.mmontes.service.FacebookService;
 import com.mmontes.util.GeometryConversor;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +28,7 @@ public class DtoService {
     public DtoService(){
     }
 
-    public TIPDetailsDto TIP2TIPDetailsDto(TIP tip,UserAccount userAccount) throws InstanceNotFoundException {
+    public TIPDetailsDto TIP2TIPDetailsDto(TIP tip, UserAccount userAccount) throws InstanceNotFoundException {
         TIPDetailsDto tipDetailsDto = new TIPDetailsDto();
         String geom = GeometryConversor.wktFromGeometry(tip.getGeom());
 

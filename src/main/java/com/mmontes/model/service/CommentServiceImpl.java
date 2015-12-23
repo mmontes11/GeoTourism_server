@@ -4,7 +4,7 @@ import com.mmontes.model.dao.CommentDao;
 import com.mmontes.model.dao.TIPDao;
 import com.mmontes.model.dao.UserAccountDao;
 import com.mmontes.model.entity.Comment;
-import com.mmontes.model.entity.TIP;
+import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.model.entity.UserAccount;
 import com.mmontes.util.dto.CommentDto;
 import com.mmontes.util.dto.DtoService;

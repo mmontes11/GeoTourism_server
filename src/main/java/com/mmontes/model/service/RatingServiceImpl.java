@@ -4,7 +4,7 @@ import com.mmontes.model.dao.RatingDao;
 import com.mmontes.model.dao.TIPDao;
 import com.mmontes.model.dao.UserAccountDao;
 import com.mmontes.model.entity.Rating;
-import com.mmontes.model.entity.TIP;
+import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.model.entity.UserAccount;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

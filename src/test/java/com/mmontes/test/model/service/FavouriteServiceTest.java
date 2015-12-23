@@ -1,7 +1,7 @@
 package com.mmontes.test.model.service;
 
 import com.mmontes.model.dao.TIPDao;
-import com.mmontes.model.entity.TIP;
+import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.model.service.FavouriteService;
 import com.mmontes.model.service.TIPService;
 import com.mmontes.util.GeometryConversor;

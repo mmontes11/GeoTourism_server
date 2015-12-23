@@ -1,6 +1,6 @@
 package com.mmontes.model.service;
 
-import com.mmontes.model.entity.TIPtype;
+import com.mmontes.model.entity.TIP.TIPtype;
 import com.mmontes.util.exception.InstanceNotFoundException;
 
 import java.util.List;

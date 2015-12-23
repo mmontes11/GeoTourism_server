@@ -2,7 +2,7 @@ package com.mmontes.model.service;
 
 import com.mmontes.model.dao.TIPDao;
 import com.mmontes.model.dao.UserAccountDao;
-import com.mmontes.model.entity.TIP;
+import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.model.entity.UserAccount;
 import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.dto.UserAccountDto;

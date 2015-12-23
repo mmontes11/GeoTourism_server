@@ -1,6 +1,6 @@
 package com.mmontes.model.dao;
 
-import com.mmontes.model.entity.TIPtype;
+import com.mmontes.model.entity.TIP.TIPtype;
 import com.mmontes.model.util.genericdao.GenericDao;
 
 import java.util.List;

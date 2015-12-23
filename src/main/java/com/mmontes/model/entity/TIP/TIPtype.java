@@ -1,4 +1,4 @@
-package com.mmontes.model.entity;
+package com.mmontes.model.entity.TIP;
 
 import javax.persistence.*;
 

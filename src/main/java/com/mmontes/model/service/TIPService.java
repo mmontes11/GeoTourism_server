@@ -1,7 +1,6 @@
 package com.mmontes.model.service;
 
 
-import com.mmontes.model.entity.TIPtype;
 import com.mmontes.rest.request.TIPPatchRequest;
 import com.mmontes.util.dto.TIPDetailsDto;
 import com.mmontes.util.dto.TIPSearchDto;

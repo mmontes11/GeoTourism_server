@@ -1,5 +1,6 @@
-package com.mmontes.model.entity;
+package com.mmontes.model.entity.TIP;
 
+import com.mmontes.model.entity.*;
 import com.vividsolutions.jts.geom.Geometry;
 import org.hibernate.annotations.Type;
 

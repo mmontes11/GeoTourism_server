@@ -1,14 +1,14 @@
 package com.mmontes.util.dto;
 
-public class TIPSearchDto {
+public class FeatureSearchDto {
 
     private Long id;
     private String geom;
 
-    public TIPSearchDto() {
+    public FeatureSearchDto() {
     }
 
-    public TIPSearchDto(Long id, String geom) {
+    public FeatureSearchDto(Long id, String geom) {
         this.id = id;
         this.geom = geom;
     }

@@ -5,7 +5,7 @@ import com.mmontes.model.service.TIPService;
 import com.mmontes.model.service.TIPtypeService;
 import com.mmontes.util.GeometryConversor;
 import com.mmontes.util.dto.TIPDetailsDto;
-import com.mmontes.util.dto.TIPSearchDto;
+import com.mmontes.util.dto.FeatureSearchDto;
 import com.mmontes.util.exception.*;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
@@ -81,10 +81,10 @@ public class TIPServiceTest {
             ArrayList<Long> typeIds = new ArrayList<Long>() {{
                 add(MONUMENT_DISCRIMINATOR);
             }};
-            List<TIPSearchDto> tipSearchDtos = tipService.find(null, typeIds, null, null, null, null);
+            List<FeatureSearchDto> featureSearchDtos = tipService.find(null, typeIds, null, null, null, null);
 
-            assertEquals(1, tipSearchDtos.size());
-            TIPSearchDto result = tipSearchDtos.get(0);
+            assertEquals(1, featureSearchDtos.size());
+            FeatureSearchDto result = featureSearchDtos.get(0);
             assertEquals(tipDetailsDto.getId(), result.getId());
         } catch (Exception e) {
             e.printStackTrace();
@@ -124,15 +124,15 @@ public class TIPServiceTest {
             e.printStackTrace();
             fail();
         }
-        List<TIPSearchDto> tipSearchDtos = null;
+        List<FeatureSearchDto> featureSearchDtos = null;
         try {
-            tipSearchDtos = tipService.find(bounds, null, null, null, null, null);
+            featureSearchDtos = tipService.find(bounds, null, null, null, null, null);
         } catch (InstanceNotFoundException e) {
             fail();
         }
 
-        assertEquals(1, tipSearchDtos.size());
-        assertEquals(santiagoCathedral.getId(), tipSearchDtos.get(0).getId());
+        assertEquals(1, featureSearchDtos.size());
+        assertEquals(santiagoCathedral.getId(), featureSearchDtos.get(0).getId());
     }
 
     @Test
@@ -154,14 +154,14 @@ public class TIPServiceTest {
             e.printStackTrace();
             fail();
         }
-        List<TIPSearchDto> tipSearchDtos = null;
+        List<FeatureSearchDto> featureSearchDtos = null;
         try {
-            tipSearchDtos = tipService.find(bounds, null, null, null, null, null);
+            featureSearchDtos = tipService.find(bounds, null, null, null, null, null);
         } catch (InstanceNotFoundException e) {
             fail();
         }
 
-        assertTrue(tipSearchDtos.isEmpty());
+        assertTrue(featureSearchDtos.isEmpty());
     }
 
     @Test
@@ -181,18 +181,18 @@ public class TIPServiceTest {
             ArrayList<Long> typeIds = new ArrayList<Long>() {{
                 add(MONUMENT_DISCRIMINATOR);
             }};
-            List<TIPSearchDto> tipSearchDtos = tipService.find(null, typeIds, null, null, null, null);
+            List<FeatureSearchDto> featureSearchDtos = tipService.find(null, typeIds, null, null, null, null);
 
-            assertEquals(1, tipSearchDtos.size());
-            assertEquals(towerHercules.getId(), tipSearchDtos.get(0).getId());
+            assertEquals(1, featureSearchDtos.size());
+            assertEquals(towerHercules.getId(), featureSearchDtos.get(0).getId());
 
             typeIds = new ArrayList<Long>() {{
                 add(MONUMENT_DISCRIMINATOR);
                 add(NATURAL_SPACE_DISCRIMINATOR);
             }};
-            tipSearchDtos = tipService.find(null, typeIds, null, null, null, null);
+            featureSearchDtos = tipService.find(null, typeIds, null, null, null, null);
 
-            assertEquals(2, tipSearchDtos.size());
+            assertEquals(2, featureSearchDtos.size());
         } catch (Exception e) {
             e.printStackTrace();
             fail();
@@ -221,25 +221,25 @@ public class TIPServiceTest {
             ArrayList<Long> cityIds = new ArrayList<Long>() {{
                 add(A_CORUNA_ID);
             }};
-            List<TIPSearchDto> tipSearchDtos = tipService.find(null, null, cityIds, null, null, null);
+            List<FeatureSearchDto> featureSearchDtos = tipService.find(null, null, cityIds, null, null, null);
 
-            assertEquals(1, tipSearchDtos.size());
-            assertEquals(towerHercules.getId(), tipSearchDtos.get(0).getId());
+            assertEquals(1, featureSearchDtos.size());
+            assertEquals(towerHercules.getId(), featureSearchDtos.get(0).getId());
 
             cityIds = new ArrayList<Long>() {{
                 add(SANTIAGO_ID);
             }};
-            tipSearchDtos = tipService.find(null, null, cityIds, null, null, null);
+            featureSearchDtos = tipService.find(null, null, cityIds, null, null, null);
 
-            assertEquals(2, tipSearchDtos.size());
+            assertEquals(2, featureSearchDtos.size());
 
             cityIds = new ArrayList<Long>() {{
                 add(A_CORUNA_ID);
                 add(SANTIAGO_ID);
             }};
-            tipSearchDtos = tipService.find(null, null, cityIds, null, null, null);
+            featureSearchDtos = tipService.find(null, null, cityIds, null, null, null);
 
-            assertEquals(3, tipSearchDtos.size());
+            assertEquals(3, featureSearchDtos.size());
         } catch (Exception e) {
             e.printStackTrace();
             fail();
@@ -281,9 +281,9 @@ public class TIPServiceTest {
             ArrayList<Long> cityIds = new ArrayList<Long>() {{
                 add(A_CORUNA_ID);
             }};
-            List<TIPSearchDto> tipSearchDtos = tipService.find(boundsGalicia, typeIds, cityIds, null, null, null);
-            assertEquals(1, tipSearchDtos.size());
-            assertEquals(towerHercules.getId(), tipSearchDtos.get(0).getId());
+            List<FeatureSearchDto> featureSearchDtos = tipService.find(boundsGalicia, typeIds, cityIds, null, null, null);
+            assertEquals(1, featureSearchDtos.size());
+            assertEquals(towerHercules.getId(), featureSearchDtos.get(0).getId());
 
             typeIds = new ArrayList<Long>() {{
                 add(MONUMENT_DISCRIMINATOR);
@@ -291,8 +291,8 @@ public class TIPServiceTest {
             cityIds = new ArrayList<Long>() {{
                 add(NEW_YORK_ID);
             }};
-            tipSearchDtos = tipService.find(boundsNY, typeIds, cityIds, null, null, null);
-            assertEquals(1, tipSearchDtos.size());
+            featureSearchDtos = tipService.find(boundsNY, typeIds, cityIds, null, null, null);
+            assertEquals(1, featureSearchDtos.size());
 
             typeIds = new ArrayList<Long>() {{
                 add(MONUMENT_DISCRIMINATOR);
@@ -300,8 +300,8 @@ public class TIPServiceTest {
             cityIds = new ArrayList<Long>() {{
                 add(A_CORUNA_ID);
             }};
-            tipSearchDtos = tipService.find(boundsNY, typeIds, cityIds, null, null, null);
-            assertEquals(0, tipSearchDtos.size());
+            featureSearchDtos = tipService.find(boundsNY, typeIds, cityIds, null, null, null);
+            assertEquals(0, featureSearchDtos.size());
 
             typeIds = new ArrayList<Long>() {{
                 add(NATURAL_SPACE_DISCRIMINATOR);
@@ -309,8 +309,8 @@ public class TIPServiceTest {
             cityIds = new ArrayList<Long>() {{
                 add(NEW_YORK_ID);
             }};
-            tipSearchDtos = tipService.find(boundsNY, typeIds, cityIds, null, null, null);
-            assertEquals(0, tipSearchDtos.size());
+            featureSearchDtos = tipService.find(boundsNY, typeIds, cityIds, null, null, null);
+            assertEquals(0, featureSearchDtos.size());
 
             typeIds = new ArrayList<Long>() {{
                 add(NATURAL_SPACE_DISCRIMINATOR);
@@ -318,8 +318,8 @@ public class TIPServiceTest {
             cityIds = new ArrayList<Long>() {{
                 add(SANTIAGO_ID);
             }};
-            tipSearchDtos = tipService.find(boundsGalicia, typeIds, cityIds, null, null, null);
-            assertEquals(1, tipSearchDtos.size());
+            featureSearchDtos = tipService.find(boundsGalicia, typeIds, cityIds, null, null, null);
+            assertEquals(1, featureSearchDtos.size());
         } catch (Exception e) {
             e.printStackTrace();
             fail();

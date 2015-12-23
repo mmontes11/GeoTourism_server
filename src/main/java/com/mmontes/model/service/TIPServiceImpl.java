@@ -11,7 +11,7 @@ import com.mmontes.rest.request.TIPPatchRequest;
 import com.mmontes.util.URLvalidator;
 import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.dto.TIPDetailsDto;
-import com.mmontes.util.dto.TIPSearchDto;
+import com.mmontes.util.dto.FeatureSearchDto;
 import com.mmontes.util.exception.*;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -94,7 +94,7 @@ public class TIPServiceImpl implements TIPService {
         tipDao.remove(TIPId);
     }
 
-    public List<TIPSearchDto> find( Geometry bounds, List<Long> typeIds, List<Long> cityIds, Integer favouritedBy, Long facebookUserId, List<Long> friendsFacebookUserIds) throws InstanceNotFoundException {
+    public List<FeatureSearchDto> find(Geometry bounds, List<Long> typeIds, List<Long> cityIds, Integer favouritedBy, Long facebookUserId, List<Long> friendsFacebookUserIds) throws InstanceNotFoundException {
         List<Long> facebookUserIds = new ArrayList<>();
         if (favouritedBy != null){
             if (favouritedBy == 0){

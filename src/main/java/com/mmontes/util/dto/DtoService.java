@@ -55,19 +55,28 @@ public class DtoService {
         return tipDetailsDto;
     }
 
-    public TIPSearchDto TIP2TIPSearchDto(TIP tip){
+    public TIPMinDto TIP2TIPMinDto(TIP tip){
+        TIPMinDto tipMinDto = new TIPMinDto();
+
+        tipMinDto.setId(tip.getId());
+        tipMinDto.setName(tip.getName());
+        tipMinDto.setGoogleMapsurl(tip.getGoogleMapsUrl());
+        return tipMinDto;
+    }
+
+    public FeatureSearchDto TIP2TIPSearchDto(TIP tip){
         Long id = tip.getId();
         String geom = GeometryConversor.wktFromGeometry(tip.getGeom());
 
-        return new TIPSearchDto(id,geom);
+        return new FeatureSearchDto(id,geom);
     }
 
-    public List<TIPSearchDto> ListTIP2ListSearchDto(List<TIP> tips){
-        List<TIPSearchDto> tipSearchDtos = new ArrayList<>();
+    public List<FeatureSearchDto> ListTIP2ListSearchDto(List<TIP> tips){
+        List<FeatureSearchDto> featureSearchDtos = new ArrayList<>();
         for (TIP tip : tips){
-            tipSearchDtos.add(TIP2TIPSearchDto(tip));
+            featureSearchDtos.add(TIP2TIPSearchDto(tip));
         }
-        return tipSearchDtos;
+        return featureSearchDtos;
     }
 
     public CityDto City2CityDto(City city) {

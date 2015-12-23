@@ -58,7 +58,7 @@ public class Rating {
         this.ratingDate = ratingDate;
     }
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "userid")
     public UserAccount getUserAccount() {
         return userAccount;
@@ -68,7 +68,7 @@ public class Rating {
         this.userAccount = userAccount;
     }
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tipid")
     public TIP getTip() {
         return tip;

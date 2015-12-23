@@ -1,6 +1,10 @@
 package com.mmontes.model.entity.TIP;
 
-import com.mmontes.model.entity.*;
+import com.mmontes.model.entity.City;
+import com.mmontes.model.entity.Comment;
+import com.mmontes.model.entity.Rating;
+import com.mmontes.model.entity.UserAccount;
+import com.mmontes.model.entity.route.RouteTIP;
 import com.vividsolutions.jts.geom.Geometry;
 import org.hibernate.annotations.Type;
 
@@ -26,6 +30,7 @@ public class TIP {
     private Set<UserAccount> favouritedBy = new HashSet<>();
     private Set<Comment> comments = new HashSet<>();
     private Set<Rating> ratings = new HashSet<>();
+    private Set<RouteTIP> routeTIPs = new HashSet<>();
 
     public TIP() {
     }
@@ -116,7 +121,7 @@ public class TIP {
         this.googleMapsUrl = googleMapsUrl;
     }
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cityid")
     public City getCity() {
         return city;
@@ -161,5 +166,14 @@ public class TIP {
 
     public void setRatings(Set<Rating> ratings) {
         this.ratings = ratings;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.tip")
+    public Set<RouteTIP> getRouteTIPs() {
+        return routeTIPs;
+    }
+
+    public void setRouteTIPs(Set<RouteTIP> routeTIPs) {
+        this.routeTIPs = routeTIPs;
     }
 }

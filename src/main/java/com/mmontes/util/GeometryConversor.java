@@ -1,12 +1,14 @@
 package com.mmontes.util;
 
+import com.google.maps.model.LatLng;
 import com.mmontes.util.exception.GeometryParsingException;
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.Point;
+import com.vividsolutions.jts.geom.*;
 import com.vividsolutions.jts.io.WKTReader;
 import com.vividsolutions.jts.io.WKTWriter;
+import org.geotools.geometry.jts.JTSFactoryFinder;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.mmontes.util.Constants.SRID;
 
@@ -27,6 +29,18 @@ public class GeometryConversor {
     public static String wktFromGeometry(Geometry geometry){
         WKTWriter wktWriter = new WKTWriter();
         return wktWriter.write(geometry);
+    }
+
+    public static Geometry geometryFromListLatLng(List<LatLng> latLngs){
+        ArrayList<Coordinate> coordinateList = new ArrayList<>();
+        for (LatLng latLng : latLngs){
+            coordinateList.add(new Coordinate(latLng.lng,latLng.lat));
+        }
+        Coordinate[] coordinates = coordinateList.toArray(new Coordinate[coordinateList.size()]);
+        GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory();
+        LineString lineString = geometryFactory.createLineString(coordinates);
+        lineString.setSRID(SRID);
+        return lineString;
     }
 
 }

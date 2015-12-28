@@ -52,7 +52,9 @@ CREATE TABLE Route(
   description TEXT,
   geom GEOMETRY,
   googleMapsUrl VARCHAR(100),
+  userId INTEGER,
   CONSTRAINT Route_PK PRIMARY KEY(id),
+  CONSTRAINT Route_UserAccount_FK FOREIGN KEY (userId) REFERENCES UserAccount(id),
   CONSTRAINT Route_Geometry CHECK(geometrytype(geom) = ANY(ARRAY['LINESTRING','MULTILINESTRING']) AND geom IS NOT NULL)
 );
 CREATE INDEX Route_Geometry_Gix ON Route USING GIST (geom);

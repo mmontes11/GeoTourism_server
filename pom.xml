@@ -48,6 +48,7 @@
         <jackson.version>2.4.2</jackson.version>
         <servlet.api.version>3.0.1</servlet.api.version>
         <commons.fileupload.version>1.2.1</commons.fileupload.version>
+        <google.maps.services>0.1.9</google.maps.services>
         <!-- Plugin versions -->
         <mavenSurefirePlugin.version>2.18.1</mavenSurefirePlugin.version>
         <mavenCompilerPlugin.version>2.3.2</mavenCompilerPlugin.version>
@@ -192,6 +193,12 @@
             <groupId>commons-fileupload</groupId>
             <artifactId>commons-fileupload</artifactId>
             <version>${commons.fileupload.version}</version>
+        </dependency>
+        <!-- Google Maps API Client -->
+        <dependency>
+            <groupId>com.google.maps</groupId>
+            <artifactId>google-maps-services</artifactId>
+            <version>${google.maps.services}</version>
         </dependency>
     </dependencies>
     <repositories>

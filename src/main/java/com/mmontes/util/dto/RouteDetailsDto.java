@@ -7,6 +7,7 @@ public class RouteDetailsDto {
     private Long id;
     private String name;
     private String description;
+    private String geom;
     private String googleMapsUrl;
     private List<TIPMinDto> tips;
     private UserAccountDto creator;
@@ -14,10 +15,11 @@ public class RouteDetailsDto {
     public RouteDetailsDto() {
     }
 
-    public RouteDetailsDto(Long id, String name, String description, String googleMapsUrl, List<TIPMinDto> tips, UserAccountDto creator) {
+    public RouteDetailsDto(Long id, String name, String description, String geom, String googleMapsUrl, List<TIPMinDto> tips, UserAccountDto creator) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.geom = geom;
         this.googleMapsUrl = googleMapsUrl;
         this.tips = tips;
         this.creator = creator;
@@ -45,6 +47,14 @@ public class RouteDetailsDto {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getGeom() {
+        return geom;
+    }
+
+    public void setGeom(String geom) {
+        this.geom = geom;
     }
 
     public String getGoogleMapsUrl() {

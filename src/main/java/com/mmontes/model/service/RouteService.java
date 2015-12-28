@@ -1,6 +1,17 @@
 package com.mmontes.model.service;
 
-public class RouteService {
+import com.mmontes.util.dto.FeatureSearchDto;
+import com.mmontes.util.dto.RouteDetailsDto;
+import com.mmontes.util.dto.TIPMinDto;
+import com.mmontes.util.exception.GoogleMapsServiceException;
+import com.mmontes.util.exception.InstanceNotFoundException;
+import com.vividsolutions.jts.geom.Geometry;
 
+import java.util.List;
 
+public interface RouteService {
+    RouteDetailsDto createRoute(String name,String description,List<String> lineStrings,List<Long> tipIds,Long facebookUserId) throws InstanceNotFoundException, GoogleMapsServiceException;
+    RouteDetailsDto editRoute(Long routeId,String name,String description,List<Long> tipIds);
+    List<FeatureSearchDto> find(Geometry bounds, List<Long> cityIds, Integer createdBy, Long facebookUserId, List<Long> friendsFacebookUserIds) throws InstanceNotFoundException;
+    List<TIPMinDto> getTIPsInOrder(Long routeID) throws InstanceNotFoundException;
 }

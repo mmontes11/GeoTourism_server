@@ -111,7 +111,7 @@ public class TIPServiceImpl implements TIPService {
             }
         }
         List<TIP> tips = tipDao.find(bounds,typeIds,cityIds,facebookUserIds);
-        return dtoService.ListTIP2ListSearchDto(tips);
+        return dtoService.ListTIP2ListFeatureSearchDto(tips);
     }
 
     public TIPDetailsDto edit(Long TIPId, Long facebooUserId, TIPPatchRequest newData) throws InstanceNotFoundException {

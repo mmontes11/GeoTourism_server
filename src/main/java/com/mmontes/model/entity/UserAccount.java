@@ -1,5 +1,7 @@
 package com.mmontes.model.entity;
 
+import com.mmontes.model.entity.route.Route;
+
 import javax.persistence.*;
 import java.util.Calendar;
 import java.util.HashSet;
@@ -17,11 +19,12 @@ public class UserAccount {
     private String facebookProfileUrl;
     private String facebookProfilePhotoUrl;
     private Set<UserAccount> friends = new HashSet<>();
+    private Set<Route> createdRoutes = new HashSet<>();
 
     public UserAccount() {
     }
 
-    public UserAccount(Long id, String name, Calendar registrationDate, Long facebookUserId, String facebookProfileUrl, String facebookProfilePhotoUrl, Set<UserAccount> friends) {
+    public UserAccount(Long id, String name, Calendar registrationDate, Long facebookUserId, String facebookProfileUrl, String facebookProfilePhotoUrl, Set<UserAccount> friends, Set<Route> createdRoutes) {
         this.id = id;
         this.name = name;
         this.registrationDate = registrationDate;
@@ -29,6 +32,7 @@ public class UserAccount {
         this.facebookProfileUrl = facebookProfileUrl;
         this.facebookProfilePhotoUrl = facebookProfilePhotoUrl;
         this.friends = friends;
+        this.createdRoutes = createdRoutes;
     }
 
     @Column(name = "id")
@@ -105,5 +109,14 @@ public class UserAccount {
 
     public void setFriends(Set<UserAccount> friends) {
         this.friends = friends;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "creator")
+    public Set<Route> getCreatedRoutes() {
+        return createdRoutes;
+    }
+
+    public void setCreatedRoutes(Set<Route> createdRoutes) {
+        this.createdRoutes = createdRoutes;
     }
 }

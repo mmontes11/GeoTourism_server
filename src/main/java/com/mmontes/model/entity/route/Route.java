@@ -1,5 +1,6 @@
 package com.mmontes.model.entity.route;
 
+import com.mmontes.model.entity.UserAccount;
 import com.vividsolutions.jts.geom.Geometry;
 import org.hibernate.annotations.Type;
 
@@ -17,6 +18,7 @@ public class Route {
     private String description;
     private Geometry geom;
     private String googleMapsUrl;
+    private UserAccount creator;
     private Set<RouteTIP> routeTIPs = new HashSet<>();
 
     public Route() {
@@ -69,6 +71,16 @@ public class Route {
 
     public void setGoogleMapsUrl(String googleMapsUrl) {
         this.googleMapsUrl = googleMapsUrl;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userid")
+    public UserAccount getCreator() {
+        return creator;
+    }
+
+    public void setCreator(UserAccount creator) {
+        this.creator = creator;
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.route")

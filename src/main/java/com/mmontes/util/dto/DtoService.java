@@ -1,10 +1,14 @@
 package com.mmontes.util.dto;
 
-import com.mmontes.model.entity.*;
+import com.mmontes.model.entity.City;
+import com.mmontes.model.entity.Comment;
 import com.mmontes.model.entity.TIP.TIP;
+import com.mmontes.model.entity.UserAccount;
+import com.mmontes.model.entity.route.Route;
 import com.mmontes.model.service.CommentService;
 import com.mmontes.model.service.FavouriteService;
 import com.mmontes.model.service.RatingService;
+import com.mmontes.model.service.RouteService;
 import com.mmontes.util.GeometryConversor;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +28,9 @@ public class DtoService {
 
     @Autowired
     private FavouriteService favouriteService;
+
+    @Autowired
+    private RouteService routeService;
 
     public DtoService(){
     }
@@ -55,26 +62,56 @@ public class DtoService {
         return tipDetailsDto;
     }
 
+    public FeatureSearchDto TIP2FeatureSearchDto(TIP tip){
+        Long id = tip.getId();
+        String geom = GeometryConversor.wktFromGeometry(tip.getGeom());
+        return new FeatureSearchDto(id,geom);
+    }
+
+    public List<FeatureSearchDto> ListTIP2ListFeatureSearchDto(List<TIP> tips){
+        List<FeatureSearchDto> featureSearchDtos = new ArrayList<>();
+        for (TIP tip : tips){
+            featureSearchDtos.add(TIP2FeatureSearchDto(tip));
+        }
+        return featureSearchDtos;
+    }
+
     public TIPMinDto TIP2TIPMinDto(TIP tip){
         TIPMinDto tipMinDto = new TIPMinDto();
-
         tipMinDto.setId(tip.getId());
         tipMinDto.setName(tip.getName());
         tipMinDto.setGoogleMapsurl(tip.getGoogleMapsUrl());
         return tipMinDto;
     }
 
-    public FeatureSearchDto TIP2TIPSearchDto(TIP tip){
-        Long id = tip.getId();
-        String geom = GeometryConversor.wktFromGeometry(tip.getGeom());
+    public List<TIPMinDto> ListTIP2ListTIPMinDto(List<TIP> tips){
+        List<TIPMinDto> tipMinDtos = new ArrayList<>();
+        for (TIP tip : tips){
+            tipMinDtos.add(TIP2TIPMinDto(tip));
+        }
+        return tipMinDtos;
+    }
 
+    public RouteDetailsDto Route2RouteDetailsDto(Route route) throws InstanceNotFoundException {
+        RouteDetailsDto routeDetailsDto = new RouteDetailsDto();
+        routeDetailsDto.setId(route.getId());
+        routeDetailsDto.setName(route.getName());
+        routeDetailsDto.setGeom(GeometryConversor.wktFromGeometry(route.getGeom()));
+        routeDetailsDto.setGoogleMapsUrl(route.getGoogleMapsUrl());
+        routeDetailsDto.setTips(routeService.getTIPsInOrder(route.getId()));
+        return routeDetailsDto;
+    }
+
+    public FeatureSearchDto Route2FeatureSearchDto(Route route){
+        Long id = route.getId();
+        String geom = GeometryConversor.wktFromGeometry(route.getGeom());
         return new FeatureSearchDto(id,geom);
     }
 
-    public List<FeatureSearchDto> ListTIP2ListSearchDto(List<TIP> tips){
+    public List<FeatureSearchDto> ListRoute2ListFeatureSearchDto(List<Route> routes){
         List<FeatureSearchDto> featureSearchDtos = new ArrayList<>();
-        for (TIP tip : tips){
-            featureSearchDtos.add(TIP2TIPSearchDto(tip));
+        for (Route route : routes){
+            featureSearchDtos.add(Route2FeatureSearchDto(route));
         }
         return featureSearchDtos;
     }

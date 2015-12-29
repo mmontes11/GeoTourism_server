@@ -35,6 +35,22 @@ public class GoogleMapsService {
         return "http://maps.google.com/maps?q=loc:" + coordinate.y + "," + coordinate.x;
     }
 
+    public String getRouteGoogleMapsUrl(List<Coordinate> coordinates){
+        String routeUrl = "http://maps.google.com/maps?";
+        for (int i = 0; i<coordinates.size(); i++){
+            Coordinate coordinate = coordinates.get(i);
+            String coordinateString = coordinate.y + "," + coordinate.x;
+            if (i == 0){
+                routeUrl += "saddr=" + coordinateString;
+            }else if (i == 1){
+                routeUrl += "&daddr=" + coordinateString;
+            } else {
+                routeUrl += ":to=" + coordinateString;
+            }
+        }
+        return routeUrl;
+    }
+
     public String getAddress(Coordinate coordinate) throws GoogleMapsServiceException {
         GeocodingResult[] results;
         try {

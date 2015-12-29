@@ -46,26 +46,25 @@ public class RouteServiceImpl implements RouteService {
         Route route = new Route();
         route.setName(name);
         route.setDescription(description);
-        List<TIP> tips = new ArrayList<>();
         List<Coordinate> coordinates = new ArrayList<>();
-        for (Long tipId : tipIds){
+        for (int i = 0; i<tipIds.size(); i++){
+            Long tipId = tipIds.get(i);
             TIP tip = tipDao.findById(tipId);
-            tips.add(tip);
             coordinates.add(tip.getGeom().getCoordinate());
-        }
-        if (lineStrings != null || !lineStrings.isEmpty()){
-
-        }else{
-            Geometry geom = googleMapsService.getRoute(coordinates);
-            route.setGeom(geom);
-        }
-        for (int i = 0; i<tips.size(); i++){
             RouteTIP routeTIP = new RouteTIP();
             routeTIP.setRoute(route);
-            routeTIP.setTip(tips.get(i));
+            routeTIP.setTip(tip);
             routeTIP.setOrdination(i);
             route.getRouteTIPs().add(routeTIP);
         }
+        Geometry geom = null;
+        if (lineStrings != null || !lineStrings.isEmpty()){
+
+        }else{
+            geom = googleMapsService.getRoute(coordinates);
+        }
+        route.setGeom(geom);
+        route.setGoogleMapsUrl(googleMapsService.getRouteGoogleMapsUrl(coordinates));
         route.setCreator(userAccountDao.findByFBUserID(facebookUserId));
         routeDao.save(route);
         return dtoService.Route2RouteDetailsDto(route);

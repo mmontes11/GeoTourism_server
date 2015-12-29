@@ -45,7 +45,7 @@ public class GoogleMapsService {
             }else if (i == 1){
                 routeUrl += "&daddr=" + coordinateString;
             } else {
-                routeUrl += ":to=" + coordinateString;
+                routeUrl += "+to:" + coordinateString;
             }
         }
         return routeUrl;

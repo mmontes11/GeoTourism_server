@@ -58,7 +58,7 @@ public class RouteServiceImpl implements RouteService {
             route.getRouteTIPs().add(routeTIP);
         }
         Geometry geom = null;
-        if (lineStrings != null || !lineStrings.isEmpty()){
+        if (lineStrings != null && !lineStrings.isEmpty()){
 
         }else{
             geom = googleMapsService.getRoute(coordinates);

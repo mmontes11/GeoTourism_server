@@ -1,11 +1,10 @@
 package com.mmontes.test.model.service;
 
-import com.mmontes.model.dao.TIPDao;
 import com.mmontes.model.service.TIPService;
 import com.mmontes.model.service.TIPtypeService;
 import com.mmontes.util.GeometryConversor;
-import com.mmontes.util.dto.TIPDetailsDto;
 import com.mmontes.util.dto.FeatureSearchDto;
+import com.mmontes.util.dto.TIPDetailsDto;
 import com.mmontes.util.exception.*;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
@@ -27,9 +26,6 @@ import static org.junit.Assert.*;
 @ContextConfiguration(locations = {SPRING_CONFIG_FILE, SPRING_CONFIG_TEST_FILE})
 @Transactional
 public class TIPServiceTest {
-
-    @Autowired
-    private TIPDao tipDao;
 
     @Autowired
     private TIPService tipService;
@@ -166,7 +162,7 @@ public class TIPServiceTest {
 
     @Test
     public void findTipsByTypes() {
-        TIPDetailsDto towerHercules ;
+        TIPDetailsDto towerHercules;
         try {
             String name = "Tower of Hercules";
             String description = "Human Patrimony";

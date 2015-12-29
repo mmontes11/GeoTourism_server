@@ -117,16 +117,6 @@ CREATE TABLE TIPUserAccount(
   CONSTRAINT TIPUserAccount_TIPIdRouteID_UNIQUE UNIQUE (TIPId,userId)
 );
 
-CREATE TABLE UserAccountRoute(
-  id SERIAL,
-  userId INTEGER,
-  routeId INTEGER,
-  CONSTRAINT UserAccountRoute_PK PRIMARY KEY(id),
-  CONSTRAINT UserAccountRoute_UserAccount_FK FOREIGN KEY(userId) REFERENCES UserAccount(id) ON DELETE CASCADE,
-  CONSTRAINT UserAccountRoute_Route_FK FOREIGN KEY(routeId) REFERENCES Route(id) ON DELETE CASCADE,
-  CONSTRAINT UserAccountRoute_UserAccountIdRouteId_UNIQUE UNIQUE(userId,routeId)
-);
-
 CREATE TABLE RouteTIP(
   id SERIAL,
   ordination INTEGER,

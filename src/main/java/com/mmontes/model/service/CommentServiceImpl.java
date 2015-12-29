@@ -42,7 +42,6 @@ public class CommentServiceImpl implements CommentService {
         comment.setCommentText(commentText);
         comment.setCommentDate(Calendar.getInstance());
         commentDao.save(comment);
-        tip.getComments().add(comment);
         tipDao.save(tip);
         return getComments(tip.getId());
     }

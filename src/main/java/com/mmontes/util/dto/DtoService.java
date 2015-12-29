@@ -17,7 +17,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 
-@Service("dtoService")
+@Service("DtoService")
 public class DtoService {
 
     @Autowired
@@ -101,6 +101,7 @@ public class DtoService {
         routeDetailsDto.setGeom(GeometryConversor.wktFromGeometry(route.getGeom()));
         routeDetailsDto.setGoogleMapsUrl(route.getGoogleMapsUrl());
         routeDetailsDto.setTips(routeService.getTIPsInOrder(route.getId()));
+        routeDetailsDto.setCreator(UserAccount2UserAccountDto(route.getCreator()));
         return routeDetailsDto;
     }
 

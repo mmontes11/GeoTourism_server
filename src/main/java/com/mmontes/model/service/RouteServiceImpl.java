@@ -68,6 +68,7 @@ public class RouteServiceImpl implements RouteService {
         route.setGeom(geom);
         route.setGoogleMapsUrl(googleMapsService.getRouteGoogleMapsUrl(coordinates,route.getTravelMode()));
         route.setCreator(userAccountDao.findByFBUserID(facebookUserId));
+        System.out.println(route.getCreator());
         routeDao.save(route);
         return dtoService.Route2RouteDetailsDto(route);
     }

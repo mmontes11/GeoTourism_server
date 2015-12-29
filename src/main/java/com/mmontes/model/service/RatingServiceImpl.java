@@ -30,7 +30,6 @@ public class RatingServiceImpl implements RatingService{
     public Double rate(Double ratingValue, Long TIPId, Long facebookUserId) throws InstanceNotFoundException {
         TIP tip = tipDao.findById(TIPId);
         UserAccount userAccount = userAccountDao.findByFBUserID(facebookUserId);
-
         Rating rating = ratingDao.getUserTIPRate(TIPId,facebookUserId);
         if (rating == null){
             rating = new Rating();
@@ -40,10 +39,7 @@ public class RatingServiceImpl implements RatingService{
         rating.setRatingValue(ratingValue);
         rating.setRatingDate(Calendar.getInstance());
         ratingDao.save(rating);
-
-        tip.getRatings().add(rating);
         tipDao.save(tip);
-
         return ratingDao.getAverageRate(tip.getId());
     }
 

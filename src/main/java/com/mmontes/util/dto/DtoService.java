@@ -96,6 +96,8 @@ public class DtoService {
         RouteDetailsDto routeDetailsDto = new RouteDetailsDto();
         routeDetailsDto.setId(route.getId());
         routeDetailsDto.setName(route.getName());
+        routeDetailsDto.setDescription(route.getDescription());
+        routeDetailsDto.setTravelMode(route.getTravelMode());
         routeDetailsDto.setGeom(GeometryConversor.wktFromGeometry(route.getGeom()));
         routeDetailsDto.setGoogleMapsUrl(route.getGoogleMapsUrl());
         routeDetailsDto.setTips(routeService.getTIPsInOrder(route.getId()));

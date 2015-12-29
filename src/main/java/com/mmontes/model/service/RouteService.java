@@ -10,8 +10,8 @@ import com.vividsolutions.jts.geom.Geometry;
 import java.util.List;
 
 public interface RouteService {
-    RouteDetailsDto createRoute(String name,String description,List<String> lineStrings,List<Long> tipIds,Long facebookUserId) throws InstanceNotFoundException, GoogleMapsServiceException;
-    RouteDetailsDto editRoute(Long routeId,String name,String description,List<Long> tipIds);
-    List<FeatureSearchDto> find(Geometry bounds, List<Long> cityIds, Integer createdBy, Long facebookUserId, List<Long> friendsFacebookUserIds) throws InstanceNotFoundException;
+    RouteDetailsDto createRoute(String name,String description,String travelMode,List<String> lineStrings,List<Long> tipIds,Long facebookUserId) throws InstanceNotFoundException, GoogleMapsServiceException;
+    RouteDetailsDto editRoute(Long routeId,String name,String description,String travelMode,List<Long> tipIds);
+    List<FeatureSearchDto> find(Geometry bounds, String travelMode, List<Long> cityIds, Integer createdBy, Long facebookUserId, List<Long> friendsFacebookUserIds) throws InstanceNotFoundException;
     List<TIPMinDto> getTIPsInOrder(Long routeID) throws InstanceNotFoundException;
 }

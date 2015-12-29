@@ -2,7 +2,6 @@ DROP TABLE IF EXISTS City CASCADE;
 DROP TABLE IF EXISTS UserAccountUserAccount CASCADE;
 DROP TABLE IF EXISTS UserAccount CASCADE;
 DROP TABLE IF EXISTS Admin CASCADE;
-DROP TABLE IF EXISTS TravelMode CASCADE;
 DROP TABLE IF EXISTS Route CASCADE;
 DROP TABLE IF EXISTS TIP CASCADE;
 DROP TABLE IF EXISTS TIPtype CASCADE;
@@ -48,13 +47,6 @@ CREATE TABLE Admin(
   CONSTRAINT Admin_PK PRIMARY KEY (id)
 );
 
-CREATE TABLE TravelMode(
-  id SERIAL,
-  name VARCHAR(50),
-  mode VARCHAR(20),
-  CONSTRAINT TravelMode_PK PRIMARY KEY (id)
-);
-
 CREATE TABLE Route(
   id SERIAL,
   name VARCHAR(100),
@@ -62,10 +54,9 @@ CREATE TABLE Route(
   geom GEOMETRY,
   googleMapsUrl TEXT,
   userId INTEGER,
-  travelModeId INTEGER,
+  travelMode VARCHAR(50),
   CONSTRAINT Route_PK PRIMARY KEY(id),
   CONSTRAINT Route_UserAccount_FK FOREIGN KEY (userId) REFERENCES UserAccount(id),
-  CONSTRAINT Route_TravelMode_FK FOREIGN KEY (travelModeId) REFERENCES TravelMode(id),
   CONSTRAINT Route_Geometry CHECK(geometrytype(geom) = ANY(ARRAY['LINESTRING','MULTILINESTRING']) AND geom IS NOT NULL)
 );
 CREATE INDEX Route_Geometry_Gix ON Route USING GIST (geom);
@@ -152,8 +143,3 @@ INSERT INTO TIPtype VALUES(1,'Monument');
 INSERT INTO TIPtype VALUES(2,'Natural Space');
 INSERT INTO TIPtype VALUES(3,'Hotel');
 INSERT INTO TIPtype VALUES(4,'Restaurant');
-
-DELETE FROM TravelMode;
-INSERT INTO TravelMode VALUES(1,'Driving','driving');
-INSERT INTO TravelMode VALUES(2,'Walking','walking');
-INSERT INTO TravelMode VALUES(3,'Bicycling','bicycling');

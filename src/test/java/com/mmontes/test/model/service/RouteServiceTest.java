@@ -69,20 +69,28 @@ public class RouteServiceTest {
     }
 
     @Test
-    @Rollback(false)
-    public void createSimpleRoute(){
+    public void createRouteFromTIPs(){
 
         try {
             String name = "From Alameda To Cathedral";
             String description = "Santiago route";
+            String travelMode = "driving";
             List<Long> tipdIds = new ArrayList<Long>() {{
                 add(alamedaID);
                 add(cathedralID);
                 add(towerOfHerculesID);
             }};
-            RouteDetailsDto routeDetailsDto = routeService.createRoute(name,description,null,tipdIds, EXISTING_FACEBOOK_USER_ID);
+            RouteDetailsDto routeDetailsDto = routeService.createRoute(name,description,travelMode,null,tipdIds, EXISTING_FACEBOOK_USER_ID);
+
+            assertNotNull(routeDetailsDto.getId());
+            assertEquals(name, routeDetailsDto.getName());
+            assertEquals(description,routeDetailsDto.getDescription());
+            assertEquals(travelMode,routeDetailsDto.getTravelMode());
+            assertNotNull(routeDetailsDto.getGeom());
+            assertNotNull(routeDetailsDto.getGoogleMapsUrl());
+//            assertEquals(3,routeDetailsDto.getTips().size());
+//            assertEquals(EXISTING_FACEBOOK_USER_ID,routeDetailsDto.getCreator().getFacebookUserId());
         } catch (Exception e) {
-            e.printStackTrace();
             fail();
         }
     }

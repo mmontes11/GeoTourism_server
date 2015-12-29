@@ -42,10 +42,12 @@ public class RouteServiceImpl implements RouteService {
     private GoogleMapsService googleMapsService;
 
     @Override
-    public RouteDetailsDto createRoute(String name, String description, List<String> lineStrings, List<Long> tipIds, Long facebookUserId) throws InstanceNotFoundException, GoogleMapsServiceException {
+    public RouteDetailsDto createRoute(String name, String description, String travelMode, List<String> lineStrings, List<Long> tipIds, Long facebookUserId)
+            throws InstanceNotFoundException, GoogleMapsServiceException {
         Route route = new Route();
         route.setName(name);
         route.setDescription(description);
+        route.setTravelMode(travelMode);
         List<Coordinate> coordinates = new ArrayList<>();
         for (int i = 0; i<tipIds.size(); i++){
             Long tipId = tipIds.get(i);
@@ -61,24 +63,25 @@ public class RouteServiceImpl implements RouteService {
         if (lineStrings != null && !lineStrings.isEmpty()){
 
         }else{
-            geom = googleMapsService.getRoute(coordinates);
+            geom = googleMapsService.getRoute(coordinates,route.getTravelMode());
         }
         route.setGeom(geom);
-        route.setGoogleMapsUrl(googleMapsService.getRouteGoogleMapsUrl(coordinates));
+        route.setGoogleMapsUrl(googleMapsService.getRouteGoogleMapsUrl(coordinates,route.getTravelMode()));
         route.setCreator(userAccountDao.findByFBUserID(facebookUserId));
         routeDao.save(route);
         return dtoService.Route2RouteDetailsDto(route);
     }
 
     @Override
-    public RouteDetailsDto editRoute(Long routeId, String name, String description, List<Long> tipIds) {
+    public RouteDetailsDto editRoute(Long routeId, String name, String description, String travelMode, List<Long> tipIds) {
         return null;
     }
 
     @Override
-    public List<FeatureSearchDto> find(Geometry bounds, List<Long> cityIds, Integer createdBy, Long facebookUserId, List<Long> friendsFacebookUserIds) throws InstanceNotFoundException {
+    public List<FeatureSearchDto> find(Geometry bounds, String travelMode, List<Long> cityIds, Integer createdBy, Long facebookUserId, List<Long> friendsFacebookUserIds) throws InstanceNotFoundException {
         return null;
     }
+
 
     @Override
     public List<TIPMinDto> getTIPsInOrder(Long routeID) throws InstanceNotFoundException {

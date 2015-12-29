@@ -16,6 +16,7 @@ public class Route {
     private Long id;
     private String name;
     private String description;
+    private String travelMode;
     private Geometry geom;
     private String googleMapsUrl;
     private UserAccount creator;
@@ -52,6 +53,15 @@ public class Route {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Column(name = "travelmode")
+    public String getTravelMode() {
+        return travelMode;
+    }
+
+    public void setTravelMode(String travelMode) {
+        this.travelMode = travelMode;
     }
 
     @Column(name = "geom")

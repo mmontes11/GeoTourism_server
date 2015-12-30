@@ -1,5 +1,7 @@
-package com.mmontes.test.model.service;
+package com.mmontes.test.model.dao;
 
+import com.mmontes.model.dao.RouteDao;
+import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.model.service.RouteService;
 import com.mmontes.model.service.TIPService;
 import com.mmontes.util.GeometryConversor;
@@ -23,9 +25,12 @@ import static com.mmontes.util.Constants.SPRING_CONFIG_FILE;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {SPRING_CONFIG_FILE, SPRING_CONFIG_TEST_FILE})
+@ContextConfiguration(locations = { SPRING_CONFIG_FILE,SPRING_CONFIG_TEST_FILE })
 @Transactional
-public class RouteServiceTest {
+public class RouteDaoTest {
+
+    @Autowired
+    private RouteDao routeDao;
 
     @Autowired
     private RouteService routeService;
@@ -33,10 +38,8 @@ public class RouteServiceTest {
     @Autowired
     private TIPService tipService;
 
-    private static Long alamedaID;
-    private static Long cathedralID;
-    private static Long towerOfHerculesID;
-    private static Long statueOfLibertyID;
+    private static List<Long> tipIds = new ArrayList<>();;
+    private static Long routeID;
 
     @Before
     public void createData() throws InvalidTIPUrlException, InstanceNotFoundException, GoogleMapsServiceException, TIPLocationException, GeometryParsingException {
@@ -44,51 +47,38 @@ public class RouteServiceTest {
         String description = "Green zone";
         Geometry geom = GeometryConversor.geometryFromWKT(POINT_ALAMEDA);
         TIPDetailsDto tipDetailsDto = tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom);
-        alamedaID = tipDetailsDto.getId();
+        Long alamedaID = tipDetailsDto.getId();
 
         name = "Santiago de Compostela cathedral";
         description = "Human patrimony";
         geom = GeometryConversor.geometryFromWKT(POINT_CATEDRAL_SANTIAGO);
         tipDetailsDto = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom);
-        cathedralID = tipDetailsDto.getId();
+        Long cathedralID = tipDetailsDto.getId();
 
         name = "Tower of Hercules";
         description = "Human Patrimony";
         geom = GeometryConversor.geometryFromWKT(POINT_TORRE_HERCULES);
         tipDetailsDto = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom);
-        towerOfHerculesID = tipDetailsDto.getId();
+        Long towerOfHerculesID = tipDetailsDto.getId();
 
-        name = "Liberty Statue";
-        description = "NY symbol";
-        geom = GeometryConversor.geometryFromWKT(POINT_STATUE_OF_LIBERTRY);
-        tipDetailsDto = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, geom);
-        statueOfLibertyID = tipDetailsDto.getId();
+        name = "From Alameda To Cathedral";
+        description = "Santiago route";
+        String travelMode = "driving";
+        tipIds.add(alamedaID);
+        tipIds.add(cathedralID);
+        tipIds.add(towerOfHerculesID);
+        RouteDetailsDto routeDetailsDto = routeService.createRoute(name,description,travelMode,null,tipIds, EXISTING_FACEBOOK_USER_ID);
+        routeID = routeDetailsDto.getId();
     }
 
     @Test
-    public void createRouteFromTIPs(){
-
-        try {
-            String name = "From Alameda To Cathedral";
-            String description = "Santiago route";
-            String travelMode = "driving";
-            List<Long> tipdIds = new ArrayList<Long>() {{
-                add(alamedaID);
-                add(cathedralID);
-                add(towerOfHerculesID);
-            }};
-            RouteDetailsDto routeDetailsDto = routeService.createRoute(name,description,travelMode,null,tipdIds, EXISTING_FACEBOOK_USER_ID);
-
-            assertNotNull(routeDetailsDto.getId());
-            assertEquals(name, routeDetailsDto.getName());
-            assertEquals(description,routeDetailsDto.getDescription());
-            assertEquals(travelMode,routeDetailsDto.getTravelMode());
-            assertNotNull(routeDetailsDto.getGeom());
-            assertNotNull(routeDetailsDto.getGoogleMapsUrl());
-            assertEquals(3,routeDetailsDto.getTips().size());
-            assertEquals(EXISTING_FACEBOOK_USER_ID,routeDetailsDto.getCreator().getFacebookUserId());
-        } catch (Exception e) {
-            fail();
+    public void retrieveTipsInOrder(){
+        List<TIP> tips = routeDao.getTIPsInOrder(routeID);
+        for (int i = 0; i<tipIds.size(); i++){
+            Long tipId = tipIds.get(i);
+            TIP tip = tips.get(i);
+            assertEquals(tipId,tip.getId());
         }
     }
+
 }

@@ -31,15 +31,6 @@ CREATE TABLE UserAccount(
   CONSTRAINT UserAccount_UNIQUE UNIQUE(facebookUserId)
 );
 
-CREATE TABLE UserAccountUserAccount(
-  id SERIAL,
-  userAccountId INTEGER,
-  friendId INTEGER,
-  CONSTRAINT UserAccountUserAccount_PK PRIMARY KEY (id),
-  CONSTRAINT UserAccountUserAccount_UserAccount_FK FOREIGN KEY (userAccountId) REFERENCES UserAccount(id),
-  CONSTRAINT UserAccountUserAccount_Friend_FK FOREIGN KEY (friendId) REFERENCES UserAccount(id)
-);
-
 CREATE TABLE Admin(
   id SERIAL,
   username VARCHAR(20),
@@ -107,14 +98,20 @@ CREATE TABLE Rating(
   CONSTRAINT Rating_UserAccount_FK FOREIGN KEY(userId) REFERENCES UserAccount(id) ON DELETE CASCADE
 );
 
+CREATE TABLE UserAccountUserAccount(
+  userAccountId INTEGER,
+  friendId INTEGER,
+  CONSTRAINT UserAccountUserAccount_PK PRIMARY KEY (userAccountId,friendId),
+  CONSTRAINT UserAccountUserAccount_UserAccount_FK FOREIGN KEY (userAccountId) REFERENCES UserAccount(id),
+  CONSTRAINT UserAccountUserAccount_Friend_FK FOREIGN KEY (friendId) REFERENCES UserAccount(id)
+);
+
 CREATE TABLE TIPUserAccount(
-  id SERIAL,
   TIPId INTEGER,
   userId INTEGER,
-  CONSTRAINT TIPUserAccount_PK PRIMARY KEY(id),
+  CONSTRAINT TIPUserAccount_PK PRIMARY KEY(TIPId,userId),
   CONSTRAINT TIPUserAccount_TIP_FK FOREIGN KEY(TIPId) REFERENCES TIP(id) ON DELETE CASCADE,
-  CONSTRAINT TIPUserAccount_UserAccount_FK FOREIGN KEY(userId) REFERENCES UserAccount(id) ON DELETE CASCADE,
-  CONSTRAINT TIPUserAccount_TIPIdRouteID_UNIQUE UNIQUE (TIPId,userId)
+  CONSTRAINT TIPUserAccount_UserAccount_FK FOREIGN KEY(userId) REFERENCES UserAccount(id) ON DELETE CASCADE
 );
 
 CREATE TABLE RouteTIP(

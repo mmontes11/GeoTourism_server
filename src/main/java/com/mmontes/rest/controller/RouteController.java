@@ -49,6 +49,8 @@ public class RouteController {
         List<String> lineStrings = routeRequest.getLineStrings();
         List<Long> tipdIds = routeRequest.getTipIds();
         RouteDetailsDto routeDetailsDto;
+        System.out.println("tipIds:");
+        System.out.println(tipdIds);
         try {
             routeDetailsDto = routeService.createRoute(name,description,travelMode,null,tipdIds, facebookUserId);
         } catch (InstanceNotFoundException e) {

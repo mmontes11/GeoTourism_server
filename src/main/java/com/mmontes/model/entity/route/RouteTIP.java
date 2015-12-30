@@ -16,19 +16,10 @@ import javax.persistence.*;
 })
 public class RouteTIP {
 
-    private int ordination;
     private RouteTIPId pk = new RouteTIPId();
+    private int ordination;
 
     public RouteTIP() {
-    }
-
-    @Column(name = "ordination")
-    public int getOrdination() {
-        return ordination;
-    }
-
-    public void setOrdination(int ordination) {
-        this.ordination = ordination;
     }
 
     @EmbeddedId
@@ -38,6 +29,15 @@ public class RouteTIP {
 
     public void setPk(RouteTIPId pk) {
         this.pk = pk;
+    }
+
+    @Column(name = "ordination")
+    public int getOrdination() {
+        return ordination;
+    }
+
+    public void setOrdination(int ordination) {
+        this.ordination = ordination;
     }
 
     @Transient
@@ -69,5 +69,13 @@ public class RouteTIP {
 
     public int hashCode() {
         return (getPk() != null ? getPk().hashCode() : 0);
+    }
+
+    @Override
+    public String toString() {
+        return "RouteTIP{" +
+                "ordination=" + ordination +
+                ", pk=" + pk +
+                '}';
     }
 }

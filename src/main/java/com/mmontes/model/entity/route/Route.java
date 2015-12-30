@@ -20,7 +20,7 @@ public class Route {
     private Geometry geom;
     private String googleMapsUrl;
     private UserAccount creator;
-    private Set<RouteTIP> routeTIPs = new HashSet<>();
+    private Set<RouteTIP> routeTIPs = new HashSet<>(0);
 
     public Route() {
     }
@@ -93,12 +93,20 @@ public class Route {
         this.creator = creator;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.route")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.route", cascade=CascadeType.ALL)
     public Set<RouteTIP> getRouteTIPs() {
         return routeTIPs;
     }
 
     public void setRouteTIPs(Set<RouteTIP> routeTIPs) {
         this.routeTIPs = routeTIPs;
+    }
+
+    @Override
+    public String toString() {
+        return "Route{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
     }
 }

@@ -49,4 +49,12 @@ public class RouteTIPId implements java.io.Serializable {
         result = 31 * result + (tip != null ? tip.hashCode() : 0);
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "RouteTIPId{" +
+                "route=" + route +
+                ", tip=" + tip +
+                '}';
+    }
 }

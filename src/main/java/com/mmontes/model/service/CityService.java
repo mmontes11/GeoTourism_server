@@ -9,8 +9,6 @@ import java.util.List;
 public interface CityService {
 
     City getCityFromLocation(Geometry location);
-
     boolean isLocatedInExistingCity(Geometry location);
-
     List<CityDto> findAll();
 }

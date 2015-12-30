@@ -2,7 +2,7 @@ package com.mmontes.rest.controller;
 
 import com.mmontes.model.service.TIPService;
 import com.mmontes.service.FacebookService;
-import com.mmontes.util.GeometryConversor;
+import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.FeatureSearchDto;
 import com.mmontes.util.exception.FacebookServiceException;
 import com.mmontes.util.exception.GeometryParsingException;
@@ -50,7 +50,7 @@ public class TIPsController {
         Polygon bounds = null;
         try {
             if (boundsWKT != null) {
-                bounds = (Polygon) GeometryConversor.geometryFromWKT(boundsWKT);
+                bounds = (Polygon) GeometryUtils.geometryFromWKT(boundsWKT);
             }
         } catch (GeometryParsingException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

@@ -4,7 +4,7 @@ import com.mmontes.model.dao.TIPDao;
 import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.model.service.FavouriteService;
 import com.mmontes.model.service.TIPService;
-import com.mmontes.util.GeometryConversor;
+import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.TIPDetailsDto;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import com.vividsolutions.jts.geom.Point;
@@ -36,7 +36,7 @@ public class FavouriteServiceTest {
     @Test
     public void favouriteCreateDeleteTest() {
         try {
-            Point geom = (Point) GeometryConversor.geometryFromWKT(POINT_TORRE_HERCULES);
+            Point geom = (Point) GeometryUtils.geometryFromWKT(POINT_TORRE_HERCULES);
             TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom);
             TIP tip = tipDao.findById(towerHercules.getId());
 
@@ -80,7 +80,7 @@ public class FavouriteServiceTest {
     public void favouriteNonExistingUser() throws InstanceNotFoundException {
         TIP tip = null;
         try {
-            Point geom = (Point) GeometryConversor.geometryFromWKT(POINT_TORRE_HERCULES);
+            Point geom = (Point) GeometryUtils.geometryFromWKT(POINT_TORRE_HERCULES);
             TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom);
             tip = tipDao.findById(towerHercules.getId());
         } catch (Exception e) {
@@ -93,7 +93,7 @@ public class FavouriteServiceTest {
     public void deleteFavouriteNonExistingUser() throws InstanceNotFoundException {
         TIP tip = null;
         try {
-            Point geom = (Point) GeometryConversor.geometryFromWKT(POINT_TORRE_HERCULES);
+            Point geom = (Point) GeometryUtils.geometryFromWKT(POINT_TORRE_HERCULES);
             TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom);
             tip = tipDao.findById(towerHercules.getId());
         } catch (Exception e) {

@@ -8,7 +8,7 @@ import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
 import com.google.maps.model.TravelMode;
 import com.mmontes.util.Constants;
-import com.mmontes.util.GeometryConversor;
+import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.exception.GoogleMapsServiceException;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -98,7 +98,7 @@ public class GoogleMapsService {
         if (results.length == 0){
             throw new GoogleMapsServiceException();
         }
-        return GeometryConversor.geometryFromListLatLng(results[0].overviewPolyline.decodePath());
+        return GeometryUtils.geometryFromListLatLng(results[0].overviewPolyline.decodePath());
     }
 
     public TravelMode string2TravelMode(String travelModeString){

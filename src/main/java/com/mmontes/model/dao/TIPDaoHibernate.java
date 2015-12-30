@@ -3,7 +3,8 @@ package com.mmontes.model.dao;
 import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.model.util.QueryUtils;
 import com.mmontes.model.util.genericdao.GenericDaoHibernate;
-import com.mmontes.util.GeometryConversor;
+import com.mmontes.util.Constants;
+import com.mmontes.util.GeometryUtils;
 import com.vividsolutions.jts.geom.Geometry;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
@@ -28,8 +29,8 @@ public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements T
         }
 
         if (bounds != null) {
-            String boundsWKT = GeometryConversor.wktFromGeometry(bounds);
-            queryString += "WHERE ST_Intersects(ST_GeographyFromText('" + boundsWKT + "'), ST_GeographyFromText(ST_AsText(t.geom)))";
+            String boundsWKT = GeometryUtils.WKTFromGeometry(bounds);
+            queryString += "WHERE ST_Contains(ST_GeometryFromText('SRID=" + Constants.SRID + ";" + boundsWKT + "'), t.geom)";
             filterByBounds = true;
         }
         if (typeIds != null && !typeIds.isEmpty()) {
@@ -52,5 +53,18 @@ public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements T
 
         Query query = getSession().createSQLQuery(queryString).addEntity(TIP.class);
         return query.list();
+    }
+
+    @Override
+    public boolean geometryContainsTIPs(Geometry superGeometry,List<Long> tipIds) {
+        String tipIdsIn = QueryUtils.getINvalues(tipIds);
+        String superGeometryWKT = GeometryUtils.WKTFromGeometry(superGeometry);
+        String queryString =
+            "SELECT id FROM tip " +
+            "WHERE id IN "+tipIdsIn+" " +
+            "AND ST_Intersects(ST_Buffer(ST_GeometryFromText('SRID=" + Constants.SRID + ";" + superGeometryWKT + "')," + Constants.GOOGLE_MAPS_THRESHOLD + "), geom)";
+        List result = getSession().createSQLQuery(queryString).list();
+        System.out.println(result.size());
+        return (result.size() == tipIds.size());
     }
 }

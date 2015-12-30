@@ -9,7 +9,7 @@ import com.mmontes.model.service.CommentService;
 import com.mmontes.model.service.FavouriteService;
 import com.mmontes.model.service.RatingService;
 import com.mmontes.model.service.RouteService;
-import com.mmontes.util.GeometryConversor;
+import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,7 +37,7 @@ public class DtoService {
 
     public TIPDetailsDto TIP2TIPDetailsDto(TIP tip, UserAccount userAccount) throws InstanceNotFoundException {
         TIPDetailsDto tipDetailsDto = new TIPDetailsDto();
-        String geom = GeometryConversor.wktFromGeometry(tip.getGeom());
+        String geom = GeometryUtils.WKTFromGeometry(tip.getGeom());
 
         tipDetailsDto.setId(tip.getId());
         tipDetailsDto.setType(tip.getType().getId());
@@ -64,7 +64,7 @@ public class DtoService {
 
     public FeatureSearchDto TIP2FeatureSearchDto(TIP tip){
         Long id = tip.getId();
-        String geom = GeometryConversor.wktFromGeometry(tip.getGeom());
+        String geom = GeometryUtils.WKTFromGeometry(tip.getGeom());
         return new FeatureSearchDto(id,geom);
     }
 
@@ -98,7 +98,7 @@ public class DtoService {
         routeDetailsDto.setName(route.getName());
         routeDetailsDto.setDescription(route.getDescription());
         routeDetailsDto.setTravelMode(route.getTravelMode());
-        routeDetailsDto.setGeom(GeometryConversor.wktFromGeometry(route.getGeom()));
+        routeDetailsDto.setGeom(GeometryUtils.WKTFromGeometry(route.getGeom()));
         routeDetailsDto.setGoogleMapsUrl(route.getGoogleMapsUrl());
         routeDetailsDto.setTips(routeService.getTIPsInOrder(route.getId()));
         routeDetailsDto.setCreator(UserAccount2UserAccountDto(route.getCreator()));
@@ -107,7 +107,7 @@ public class DtoService {
 
     public FeatureSearchDto Route2FeatureSearchDto(Route route){
         Long id = route.getId();
-        String geom = GeometryConversor.wktFromGeometry(route.getGeom());
+        String geom = GeometryUtils.WKTFromGeometry(route.getGeom());
         return new FeatureSearchDto(id,geom);
     }
 

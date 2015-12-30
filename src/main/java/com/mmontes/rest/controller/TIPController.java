@@ -4,7 +4,7 @@ import com.mmontes.model.service.TIPService;
 import com.mmontes.rest.request.TIPPatchRequest;
 import com.mmontes.rest.request.TIPRequest;
 import com.mmontes.service.FacebookService;
-import com.mmontes.util.GeometryConversor;
+import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.TIPDetailsDto;
 import com.mmontes.util.exception.FacebookServiceException;
 import com.mmontes.util.exception.GeometryParsingException;
@@ -37,7 +37,7 @@ public class TIPController {
         }
         Geometry geometry;
         try {
-            geometry = GeometryConversor.geometryFromWKT(tipRequest.getGeometry());
+            geometry = GeometryUtils.geometryFromWKT(tipRequest.getGeometry());
         } catch (GeometryParsingException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

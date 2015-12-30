@@ -4,7 +4,7 @@ import com.mmontes.model.dao.TIPDao;
 import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.model.service.RatingService;
 import com.mmontes.model.service.TIPService;
-import com.mmontes.util.GeometryConversor;
+import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.TIPDetailsDto;
 import com.vividsolutions.jts.geom.Point;
 import org.junit.Test;
@@ -36,7 +36,7 @@ public class RatingServiceTest {
     @Test
     public void rateAndGetAverage() {
         try {
-            Point geom = (Point) GeometryConversor.geometryFromWKT(POINT_TORRE_HERCULES);
+            Point geom = (Point) GeometryUtils.geometryFromWKT(POINT_TORRE_HERCULES);
             TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom);
             TIP tip = tipDao.findById(towerHercules.getId());
 
@@ -60,7 +60,7 @@ public class RatingServiceTest {
     @Test
     public void rateAndGetUserRating() {
         try {
-            Point geom = (Point) GeometryConversor.geometryFromWKT(POINT_TORRE_HERCULES);
+            Point geom = (Point) GeometryUtils.geometryFromWKT(POINT_TORRE_HERCULES);
             TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom);
             TIP tip = tipDao.findById(towerHercules.getId());
 

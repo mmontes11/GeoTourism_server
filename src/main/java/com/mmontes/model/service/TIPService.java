@@ -19,4 +19,5 @@ public interface TIPService {
     List<FeatureSearchDto> find(Geometry bounds, List<Long> typeIds, List<Long> cityIds, Integer favouritedBy, Long facebookUserId, List<Long> friendsFacebookUserIds)
             throws InstanceNotFoundException;
     TIPDetailsDto edit(Long TIPId, Long facebooUserId, TIPPatchRequest newData) throws InstanceNotFoundException;
+    boolean geometryContainsTIPs(Geometry superGeometry,List<Long> tipIds);
 }

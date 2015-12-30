@@ -4,7 +4,7 @@ import com.mmontes.model.dao.TIPDao;
 import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.model.service.CommentService;
 import com.mmontes.model.service.TIPService;
-import com.mmontes.util.GeometryConversor;
+import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.CommentDto;
 import com.mmontes.util.dto.TIPDetailsDto;
 import com.mmontes.util.exception.InstanceException;
@@ -40,7 +40,7 @@ public class CommentServiceTest {
     @Test
     public void addDeleteComments() {
         try {
-            Point geom = (Point) GeometryConversor.geometryFromWKT(POINT_TORRE_HERCULES);
+            Point geom = (Point) GeometryUtils.geometryFromWKT(POINT_TORRE_HERCULES);
             TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom);
             TIP tip = tipDao.findById(towerHercules.getId());
 
@@ -66,7 +66,7 @@ public class CommentServiceTest {
     public void deleteInvalidComment() throws InstanceNotFoundException {
         TIP tip = null;
         try {
-            Point geom = (Point) GeometryConversor.geometryFromWKT(POINT_TORRE_HERCULES);
+            Point geom = (Point) GeometryUtils.geometryFromWKT(POINT_TORRE_HERCULES);
             TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom);
             tip = tipDao.findById(towerHercules.getId());
         } catch (Exception e) {

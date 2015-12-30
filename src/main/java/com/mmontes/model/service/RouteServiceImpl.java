@@ -7,10 +7,12 @@ import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.model.entity.route.Route;
 import com.mmontes.model.entity.route.RouteTIP;
 import com.mmontes.service.GoogleMapsService;
+import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.dto.FeatureSearchDto;
 import com.mmontes.util.dto.RouteDetailsDto;
 import com.mmontes.util.dto.TIPMinDto;
+import com.mmontes.util.exception.GeometryParsingException;
 import com.mmontes.util.exception.GoogleMapsServiceException;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import com.vividsolutions.jts.geom.Coordinate;
@@ -42,8 +44,8 @@ public class RouteServiceImpl implements RouteService {
     private GoogleMapsService googleMapsService;
 
     @Override
-    public RouteDetailsDto createRoute(String name, String description, String travelMode, List<String> lineStrings, List<Long> tipIds, Long facebookUserId)
-            throws InstanceNotFoundException, GoogleMapsServiceException {
+    public RouteDetailsDto createRoute(String name, String description, String travelMode, Geometry routeGeom, List<Long> tipIds, Long facebookUserId)
+            throws InstanceNotFoundException, GoogleMapsServiceException, GeometryParsingException {
         Route route = new Route();
         route.setName(name);
         route.setDescription(description);
@@ -59,9 +61,9 @@ public class RouteServiceImpl implements RouteService {
             routeTIP.setOrdination(i);
             route.getRouteTIPs().add(routeTIP);
         }
-        Geometry geom = null;
-        if (lineStrings != null && !lineStrings.isEmpty()){
-
+        Geometry geom;
+        if (routeGeom != null){
+            geom = routeGeom;
         }else{
             geom = googleMapsService.getRoute(coordinates,route.getTravelMode());
         }

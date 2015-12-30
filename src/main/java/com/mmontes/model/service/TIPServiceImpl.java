@@ -129,4 +129,9 @@ public class TIPServiceImpl implements TIPService {
         tipDao.save(tip);
         return dtoService.TIP2TIPDetailsDto(tip,userAccount);
     }
+
+    @Override
+    public boolean geometryContainsTIPs(Geometry superGeometry,List<Long> tipIds){
+        return tipDao.geometryContainsTIPs(superGeometry,tipIds);
+    }
 }

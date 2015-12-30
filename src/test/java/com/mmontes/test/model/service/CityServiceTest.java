@@ -2,7 +2,7 @@ package com.mmontes.test.model.service;
 
 import com.mmontes.model.entity.City;
 import com.mmontes.model.service.CityService;
-import com.mmontes.util.GeometryConversor;
+import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.exception.GeometryParsingException;
 import com.vividsolutions.jts.geom.Point;
 import org.junit.Test;
@@ -28,17 +28,17 @@ public class CityServiceTest {
     public void getCityFromPoint() {
         Point cityGeometry;
         try {
-            cityGeometry = (Point) GeometryConversor.geometryFromWKT(POINT_TORRE_HERCULES);
+            cityGeometry = (Point) GeometryUtils.geometryFromWKT(POINT_TORRE_HERCULES);
             City city = cityService.getCityFromLocation(cityGeometry);
             assertNotNull(city);
             assertEquals(NAME_CITY_A_CORUNA, city.getName());
 
-            cityGeometry = (Point) GeometryConversor.geometryFromWKT(POINT_CATEDRAL_SANTIAGO);
+            cityGeometry = (Point) GeometryUtils.geometryFromWKT(POINT_CATEDRAL_SANTIAGO);
             city = cityService.getCityFromLocation(cityGeometry);
             assertNotNull(city);
             assertEquals(NAME_CITY_SANTIAGO, city.getName());
 
-            cityGeometry = (Point) GeometryConversor.geometryFromWKT(POINT_ALHAMBRA);
+            cityGeometry = (Point) GeometryUtils.geometryFromWKT(POINT_ALHAMBRA);
             city = cityService.getCityFromLocation(cityGeometry);
             assertNull(city);
         } catch (GeometryParsingException e) {

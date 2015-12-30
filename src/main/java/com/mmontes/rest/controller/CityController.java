@@ -1,7 +1,7 @@
 package com.mmontes.rest.controller;
 
 import com.mmontes.model.service.CityService;
-import com.mmontes.util.GeometryConversor;
+import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.exception.GeometryParsingException;
 import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class CityController {
     isLocatedInExistingCity(@RequestParam(value = "location", required = true) String locationString) {
         Geometry geometry;
         try {
-            geometry = GeometryConversor.geometryFromWKT(locationString);
+            geometry = GeometryUtils.geometryFromWKT(locationString);
         } catch (GeometryParsingException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

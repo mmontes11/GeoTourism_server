@@ -6,7 +6,6 @@ import com.mmontes.rest.request.TIPRequest;
 import com.mmontes.service.FacebookService;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.TIPDetailsDto;
-import com.mmontes.util.exception.FacebookServiceException;
 import com.mmontes.util.exception.GeometryParsingException;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import com.vividsolutions.jts.geom.Geometry;
@@ -16,16 +15,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-
 @RestController
 public class TIPController {
 
     @Autowired
     private TIPService tipService;
-
-    @Autowired
-    private FacebookService facebookService;
 
     @RequestMapping(value = "/admin/tip", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TIPDetailsDto>
@@ -59,18 +53,9 @@ public class TIPController {
          @RequestHeader(value="AuthorizationFB", required = false) String accessToken,
          @RequestParam(value = "facebookUserId", required = false) Long facebookUserId) {
 
-        if (accessToken != null && facebookUserId != null){
-            facebookService.setParams(accessToken, facebookUserId);
-            try {
-                facebookService.validateAuth();
-            } catch (FacebookServiceException e) {
-                e.printStackTrace();
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-            } catch (IOException e) {
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+        if (!FacebookService.validFBparams(accessToken,facebookUserId)){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-
         TIPDetailsDto tipDetailsDto;
         try {
             tipDetailsDto = tipService.findById(TIPId,facebookUserId);
@@ -98,19 +83,9 @@ public class TIPController {
           @RequestHeader(value="AuthorizationFB", required = false) String accessToken,
           @RequestParam(value = "facebookUserId", required = false) Long facebookUserId) {
 
-        if (accessToken != null && facebookUserId != null){
-            facebookService.setParams(accessToken,facebookUserId);
-            try {
-                facebookService.validateAuth();
-            } catch (FacebookServiceException e) {
-                e.printStackTrace();
-                return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-            }
+        if (!FacebookService.validFBparams(accessToken,facebookUserId)){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-
         TIPDetailsDto tipDetailsDto;
         try {
             tipDetailsDto = tipService.edit(TIPId, facebookUserId, tipPatchRequest);

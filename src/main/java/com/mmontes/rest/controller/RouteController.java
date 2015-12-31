@@ -57,18 +57,16 @@ public class RouteController {
                         lineStrings.add(lineString);
                     }
                     routeGeom = GeometryUtils.unionGeometries(lineStrings);
+                    if (!tipService.geometryContainsTIPs(routeGeom, routeRequest.getTipIds())) {
+                        return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                    }
                 } catch (GeometryParsingException e) {
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 }
             }
-            if (routeRequest.getTipIds() == null || routeRequest.getTipIds().size() < 2) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
-            if (routeGeom != null) {
-                if (!tipService.geometryContainsTIPs(routeGeom, routeRequest.getTipIds())) {
-                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-                }
-            }
+        }
+        if (routeRequest.getTipIds() == null || routeRequest.getTipIds().size() < 2) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         String name = routeRequest.getName();
         String description = routeRequest.getDescription();

@@ -7,6 +7,8 @@ import com.mmontes.util.Constants;
 import com.mmontes.util.HashUtils;
 import com.mmontes.util.JSONParser;
 import com.mmontes.util.exception.FacebookServiceException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -82,4 +84,20 @@ public class FacebookService {
         return friendsFBIds;
     }
 
+    public static boolean validFBparams(String accessToken, Long facebookUserId){
+        FacebookService facebookService = new FacebookService();
+        if (accessToken != null && facebookUserId != null){
+            facebookService.setParams(accessToken,facebookUserId);
+            try {
+                facebookService.validateAuth();
+            } catch (FacebookServiceException e) {
+                e.printStackTrace();
+                return false;
+            } catch (IOException e) {
+                e.printStackTrace();
+                return false;
+            }
+        }
+        return true;
+    }
 }

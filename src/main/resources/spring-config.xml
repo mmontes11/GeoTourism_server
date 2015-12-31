@@ -26,13 +26,10 @@
           p:jndiName="jdbc/geotourism"
           p:resourceRef="true" />
 
-    <bean id="dataSourceProxy" class="org.springframework.jdbc.datasource.LazyConnectionDataSourceProxy"
-          p:targetDataSource-ref="dataSource"/>
-
     <!-- Hibernate session factory -->
     <bean id="sessionFactory"
           class="org.springframework.orm.hibernate4.LocalSessionFactoryBean"
-          p:dataSource-ref="dataSourceProxy"
+          p:dataSource-ref="dataSource"
           p:configLocation="classpath:/hibernate-config.xml"/>
 
     <!-- Transaction manager for a single Hibernate SessionFactory.  -->

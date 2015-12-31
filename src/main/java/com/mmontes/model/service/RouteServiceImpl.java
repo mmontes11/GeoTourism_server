@@ -43,13 +43,7 @@ public class RouteServiceImpl implements RouteService {
     @Autowired
     private GoogleMapsService googleMapsService;
 
-    @Override
-    public RouteDetailsDto createRoute(String name, String description, String travelMode, Geometry routeGeom, List<Long> tipIds, Long facebookUserId)
-            throws InstanceNotFoundException, GoogleMapsServiceException, GeometryParsingException {
-        Route route = new Route();
-        route.setName(name);
-        route.setDescription(description);
-        route.setTravelMode(travelMode);
+    private List<Coordinate> setRouteTIPsAndGetCoords(Route route,List<Long> tipIds) throws InstanceNotFoundException {
         List<Coordinate> coordinates = new ArrayList<>();
         for (int i = 0; i<tipIds.size(); i++){
             Long tipId = tipIds.get(i);
@@ -61,6 +55,17 @@ public class RouteServiceImpl implements RouteService {
             routeTIP.setOrdination(i);
             route.getRouteTIPs().add(routeTIP);
         }
+        return coordinates;
+    }
+
+    @Override
+    public RouteDetailsDto createRoute(String name, String description, String travelMode, Geometry routeGeom, List<Long> tipIds, Long facebookUserId)
+            throws InstanceNotFoundException, GoogleMapsServiceException, GeometryParsingException {
+        Route route = new Route();
+        route.setName(name);
+        route.setDescription(description);
+        route.setTravelMode(travelMode);
+        List<Coordinate> coordinates = setRouteTIPsAndGetCoords(route,tipIds);
         Geometry geom;
         if (routeGeom != null){
             geom = routeGeom;
@@ -75,8 +80,16 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public RouteDetailsDto editRoute(Long routeId, String name, String description, String travelMode, List<Long> tipIds) {
-        return null;
+    public RouteDetailsDto editRoute(Long routeId, String name, String description, String travelMode, List<Long> tipIds, Long facebookUserId) throws InstanceNotFoundException, GoogleMapsServiceException {
+        Route route = routeDao.getRouteByIDandUser(routeId,facebookUserId);
+        route.setName(name);
+        route.setDescription(description);
+        route.setTravelMode(travelMode);
+        route.getRouteTIPs().clear();
+        List<Coordinate> coordinates = setRouteTIPsAndGetCoords(route,tipIds);
+        route.setGeom(googleMapsService.getRoute(coordinates,route.getTravelMode()));
+        route.setGoogleMapsUrl(googleMapsService.getRouteGoogleMapsUrl(coordinates,route.getTravelMode()));
+        return dtoService.Route2RouteDetailsDto(route);
     }
 
     @Override

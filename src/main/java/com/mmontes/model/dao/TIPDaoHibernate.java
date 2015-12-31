@@ -30,7 +30,7 @@ public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements T
 
         if (bounds != null) {
             String boundsWKT = GeometryUtils.WKTFromGeometry(bounds);
-            queryString += "WHERE ST_Contains(ST_GeometryFromText('SRID=" + Constants.SRID + ";" + boundsWKT + "'), t.geom)";
+            queryString += "WHERE ST_Within(t.geom,ST_GeometryFromText('SRID=" + Constants.SRID + ";" + boundsWKT + "'))";
             filterByBounds = true;
         }
         if (typeIds != null && !typeIds.isEmpty()) {

@@ -6,12 +6,13 @@ import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.RouteDetailsDto;
 import com.mmontes.util.dto.TIPDetailsDto;
 import com.mmontes.util.dto.TIPMinDto;
-import com.mmontes.util.exception.*;
+import com.mmontes.util.exception.InstanceNotFoundException;
 import com.vividsolutions.jts.geom.Geometry;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,12 +29,6 @@ import static org.junit.Assert.*;
 @Transactional
 public class RouteServiceTest {
 
-    @Autowired
-    private RouteService routeService;
-
-    @Autowired
-    private TIPService tipService;
-
     private static Long alamedaID;
     private static Long cathedralID;
     private static Long towerOfHerculesID;
@@ -42,8 +37,13 @@ public class RouteServiceTest {
     private static List<Long> tipIds = new ArrayList<>();
     private static Long routeID;
 
+    @Autowired
+    private RouteService routeService;
+    @Autowired
+    private TIPService tipService;
+
     @Before
-    public void createData(){
+    public void createData() {
         try {
             String name = "Alameda Park";
             String description = "Green zone";
@@ -84,7 +84,7 @@ public class RouteServiceTest {
             tipIds.add(towerOfHerculesID);
             RouteDetailsDto routeDetailsDto = routeService.createRoute(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID);
             routeID = routeDetailsDto.getId();
-        } catch (Exception e){
+        } catch (Exception e) {
             fail();
         }
     }
@@ -125,6 +125,51 @@ public class RouteServiceTest {
             assertEquals(3, routeDetailsDto.getTips().size());
             assertEquals(EXISTING_FACEBOOK_USER_ID, routeDetailsDto.getCreator().getFacebookUserId());
         } catch (Exception e) {
+            fail();
+        }
+    }
+
+    @Test
+    public void createRouteFromGeometry() {
+        try {
+            String name = "From Alameda To Cathedral";
+            String description = "Santiago route";
+            String travelMode = "driving";
+            Geometry geom = GeometryUtils.geometryFromWKT(LINESTRING_ALAMEDA_CATEDRAL_REIS_CATOLICOS);
+            List<Long> tipdIds = new ArrayList<Long>() {{
+                add(alamedaID);
+                add(cathedralID);
+                add(towerOfHerculesID);
+            }};
+            RouteDetailsDto routeDetailsDto = routeService.createRoute(name, description, travelMode, geom, tipdIds, EXISTING_FACEBOOK_USER_ID);
+
+            assertNotNull(routeDetailsDto.getId());
+            assertEquals(name, routeDetailsDto.getName());
+            assertEquals(description, routeDetailsDto.getDescription());
+            assertEquals(travelMode, routeDetailsDto.getTravelMode());
+            assertNotNull(routeDetailsDto.getGeom());
+            assertNotNull(routeDetailsDto.getGoogleMapsUrl());
+            assertEquals(3, routeDetailsDto.getTips().size());
+            assertEquals(EXISTING_FACEBOOK_USER_ID, routeDetailsDto.getCreator().getFacebookUserId());
+
+            Geometry geom1 = GeometryUtils.geometryFromWKT(LINESTRING_PARTIAL_1);
+            Geometry geom2 = GeometryUtils.geometryFromWKT(LINESTRING_PARTIAL_2);
+            List<Geometry> geometries = new ArrayList<>();
+            geometries.add(geom1);
+            geometries.add(geom2);
+            GeometryUtils.unionGeometries(geometries);
+            routeDetailsDto = routeService.createRoute(name, description, travelMode, geom, tipdIds, EXISTING_FACEBOOK_USER_ID);
+
+            assertNotNull(routeDetailsDto.getId());
+            assertEquals(name, routeDetailsDto.getName());
+            assertEquals(description, routeDetailsDto.getDescription());
+            assertEquals(travelMode, routeDetailsDto.getTravelMode());
+            assertNotNull(routeDetailsDto.getGeom());
+            assertNotNull(routeDetailsDto.getGoogleMapsUrl());
+            assertEquals(3, routeDetailsDto.getTips().size());
+            assertEquals(EXISTING_FACEBOOK_USER_ID, routeDetailsDto.getCreator().getFacebookUserId());
+        } catch (Exception e) {
+            e.printStackTrace();
             fail();
         }
     }

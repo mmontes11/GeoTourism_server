@@ -46,7 +46,7 @@ public class TIPServiceTest {
         try {
             String name = "Tower of Hercules";
             String description = "Human Patrimony";
-            Geometry geom = (Point) GeometryUtils.geometryFromWKT(POINT_TORRE_HERCULES);
+            Geometry geom = GeometryUtils.geometryFromWKT(POINT_TORRE_HERCULES);
             towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom);
 
             name = "Alameda Santiago de Compostela";
@@ -144,7 +144,7 @@ public class TIPServiceTest {
 
     @Test
     public void finTipsFromFarCity() {
-        Geometry bounds = null;
+        Geometry bounds;
         List<FeatureSearchDto> featureSearchDtos = null;
         try {
             bounds = GeometryUtils.geometryFromWKT(BOUNDS_NEW_YORK);
@@ -266,22 +266,4 @@ public class TIPServiceTest {
     public void getAllTIPtypes() {
         assertEquals(4, tipTypeService.findAllTypes().size());
     }
-/*
-    @Test
-    public void geomContainsTIPs(){
-        try {
-            Geometry superGeometry = GeometryUtils.geometryFromWKT(LINESTRING_ALAMEDA_CATEDRAL_REIS_CATOLICOS);
-
-            List<Long> tipdIds = new ArrayList<>();
-            tipdIds.add(alameda.getId());
-            tipdIds.add(cathedral.getId());
-            tipdIds.add(reisCatolicos.getId());
-
-            assertEquals(true,tipService.geometryContainsTIPs(superGeometry,tipdIds));
-        } catch (Exception e) {
-            fail();
-        }
-
-    }
-*/
 }

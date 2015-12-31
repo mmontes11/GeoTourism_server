@@ -63,8 +63,6 @@ public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements T
             "SELECT id FROM tip " +
             "WHERE id IN "+tipIdsIn+" " +
             "AND ST_Intersects(ST_Buffer(ST_GeometryFromText('SRID=" + Constants.SRID + ";" + superGeometryWKT + "')," + Constants.GOOGLE_MAPS_THRESHOLD + "), geom)";
-        List result = getSession().createSQLQuery(queryString).list();
-        System.out.println(result.size());
-        return (result.size() == tipIds.size());
+        return (getSession().createSQLQuery(queryString).list().size() == tipIds.size());
     }
 }

@@ -61,16 +61,15 @@ public class RouteController {
                     return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
                 }
             }
-        }
-        if (routeRequest.getTipIds() == null || routeRequest.getTipIds().size() < 2) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        if (routeGeom != null){
-            if (tipService.geometryContainsTIPs(routeGeom,routeRequest.getTipIds())){
+            if (routeRequest.getTipIds() == null || routeRequest.getTipIds().size() < 2) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
+            if (routeGeom != null) {
+                if (!tipService.geometryContainsTIPs(routeGeom, routeRequest.getTipIds())) {
+                    return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+                }
+            }
         }
-
         String name = routeRequest.getName();
         String description = routeRequest.getDescription();
         String travelMode = routeRequest.getTravelMode();
@@ -87,4 +86,5 @@ public class RouteController {
         }
         return new ResponseEntity<>(routeDetailsDto, HttpStatus.CREATED);
     }
+
 }

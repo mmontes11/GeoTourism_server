@@ -11,11 +11,11 @@ import com.vividsolutions.jts.geom.Geometry;
 import java.util.List;
 
 public interface RouteService {
-    RouteDetailsDto createRoute(String name,String description,String travelMode,Geometry routeGeom,List<Long> tipIds,Long facebookUserId)
+    RouteDetailsDto create(String name, String description, String travelMode, Geometry routeGeom, List<Long> tipIds, Long facebookUserId)
             throws InstanceNotFoundException, GoogleMapsServiceException, GeometryParsingException;
-    RouteDetailsDto editRoute(Long routeId,String name,String description,String travelMode,List<Long> tipIds, Long facebookUserId) throws InstanceNotFoundException, GoogleMapsServiceException;
-    List<FeatureSearchDto> find(Geometry bounds, String travelMode, List<Long> cityIds, Integer createdBy, Long facebookUserId, List<Long> friendsFacebookUserIds)
-            throws InstanceNotFoundException;
+    RouteDetailsDto edit(Long routeId, String name, String description, String travelMode, List<Long> tipIds, Long facebookUserId) throws InstanceNotFoundException, GoogleMapsServiceException;
+    List<FeatureSearchDto> find(Geometry bounds, String travelMode, List<Long> cityIds, Integer createdBy, Long facebookUserId, List<Long> friendsFacebookUserIds);
+    void remove(Long routeId) throws InstanceNotFoundException;
     List<TIPMinDto> getTIPsInOrder(Long routeID)
             throws InstanceNotFoundException;
 }

@@ -74,7 +74,7 @@ public class RouteController {
         List<Long> tipdIds = routeRequest.getTipIds();
         RouteDetailsDto routeDetailsDto;
         try {
-            routeDetailsDto = routeService.createRoute(name, description, travelMode, routeGeom, tipdIds, facebookUserId);
+            routeDetailsDto = routeService.create(name, description, travelMode, routeGeom, tipdIds, facebookUserId);
         } catch (GeometryParsingException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (InstanceNotFoundException e) {

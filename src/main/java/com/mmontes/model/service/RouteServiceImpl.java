@@ -59,7 +59,7 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public RouteDetailsDto createRoute(String name, String description, String travelMode, Geometry routeGeom, List<Long> tipIds, Long facebookUserId)
+    public RouteDetailsDto create(String name, String description, String travelMode, Geometry routeGeom, List<Long> tipIds, Long facebookUserId)
             throws InstanceNotFoundException, GoogleMapsServiceException, GeometryParsingException {
         Route route = new Route();
         route.setName(name);
@@ -80,7 +80,7 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public RouteDetailsDto editRoute(Long routeId, String name, String description, String travelMode, List<Long> tipIds, Long facebookUserId) throws InstanceNotFoundException, GoogleMapsServiceException {
+    public RouteDetailsDto edit(Long routeId, String name, String description, String travelMode, List<Long> tipIds, Long facebookUserId) throws InstanceNotFoundException, GoogleMapsServiceException {
         Route route = routeDao.getRouteByIDandUser(routeId,facebookUserId);
         route.setName(name);
         route.setDescription(description);
@@ -93,8 +93,13 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public List<FeatureSearchDto> find(Geometry bounds, String travelMode, List<Long> cityIds, Integer createdBy, Long facebookUserId, List<Long> friendsFacebookUserIds) throws InstanceNotFoundException {
+    public List<FeatureSearchDto> find(Geometry bounds, String travelMode, List<Long> cityIds, Integer createdBy, Long facebookUserId, List<Long> friendsFacebookUserIds) {
         return null;
+    }
+
+    @Override
+    public void remove(Long routeId) throws InstanceNotFoundException {
+        routeDao.remove(routeId);
     }
 
 

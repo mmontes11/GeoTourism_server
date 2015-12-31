@@ -12,7 +12,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -82,7 +81,7 @@ public class RouteServiceTest {
             tipIds.add(alamedaID);
             tipIds.add(cathedralID);
             tipIds.add(towerOfHerculesID);
-            RouteDetailsDto routeDetailsDto = routeService.createRoute(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID);
+            RouteDetailsDto routeDetailsDto = routeService.create(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID);
             routeID = routeDetailsDto.getId();
         } catch (Exception e) {
             fail();
@@ -114,7 +113,7 @@ public class RouteServiceTest {
                 add(cathedralID);
                 add(towerOfHerculesID);
             }};
-            RouteDetailsDto routeDetailsDto = routeService.createRoute(name, description, travelMode, null, tipdIds, EXISTING_FACEBOOK_USER_ID);
+            RouteDetailsDto routeDetailsDto = routeService.create(name, description, travelMode, null, tipdIds, EXISTING_FACEBOOK_USER_ID);
 
             assertNotNull(routeDetailsDto.getId());
             assertEquals(name, routeDetailsDto.getName());
@@ -141,7 +140,7 @@ public class RouteServiceTest {
                 add(cathedralID);
                 add(towerOfHerculesID);
             }};
-            RouteDetailsDto routeDetailsDto = routeService.createRoute(name, description, travelMode, geom, tipdIds, EXISTING_FACEBOOK_USER_ID);
+            RouteDetailsDto routeDetailsDto = routeService.create(name, description, travelMode, geom, tipdIds, EXISTING_FACEBOOK_USER_ID);
 
             assertNotNull(routeDetailsDto.getId());
             assertEquals(name, routeDetailsDto.getName());
@@ -158,7 +157,7 @@ public class RouteServiceTest {
             geometries.add(geom1);
             geometries.add(geom2);
             GeometryUtils.unionGeometries(geometries);
-            routeDetailsDto = routeService.createRoute(name, description, travelMode, geom, tipdIds, EXISTING_FACEBOOK_USER_ID);
+            routeDetailsDto = routeService.create(name, description, travelMode, geom, tipdIds, EXISTING_FACEBOOK_USER_ID);
 
             assertNotNull(routeDetailsDto.getId());
             assertEquals(name, routeDetailsDto.getName());
@@ -172,5 +171,22 @@ public class RouteServiceTest {
             e.printStackTrace();
             fail();
         }
+    }
+
+    @Test
+    public void editRoute(){
+        try{
+            String newName = "newName";
+            String newDescription = "newDescription";
+            //RouteDetailsDto editedRoute = routeService.edit(routeID,newName,newDescription)
+        } catch(Exception e){
+            fail();
+        }
+    }
+
+    @Test
+    public void removeRoute(){
+        //Remove route and verify that there's not RouteTIPs but yes TIPs
+        //Remove TIP and verify that the route is removed
     }
 }

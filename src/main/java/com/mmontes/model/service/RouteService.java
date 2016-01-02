@@ -6,14 +6,16 @@ import com.mmontes.util.dto.TIPMinDto;
 import com.mmontes.util.exception.GeometryParsingException;
 import com.mmontes.util.exception.GoogleMapsServiceException;
 import com.mmontes.util.exception.InstanceNotFoundException;
+import com.mmontes.util.exception.InvalidRouteException;
 import com.vividsolutions.jts.geom.Geometry;
 
 import java.util.List;
 
 public interface RouteService {
-    RouteDetailsDto create(String name, String description, String travelMode, Geometry routeGeom, List<Long> tipIds, Long facebookUserId)
-            throws InstanceNotFoundException, GoogleMapsServiceException, GeometryParsingException;
-    RouteDetailsDto edit(Long routeId, String name, String description, String travelMode, List<Long> tipIds, Long facebookUserId) throws InstanceNotFoundException, GoogleMapsServiceException;
+    RouteDetailsDto create(String name, String description, String travelMode, List<Geometry> partialGeoms, List<Long> tipIds, Long facebookUserId)
+            throws InstanceNotFoundException, GoogleMapsServiceException, InvalidRouteException;
+    RouteDetailsDto edit(Long routeId, String name, String description, String travelMode, List<Long> tipIds, Long facebookUserId)
+            throws InstanceNotFoundException, GoogleMapsServiceException, InvalidRouteException;
     List<FeatureSearchDto> find(Geometry bounds, String travelMode, List<Long> cityIds, Integer createdBy, Long facebookUserId, List<Long> friendsFacebookUserIds);
     void remove(Long routeId) throws InstanceNotFoundException;
     List<TIPMinDto> getTIPsInOrder(Long routeID)

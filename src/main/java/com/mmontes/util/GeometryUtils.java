@@ -46,7 +46,7 @@ public class GeometryUtils {
         return lineString;
     }
 
-    public static Geometry unionGeometries(List<Geometry> geometries) throws GeometryParsingException {
+    public static Geometry unionGeometries(List<Geometry> geometries) {
         Geometry all = null;
         for (Geometry geometry : geometries){
             if( geometry == null ) continue;
@@ -57,7 +57,9 @@ public class GeometryUtils {
                 all = all.union( geometry );
             }
         }
-        all.setSRID(SRID);
+        if (all != null){
+            all.setSRID(SRID);
+        }
         return all;
     }
 }

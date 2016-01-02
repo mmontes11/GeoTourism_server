@@ -93,7 +93,7 @@ public class Route {
         this.creator = creator;
     }
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.route", cascade=CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.route", orphanRemoval=true, cascade=CascadeType.ALL)
     public Set<RouteTIP> getRouteTIPs() {
         return routeTIPs;
     }

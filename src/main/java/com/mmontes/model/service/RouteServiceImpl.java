@@ -12,9 +12,9 @@ import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.dto.FeatureSearchDto;
 import com.mmontes.util.dto.RouteDetailsDto;
 import com.mmontes.util.dto.TIPMinDto;
-import com.mmontes.util.exception.GeometryParsingException;
 import com.mmontes.util.exception.GoogleMapsServiceException;
 import com.mmontes.util.exception.InstanceNotFoundException;
+import com.mmontes.util.exception.InvalidRouteException;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,9 +43,12 @@ public class RouteServiceImpl implements RouteService {
     @Autowired
     private GoogleMapsService googleMapsService;
 
-    private List<Coordinate> setRouteTIPsAndGetCoords(Route route,List<Long> tipIds) throws InstanceNotFoundException {
+    @Autowired
+    private TIPService tipService;
+
+    private List<Coordinate> setRouteTIPsAndGetCoords(Route route, List<Long> tipIds) throws InstanceNotFoundException {
         List<Coordinate> coordinates = new ArrayList<>();
-        for (int i = 0; i<tipIds.size(); i++){
+        for (int i = 0; i < tipIds.size(); i++) {
             Long tipId = tipIds.get(i);
             TIP tip = tipDao.findById(tipId);
             coordinates.add(tip.getGeom().getCoordinate());
@@ -58,37 +61,74 @@ public class RouteServiceImpl implements RouteService {
         return coordinates;
     }
 
+    private void validateRouteParams(String travelMode, List<Geometry> partialGeoms, List<Long> tipIds) throws InvalidRouteException {
+        if (!googleMapsService.isValidTravelMode(travelMode)) {
+            throw new InvalidRouteException("Invalid travel mode");
+        }
+        if (partialGeoms != null && partialGeoms.size() < 2) {
+            throw new InvalidRouteException("Invalid number of partial geometries("+partialGeoms.size()+")");
+        }
+        if (tipIds.size() < 2) {
+            throw new InvalidRouteException("Invalid number of TIP IDs ("+tipIds.size()+")");
+        }
+    }
+
+    private Geometry getCompleteRouteGeom(List<Geometry> partialGeoms, List<Long> tipIds) throws InvalidRouteException {
+        Geometry routeGeom = GeometryUtils.unionGeometries(partialGeoms);
+        if (!tipService.geometryContainsTIPs(routeGeom, tipIds)) {
+            throw new InvalidRouteException("TIPs not contained inside geometry");
+        }
+        return routeGeom;
+    }
+
     @Override
-    public RouteDetailsDto create(String name, String description, String travelMode, Geometry routeGeom, List<Long> tipIds, Long facebookUserId)
-            throws InstanceNotFoundException, GoogleMapsServiceException, GeometryParsingException {
+    public RouteDetailsDto create(String name, String description, String travelMode, List<Geometry> partialGeoms, List<Long> tipIds, Long facebookUserId)
+            throws InstanceNotFoundException, GoogleMapsServiceException, InvalidRouteException {
+        validateRouteParams(travelMode, partialGeoms, tipIds);
+        Geometry routeGeom = null;
+        if (partialGeoms != null && !partialGeoms.isEmpty()) {
+            routeGeom = getCompleteRouteGeom(partialGeoms, tipIds);
+        }
         Route route = new Route();
         route.setName(name);
         route.setDescription(description);
         route.setTravelMode(travelMode);
-        List<Coordinate> coordinates = setRouteTIPsAndGetCoords(route,tipIds);
-        Geometry geom;
-        if (routeGeom != null){
-            geom = routeGeom;
-        }else{
-            geom = googleMapsService.getRoute(coordinates,route.getTravelMode());
+        List<Coordinate> coordinates = setRouteTIPsAndGetCoords(route, tipIds);
+        if (routeGeom == null) {
+            routeGeom = googleMapsService.getRoute(coordinates, route.getTravelMode());
         }
-        route.setGeom(geom);
-        route.setGoogleMapsUrl(googleMapsService.getRouteGoogleMapsUrl(coordinates,route.getTravelMode()));
+        route.setGeom(routeGeom);
+        route.setGoogleMapsUrl(googleMapsService.getRouteGoogleMapsUrl(coordinates, route.getTravelMode()));
         route.setCreator(userAccountDao.findByFBUserID(facebookUserId));
         routeDao.save(route);
         return dtoService.Route2RouteDetailsDto(route);
     }
 
     @Override
-    public RouteDetailsDto edit(Long routeId, String name, String description, String travelMode, List<Long> tipIds, Long facebookUserId) throws InstanceNotFoundException, GoogleMapsServiceException {
-        Route route = routeDao.getRouteByIDandUser(routeId,facebookUserId);
+    public RouteDetailsDto edit(Long routeId, String name, String description, String travelMode, List<Long> tipIds, Long facebookUserId)
+            throws InstanceNotFoundException, GoogleMapsServiceException, InvalidRouteException {
+        validateRouteParams(travelMode, null, tipIds);
+        Route route = routeDao.getRouteByIDandUser(routeId, facebookUserId);
+        editDetails(route, name, description, travelMode);
+        return editTIPs(route, tipIds);
+    }
+
+    private RouteDetailsDto editDetails(Route route, String name, String description, String travelMode)
+            throws InstanceNotFoundException, GoogleMapsServiceException, InvalidRouteException {
         route.setName(name);
         route.setDescription(description);
         route.setTravelMode(travelMode);
         route.getRouteTIPs().clear();
-        List<Coordinate> coordinates = setRouteTIPsAndGetCoords(route,tipIds);
-        route.setGeom(googleMapsService.getRoute(coordinates,route.getTravelMode()));
-        route.setGoogleMapsUrl(googleMapsService.getRouteGoogleMapsUrl(coordinates,route.getTravelMode()));
+        routeDao.save(route);
+        return dtoService.Route2RouteDetailsDto(route);
+    }
+
+    private RouteDetailsDto editTIPs(Route route, List<Long> tipIds)
+            throws InstanceNotFoundException, GoogleMapsServiceException, InvalidRouteException {
+        List<Coordinate> coordinates = setRouteTIPsAndGetCoords(route, tipIds);
+        route.setGeom(googleMapsService.getRoute(coordinates, route.getTravelMode()));
+        route.setGoogleMapsUrl(googleMapsService.getRouteGoogleMapsUrl(coordinates, route.getTravelMode()));
+        routeDao.save(route);
         return dtoService.Route2RouteDetailsDto(route);
     }
 

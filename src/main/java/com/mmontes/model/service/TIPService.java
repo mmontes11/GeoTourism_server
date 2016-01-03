@@ -15,7 +15,7 @@ public interface TIPService {
             throws TIPLocationException, InvalidTIPUrlException, GoogleMapsServiceException, InstanceNotFoundException;
     TIPDetailsDto findById(Long TIPId,Long facebooUserId) throws InstanceNotFoundException;
     boolean exists(Long TIPId);
-    void remove(Long TIPId) throws InstanceNotFoundException;
+    void remove(Long TIPId) throws InstanceNotFoundException, InvalidRouteException, GoogleMapsServiceException;
     List<FeatureSearchDto> find(Geometry bounds, List<Long> typeIds, List<Long> cityIds, Integer favouritedBy, Long facebookUserId, List<Long> friendsFacebookUserIds)
             throws InstanceNotFoundException;
     TIPDetailsDto edit(Long TIPId, Long facebooUserId, TIPPatchRequest newData) throws InstanceNotFoundException;

@@ -7,7 +7,9 @@ import com.mmontes.service.FacebookService;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.TIPDetailsDto;
 import com.mmontes.util.exception.GeometryParsingException;
+import com.mmontes.util.exception.GoogleMapsServiceException;
 import com.mmontes.util.exception.InstanceNotFoundException;
+import com.mmontes.util.exception.InvalidRouteException;
 import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -72,6 +74,8 @@ public class TIPController {
             tipService.remove(TIPId);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (GoogleMapsServiceException | InvalidRouteException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(HttpStatus.OK);
     }

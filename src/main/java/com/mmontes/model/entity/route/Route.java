@@ -20,7 +20,7 @@ public class Route {
     private Geometry geom;
     private String googleMapsUrl;
     private UserAccount creator;
-    private Set<RouteTIP> routeTIPs = new HashSet<>(0);
+    private Set<RouteTIP> routeTIPs = new HashSet<>();
 
     public Route() {
     }

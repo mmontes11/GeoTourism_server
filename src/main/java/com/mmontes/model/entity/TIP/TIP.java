@@ -28,6 +28,7 @@ public class TIP {
     private String googleMapsUrl;
     private City city;
     private Set<UserAccount> favouritedBy = new HashSet<>();
+    private Set<RouteTIP> routeTIPs = new HashSet<>();
 
     public TIP() {
     }
@@ -145,6 +146,15 @@ public class TIP {
 
     public void setFavouritedBy(Set<UserAccount> favouritedBy) {
         this.favouritedBy = favouritedBy;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.tip", orphanRemoval=true, cascade=CascadeType.ALL)
+    public Set<RouteTIP> getRouteTIPs() {
+        return routeTIPs;
+    }
+
+    public void setRouteTIPs(Set<RouteTIP> routeTIPs) {
+        this.routeTIPs = routeTIPs;
     }
 
     @Override

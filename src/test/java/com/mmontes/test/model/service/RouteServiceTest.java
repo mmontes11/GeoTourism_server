@@ -6,6 +6,9 @@ import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.RouteDetailsDto;
 import com.mmontes.util.dto.TIPDetailsDto;
 import com.mmontes.util.dto.TIPMinDto;
+import com.mmontes.util.exception.GoogleMapsServiceException;
+import com.mmontes.util.exception.InstanceNotFoundException;
+import com.mmontes.util.exception.InvalidRouteException;
 import com.vividsolutions.jts.geom.Geometry;
 import org.junit.Before;
 import org.junit.Test;
@@ -37,6 +40,7 @@ public class RouteServiceTest {
 
     @Autowired
     private RouteService routeService;
+
     @Autowired
     private TIPService tipService;
 
@@ -111,7 +115,6 @@ public class RouteServiceTest {
     }
 
     @Test
-    @Rollback(false)
     public void editRoute() {
         try {
             String name = "From Alameda To Cathedral";
@@ -129,7 +132,7 @@ public class RouteServiceTest {
             tipIds = new ArrayList<>();
             tipIds.add(cathedralID);
             tipIds.add(alamedaID);
-            RouteDetailsDto editedRoute = routeService.edit(routeDetailsDto.getId(),name,description,travelMode,tipIds,EXISTING_FACEBOOK_USER_ID);
+            RouteDetailsDto editedRoute = routeService.edit(routeDetailsDto.getId(), name, description, travelMode, tipIds, EXISTING_FACEBOOK_USER_ID);
 
             assertNotNull(editedRoute.getId());
             assertEquals(name, editedRoute.getName());
@@ -152,9 +155,57 @@ public class RouteServiceTest {
         }
     }
 
+    @Test(expected = InstanceNotFoundException.class)
+    public void removeRoute() throws InstanceNotFoundException {
+        try {
+            String name = "From Alameda To Cathedral";
+            String description = "Santiago route";
+            String travelMode = "driving";
+            List<Long> tipIds = new ArrayList<>();
+            tipIds.add(alamedaID);
+            tipIds.add(cathedralID);
+            tipIds.add(towerOfHerculesID);
+            RouteDetailsDto routeDetailsDto = routeService.create(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID);
+            routeService.remove(routeDetailsDto.getId());
+            try {
+                assertNotNull(tipService.findById(alamedaID, null));
+                assertNotNull(tipService.findById(cathedralID, null));
+                assertNotNull(tipService.findById(towerOfHerculesID, null));
+            } catch (InstanceNotFoundException e) {
+                fail();
+            }
+            routeService.findById(routeDetailsDto.getId());
+        } catch (GoogleMapsServiceException | InvalidRouteException e) {
+            fail();
+        }
+    }
+
     @Test
-    public void removeRoute() {
-        //Remove route and verify that there's not RouteTIPs but yes TIPs
-        //Remove TIP and verify that the route is removed
+    public void removeTIPfromRoute() throws InstanceNotFoundException {
+        try {
+            String name = "From Alameda To Cathedral";
+            String description = "Santiago route";
+            String travelMode = "driving";
+            List<Long> tipIds = new ArrayList<>();
+            tipIds.add(alamedaID);
+            tipIds.add(cathedralID);
+            tipIds.add(towerOfHerculesID);
+            RouteDetailsDto routeDetailsDto = routeService.create(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID);
+            tipService.remove(alamedaID);
+
+            /*
+            routeDetailsDto = routeService.findById(routeDetailsDto.getId());
+            assertNotNull(routeDetailsDto.getId());
+            assertEquals(name, routeDetailsDto.getName());
+            assertEquals(description, routeDetailsDto.getDescription());
+            assertEquals(travelMode, routeDetailsDto.getTravelMode());
+            assertNotNull(routeDetailsDto.getGeom());
+            assertNotNull(routeDetailsDto.getGoogleMapsUrl());
+            assertEquals(2, routeDetailsDto.getTips().size());
+            assertEquals(EXISTING_FACEBOOK_USER_ID, routeDetailsDto.getCreator().getFacebookUserId());
+            */
+        } catch (GoogleMapsServiceException | InvalidRouteException e) {
+            fail();
+        }
     }
 }

@@ -1,11 +1,13 @@
 package com.mmontes.model.service;
 
+import com.mmontes.model.dao.RouteDao;
 import com.mmontes.model.dao.TIPDao;
 import com.mmontes.model.dao.TIPtypeDao;
 import com.mmontes.model.dao.UserAccountDao;
 import com.mmontes.model.entity.City;
 import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.model.entity.UserAccount;
+import com.mmontes.model.entity.route.Route;
 import com.mmontes.service.GoogleMapsService;
 import com.mmontes.rest.request.TIPPatchRequest;
 import com.mmontes.util.URLvalidator;
@@ -33,6 +35,12 @@ public class TIPServiceImpl implements TIPService {
     private TIPtypeDao tipTypeDao;
 
     @Autowired
+    private RouteDao routeDao;
+
+    @Autowired
+    private RouteService routeService;
+
+    @Autowired
     private CityService cityService;
 
     @Autowired
@@ -43,6 +51,14 @@ public class TIPServiceImpl implements TIPService {
 
     @Autowired
     private GoogleMapsService googleMapsService;
+
+    private List<Long> getTIPIds(List<TIP> tips){
+        List<Long> ids = new ArrayList<>();
+        for (TIP tip : tips){
+            ids.add(tip.getId());
+        }
+        return ids;
+    }
 
     public TIPDetailsDto
     create(Long typeId, String name, String description, String photoUrl, String infoUrl, Geometry geom)
@@ -90,8 +106,14 @@ public class TIPServiceImpl implements TIPService {
         return tipDao.exists(TIPId);
     }
 
-    public void remove(Long TIPId) throws InstanceNotFoundException {
+    public void remove(Long TIPId) throws InstanceNotFoundException, InvalidRouteException, GoogleMapsServiceException {
         tipDao.remove(TIPId);
+        /*
+        List<Route> routes = routeDao.getRoutesByTIP(TIPId);
+        for (Route route : routes){
+            routeService.edit(route.getId(),route.getName(),route.getDescription(),route.getTravelMode(),getTIPIds(routeDao.getTIPsInOrder(route.getId())),route.getCreator().getFacebookUserId());
+        }
+        */
     }
 
     public List<FeatureSearchDto> find(Geometry bounds, List<Long> typeIds, List<Long> cityIds, Integer favouritedBy, Long facebookUserId, List<Long> friendsFacebookUserIds) throws InstanceNotFoundException {

@@ -62,7 +62,7 @@ public class RouteServiceImpl implements RouteService {
     }
 
     private void validateRouteParams(String travelMode, List<Geometry> partialGeoms, List<Long> tipIds) throws InvalidRouteException {
-        if (!googleMapsService.isValidTravelMode(travelMode)) {
+        if (travelMode != null && !googleMapsService.isValidTravelMode(travelMode)) {
             throw new InvalidRouteException("Invalid travel mode");
         }
         if (partialGeoms != null && partialGeoms.size() < 2) {
@@ -109,26 +109,21 @@ public class RouteServiceImpl implements RouteService {
             throws InstanceNotFoundException, GoogleMapsServiceException, InvalidRouteException {
         validateRouteParams(travelMode, null, tipIds);
         Route route = routeDao.getRouteByIDandUser(routeId, facebookUserId);
-        editDetails(route, name, description, travelMode);
-        return editTIPs(route, tipIds);
-    }
-
-    private RouteDetailsDto editDetails(Route route, String name, String description, String travelMode)
-            throws InstanceNotFoundException, GoogleMapsServiceException, InvalidRouteException {
         route.setName(name);
         route.setDescription(description);
         route.setTravelMode(travelMode);
         route.getRouteTIPs().clear();
-        routeDao.save(route);
-        return dtoService.Route2RouteDetailsDto(route);
-    }
-
-    private RouteDetailsDto editTIPs(Route route, List<Long> tipIds)
-            throws InstanceNotFoundException, GoogleMapsServiceException, InvalidRouteException {
+        routeDao.getTIPsInOrder(route.getId());
         List<Coordinate> coordinates = setRouteTIPsAndGetCoords(route, tipIds);
         route.setGeom(googleMapsService.getRoute(coordinates, route.getTravelMode()));
         route.setGoogleMapsUrl(googleMapsService.getRouteGoogleMapsUrl(coordinates, route.getTravelMode()));
         routeDao.save(route);
+        return dtoService.Route2RouteDetailsDto(route);
+    }
+
+    @Override
+    public RouteDetailsDto findById(Long routeId) throws InstanceNotFoundException {
+        Route route = routeDao.findById(routeId);
         return dtoService.Route2RouteDetailsDto(route);
     }
 

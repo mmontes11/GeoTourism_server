@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import static com.mmontes.test.util.Constants.*;
 import static com.mmontes.util.Constants.SPRING_CONFIG_FILE;
@@ -114,6 +115,21 @@ public class RouteServiceTest {
         }
     }
 
+    @Test(expected = InvalidRouteException.class)
+    public void createInvalidRoute() throws InvalidRouteException {
+        String name = "From Alameda To Cathedral";
+        String description = "Santiago route";
+        String travelMode = "driving";
+        List<Long> tipIds = new ArrayList<>();
+        tipIds.add(alamedaID);
+        try {
+            routeService.create(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID);
+        } catch (InstanceNotFoundException | GoogleMapsServiceException e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
     @Test
     public void editRoute() {
         try {
@@ -180,8 +196,26 @@ public class RouteServiceTest {
         }
     }
 
+    @Test(expected = InstanceNotFoundException.class)
+    public void removeTIPfromRouteAndRemove() throws InstanceNotFoundException {
+        try {
+            String name = "From Alameda To Cathedral";
+            String description = "Santiago route";
+            String travelMode = "driving";
+            List<Long> tipIds = new ArrayList<>();
+            tipIds.add(cathedralID);
+            tipIds.add(towerOfHerculesID);
+            RouteDetailsDto routeDetailsDto = routeService.create(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID);
+
+            tipService.remove(cathedralID);
+            routeService.findById(routeDetailsDto.getId());
+        } catch (GoogleMapsServiceException | InvalidRouteException e) {
+            fail();
+        }
+    }
+
     @Test
-    public void removeTIPfromRoute() throws InstanceNotFoundException {
+    public void removeTIPfromRouteAndUpdate() throws InstanceNotFoundException {
         try {
             String name = "From Alameda To Cathedral";
             String description = "Santiago route";
@@ -189,21 +223,24 @@ public class RouteServiceTest {
             List<Long> tipIds = new ArrayList<>();
             tipIds.add(alamedaID);
             tipIds.add(cathedralID);
-            tipIds.add(towerOfHerculesID);
+            tipIds.add(reisCatolicosID);
             RouteDetailsDto routeDetailsDto = routeService.create(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID);
-            tipService.remove(alamedaID);
+            RouteDetailsDto oldRouteDetailsDto = routeDetailsDto;
 
-            /*
+
+            tipService.remove(cathedralID);
             routeDetailsDto = routeService.findById(routeDetailsDto.getId());
+
             assertNotNull(routeDetailsDto.getId());
             assertEquals(name, routeDetailsDto.getName());
             assertEquals(description, routeDetailsDto.getDescription());
             assertEquals(travelMode, routeDetailsDto.getTravelMode());
             assertNotNull(routeDetailsDto.getGeom());
+            assertTrue(!Objects.equals(routeDetailsDto.getGeom(), oldRouteDetailsDto.getGeom()));
             assertNotNull(routeDetailsDto.getGoogleMapsUrl());
+            assertTrue(!Objects.equals(routeDetailsDto.getGoogleMapsUrl(), oldRouteDetailsDto.getGoogleMapsUrl()));
             assertEquals(2, routeDetailsDto.getTips().size());
             assertEquals(EXISTING_FACEBOOK_USER_ID, routeDetailsDto.getCreator().getFacebookUserId());
-            */
         } catch (GoogleMapsServiceException | InvalidRouteException e) {
             fail();
         }

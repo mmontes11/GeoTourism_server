@@ -17,9 +17,13 @@ public interface RouteService {
             throws InstanceNotFoundException, GoogleMapsServiceException, InvalidRouteException;
     RouteDetailsDto edit(Long routeId, String name, String description, String travelMode, List<Long> tipIds, Long facebookUserId)
             throws InstanceNotFoundException, GoogleMapsServiceException, InvalidRouteException;
-    RouteDetailsDto findById(Long routeId) throws InstanceNotFoundException;
-    List<FeatureSearchDto> find(Geometry bounds, String travelMode, List<Long> cityIds, Integer createdBy, Long facebookUserId, List<Long> friendsFacebookUserIds);
-    void remove(Long routeId) throws InstanceNotFoundException;
+    void updateRouteFromTIPs(Route route)
+            throws InstanceNotFoundException, GoogleMapsServiceException;
+    RouteDetailsDto findById(Long routeId)
+            throws InstanceNotFoundException;
+    List<FeatureSearchDto> find(Geometry bounds, List<String> travelModes, List<Long> cityIds, Integer createdBy, Long facebookUserId, List<Long> friendsFacebookUserIds);
+    void remove(Long routeId)
+            throws InstanceNotFoundException;
     List<TIPMinDto> getTIPsInOrder(Long routeID)
             throws InstanceNotFoundException;
 }

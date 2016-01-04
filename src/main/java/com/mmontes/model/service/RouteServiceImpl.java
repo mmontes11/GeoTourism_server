@@ -122,13 +122,25 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
+    public void updateRouteFromTIPs(Route route) throws GoogleMapsServiceException {
+        List<TIP> tips = routeDao.getTIPsInOrder(route.getId());
+        List<Coordinate> coordinates = new ArrayList<>();
+        for(TIP tip : tips){
+            coordinates.add(tip.getGeom().getCoordinate());
+        }
+        route.setGeom(googleMapsService.getRoute(coordinates, route.getTravelMode()));
+        route.setGoogleMapsUrl(googleMapsService.getRouteGoogleMapsUrl(coordinates, route.getTravelMode()));
+        routeDao.save(route);
+    }
+
+    @Override
     public RouteDetailsDto findById(Long routeId) throws InstanceNotFoundException {
         Route route = routeDao.findById(routeId);
         return dtoService.Route2RouteDetailsDto(route);
     }
 
     @Override
-    public List<FeatureSearchDto> find(Geometry bounds, String travelMode, List<Long> cityIds, Integer createdBy, Long facebookUserId, List<Long> friendsFacebookUserIds) {
+    public List<FeatureSearchDto> find(Geometry bounds, List<String>  travelModes, List<Long> cityIds, Integer createdBy, Long facebookUserId, List<Long> friendsFacebookUserIds) {
         return null;
     }
 

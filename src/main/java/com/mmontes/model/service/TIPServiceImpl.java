@@ -106,19 +106,16 @@ public class TIPServiceImpl implements TIPService {
         return tipDao.exists(TIPId);
     }
 
-    public void remove(Long TIPId) throws InstanceNotFoundException, InvalidRouteException, GoogleMapsServiceException {
-        tipDao.remove(TIPId);
-        /*
+    public void remove(Long TIPId) throws InstanceNotFoundException, GoogleMapsServiceException {
         List<Route> routes = routeDao.getRoutesByTIP(TIPId);
+        tipDao.remove(TIPId);
         for (Route route : routes){
-            List<TIP> tips = routeDao.getTIPsInOrder(route.getId();
-            if (tips.size() < 2){
-                //delete
+            if (routeDao.getTIPsInOrder(route.getId()).size() < 2){
+                routeService.remove(route.getId());
             }else{
-                //update geom and google maps url
+                routeService.updateRouteFromTIPs(route);
             }
         }
-        */
     }
 
     public List<FeatureSearchDto> find(Geometry bounds, List<Long> typeIds, List<Long> cityIds, Integer favouritedBy, Long facebookUserId, List<Long> friendsFacebookUserIds) throws InstanceNotFoundException {

@@ -74,7 +74,7 @@ public class TIPController {
             tipService.remove(TIPId);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (GoogleMapsServiceException | InvalidRouteException e) {
+        } catch (GoogleMapsServiceException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(HttpStatus.OK);

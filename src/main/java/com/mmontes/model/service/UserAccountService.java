@@ -13,4 +13,5 @@ public interface UserAccountService {
 
     HashMap<String, Object> createOrRetrieveUser(String FBaccessToken, Long FBuserID) throws JSONException, IOException, FacebookServiceException;
     List<UserAccountDto> getFriends(Long FBuserID) throws InstanceNotFoundException;
+    List<Long> getFacebookUserIds(Integer who, Long facebookUserId, List<Long> friendsFacebookUserIds) throws InstanceNotFoundException;
 }

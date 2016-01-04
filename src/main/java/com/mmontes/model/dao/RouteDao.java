@@ -13,5 +13,5 @@ public interface RouteDao extends GenericDao<Route, Long> {
     List<TIP> getTIPsInOrder(Long routeId);
     Route getRouteByIDandUser(Long routeId,Long facebookUserId) throws InstanceNotFoundException;
     List<Route> getRoutesByTIP(Long tipId);
-    List<Route> find(Geometry bounds, List<String> travelModes, List<Long> cityIds, List<Long> friendsFacebookUserIds);
+    List<Route> find(Geometry bounds, List<String> travelModes, List<Long> cityIds, List<Long> facebookUserIds);
 }

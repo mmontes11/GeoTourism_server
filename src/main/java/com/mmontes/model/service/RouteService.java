@@ -21,7 +21,7 @@ public interface RouteService {
             throws InstanceNotFoundException, GoogleMapsServiceException;
     RouteDetailsDto findById(Long routeId)
             throws InstanceNotFoundException;
-    List<FeatureSearchDto> find(Geometry bounds, List<String> travelModes, List<Long> cityIds, Integer createdBy, Long facebookUserId, List<Long> friendsFacebookUserIds);
+    List<FeatureSearchDto> find(Geometry bounds, List<String> travelModes, List<Long> cityIds, Integer createdBy, Long facebookUserId, List<Long> friendsFacebookUserIds) throws InstanceNotFoundException;
     void remove(Long routeId)
             throws InstanceNotFoundException;
     List<TIPMinDto> getTIPsInOrder(Long routeID)

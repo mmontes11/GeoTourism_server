@@ -23,7 +23,7 @@ import java.util.List;
 public class UserAccountServiceImpl implements UserAccountService {
 
     @Autowired
-    private UserAccountDao userDao;
+    private UserAccountDao userAccountDao;
 
     @Autowired
     private DtoService dtoService;
@@ -38,7 +38,7 @@ public class UserAccountServiceImpl implements UserAccountService {
         UserAccount userAccount;
         facebookService.setParams(accessToken, FBuserID);
         try {
-            userAccount = userDao.findByFBUserID(FBuserID);
+            userAccount = userAccountDao.findByFBUserID(FBuserID);
             result.put("created", false);
         } catch (InstanceNotFoundException e) {
             userAccount = new UserAccount();
@@ -51,17 +51,37 @@ public class UserAccountServiceImpl implements UserAccountService {
         userAccount.setFacebookProfileUrl(details.get("link"));
         userAccount.setFacebookProfilePhotoUrl(facebookService.getUserProfilePhoto());
         userAccount.getFriends().clear();
-        List<UserAccount> friends = userDao.findUserAccountsByFBUserIDs(facebookService.getUserFriends());
+        List<UserAccount> friends = userAccountDao.findUserAccountsByFBUserIDs(facebookService.getUserFriends());
         userAccount.getFriends().addAll(friends);
-        userDao.save(userAccount);
+        userAccountDao.save(userAccount);
         result.put("userAccountDto", dtoService.UserAccount2UserAccountDto(userAccount));
         return result;
     }
 
     @Override
     public List<UserAccountDto> getFriends(Long FBuserID) throws InstanceNotFoundException {
-        UserAccount userAccount = userDao.findByFBUserID(FBuserID);
+        UserAccount userAccount = userAccountDao.findByFBUserID(FBuserID);
         List<UserAccount> friends = new ArrayList<>(userAccount.getFriends());
         return dtoService.ListUserAccount2ListUserAccountDto(friends);
+    }
+
+    @Override
+    public List<Long> getFacebookUserIds(Integer who, Long facebookUserId, List<Long> friendsFacebookUserIds) throws InstanceNotFoundException {
+        List<Long> facebookUserIds = new ArrayList<>();
+        if (who != null) {
+            if (who == 0) {
+                facebookUserIds.add(facebookUserId);
+            } else if (who == 1) {
+                if (friendsFacebookUserIds != null && !friendsFacebookUserIds.isEmpty()) {
+                    facebookUserIds.addAll(friendsFacebookUserIds);
+                } else {
+                    UserAccount userAccount = userAccountDao.findByFBUserID(facebookUserId);
+                    for (UserAccount user : userAccount.getFriends()) {
+                        facebookUserIds.add(user.getFacebookUserId());
+                    }
+                }
+            }
+        }
+        return facebookUserIds;
     }
 }

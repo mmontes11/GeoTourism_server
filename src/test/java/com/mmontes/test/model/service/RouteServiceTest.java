@@ -227,7 +227,6 @@ public class RouteServiceTest {
             RouteDetailsDto routeDetailsDto = routeService.create(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID);
             RouteDetailsDto oldRouteDetailsDto = routeDetailsDto;
 
-
             tipService.remove(cathedralID);
             routeDetailsDto = routeService.findById(routeDetailsDto.getId());
 

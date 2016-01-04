@@ -2,7 +2,10 @@ package com.mmontes.model.dao;
 
 import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.model.entity.route.Route;
+import com.mmontes.model.util.QueryUtils;
 import com.mmontes.model.util.genericdao.GenericDaoHibernate;
+import com.mmontes.util.Constants;
+import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.stereotype.Repository;
@@ -36,7 +39,30 @@ public class RouteDaoHibernate extends GenericDaoHibernate<Route,Long> implement
     }
 
     @Override
-    public List<Route> find(Geometry bounds, List<String> travelModes, List<Long> cityIds, List<Long> friendsFacebookUserIds) {
+    public List<Route> find(Geometry bounds, List<String> travelModes, List<Long> cityIds, List<Long> facebookUserIds) {
+
+        boolean filterByBounds = false;
+        boolean filterByTravelMode = false;
+        boolean filterByCity = false;
+        boolean filterByFacebookUserIds = facebookUserIds != null && !facebookUserIds.isEmpty();
+
+        String queryString = "SELECT * FROM route r ";
+
+        if (bounds != null) {
+            String boundsWKT = GeometryUtils.WKTFromGeometry(bounds);
+            queryString += "WHERE ST_Within(r.geom,ST_GeometryFromText('SRID=" + Constants.SRID + ";" + boundsWKT + "'))";
+            filterByBounds = true;
+        }
+        if (travelModes != null && !travelModes.isEmpty()) {
+            String travelModesIn = QueryUtils.getINvalues(travelModes);
+            String partialQuery = "r.travelmode IN " + travelModesIn + " ";
+            queryString += (filterByBounds ? "AND " : "WHERE ") + partialQuery;
+            filterByTravelMode = true;
+        }
+        if (cityIds != null && !cityIds.isEmpty()){
+            String cities = QueryUtils.getINvalues(cityIds);
+
+        }
         return null;
     }
 }

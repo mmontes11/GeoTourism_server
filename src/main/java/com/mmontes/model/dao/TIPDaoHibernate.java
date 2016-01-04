@@ -17,10 +17,10 @@ public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements T
 
     public List<TIP> find(Geometry bounds, List<Long> typeIds, List<Long> cityIds, List<Long> facebookUserIds) {
 
-        boolean filterByFacebookUserIds = facebookUserIds != null && !facebookUserIds.isEmpty();
         boolean filterByBounds = false;
         boolean filterByType = false;
         boolean filterByCity = false;
+        boolean filterByFacebookUserIds = facebookUserIds != null && !facebookUserIds.isEmpty();
 
         String queryString = "SELECT * FROM tip t ";
         if (filterByFacebookUserIds) {

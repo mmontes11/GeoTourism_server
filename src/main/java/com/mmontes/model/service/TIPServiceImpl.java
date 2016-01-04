@@ -52,6 +52,9 @@ public class TIPServiceImpl implements TIPService {
     @Autowired
     private GoogleMapsService googleMapsService;
 
+    @Autowired
+    private UserAccountService userAccountService;
+
     private List<Long> getTIPIds(List<TIP> tips){
         List<Long> ids = new ArrayList<>();
         for (TIP tip : tips){
@@ -119,21 +122,7 @@ public class TIPServiceImpl implements TIPService {
     }
 
     public List<FeatureSearchDto> find(Geometry bounds, List<Long> typeIds, List<Long> cityIds, Integer favouritedBy, Long facebookUserId, List<Long> friendsFacebookUserIds) throws InstanceNotFoundException {
-        List<Long> facebookUserIds = new ArrayList<>();
-        if (favouritedBy != null){
-            if (favouritedBy == 0){
-                facebookUserIds.add(facebookUserId);
-            } else if (favouritedBy == 1){
-                if (friendsFacebookUserIds != null && !friendsFacebookUserIds.isEmpty()){
-                    facebookUserIds.addAll(friendsFacebookUserIds);
-                }else{
-                    UserAccount userAccount = userAccountDao.findByFBUserID(facebookUserId);
-                    for (UserAccount user : userAccount.getFriends()){
-                        facebookUserIds.add(user.getFacebookUserId());
-                    }
-                }
-            }
-        }
+        List<Long> facebookUserIds = userAccountService.getFacebookUserIds(favouritedBy,facebookUserId,friendsFacebookUserIds);
         List<TIP> tips = tipDao.find(bounds,typeIds,cityIds,facebookUserIds);
         return dtoService.ListTIP2ListFeatureSearchDto(tips);
     }

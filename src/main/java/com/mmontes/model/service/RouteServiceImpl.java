@@ -38,6 +38,9 @@ public class RouteServiceImpl implements RouteService {
     private UserAccountDao userAccountDao;
 
     @Autowired
+    private UserAccountService userAccountService;
+
+    @Autowired
     private DtoService dtoService;
 
     @Autowired
@@ -140,7 +143,8 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public List<FeatureSearchDto> find(Geometry bounds, List<String>  travelModes, List<Long> cityIds, Integer createdBy, Long facebookUserId, List<Long> friendsFacebookUserIds) {
+    public List<FeatureSearchDto> find(Geometry bounds, List<String>  travelModes, List<Long> cityIds, Integer createdBy, Long facebookUserId, List<Long> friendsFacebookUserIds) throws InstanceNotFoundException {
+        List<Long> facebookUserIds = userAccountService.getFacebookUserIds(createdBy,facebookUserId,friendsFacebookUserIds);
         return null;
     }
 

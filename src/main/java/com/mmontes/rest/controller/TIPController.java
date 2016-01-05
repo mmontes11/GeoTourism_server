@@ -6,10 +6,7 @@ import com.mmontes.rest.request.TIPRequest;
 import com.mmontes.service.FacebookService;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.TIPDetailsDto;
-import com.mmontes.util.exception.GeometryParsingException;
-import com.mmontes.util.exception.GoogleMapsServiceException;
-import com.mmontes.util.exception.InstanceNotFoundException;
-import com.mmontes.util.exception.InvalidRouteException;
+import com.mmontes.util.exception.*;
 import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -74,7 +71,7 @@ public class TIPController {
             tipService.remove(TIPId);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (GoogleMapsServiceException e) {
+        } catch (InvalidRouteException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(HttpStatus.OK);
@@ -92,9 +89,12 @@ public class TIPController {
         }
         TIPDetailsDto tipDetailsDto;
         try {
-            tipDetailsDto = tipService.edit(TIPId, facebookUserId, tipPatchRequest);
+            tipDetailsDto = tipService.edit(TIPId, facebookUserId,
+                    tipPatchRequest.getType(), tipPatchRequest.getName(), tipPatchRequest.getDescription(), tipPatchRequest.getInfoUrl(), tipPatchRequest.getAddress(), tipPatchRequest.getPhotoUrl());
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (InvalidTIPUrlException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(tipDetailsDto, HttpStatus.OK);
     }

@@ -1,12 +1,12 @@
 package com.mmontes.test.model.service;
 
+import com.mmontes.model.dao.RouteDao;
 import com.mmontes.model.service.RouteService;
 import com.mmontes.model.service.TIPService;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.RouteDetailsDto;
 import com.mmontes.util.dto.TIPDetailsDto;
 import com.mmontes.util.dto.TIPMinDto;
-import com.mmontes.util.exception.GoogleMapsServiceException;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import com.mmontes.util.exception.InvalidRouteException;
 import com.vividsolutions.jts.geom.Geometry;
@@ -14,7 +14,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -37,15 +36,18 @@ public class RouteServiceTest {
     private static Long towerOfHerculesID;
     private static Long reisCatolicosID;
     private static Long statueOfLibertyID;
-    private static RouteDetailsDto route;
 
     @Autowired
     private RouteService routeService;
 
     @Autowired
+    private RouteDao routeDao;
+
+    @Autowired
     private TIPService tipService;
 
     @Before
+    @SuppressWarnings("all")
     public void createData() {
         try {
             String name = "Alameda Park";
@@ -85,9 +87,9 @@ public class RouteServiceTest {
     @Test
     public void createRouteFromTIPS() {
         try {
-            String name = "From Alameda To Cathedral";
+            String name = "From Alameda To Tower of Hercules";
             String description = "Santiago route";
-            String travelMode = "driving";
+            String travelMode = WALKING_TRAVEL_MODE;
             List<Long> tipIds = new ArrayList<>();
             tipIds.add(alamedaID);
             tipIds.add(cathedralID);
@@ -119,12 +121,28 @@ public class RouteServiceTest {
     public void createInvalidRoute() throws InvalidRouteException {
         String name = "From Alameda To Cathedral";
         String description = "Santiago route";
-        String travelMode = "driving";
+        String travelMode = WALKING_TRAVEL_MODE;
         List<Long> tipIds = new ArrayList<>();
         tipIds.add(alamedaID);
         try {
             routeService.create(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID);
-        } catch (InstanceNotFoundException | GoogleMapsServiceException e) {
+        } catch (InstanceNotFoundException e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test(expected = InvalidRouteException.class)
+    public void createImpossibleRoute() throws InvalidRouteException {
+        String name = "From Alameda To NY";
+        String description = "Impossible route";
+        String travelMode = WALKING_TRAVEL_MODE;
+        List<Long> tipIds = new ArrayList<>();
+        tipIds.add(alamedaID);
+        tipIds.add(statueOfLibertyID);
+        try {
+            routeService.create(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID);
+        } catch (InstanceNotFoundException e) {
             e.printStackTrace();
             fail();
         }
@@ -135,7 +153,7 @@ public class RouteServiceTest {
         try {
             String name = "From Alameda To Cathedral";
             String description = "Santiago route";
-            String travelMode = "driving";
+            String travelMode = WALKING_TRAVEL_MODE;
             List<Long> tipIds = new ArrayList<>();
             tipIds.add(alamedaID);
             tipIds.add(cathedralID);
@@ -172,17 +190,41 @@ public class RouteServiceTest {
     }
 
     @Test(expected = InstanceNotFoundException.class)
-    public void removeRoute() throws InstanceNotFoundException {
+    public void editRouteOfOtherUser() throws InstanceNotFoundException {
         try {
             String name = "From Alameda To Cathedral";
             String description = "Santiago route";
-            String travelMode = "driving";
+            String travelMode = WALKING_TRAVEL_MODE;
             List<Long> tipIds = new ArrayList<>();
             tipIds.add(alamedaID);
             tipIds.add(cathedralID);
             tipIds.add(towerOfHerculesID);
             RouteDetailsDto routeDetailsDto = routeService.create(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID);
-            routeService.remove(routeDetailsDto.getId());
+
+            name = "newName";
+            description = "newDescription";
+            travelMode = "walking";
+            tipIds = new ArrayList<>();
+            tipIds.add(cathedralID);
+            tipIds.add(alamedaID);
+            routeService.edit(routeDetailsDto.getId(), name, description, travelMode, tipIds, EXISTING_FACEBOOK_USER_ID2);
+        } catch (InvalidRouteException e) {
+            fail();
+        }
+    }
+
+    @Test(expected = InstanceNotFoundException.class)
+    public void removeRoute() throws InstanceNotFoundException {
+        try {
+            String name = "From Alameda To Cathedral";
+            String description = "Santiago route";
+            String travelMode = WALKING_TRAVEL_MODE;
+            List<Long> tipIds = new ArrayList<>();
+            tipIds.add(alamedaID);
+            tipIds.add(cathedralID);
+            tipIds.add(towerOfHerculesID);
+            RouteDetailsDto routeDetailsDto = routeService.create(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID);
+            routeService.remove(routeDetailsDto.getId(), EXISTING_FACEBOOK_USER_ID);
             try {
                 assertNotNull(tipService.findById(alamedaID, null));
                 assertNotNull(tipService.findById(cathedralID, null));
@@ -190,8 +232,25 @@ public class RouteServiceTest {
             } catch (InstanceNotFoundException e) {
                 fail();
             }
-            routeService.findById(routeDetailsDto.getId());
-        } catch (GoogleMapsServiceException | InvalidRouteException e) {
+            routeDao.findById(routeDetailsDto.getId());
+        } catch (InvalidRouteException e) {
+            fail();
+        }
+    }
+
+    @Test(expected = InstanceNotFoundException.class)
+    public void removeRouteOfOtherUser() throws InstanceNotFoundException {
+        try {
+            String name = "From Alameda To Cathedral";
+            String description = "Santiago route";
+            String travelMode = WALKING_TRAVEL_MODE;
+            List<Long> tipIds = new ArrayList<>();
+            tipIds.add(alamedaID);
+            tipIds.add(cathedralID);
+            tipIds.add(towerOfHerculesID);
+            RouteDetailsDto routeDetailsDto = routeService.create(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID);
+            routeService.remove(routeDetailsDto.getId(), EXISTING_FACEBOOK_USER_ID2);
+        } catch (InvalidRouteException e) {
             fail();
         }
     }
@@ -201,15 +260,15 @@ public class RouteServiceTest {
         try {
             String name = "From Alameda To Cathedral";
             String description = "Santiago route";
-            String travelMode = "driving";
+            String travelMode = WALKING_TRAVEL_MODE;
             List<Long> tipIds = new ArrayList<>();
             tipIds.add(cathedralID);
             tipIds.add(towerOfHerculesID);
             RouteDetailsDto routeDetailsDto = routeService.create(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID);
 
             tipService.remove(cathedralID);
-            routeService.findById(routeDetailsDto.getId());
-        } catch (GoogleMapsServiceException | InvalidRouteException e) {
+            routeDao.findById(routeDetailsDto.getId());
+        } catch (InvalidRouteException e) {
             fail();
         }
     }
@@ -219,7 +278,7 @@ public class RouteServiceTest {
         try {
             String name = "From Alameda To Cathedral";
             String description = "Santiago route";
-            String travelMode = "driving";
+            String travelMode = WALKING_TRAVEL_MODE;
             List<Long> tipIds = new ArrayList<>();
             tipIds.add(alamedaID);
             tipIds.add(cathedralID);
@@ -228,7 +287,7 @@ public class RouteServiceTest {
             RouteDetailsDto oldRouteDetailsDto = routeDetailsDto;
 
             tipService.remove(cathedralID);
-            routeDetailsDto = routeService.findById(routeDetailsDto.getId());
+            routeDetailsDto = routeService.findById(routeDetailsDto.getId(), EXISTING_FACEBOOK_USER_ID);
 
             assertNotNull(routeDetailsDto.getId());
             assertEquals(name, routeDetailsDto.getName());
@@ -240,7 +299,7 @@ public class RouteServiceTest {
             assertTrue(!Objects.equals(routeDetailsDto.getGoogleMapsUrl(), oldRouteDetailsDto.getGoogleMapsUrl()));
             assertEquals(2, routeDetailsDto.getTips().size());
             assertEquals(EXISTING_FACEBOOK_USER_ID, routeDetailsDto.getCreator().getFacebookUserId());
-        } catch (GoogleMapsServiceException | InvalidRouteException e) {
+        } catch (InvalidRouteException e) {
             fail();
         }
     }

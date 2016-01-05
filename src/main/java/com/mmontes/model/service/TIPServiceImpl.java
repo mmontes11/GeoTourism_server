@@ -9,11 +9,10 @@ import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.model.entity.UserAccount;
 import com.mmontes.model.entity.route.Route;
 import com.mmontes.service.GoogleMapsService;
-import com.mmontes.rest.request.TIPPatchRequest;
 import com.mmontes.util.URLvalidator;
 import com.mmontes.util.dto.DtoService;
-import com.mmontes.util.dto.TIPDetailsDto;
 import com.mmontes.util.dto.FeatureSearchDto;
+import com.mmontes.util.dto.TIPDetailsDto;
 import com.mmontes.util.exception.*;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -55,17 +54,9 @@ public class TIPServiceImpl implements TIPService {
     @Autowired
     private UserAccountService userAccountService;
 
-    private List<Long> getTIPIds(List<TIP> tips){
-        List<Long> ids = new ArrayList<>();
-        for (TIP tip : tips){
-            ids.add(tip.getId());
-        }
-        return ids;
-    }
-
     public TIPDetailsDto
     create(Long typeId, String name, String description, String photoUrl, String infoUrl, Geometry geom)
-            throws TIPLocationException, InvalidTIPUrlException, GoogleMapsServiceException, InstanceNotFoundException {
+            throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException {
 
         TIP tip = new TIP();
         tip.setType(tipTypeDao.findById(typeId));
@@ -81,70 +72,70 @@ public class TIPServiceImpl implements TIPService {
             tip.setAddress(googleMapsService.getAddress(coordinate));
         } catch (Exception e) {
             e.printStackTrace();
-            throw new GoogleMapsServiceException();
+            throw new TIPLocationException("Invalid TIP address");
         }
 
         City city = cityService.getCityFromLocation(geom);
-        if (city != null){
+        if (city != null) {
             tip.setCity(city);
-        }else{
-            throw new TIPLocationException();
+        } else {
+            throw new TIPLocationException("TIP location is incorrect. It should be located in a single City");
         }
 
         URLvalidator.checkURLs(tip);
 
         tipDao.save(tip);
-        return dtoService.TIP2TIPDetailsDto(tip,null);
+        return dtoService.TIP2TIPDetailsDto(tip, null);
     }
 
-    public TIPDetailsDto findById(Long TIPId,Long facebooUserId) throws InstanceNotFoundException {
+    public TIPDetailsDto findById(Long TIPId, Long facebooUserId) throws InstanceNotFoundException {
         UserAccount userAccount = null;
-        if (facebooUserId != null){
+        if (facebooUserId != null) {
             userAccount = userAccountDao.findByFBUserID(facebooUserId);
         }
         return dtoService.TIP2TIPDetailsDto(tipDao.findById(TIPId), userAccount);
     }
 
-    public boolean exists(Long TIPId) {
-        return tipDao.exists(TIPId);
-    }
-
-    public void remove(Long TIPId) throws InstanceNotFoundException, GoogleMapsServiceException {
+    public void remove(Long TIPId) throws InstanceNotFoundException, InvalidRouteException {
         List<Route> routes = routeDao.getRoutesByTIP(TIPId);
         tipDao.remove(TIPId);
-        for (Route route : routes){
-            if (routeDao.getTIPsInOrder(route.getId()).size() < 2){
-                routeService.remove(route.getId());
-            }else{
+        for (Route route : routes) {
+            if (routeDao.getTIPsInOrder(route.getId()).size() < 2) {
+                routeDao.remove(route.getId());
+            } else {
                 routeService.updateRouteFromTIPs(route);
             }
         }
     }
 
     public List<FeatureSearchDto> find(Geometry bounds, List<Long> typeIds, List<Long> cityIds, Integer favouritedBy, Long facebookUserId, List<Long> friendsFacebookUserIds) throws InstanceNotFoundException {
-        List<Long> facebookUserIds = userAccountService.getFacebookUserIds(favouritedBy,facebookUserId,friendsFacebookUserIds);
-        List<TIP> tips = tipDao.find(bounds,typeIds,cityIds,facebookUserIds);
+        List<Long> facebookUserIds = userAccountService.getFacebookUserIds(favouritedBy, facebookUserId, friendsFacebookUserIds);
+        List<TIP> tips = tipDao.find(bounds, typeIds, cityIds, facebookUserIds);
         return dtoService.ListTIP2ListFeatureSearchDto(tips);
     }
 
-    public TIPDetailsDto edit(Long TIPId, Long facebooUserId, TIPPatchRequest newData) throws InstanceNotFoundException {
+    public TIPDetailsDto edit(Long TIPId, Long facebooUserId, Long type, String name, String description, String infoUrl, String address, String photoUrl)
+            throws InstanceNotFoundException, InvalidTIPUrlException {
         TIP tip = tipDao.findById(TIPId);
         UserAccount userAccount = null;
-        if (facebooUserId != null){
+        if (facebooUserId != null) {
             userAccount = userAccountDao.findByFBUserID(facebooUserId);
         }
-        tip.setType(tipTypeDao.findById(newData.getType()));
-        tip.setName(newData.getName());
-        tip.setDescription(newData.getDescription());
-        tip.setInfoUrl(newData.getInfoUrl());
-        tip.setAddress(newData.getAddress());
-        tip.setPhotoUrl(newData.getPhotoUrl());
+        tip.setType(tipTypeDao.findById(type));
+        tip.setName(name);
+        tip.setDescription(description);
+        tip.setInfoUrl(infoUrl);
+        tip.setAddress(address);
+        tip.setPhotoUrl(photoUrl);
+
+        URLvalidator.checkURLs(tip);
+
         tipDao.save(tip);
-        return dtoService.TIP2TIPDetailsDto(tip,userAccount);
+        return dtoService.TIP2TIPDetailsDto(tip, userAccount);
     }
 
     @Override
-    public boolean geometryContainsTIPs(Geometry superGeometry,List<Long> tipIds){
-        return tipDao.geometryContainsTIPs(superGeometry,tipIds);
+    public boolean geometryContainsTIPs(Geometry superGeometry, List<Long> tipIds) {
+        return tipDao.geometryContainsTIPs(superGeometry, tipIds);
     }
 }

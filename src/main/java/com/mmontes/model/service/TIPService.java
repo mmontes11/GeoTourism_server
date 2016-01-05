@@ -1,9 +1,8 @@
 package com.mmontes.model.service;
 
 
-import com.mmontes.rest.request.TIPPatchRequest;
-import com.mmontes.util.dto.TIPDetailsDto;
 import com.mmontes.util.dto.FeatureSearchDto;
+import com.mmontes.util.dto.TIPDetailsDto;
 import com.mmontes.util.exception.*;
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -12,12 +11,12 @@ import java.util.List;
 public interface TIPService {
 
     TIPDetailsDto create(Long typeId, String name, String description, String photoUrl, String infoUrl, Geometry geom)
-            throws TIPLocationException, InvalidTIPUrlException, GoogleMapsServiceException, InstanceNotFoundException;
+            throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException;
     TIPDetailsDto findById(Long TIPId,Long facebooUserId) throws InstanceNotFoundException;
-    boolean exists(Long TIPId);
-    void remove(Long TIPId) throws InstanceNotFoundException, GoogleMapsServiceException;
+    void remove(Long TIPId) throws InstanceNotFoundException, InvalidRouteException;
     List<FeatureSearchDto> find(Geometry bounds, List<Long> typeIds, List<Long> cityIds, Integer favouritedBy, Long facebookUserId, List<Long> friendsFacebookUserIds)
             throws InstanceNotFoundException;
-    TIPDetailsDto edit(Long TIPId, Long facebooUserId, TIPPatchRequest newData) throws InstanceNotFoundException;
+    TIPDetailsDto edit(Long TIPId, Long facebookUserId, Long type, String name, String description, String infoUrl, String address, String photoUrl)
+            throws InstanceNotFoundException, InvalidTIPUrlException;
     boolean geometryContainsTIPs(Geometry superGeometry,List<Long> tipIds);
 }

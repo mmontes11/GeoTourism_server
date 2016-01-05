@@ -8,6 +8,7 @@ import com.mmontes.util.Constants;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import com.vividsolutions.jts.geom.Geometry;
+import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -39,18 +40,20 @@ public class RouteDaoHibernate extends GenericDaoHibernate<Route,Long> implement
     }
 
     @Override
-    public List<Route> find(Geometry bounds, List<String> travelModes, List<Long> cityIds, List<Long> facebookUserIds) {
+    public List<Route> find(Geometry bounds, List<String> travelModes, List<Long> facebookUserIds) {
 
         boolean filterByBounds = false;
         boolean filterByTravelMode = false;
-        boolean filterByCity = false;
         boolean filterByFacebookUserIds = facebookUserIds != null && !facebookUserIds.isEmpty();
 
         String queryString = "SELECT * FROM route r ";
+        if (filterByFacebookUserIds){
+            queryString += "JOIN useraccount u ON r.userid = u.id ";
+        }
 
         if (bounds != null) {
             String boundsWKT = GeometryUtils.WKTFromGeometry(bounds);
-            queryString += "WHERE ST_Within(r.geom,ST_GeometryFromText('SRID=" + Constants.SRID + ";" + boundsWKT + "'))";
+            queryString += "WHERE ST_Intersects(r.geom,ST_GeometryFromText('SRID=" + Constants.SRID + ";" + boundsWKT + "'))";
             filterByBounds = true;
         }
         if (travelModes != null && !travelModes.isEmpty()) {
@@ -59,10 +62,13 @@ public class RouteDaoHibernate extends GenericDaoHibernate<Route,Long> implement
             queryString += (filterByBounds ? "AND " : "WHERE ") + partialQuery;
             filterByTravelMode = true;
         }
-        if (cityIds != null && !cityIds.isEmpty()){
-            String cities = QueryUtils.getINvalues(cityIds);
-
+        if (filterByFacebookUserIds) {
+            String FBuserIds = QueryUtils.getINvalues(facebookUserIds);
+            String partialQuery = "u.facebookuserid IN " + FBuserIds + " ";
+            queryString += ((filterByBounds || filterByTravelMode) ? "AND " : "WHERE ") + partialQuery;
         }
-        return null;
+
+        Query query = getSession().createSQLQuery(queryString).addEntity(Route.class);
+        return query.list();
     }
 }

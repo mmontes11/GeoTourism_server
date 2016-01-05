@@ -8,21 +8,17 @@ public class TIPPatchRequest {
     private String infoUrl;
     private String address;
     private String photoUrl;
-    private String photoContent;
-    private String photoName;
 
     public TIPPatchRequest() {
     }
 
-    public TIPPatchRequest(Long type, String name, String description, String infoUrl, String address, String photoUrl, String photoContent, String photoName) {
+    public TIPPatchRequest(Long type, String name, String description, String infoUrl, String address, String photoUrl) {
         this.type = type;
         this.name = name;
         this.description = description;
         this.infoUrl = infoUrl;
         this.address = address;
         this.photoUrl = photoUrl;
-        this.photoContent = photoContent;
-        this.photoName = photoName;
     }
 
     public Long getType() {
@@ -71,21 +67,5 @@ public class TIPPatchRequest {
 
     public void setPhotoUrl(String photoUrl) {
         this.photoUrl = photoUrl;
-    }
-
-    public String getPhotoContent() {
-        return photoContent;
-    }
-
-    public void setPhotoContent(String photoContent) {
-        this.photoContent = photoContent;
-    }
-
-    public String getPhotoName() {
-        return photoName;
-    }
-
-    public void setPhotoName(String photoName) {
-        this.photoName = photoName;
     }
 }

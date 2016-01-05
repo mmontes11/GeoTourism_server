@@ -92,7 +92,7 @@ public class DtoService {
         return tipMinDtos;
     }
 
-    public RouteDetailsDto Route2RouteDetailsDto(Route route) throws InstanceNotFoundException {
+    public RouteDetailsDto Route2RouteDetailsDto(Route route,UserAccount userAccount) throws InstanceNotFoundException {
         RouteDetailsDto routeDetailsDto = new RouteDetailsDto();
         routeDetailsDto.setId(route.getId());
         routeDetailsDto.setName(route.getName());
@@ -101,7 +101,10 @@ public class DtoService {
         routeDetailsDto.setGeom(GeometryUtils.WKTFromGeometry(route.getGeom()));
         routeDetailsDto.setGoogleMapsUrl(route.getGoogleMapsUrl());
         routeDetailsDto.setTips(routeService.getTIPsInOrder(route.getId()));
-        routeDetailsDto.setCreator(UserAccount2UserAccountDto(route.getCreator()));
+
+        if (userAccount != null){
+            routeDetailsDto.setCreator(UserAccount2UserAccountDto(route.getCreator()));
+        }
         return routeDetailsDto;
     }
 

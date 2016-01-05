@@ -4,6 +4,7 @@ import com.mmontes.model.dao.RouteDao;
 import com.mmontes.model.dao.TIPDao;
 import com.mmontes.model.dao.UserAccountDao;
 import com.mmontes.model.entity.TIP.TIP;
+import com.mmontes.model.entity.UserAccount;
 import com.mmontes.model.entity.route.Route;
 import com.mmontes.model.entity.route.RouteTIP;
 import com.mmontes.service.GoogleMapsService;
@@ -69,10 +70,10 @@ public class RouteServiceImpl implements RouteService {
             throw new InvalidRouteException("Invalid travel mode");
         }
         if (partialGeoms != null && partialGeoms.size() < 2) {
-            throw new InvalidRouteException("Invalid number of partial geometries("+partialGeoms.size()+")");
+            throw new InvalidRouteException("Invalid number of partial geometries(" + partialGeoms.size() + ")");
         }
         if (tipIds.size() < 2) {
-            throw new InvalidRouteException("Invalid number of TIP IDs ("+tipIds.size()+")");
+            throw new InvalidRouteException("Invalid number of TIP IDs(" + tipIds.size() + ")");
         }
     }
 
@@ -86,8 +87,9 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     public RouteDetailsDto create(String name, String description, String travelMode, List<Geometry> partialGeoms, List<Long> tipIds, Long facebookUserId)
-            throws InstanceNotFoundException, GoogleMapsServiceException, InvalidRouteException {
+            throws InstanceNotFoundException, InvalidRouteException {
         validateRouteParams(travelMode, partialGeoms, tipIds);
+        UserAccount creator = userAccountDao.findByFBUserID(facebookUserId);
         Geometry routeGeom = null;
         if (partialGeoms != null && !partialGeoms.isEmpty()) {
             routeGeom = getCompleteRouteGeom(partialGeoms, tipIds);
@@ -98,19 +100,24 @@ public class RouteServiceImpl implements RouteService {
         route.setTravelMode(travelMode);
         List<Coordinate> coordinates = setRouteTIPsAndGetCoords(route, tipIds);
         if (routeGeom == null) {
-            routeGeom = googleMapsService.getRoute(coordinates, route.getTravelMode());
+            try {
+                routeGeom = googleMapsService.getRoute(coordinates, route.getTravelMode());
+            } catch (GoogleMapsServiceException e) {
+                throw new InvalidRouteException("Invalid Route");
+            }
         }
         route.setGeom(routeGeom);
         route.setGoogleMapsUrl(googleMapsService.getRouteGoogleMapsUrl(coordinates, route.getTravelMode()));
-        route.setCreator(userAccountDao.findByFBUserID(facebookUserId));
+        route.setCreator(creator);
         routeDao.save(route);
-        return dtoService.Route2RouteDetailsDto(route);
+        return dtoService.Route2RouteDetailsDto(route, creator);
     }
 
     @Override
     public RouteDetailsDto edit(Long routeId, String name, String description, String travelMode, List<Long> tipIds, Long facebookUserId)
-            throws InstanceNotFoundException, GoogleMapsServiceException, InvalidRouteException {
+            throws InstanceNotFoundException, InvalidRouteException {
         validateRouteParams(travelMode, null, tipIds);
+        UserAccount creator = userAccountDao.findByFBUserID(facebookUserId);
         Route route = routeDao.getRouteByIDandUser(routeId, facebookUserId);
         route.setName(name);
         route.setDescription(description);
@@ -118,41 +125,58 @@ public class RouteServiceImpl implements RouteService {
         route.getRouteTIPs().clear();
         routeDao.getTIPsInOrder(route.getId());
         List<Coordinate> coordinates = setRouteTIPsAndGetCoords(route, tipIds);
-        route.setGeom(googleMapsService.getRoute(coordinates, route.getTravelMode()));
+        try {
+            route.setGeom(googleMapsService.getRoute(coordinates, route.getTravelMode()));
+        } catch (GoogleMapsServiceException e) {
+            throw new InvalidRouteException("Invalid Route");
+        }
         route.setGoogleMapsUrl(googleMapsService.getRouteGoogleMapsUrl(coordinates, route.getTravelMode()));
         routeDao.save(route);
-        return dtoService.Route2RouteDetailsDto(route);
+        return dtoService.Route2RouteDetailsDto(route, creator);
     }
 
     @Override
-    public void updateRouteFromTIPs(Route route) throws GoogleMapsServiceException {
+    public void updateRouteFromTIPs(Route route) throws InvalidRouteException {
         List<TIP> tips = routeDao.getTIPsInOrder(route.getId());
         List<Coordinate> coordinates = new ArrayList<>();
-        for(TIP tip : tips){
+        for (TIP tip : tips) {
             coordinates.add(tip.getGeom().getCoordinate());
         }
-        route.setGeom(googleMapsService.getRoute(coordinates, route.getTravelMode()));
+        try {
+            route.setGeom(googleMapsService.getRoute(coordinates, route.getTravelMode()));
+        } catch (GoogleMapsServiceException e) {
+            throw new InvalidRouteException("Invalid Route");
+        }
         route.setGoogleMapsUrl(googleMapsService.getRouteGoogleMapsUrl(coordinates, route.getTravelMode()));
         routeDao.save(route);
     }
 
     @Override
-    public RouteDetailsDto findById(Long routeId) throws InstanceNotFoundException {
-        Route route = routeDao.findById(routeId);
-        return dtoService.Route2RouteDetailsDto(route);
+    public RouteDetailsDto findById(Long routeId, Long facebookUserId) throws InstanceNotFoundException {
+        Route route;
+        UserAccount creator = null;
+        if (facebookUserId != null) {
+            creator = userAccountDao.findByFBUserID(facebookUserId);
+            route = routeDao.getRouteByIDandUser(routeId, facebookUserId);
+        } else {
+            route = routeDao.findById(routeId);
+        }
+        return dtoService.Route2RouteDetailsDto(route, creator);
     }
 
     @Override
-    public List<FeatureSearchDto> find(Geometry bounds, List<String>  travelModes, List<Long> cityIds, Integer createdBy, Long facebookUserId, List<Long> friendsFacebookUserIds) throws InstanceNotFoundException {
-        List<Long> facebookUserIds = userAccountService.getFacebookUserIds(createdBy,facebookUserId,friendsFacebookUserIds);
-        return null;
+    public List<FeatureSearchDto> find(Geometry bounds, List<String> travelModes, Integer createdBy, Long facebookUserId, List<Long> friendsFacebookUserIds)
+            throws InstanceNotFoundException {
+        List<Long> facebookUserIds = userAccountService.getFacebookUserIds(createdBy, facebookUserId, friendsFacebookUserIds);
+        List<Route> routes = routeDao.find(bounds, travelModes, facebookUserIds);
+        return dtoService.ListRoute2ListFeatureSearchDto(routes);
     }
 
     @Override
-    public void remove(Long routeId) throws InstanceNotFoundException {
-        routeDao.remove(routeId);
+    public void remove(Long routeId, Long facebookUserId) throws InstanceNotFoundException {
+        Route route = routeDao.getRouteByIDandUser(routeId, facebookUserId);
+        routeDao.remove(route.getId());
     }
-
 
     @Override
     public List<TIPMinDto> getTIPsInOrder(Long routeID) throws InstanceNotFoundException {

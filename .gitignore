@@ -5,6 +5,7 @@
 *.ear
 
 admin.sql
-Constants.java
+src/main/java/com/mmontes/util/Constants.java
 target/
+lib/
 .idea/

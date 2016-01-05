@@ -58,8 +58,6 @@ public class RouteController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (GoogleMapsServiceException e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
         return new ResponseEntity<>(routeDetailsDto, HttpStatus.CREATED);
     }

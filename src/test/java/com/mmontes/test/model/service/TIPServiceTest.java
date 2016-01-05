@@ -119,40 +119,67 @@ public class TIPServiceTest {
             String description = "Patrimonio de la humanidad";
             Geometry geom = GeometryUtils.geometryFromWKT(POINT_ALHAMBRA);
             tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom);
-        } catch (InvalidTIPUrlException | GeometryParsingException | InstanceNotFoundException | GoogleMapsServiceException e) {
+        } catch (InvalidTIPUrlException | GeometryParsingException | InstanceNotFoundException e) {
             e.printStackTrace();
+            fail();
         }
+    }
+
+    @Test
+    public void editTIP() {
+        try {
+            Long newType = NATURAL_SPACE_DISCRIMINATOR;
+            String newName = "New name";
+            String newDescription = "New description";
+            String newInfoUrl = VALID_TIP_INFO_URL;
+            String newAddress = "Fake street";
+            String newPhotoUrl = VALID_TIP_PHOTO_URL;
+            TIPDetailsDto tipDetailsDto = tipService.edit(statueOfLiberty.getId(),null,newType,newName,newDescription,newInfoUrl,newAddress,newPhotoUrl);
+
+            assertEquals(newType, tipDetailsDto.getType());
+            assertEquals(newName, tipDetailsDto.getName());
+            assertEquals(newDescription, tipDetailsDto.getDescription());
+            assertEquals(newInfoUrl, tipDetailsDto.getInfoUrl());
+            assertEquals(newAddress, tipDetailsDto.getAddress());
+            assertEquals(newPhotoUrl, tipDetailsDto.getPhotoUrl());
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test(expected = InstanceNotFoundException.class)
+    public void removeTIP() throws InstanceNotFoundException {
+        TIPDetailsDto tipDetailsDto = null;
+        try {
+            tipDetailsDto = tipService.findById(statueOfLiberty.getId(),null);
+            tipService.remove(tipDetailsDto.getId());
+        } catch (Exception e) {
+            fail();
+        }
+        tipService.findById(tipDetailsDto.getId(),null);
     }
 
     @Test
     public void findTIPsByBounds() {
-        Geometry bounds = null;
+        Geometry boundsSantiago = null;
+        Geometry boundsNY = null;
         try {
-            bounds = GeometryUtils.geometryFromWKT(BOUNDS_SANTIAGO_DE_COMPOSTELA);
+            boundsSantiago = GeometryUtils.geometryFromWKT(BOUNDS_SANTIAGO_DE_COMPOSTELA);
+            boundsNY = GeometryUtils.geometryFromWKT(BOUNDS_NEW_YORK);
         } catch (Exception e) {
             e.printStackTrace();
             fail();
         }
-        List<FeatureSearchDto> featureSearchDtos = null;
+        List<FeatureSearchDto> featureSearchDtos;
         try {
-            featureSearchDtos = tipService.find(bounds, null, null, null, null, null);
+            featureSearchDtos = tipService.find(boundsSantiago, null, null, null, null, null);
+            assertEquals(3, featureSearchDtos.size());
+            featureSearchDtos = tipService.find(boundsNY, null, null, null, null, null);
+            assertEquals(1,featureSearchDtos.size());
         } catch (InstanceNotFoundException e) {
             fail();
         }
-        assertEquals(3, featureSearchDtos.size());
-    }
-
-    @Test
-    public void finTipsFromFarCity() {
-        Geometry bounds;
-        List<FeatureSearchDto> featureSearchDtos = null;
-        try {
-            bounds = GeometryUtils.geometryFromWKT(BOUNDS_NEW_YORK);
-            featureSearchDtos = tipService.find(bounds, null, null, null, null, null);
-        } catch (Exception e) {
-            fail();
-        }
-        assertEquals(1,featureSearchDtos.size());
     }
 
     @Test

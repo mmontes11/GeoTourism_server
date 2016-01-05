@@ -70,7 +70,9 @@ public class UserAccountServiceImpl implements UserAccountService {
         List<Long> facebookUserIds = new ArrayList<>();
         if (who != null) {
             if (who == 0) {
-                facebookUserIds.add(facebookUserId);
+                if (facebookUserId != null){
+                    facebookUserIds.add(facebookUserId);
+                }
             } else if (who == 1) {
                 if (friendsFacebookUserIds != null && !friendsFacebookUserIds.isEmpty()) {
                     facebookUserIds.addAll(friendsFacebookUserIds);

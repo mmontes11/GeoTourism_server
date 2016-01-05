@@ -8,7 +8,11 @@ public class QueryUtils {
     public static String getINvalues (List values){
         StringJoiner joiner = new StringJoiner(",");
         for (Object o : values){
-            joiner.add(o.toString());
+            if (o instanceof String){
+                joiner.add("'"+o.toString()+"'");
+            }else{
+                joiner.add(o.toString());
+            }
         }
         return "(" + joiner.toString() + ")";
     }

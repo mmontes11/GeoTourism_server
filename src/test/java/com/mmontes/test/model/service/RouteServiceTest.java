@@ -166,7 +166,7 @@ public class RouteServiceTest {
             tipIds = new ArrayList<>();
             tipIds.add(cathedralID);
             tipIds.add(alamedaID);
-            RouteDetailsDto editedRoute = routeService.edit(routeDetailsDto.getId(), name, description, travelMode, tipIds, EXISTING_FACEBOOK_USER_ID);
+            RouteDetailsDto editedRoute = routeService.edit(routeDetailsDto.getId(), EXISTING_FACEBOOK_USER_ID, name, description, travelMode, tipIds);
 
             assertNotNull(editedRoute.getId());
             assertEquals(name, editedRoute.getName());
@@ -207,7 +207,7 @@ public class RouteServiceTest {
             tipIds = new ArrayList<>();
             tipIds.add(cathedralID);
             tipIds.add(alamedaID);
-            routeService.edit(routeDetailsDto.getId(), name, description, travelMode, tipIds, EXISTING_FACEBOOK_USER_ID2);
+            routeService.edit(routeDetailsDto.getId(), EXISTING_FACEBOOK_USER_ID2, name, description, travelMode, tipIds);
         } catch (InvalidRouteException e) {
             fail();
         }

@@ -2,7 +2,9 @@ package com.mmontes.rest.controller;
 
 import com.mmontes.model.service.RouteService;
 import com.mmontes.model.service.TIPService;
+import com.mmontes.rest.request.RoutePatchRequest;
 import com.mmontes.rest.request.RouteRequest;
+import com.mmontes.rest.request.TIPPatchRequest;
 import com.mmontes.service.GoogleMapsService;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.RouteDetailsDto;
@@ -22,9 +24,6 @@ import java.util.List;
 
 @RestController
 public class RouteController {
-
-    @Autowired
-    private GoogleMapsService googleMapsService;
 
     @Autowired
     private RouteService routeService;
@@ -62,4 +61,20 @@ public class RouteController {
         return new ResponseEntity<>(routeDetailsDto, HttpStatus.CREATED);
     }
 
+    @RequestMapping(value = "/social/route/{routeID}", method = RequestMethod.PATCH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<RouteDetailsDto>
+    patch(@PathVariable Long routeID,
+          @RequestBody RoutePatchRequest routePatchRequest,
+          @RequestParam(value = "facebookUserId", required = true) Long facebookUserId){
+        RouteDetailsDto routeDetailsDto;
+        try {
+            routeDetailsDto = routeService.edit(routeID,facebookUserId,
+                    routePatchRequest.getName(),routePatchRequest.getDescription(),routePatchRequest.getTravelMode(),routePatchRequest.getTipIds());
+        } catch (InstanceNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (InvalidRouteException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(routeDetailsDto, HttpStatus.CREATED);
+    }
 }

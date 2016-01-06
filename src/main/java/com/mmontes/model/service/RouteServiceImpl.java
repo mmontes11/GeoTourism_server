@@ -114,7 +114,7 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public RouteDetailsDto edit(Long routeId, String name, String description, String travelMode, List<Long> tipIds, Long facebookUserId)
+    public RouteDetailsDto edit(Long routeId, Long facebookUserId, String name, String description, String travelMode, List<Long> tipIds)
             throws InstanceNotFoundException, InvalidRouteException {
         validateRouteParams(travelMode, null, tipIds);
         UserAccount creator = userAccountDao.findByFBUserID(facebookUserId);

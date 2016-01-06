@@ -15,7 +15,7 @@ import java.util.List;
 public interface RouteService {
     RouteDetailsDto create(String name, String description, String travelMode, List<Geometry> partialGeoms, List<Long> tipIds, Long facebookUserId)
             throws InstanceNotFoundException, InvalidRouteException;
-    RouteDetailsDto edit(Long routeId, String name, String description, String travelMode, List<Long> tipIds, Long facebookUserId)
+    RouteDetailsDto edit(Long routeId, Long facebookUserId, String name, String description, String travelMode, List<Long> tipIds)
             throws InstanceNotFoundException, InvalidRouteException;
     void updateRouteFromTIPs(Route route)
             throws InstanceNotFoundException, InvalidRouteException;

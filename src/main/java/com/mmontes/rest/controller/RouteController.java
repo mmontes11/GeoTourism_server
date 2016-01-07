@@ -5,8 +5,10 @@ import com.mmontes.model.service.TIPService;
 import com.mmontes.rest.request.RoutePatchRequest;
 import com.mmontes.rest.request.RouteRequest;
 import com.mmontes.rest.request.TIPPatchRequest;
+import com.mmontes.service.FacebookService;
 import com.mmontes.service.GoogleMapsService;
 import com.mmontes.util.GeometryUtils;
+import com.mmontes.util.dto.FeatureSearchDto;
 import com.mmontes.util.dto.RouteDetailsDto;
 import com.mmontes.util.exception.GeometryParsingException;
 import com.mmontes.util.exception.GoogleMapsServiceException;
@@ -14,6 +16,7 @@ import com.mmontes.util.exception.InstanceNotFoundException;
 import com.mmontes.util.exception.InvalidRouteException;
 import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -39,8 +42,9 @@ public class RouteController {
         if (routeRequest.getDescription() == null || routeRequest.getDescription().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        List<Geometry> partialGeoms = new ArrayList<>();
-        if (routeRequest.getLineStrings() != null) {
+        List<Geometry> partialGeoms = null;
+        if (routeRequest.getLineStrings() != null && !routeRequest.getLineStrings().isEmpty()) {
+            partialGeoms = new ArrayList<>();
             try {
                 for (String geometryString : routeRequest.getLineStrings()) {
                     Geometry lineString = GeometryUtils.geometryFromWKT(geometryString);
@@ -54,6 +58,7 @@ public class RouteController {
         try {
             routeDetailsDto = routeService.create(routeRequest.getName(), routeRequest.getDescription(), routeRequest.getTravelMode(), partialGeoms, routeRequest.getTipIds(), facebookUserId);
         } catch (InvalidRouteException e) {
+            e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -76,5 +81,34 @@ public class RouteController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(routeDetailsDto, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/route/{routeID}", method = RequestMethod.GET)
+    public ResponseEntity<RouteDetailsDto>
+    findById(@PathVariable Long routeID,
+             @RequestHeader(value="AuthorizationFB", required = false) String accessToken,
+             @RequestParam(value = "facebookUserId", required = false) Long facebookUserId){
+        if (!FacebookService.validFBparams(accessToken,facebookUserId)){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        RouteDetailsDto routeDetailsDto;
+        try {
+            routeDetailsDto = routeService.findById(routeID,facebookUserId);
+        } catch (InstanceNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
+        return new ResponseEntity<>(routeDetailsDto, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/social/route/{routeID}", method = RequestMethod.DELETE)
+    public ResponseEntity
+    delete(@PathVariable Long routeID,
+           @RequestParam(value = "facebookUserId", required = true)Long facebookUserId){
+        try {
+            routeService.remove(routeID,facebookUserId);
+        } catch (InstanceNotFoundException e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity(HttpStatus.OK);
     }
 }

@@ -48,7 +48,7 @@ public class TIPController {
 
     @RequestMapping(value = "/tip/{TIPId}", method = RequestMethod.GET)
     public ResponseEntity<TIPDetailsDto>
-    find(@PathVariable Long TIPId,
+    findById(@PathVariable Long TIPId,
          @RequestHeader(value="AuthorizationFB", required = false) String accessToken,
          @RequestParam(value = "facebookUserId", required = false) Long facebookUserId) {
 

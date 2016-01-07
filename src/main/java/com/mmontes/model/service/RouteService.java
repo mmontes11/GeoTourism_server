@@ -21,9 +21,11 @@ public interface RouteService {
             throws InstanceNotFoundException, InvalidRouteException;
     RouteDetailsDto findById(Long routeId,Long facebooUserId)
             throws InstanceNotFoundException;
-    List<FeatureSearchDto> find(Geometry bounds, List<String> travelModes, Integer createdBy, Long facebookUserId, List<Long> friendsFacebookUserIds) throws InstanceNotFoundException;
+    List<FeatureSearchDto> find(Geometry bounds, List<String> travelModes, Integer createdBy, Long facebookUserId, List<Long> friendsFacebookUserIds)
+            throws InstanceNotFoundException;
     void remove(Long routeId,Long facebookUserId)
             throws InstanceNotFoundException;
     List<TIPMinDto> getTIPsInOrder(Long routeID)
             throws InstanceNotFoundException;
+    Geometry getShortestPath(Long TIPIdOrigin,Long TIPIdDestination,String travelMode) throws InstanceNotFoundException, InvalidRouteException;
 }

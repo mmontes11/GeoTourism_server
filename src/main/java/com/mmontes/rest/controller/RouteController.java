@@ -5,6 +5,7 @@ import com.mmontes.model.service.TIPService;
 import com.mmontes.rest.request.RoutePatchRequest;
 import com.mmontes.rest.request.RouteRequest;
 import com.mmontes.rest.request.TIPPatchRequest;
+import com.mmontes.rest.response.ResponseFactory;
 import com.mmontes.service.FacebookService;
 import com.mmontes.service.GoogleMapsService;
 import com.mmontes.util.GeometryUtils;
@@ -34,7 +35,7 @@ public class RouteController {
     @RequestMapping(value = "/social/route", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RouteDetailsDto>
     create(@RequestBody RouteRequest routeRequest,
-           @RequestParam(value = "facebookUserId", required = false) Long facebookUserId) {
+           @RequestParam(value = "facebookUserId", required = true) Long facebookUserId) {
 
         if (routeRequest.getName() == null || routeRequest.getName().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -110,5 +111,21 @@ public class RouteController {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity(HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/social/route/geom", method = RequestMethod.GET)
+    public ResponseEntity
+    getShortestPath(@RequestParam(value = "origin", required = true) Long TIPIdOrigin,
+                    @RequestParam(value = "destination", required = true) Long TIPIdDestination,
+                    @RequestParam(value = "travelMode", required = true) String travelMode){
+        try {
+            Geometry geom = routeService.getShortestPath(TIPIdOrigin,TIPIdDestination,travelMode);
+            String geomWKT = GeometryUtils.WKTFromGeometry(geom);
+            return new ResponseEntity<>(ResponseFactory.getCustomJSON("geom",geomWKT),HttpStatus.OK);
+        } catch (InstanceNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (InvalidRouteException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 }

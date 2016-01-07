@@ -184,4 +184,23 @@ public class RouteServiceImpl implements RouteService {
         List<TIP> tips = routeDao.getTIPsInOrder(route.getId());
         return dtoService.ListTIP2ListTIPMinDto(tips);
     }
+
+    @Override
+    public Geometry getShortestPath(Long TIPIdOrigin, Long TIPIdDestination, String travelMode) throws InstanceNotFoundException, InvalidRouteException {
+        List<Long> tipIds = new ArrayList<>();
+        tipIds.add(TIPIdOrigin);
+        tipIds.add(TIPIdDestination);
+        validateRouteParams(travelMode,null,tipIds);
+
+        TIP origin = tipDao.findById(TIPIdOrigin);
+        TIP destination = tipDao.findById(TIPIdDestination);
+        List<Coordinate> coordinates = new ArrayList<>();
+        coordinates.add(origin.getGeom().getCoordinate());
+        coordinates.add(destination.getGeom().getCoordinate());
+        try {
+            return googleMapsService.getRoute(coordinates,travelMode);
+        } catch (GoogleMapsServiceException e) {
+            throw new InvalidRouteException("Invalid partial route");
+        }
+    }
 }

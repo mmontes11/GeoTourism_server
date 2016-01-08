@@ -21,7 +21,7 @@ public interface RouteService {
             throws InstanceNotFoundException, InvalidRouteException;
     RouteDetailsDto findById(Long routeId,Long facebooUserId)
             throws InstanceNotFoundException;
-    List<FeatureSearchDto> find(String boundsWKT, List<String> travelModes, Integer createdBy, Long facebookUserId, List<Long> friendsFacebookUserIds)
+    List<FeatureSearchDto> find(String boundsWKT, List<String> travelModes, List<Long> facebookUserIds)
             throws InstanceNotFoundException;
     void remove(Long routeId,Long facebookUserId)
             throws InstanceNotFoundException;

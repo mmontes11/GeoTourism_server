@@ -121,16 +121,16 @@ public class RouteServiceFindTest {
     @Test
     public void findRoutesByBounds() {
         try {
-            List<FeatureSearchDto> featureSearchDtos = routeService.find(BOUNDS_GALICIA, null, null, null, null);
+            List<FeatureSearchDto> featureSearchDtos = routeService.find(BOUNDS_GALICIA, null, null);
             assertEquals(2, featureSearchDtos.size());
 
-            featureSearchDtos = routeService.find(BOUNDS_A_CORUNA, null, null, null, null);
+            featureSearchDtos = routeService.find(BOUNDS_A_CORUNA, null, null);
             assertEquals(1, featureSearchDtos.size());
 
-            featureSearchDtos = routeService.find(BOUNDS_SANTIAGO_DE_COMPOSTELA, null, null, null, null);
+            featureSearchDtos = routeService.find(BOUNDS_SANTIAGO_DE_COMPOSTELA, null, null);
             assertEquals(1, featureSearchDtos.size());
 
-            featureSearchDtos = routeService.find(BOUNDS_NEW_YORK, null, null, null, null);
+            featureSearchDtos = routeService.find(BOUNDS_NEW_YORK, null, null);
             assertEquals(0, featureSearchDtos.size());
         } catch (Exception e) {
             fail();
@@ -142,23 +142,23 @@ public class RouteServiceFindTest {
         try {
             List<String> travelModes = new ArrayList<>();
             travelModes.add(WALKING_TRAVEL_MODE);
-            List<FeatureSearchDto> featureSearchDtos = routeService.find(null, travelModes, null, null, null);
+            List<FeatureSearchDto> featureSearchDtos = routeService.find(null, travelModes, null);
             assertEquals(1, featureSearchDtos.size());
 
             travelModes.clear();
             travelModes.add(DRIVING_TRAVEL_MODE);
-            featureSearchDtos = routeService.find(null, travelModes, null, null, null);
+            featureSearchDtos = routeService.find(null, travelModes, null);
             assertEquals(1, featureSearchDtos.size());
 
             travelModes.clear();
             travelModes.add(DRIVING_TRAVEL_MODE);
             travelModes.add(WALKING_TRAVEL_MODE);
-            featureSearchDtos = routeService.find(null, travelModes, null, null, null);
+            featureSearchDtos = routeService.find(null, travelModes, null);
             assertEquals(2, featureSearchDtos.size());
 
             travelModes.clear();
             travelModes.add(BICYCLING_TRAVEL_MODE);
-            featureSearchDtos = routeService.find(null, travelModes, null, null, null);
+            featureSearchDtos = routeService.find(null, travelModes, null);
             assertEquals(0, featureSearchDtos.size());
         } catch (Exception e) {
             e.printStackTrace();
@@ -169,10 +169,16 @@ public class RouteServiceFindTest {
     @Test
     public void findRoutesCreatedByMe() {
         try {
-            List<FeatureSearchDto> featureSearchDtos = routeService.find(null, null, 0, EXISTING_FACEBOOK_USER_ID, null);
+            List<Long>facebookUserIds = new ArrayList<Long>() {{
+                add(EXISTING_FACEBOOK_USER_ID);
+            }};
+            List<FeatureSearchDto> featureSearchDtos = routeService.find(null, null, facebookUserIds);
             assertEquals(1, featureSearchDtos.size());
 
-            featureSearchDtos = routeService.find(null, null, 0, EXISTING_FACEBOOK_USER_ID2, null);
+            facebookUserIds = new ArrayList<Long>() {{
+                add(EXISTING_FACEBOOK_USER_ID2);
+            }};
+            featureSearchDtos = routeService.find(null, null, facebookUserIds);
             assertEquals(1, featureSearchDtos.size());
         } catch (Exception e) {
             fail();
@@ -182,20 +188,23 @@ public class RouteServiceFindTest {
     @Test
     public void findRoutesCreatedByMyFriends() {
         try {
-            List<Long> facebookUserIds = new ArrayList<>();
-            facebookUserIds.add(EXISTING_FACEBOOK_USER_ID);
-            List<FeatureSearchDto> featureSearchDtos = routeService.find(null, null, 1, null, facebookUserIds);
+            List<Long> facebookUserIds = new ArrayList<Long>() {{
+                add(EXISTING_FACEBOOK_USER_ID);
+            }};
+            List<FeatureSearchDto> featureSearchDtos = routeService.find(null, null, facebookUserIds);
             assertEquals(1, featureSearchDtos.size());
 
-            facebookUserIds.clear();
-            facebookUserIds.add(EXISTING_FACEBOOK_USER_ID2);
-            featureSearchDtos = routeService.find(null, null, 1, null, facebookUserIds);
+            facebookUserIds = new ArrayList<Long>() {{
+                add(EXISTING_FACEBOOK_USER_ID2);
+            }};
+            featureSearchDtos = routeService.find(null, null, facebookUserIds);
             assertEquals(1, featureSearchDtos.size());
 
-            facebookUserIds.clear();
-            facebookUserIds.add(EXISTING_FACEBOOK_USER_ID);
-            facebookUserIds.add(EXISTING_FACEBOOK_USER_ID2);
-            featureSearchDtos = routeService.find(null, null, 1, null, facebookUserIds);
+            facebookUserIds = new ArrayList<Long>() {{
+                add(EXISTING_FACEBOOK_USER_ID);
+                add(EXISTING_FACEBOOK_USER_ID2);
+            }};
+            featureSearchDtos = routeService.find(null, null, facebookUserIds);
             assertEquals(2, featureSearchDtos.size());
         } catch (Exception e) {
             fail();
@@ -205,26 +214,31 @@ public class RouteServiceFindTest {
     @Test
     public void findRoutesWithAllParams() {
         try {
-            List<FeatureSearchDto> featureSearchDtos = routeService.find(null, null, null, null, null);
+            List<FeatureSearchDto> featureSearchDtos = routeService.find(null, null, null);
             assertEquals(2, featureSearchDtos.size());
 
             List<String> travelModes = new ArrayList<>();
             travelModes.add(WALKING_TRAVEL_MODE);
-            featureSearchDtos = routeService.find(BOUNDS_GALICIA, travelModes, 0, EXISTING_FACEBOOK_USER_ID, null);
+            List<Long> facebookUserIds = new ArrayList<Long>() {{
+                add(EXISTING_FACEBOOK_USER_ID);
+            }};
+            featureSearchDtos = routeService.find(BOUNDS_GALICIA, travelModes, facebookUserIds);
             assertEquals(1, featureSearchDtos.size());
 
-            List<Long> facebookUserIds = new ArrayList<>();
-            facebookUserIds.add(EXISTING_FACEBOOK_USER_ID2);
-            featureSearchDtos = routeService.find(BOUNDS_GALICIA, travelModes, 1, null, facebookUserIds);
+            facebookUserIds = new ArrayList<Long>() {{
+                add(EXISTING_FACEBOOK_USER_ID2);
+            }};
+            featureSearchDtos = routeService.find(BOUNDS_GALICIA, travelModes, facebookUserIds);
             assertEquals(0, featureSearchDtos.size());
 
             travelModes.clear();
-            facebookUserIds.clear();
             travelModes.add(WALKING_TRAVEL_MODE);
             travelModes.add(DRIVING_TRAVEL_MODE);
-            facebookUserIds.add(EXISTING_FACEBOOK_USER_ID);
-            facebookUserIds.add(EXISTING_FACEBOOK_USER_ID2);
-            featureSearchDtos = routeService.find(BOUNDS_A_CORUNA , travelModes, 1, null, facebookUserIds);
+            facebookUserIds = new ArrayList<Long>() {{
+                add(EXISTING_FACEBOOK_USER_ID);
+                add(EXISTING_FACEBOOK_USER_ID2);
+            }};
+            featureSearchDtos = routeService.find(BOUNDS_A_CORUNA , travelModes, facebookUserIds);
             assertEquals(1, featureSearchDtos.size());
         } catch (Exception e) {
             e.printStackTrace();

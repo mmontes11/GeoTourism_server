@@ -2,6 +2,7 @@ package com.mmontes.rest.controller;
 
 import com.mmontes.model.service.CityService;
 import com.mmontes.model.service.RouteService;
+import com.mmontes.model.service.UserAccountService;
 import com.mmontes.service.FacebookService;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.FeatureSearchDto;
@@ -24,6 +25,9 @@ public class RoutesController {
 
     @Autowired
     private CityService cityService;
+
+    @Autowired
+    private UserAccountService userAccountService;
 
     @RequestMapping(value = "/routes", method = RequestMethod.GET)
     public ResponseEntity<List<FeatureSearchDto>>
@@ -66,7 +70,8 @@ public class RoutesController {
 
         List<FeatureSearchDto> routes;
         try {
-            routes = routeService.find(geomWKT,travelModes,createdBy,facebookUserId,friendsFacebookUserIds);
+            List<Long> facebookUserIds = userAccountService.getFacebookUserIds(createdBy, facebookUserId, friendsFacebookUserIds);
+            routes = routeService.find(geomWKT,travelModes,facebookUserIds);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

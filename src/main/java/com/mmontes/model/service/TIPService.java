@@ -14,7 +14,7 @@ public interface TIPService {
             throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException;
     TIPDetailsDto findById(Long TIPId,Long facebooUserId) throws InstanceNotFoundException;
     void remove(Long TIPId) throws InstanceNotFoundException, InvalidRouteException;
-    List<FeatureSearchDto> find(String boundsWKT, List<Long> typeIds, List<Long> cityIds, Integer favouritedBy, Long facebookUserId, List<Long> friendsFacebookUserIds)
+    List<FeatureSearchDto> find(String boundsWKT, List<Long> typeIds, List<Long> cityIds, List<Long> facebookUserIds)
             throws InstanceNotFoundException;
     TIPDetailsDto edit(Long TIPId, Long facebookUserId, Long type, String name, String description, String infoUrl, String address, String photoUrl)
             throws InstanceNotFoundException, InvalidTIPUrlException;

@@ -172,9 +172,9 @@ public class TIPServiceTest {
     public void findTIPsByBounds() {
         List<FeatureSearchDto> featureSearchDtos;
         try {
-            featureSearchDtos = tipService.find(BOUNDS_SANTIAGO_DE_COMPOSTELA, null, null, null, null, null);
+            featureSearchDtos = tipService.find(BOUNDS_SANTIAGO_DE_COMPOSTELA, null, null, null);
             assertEquals(3, featureSearchDtos.size());
-            featureSearchDtos = tipService.find(BOUNDS_NEW_YORK, null, null, null, null, null);
+            featureSearchDtos = tipService.find(BOUNDS_NEW_YORK, null, null, null);
             assertEquals(1,featureSearchDtos.size());
         } catch (InstanceNotFoundException e) {
             fail();
@@ -187,14 +187,14 @@ public class TIPServiceTest {
             ArrayList<Long> typeIds = new ArrayList<Long>() {{
                 add(MONUMENT_DISCRIMINATOR);
             }};
-            List<FeatureSearchDto> featureSearchDtos = tipService.find(null, typeIds, null, null, null, null);
+            List<FeatureSearchDto> featureSearchDtos = tipService.find(null, typeIds, null, null);
             assertEquals(3, featureSearchDtos.size());
 
             typeIds = new ArrayList<Long>() {{
                 add(MONUMENT_DISCRIMINATOR);
                 add(NATURAL_SPACE_DISCRIMINATOR);
             }};
-            featureSearchDtos = tipService.find(null, typeIds, null, null, null, null);
+            featureSearchDtos = tipService.find(null, typeIds, null, null);
             assertEquals(4, featureSearchDtos.size());
 
             typeIds = new ArrayList<Long>() {{
@@ -202,7 +202,7 @@ public class TIPServiceTest {
                 add(NATURAL_SPACE_DISCRIMINATOR);
                 add(HOTEL_DISCRIMINATOR);
             }};
-            featureSearchDtos = tipService.find(null, typeIds, null, null, null, null);
+            featureSearchDtos = tipService.find(null, typeIds, null, null);
             assertEquals(5, featureSearchDtos.size());
         } catch (Exception e) {
             e.printStackTrace();
@@ -216,20 +216,20 @@ public class TIPServiceTest {
             ArrayList<Long> cityIds = new ArrayList<Long>() {{
                 add(A_CORUNA_ID);
             }};
-            List<FeatureSearchDto> featureSearchDtos = tipService.find(null, null, cityIds, null, null, null);
+            List<FeatureSearchDto> featureSearchDtos = tipService.find(null, null, cityIds, null);
             assertEquals(1, featureSearchDtos.size());
 
             cityIds = new ArrayList<Long>() {{
                 add(SANTIAGO_ID);
             }};
-            featureSearchDtos = tipService.find(null, null, cityIds, null, null, null);
+            featureSearchDtos = tipService.find(null, null, cityIds, null);
             assertEquals(3, featureSearchDtos.size());
 
             cityIds = new ArrayList<Long>() {{
                 add(A_CORUNA_ID);
                 add(SANTIAGO_ID);
             }};
-            featureSearchDtos = tipService.find(null, null, cityIds, null, null, null);
+            featureSearchDtos = tipService.find(null, null, cityIds, null);
             assertEquals(4, featureSearchDtos.size());
         } catch (Exception e) {
             e.printStackTrace();
@@ -238,36 +238,22 @@ public class TIPServiceTest {
     }
 
     @Test
-    public void findTipsFavouritedByMe(){
-        try {
-            List<FeatureSearchDto> featureSearchDtos = tipService.find(null,null,null,0,EXISTING_FACEBOOK_USER_ID,null);
-            assertEquals(1, featureSearchDtos.size());
-
-            featureSearchDtos = tipService.find(null,null,null,0,EXISTING_FACEBOOK_USER_ID,null);
-            assertEquals(1, featureSearchDtos.size());
-        } catch (Exception e) {
-            e.printStackTrace();
-            fail();
-        }
-    }
-
-    @Test
-    public void findTipsFavouritedByMyFriends(){
+    public void findTipsFavouritedByFacebookUserIDs(){
         try {
             List<Long> facebookUserIDs = new ArrayList<>();
             facebookUserIDs.add(EXISTING_FACEBOOK_USER_ID);
-            List<FeatureSearchDto> featureSearchDtos = tipService.find(null,null,null,1,null,facebookUserIDs);
+            List<FeatureSearchDto> featureSearchDtos = tipService.find(null,null,null,facebookUserIDs);
             assertEquals(1, featureSearchDtos.size());
 
             facebookUserIDs.clear();
             facebookUserIDs.add(EXISTING_FACEBOOK_USER_ID2);
-            featureSearchDtos = tipService.find(null,null,null,1,null,facebookUserIDs);
+            featureSearchDtos = tipService.find(null,null,null,facebookUserIDs);
             assertEquals(1, featureSearchDtos.size());
 
             facebookUserIDs.clear();
             facebookUserIDs.add(EXISTING_FACEBOOK_USER_ID);
             facebookUserIDs.add(EXISTING_FACEBOOK_USER_ID2);
-            featureSearchDtos = tipService.find(null,null,null,1,null,facebookUserIDs);
+            featureSearchDtos = tipService.find(null,null,null,facebookUserIDs);
             assertEquals(2, featureSearchDtos.size());
         }catch (Exception e) {
             e.printStackTrace();
@@ -284,7 +270,10 @@ public class TIPServiceTest {
             ArrayList<Long> cityIds = new ArrayList<Long>() {{
                 add(A_CORUNA_ID);
             }};
-            List<FeatureSearchDto> featureSearchDtos = tipService.find(BOUNDS_GALICIA, typeIds, cityIds, 0, EXISTING_FACEBOOK_USER_ID2, null);
+            ArrayList<Long> facebookUserIds = new ArrayList<Long>() {{
+                add(EXISTING_FACEBOOK_USER_ID2);
+            }};
+            List<FeatureSearchDto> featureSearchDtos = tipService.find(BOUNDS_GALICIA, typeIds, cityIds, facebookUserIds);
             assertEquals(1, featureSearchDtos.size());
 
 
@@ -294,10 +283,10 @@ public class TIPServiceTest {
             cityIds = new ArrayList<Long>() {{
                 add(NEW_YORK_ID);
             }};
-            ArrayList<Long> facebookUserIds = new ArrayList<Long>() {{
+            facebookUserIds = new ArrayList<Long>() {{
                 add(EXISTING_FACEBOOK_USER_ID);
             }};
-            featureSearchDtos = tipService.find(BOUNDS_NEW_YORK, typeIds, cityIds, 1, null, facebookUserIds);
+            featureSearchDtos = tipService.find(BOUNDS_NEW_YORK, typeIds, cityIds, facebookUserIds);
             assertEquals(1, featureSearchDtos.size());
 
 
@@ -311,7 +300,7 @@ public class TIPServiceTest {
                 add(EXISTING_FACEBOOK_USER_ID);
                 add(EXISTING_FACEBOOK_USER_ID2);
             }};
-            featureSearchDtos = tipService.find(BOUNDS_NEW_YORK, typeIds, cityIds, 1, null, facebookUserIds);
+            featureSearchDtos = tipService.find(BOUNDS_NEW_YORK, typeIds, cityIds, facebookUserIds);
             assertEquals(0, featureSearchDtos.size());
 
 
@@ -323,7 +312,7 @@ public class TIPServiceTest {
             cityIds = new ArrayList<Long>() {{
                 add(SANTIAGO_ID);
             }};
-            featureSearchDtos = tipService.find(BOUNDS_GALICIA, typeIds, cityIds, 0, null, null);
+            featureSearchDtos = tipService.find(BOUNDS_GALICIA, typeIds, cityIds, null);
             assertEquals(3, featureSearchDtos.size());
         } catch (Exception e) {
             e.printStackTrace();

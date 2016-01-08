@@ -20,7 +20,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service("TIPService")
@@ -50,9 +49,6 @@ public class TIPServiceImpl implements TIPService {
 
     @Autowired
     private GoogleMapsService googleMapsService;
-
-    @Autowired
-    private UserAccountService userAccountService;
 
     public TIPDetailsDto
     create(Long typeId, String name, String description, String photoUrl, String infoUrl, Geometry geom)
@@ -108,8 +104,7 @@ public class TIPServiceImpl implements TIPService {
         }
     }
 
-    public List<FeatureSearchDto> find(String boundsWKT, List<Long> typeIds, List<Long> cityIds, Integer favouritedBy, Long facebookUserId, List<Long> friendsFacebookUserIds) throws InstanceNotFoundException {
-        List<Long> facebookUserIds = userAccountService.getFacebookUserIds(favouritedBy, facebookUserId, friendsFacebookUserIds);
+    public List<FeatureSearchDto> find(String boundsWKT, List<Long> typeIds, List<Long> cityIds, List<Long> facebookUserIds) throws InstanceNotFoundException {
         List<TIP> tips = tipDao.find(boundsWKT, typeIds, cityIds, facebookUserIds);
         return dtoService.ListTIP2ListFeatureSearchDto(tips);
     }

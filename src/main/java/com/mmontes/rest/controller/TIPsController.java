@@ -1,6 +1,7 @@
 package com.mmontes.rest.controller;
 
 import com.mmontes.model.service.TIPService;
+import com.mmontes.model.service.UserAccountService;
 import com.mmontes.service.FacebookService;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.FeatureSearchDto;
@@ -19,6 +20,9 @@ public class TIPsController {
 
     @Autowired
     private TIPService tipService;
+
+    @Autowired
+    private UserAccountService userAccountService;
 
     @RequestMapping(value = "/tips", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<List<FeatureSearchDto>>
@@ -45,7 +49,8 @@ public class TIPsController {
         }
         List<FeatureSearchDto> tips;
         try {
-            tips = tipService.find(boundsWKT, typeIds, cityIds, favouritedBy, facebookUserId, friendsFacebookUserIds);
+            List<Long> facebookUserIds = userAccountService.getFacebookUserIds(favouritedBy,facebookUserId,friendsFacebookUserIds);
+            tips = tipService.find(boundsWKT, typeIds, cityIds, facebookUserIds);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

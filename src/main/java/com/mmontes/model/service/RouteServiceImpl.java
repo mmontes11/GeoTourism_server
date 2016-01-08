@@ -50,9 +50,6 @@ public class RouteServiceImpl implements RouteService {
     @Autowired
     private TIPService tipService;
 
-    @Autowired
-    private CityService cityService;
-
     private List<Coordinate> setRouteTIPsAndGetCoords(Route route, List<Long> tipIds) throws InstanceNotFoundException {
         List<Coordinate> coordinates = new ArrayList<>();
         for (int i = 0; i < tipIds.size(); i++) {
@@ -168,9 +165,8 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public List<FeatureSearchDto> find(String boundsWKT, List<String> travelModes, Integer createdBy, Long facebookUserId, List<Long> friendsFacebookUserIds)
+    public List<FeatureSearchDto> find(String boundsWKT, List<String> travelModes, List<Long> facebookUserIds)
             throws InstanceNotFoundException {
-        List<Long> facebookUserIds = userAccountService.getFacebookUserIds(createdBy, facebookUserId, friendsFacebookUserIds);
         List<Route> routes = routeDao.find(boundsWKT, travelModes, facebookUserIds);
         return dtoService.ListRoute2ListFeatureSearchDto(routes);
     }

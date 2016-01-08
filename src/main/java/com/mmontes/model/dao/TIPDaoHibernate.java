@@ -15,7 +15,7 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements TIPDao {
 
-    public List<TIP> find(Geometry bounds, List<Long> typeIds, List<Long> cityIds, List<Long> facebookUserIds) {
+    public List<TIP> find(String boundsWKT, List<Long> typeIds, List<Long> cityIds, List<Long> facebookUserIds) {
 
         boolean filterByBounds = false;
         boolean filterByType = false;
@@ -28,8 +28,7 @@ public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements T
             queryString += "JOIN useraccount u ON tu.userid = u.id ";
         }
 
-        if (bounds != null) {
-            String boundsWKT = GeometryUtils.WKTFromGeometry(bounds);
+        if (boundsWKT != null) {
             queryString += "WHERE ST_Within(t.geom,ST_GeometryFromText('SRID=" + Constants.SRID + ";" + boundsWKT + "'))";
             filterByBounds = true;
         }

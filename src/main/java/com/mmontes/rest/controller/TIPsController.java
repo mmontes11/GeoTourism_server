@@ -33,10 +33,9 @@ public class TIPsController {
         if (!FacebookService.validFBparams(accessToken,facebookUserId)){
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
-        Geometry bounds = null;
         try {
             if (boundsWKT != null) {
-                bounds = GeometryUtils.geometryFromWKT(boundsWKT);
+                GeometryUtils.geometryFromWKT(boundsWKT);
             }
         } catch (GeometryParsingException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -46,7 +45,7 @@ public class TIPsController {
         }
         List<FeatureSearchDto> tips;
         try {
-            tips = tipService.find(bounds, typeIds, cityIds, favouritedBy, facebookUserId, friendsFacebookUserIds);
+            tips = tipService.find(boundsWKT, typeIds, cityIds, favouritedBy, facebookUserId, friendsFacebookUserIds);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

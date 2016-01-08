@@ -4,6 +4,7 @@ import com.mmontes.model.entity.City;
 import com.mmontes.model.service.CityService;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.exception.GeometryParsingException;
+import com.mmontes.util.exception.InstanceNotFoundException;
 import com.vividsolutions.jts.geom.Point;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -11,6 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.mmontes.test.util.Constants.*;
 import static com.mmontes.util.Constants.SPRING_CONFIG_FILE;
@@ -50,5 +54,19 @@ public class CityServiceTest {
     @Test
     public void getAllCities(){
         assertEquals(4,cityService.findAll().size());
+    }
+
+    @Test
+    public void getCityGeomsWKT(){
+        try {
+            List<Long> cities = new ArrayList<Long>() {{
+                add(A_CORUNA_ID);
+                add(SANTIAGO_ID);
+            }};
+            assertNotNull(cityService.getGeomUnionCities(cities));
+        } catch (InstanceNotFoundException e) {
+            e.printStackTrace();
+            fail();
+        }
     }
 }

@@ -40,7 +40,7 @@ public class RouteDaoHibernate extends GenericDaoHibernate<Route,Long> implement
     }
 
     @Override
-    public List<Route> find(Geometry bounds, List<String> travelModes, List<Long> facebookUserIds) {
+    public List<Route> find(String boundsWKT, List<String> travelModes, List<Long> facebookUserIds) {
 
         boolean filterByBounds = false;
         boolean filterByTravelMode = false;
@@ -50,10 +50,8 @@ public class RouteDaoHibernate extends GenericDaoHibernate<Route,Long> implement
         if (filterByFacebookUserIds){
             queryString += "JOIN useraccount u ON r.userid = u.id ";
         }
-
-        if (bounds != null) {
-            String boundsWKT = GeometryUtils.WKTFromGeometry(bounds);
-            queryString += "WHERE ST_Intersects(r.geom,ST_GeometryFromText('SRID=" + Constants.SRID + ";" + boundsWKT + "'))";
+        if (boundsWKT != null) {
+            queryString += "WHERE ST_Intersects(r.geom,ST_GeometryFromText('SRID=" + Constants.SRID + ";" + boundsWKT + "')) ";
             filterByBounds = true;
         }
         if (travelModes != null && !travelModes.isEmpty()) {
@@ -67,7 +65,6 @@ public class RouteDaoHibernate extends GenericDaoHibernate<Route,Long> implement
             String partialQuery = "u.facebookuserid IN " + FBuserIds + " ";
             queryString += ((filterByBounds || filterByTravelMode) ? "AND " : "WHERE ") + partialQuery;
         }
-
         Query query = getSession().createSQLQuery(queryString).addEntity(Route.class);
         return query.list();
     }

@@ -1,6 +1,7 @@
 package com.mmontes.test.model.service;
 
 import com.mmontes.model.dao.RouteDao;
+import com.mmontes.model.service.CityService;
 import com.mmontes.model.service.RouteService;
 import com.mmontes.model.service.TIPService;
 import com.mmontes.util.GeometryUtils;
@@ -27,12 +28,9 @@ import static org.junit.Assert.fail;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {SPRING_CONFIG_FILE, SPRING_CONFIG_TEST_FILE})
 @Transactional
+@SuppressWarnings("all")
 public class RouteServiceFindTest {
-
-    public static Geometry boundsGalicia;
-    public static Geometry boundsCoruna;
-    public static Geometry boundsSantiago;
-    public static Geometry boundsNY;
+    
     private static Long alamedaID;
     private static Long cathedralID;
     private static Long reisCatolicosID;
@@ -41,6 +39,8 @@ public class RouteServiceFindTest {
     private static Long almaNegraID;
     private static Long alamedaToReisCatolicosID;
     private static Long hotelRiazorToTorreHerculesID;
+    private static String corunaSantiagoWKT;
+
     @Autowired
     private RouteService routeService;
 
@@ -49,6 +49,9 @@ public class RouteServiceFindTest {
 
     @Autowired
     private TIPService tipService;
+
+    @Autowired
+    private CityService cityService;
 
     @Before
     @SuppressWarnings("all")
@@ -100,8 +103,8 @@ public class RouteServiceFindTest {
             RouteDetailsDto routeDetailsDto = routeService.create(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID);
             alamedaToReisCatolicosID = routeDetailsDto.getId();
 
-            name = "From Hotel Riazor ";
-            description = "Santiago route";
+            name = "From Hotel Riazor to Tower of Hercules";
+            description = "A Coruña";
             travelMode = DRIVING_TRAVEL_MODE;
             tipIds.clear();
             tipIds.add(hotelRiazorID);
@@ -109,11 +112,6 @@ public class RouteServiceFindTest {
             tipIds.add(towerOfHerculesID);
             routeDetailsDto = routeService.create(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID2);
             hotelRiazorToTorreHerculesID = routeDetailsDto.getId();
-
-            boundsGalicia = GeometryUtils.geometryFromWKT(BOUNDS_GALICIA);
-            boundsCoruna = GeometryUtils.geometryFromWKT(BOUNDS_A_CORUNA);
-            boundsSantiago = GeometryUtils.geometryFromWKT(BOUNDS_SANTIAGO_DE_COMPOSTELA);
-            boundsNY = GeometryUtils.geometryFromWKT(BOUNDS_NEW_YORK);
         } catch (Exception e) {
             e.printStackTrace();
             fail();
@@ -123,16 +121,16 @@ public class RouteServiceFindTest {
     @Test
     public void findRoutesByBounds() {
         try {
-            List<FeatureSearchDto> featureSearchDtos = routeService.find(boundsGalicia, null, null, null, null);
+            List<FeatureSearchDto> featureSearchDtos = routeService.find(BOUNDS_GALICIA, null, null, null, null);
             assertEquals(2, featureSearchDtos.size());
 
-            featureSearchDtos = routeService.find(boundsCoruna, null, null, null, null);
+            featureSearchDtos = routeService.find(BOUNDS_A_CORUNA, null, null, null, null);
             assertEquals(1, featureSearchDtos.size());
 
-            featureSearchDtos = routeService.find(boundsSantiago, null, null, null, null);
+            featureSearchDtos = routeService.find(BOUNDS_SANTIAGO_DE_COMPOSTELA, null, null, null, null);
             assertEquals(1, featureSearchDtos.size());
 
-            featureSearchDtos = routeService.find(boundsNY, null, null, null, null);
+            featureSearchDtos = routeService.find(BOUNDS_NEW_YORK, null, null, null, null);
             assertEquals(0, featureSearchDtos.size());
         } catch (Exception e) {
             fail();
@@ -163,6 +161,7 @@ public class RouteServiceFindTest {
             featureSearchDtos = routeService.find(null, travelModes, null, null, null);
             assertEquals(0, featureSearchDtos.size());
         } catch (Exception e) {
+            e.printStackTrace();
             fail();
         }
     }
@@ -211,12 +210,12 @@ public class RouteServiceFindTest {
 
             List<String> travelModes = new ArrayList<>();
             travelModes.add(WALKING_TRAVEL_MODE);
-            featureSearchDtos = routeService.find(boundsGalicia, travelModes, 0, EXISTING_FACEBOOK_USER_ID, null);
+            featureSearchDtos = routeService.find(BOUNDS_GALICIA, travelModes, 0, EXISTING_FACEBOOK_USER_ID, null);
             assertEquals(1, featureSearchDtos.size());
 
             List<Long> facebookUserIds = new ArrayList<>();
             facebookUserIds.add(EXISTING_FACEBOOK_USER_ID2);
-            featureSearchDtos = routeService.find(boundsGalicia, travelModes, 1, null, facebookUserIds);
+            featureSearchDtos = routeService.find(BOUNDS_GALICIA, travelModes, 1, null, facebookUserIds);
             assertEquals(0, featureSearchDtos.size());
 
             travelModes.clear();
@@ -225,7 +224,7 @@ public class RouteServiceFindTest {
             travelModes.add(DRIVING_TRAVEL_MODE);
             facebookUserIds.add(EXISTING_FACEBOOK_USER_ID);
             facebookUserIds.add(EXISTING_FACEBOOK_USER_ID2);
-            featureSearchDtos = routeService.find(boundsCoruna, travelModes, 1, null, facebookUserIds);
+            featureSearchDtos = routeService.find(BOUNDS_A_CORUNA , travelModes, 1, null, facebookUserIds);
             assertEquals(1, featureSearchDtos.size());
         } catch (Exception e) {
             e.printStackTrace();

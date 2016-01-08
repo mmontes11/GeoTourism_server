@@ -14,6 +14,11 @@ import static com.mmontes.util.Constants.SRID;
 
 public class GeometryUtils {
 
+    public enum GeomOperation {
+        UNION,
+        INTERSECTION
+    }
+
     public static Geometry geometryFromWKT(String wkt) throws GeometryParsingException {
         if(wkt == null || wkt.equals("")){
             throw new GeometryParsingException("Unable to parse empty or null geometry");
@@ -46,7 +51,7 @@ public class GeometryUtils {
         return lineString;
     }
 
-    public static Geometry unionGeometries(List<Geometry> geometries) {
+    public static Geometry apply(List<Geometry> geometries,GeomOperation operation) {
         Geometry all = null;
         for (Geometry geometry : geometries){
             if( geometry == null ) continue;
@@ -54,7 +59,16 @@ public class GeometryUtils {
                 all = geometry;
             }
             else {
-                all = all.union( geometry );
+                switch(operation){
+                    case UNION:
+                        all = all.union( geometry );
+                        break;
+                    case INTERSECTION:
+                        all = all.intersection( geometry );
+                        break;
+                    default:
+                        return null;
+                }
             }
         }
         if (all != null){

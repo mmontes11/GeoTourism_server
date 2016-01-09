@@ -66,7 +66,10 @@ public class RoutesController {
         geoms.add(bounds);
         geoms.add(unionCities);
         Geometry geom = GeometryUtils.apply(geoms,GeometryUtils.GeomOperation.INTERSECTION);
-        String geomWKT = GeometryUtils.WKTFromGeometry(geom);
+        String geomWKT = null;
+        if (geom != null){
+            geomWKT = GeometryUtils.WKTFromGeometry(geom);
+        }
 
         List<FeatureSearchDto> routes;
         try {

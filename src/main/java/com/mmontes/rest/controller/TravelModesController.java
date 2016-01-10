@@ -11,12 +11,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-public class TravelModes {
+public class TravelModesController {
 
     @RequestMapping(value = "/travelModes", method = RequestMethod.GET)
     public ResponseEntity<List<String>>
-    getTravelModes(){
-        List<String> travelModes = new ArrayList<String>(){{
+    getTravelModes() {
+        List<String> travelModes = new ArrayList<String>() {{
             add(TravelMode.WALKING.toUrlValue());
             add(TravelMode.BICYCLING.toUrlValue());
             add(TravelMode.DRIVING.toUrlValue());

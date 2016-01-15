@@ -136,6 +136,6 @@ public class RouteController {
     @RequestMapping(value = "/social/route/maxwaypoints", method = RequestMethod.GET)
     public ResponseEntity<Integer>
     getMaxWayPoints(){
-        return new ResponseEntity<>(Constants.MAX_NUM_WAYPOINTS,HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(Constants.MAX_NUM_WAYPOINTS,HttpStatus.OK);
     }
 }

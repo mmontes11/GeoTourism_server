@@ -25,7 +25,7 @@ public final class Constants {
     public static final String POINT_TORRE_HERCULES = "POINT(-8.4048645 43.3855127)";
     public static final String POINT_ALAMEDA = "POINT(-8.54667395353317 42.8772574529327)";
     public static final String POINT_CATEDRAL_SANTIAGO = "POINT(-8.54484736919403 42.8803668869386)";
-    public static final String POINT_HOTEL_REIS_CATOLICOS = "POINT(-8.54542136192322 42.881416432956)";
+    public static final String POINT_HOTEL_REIS_CATOLICOS = "POINT(-8.54542136192322 42.8814525)";
     public static final String POINT_STATUE_OF_LIBERTRY = "POINT(-74.0445004 40.6892494)";
     public static final String POINT_ALHAMBRA = "POINT(-3.59033 37.1760826)";
 

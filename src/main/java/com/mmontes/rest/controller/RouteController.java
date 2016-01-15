@@ -8,6 +8,7 @@ import com.mmontes.rest.request.TIPPatchRequest;
 import com.mmontes.rest.response.ResponseFactory;
 import com.mmontes.service.FacebookService;
 import com.mmontes.service.GoogleMapsService;
+import com.mmontes.util.Constants;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.FeatureSearchDto;
 import com.mmontes.util.dto.RouteDetailsDto;
@@ -54,6 +55,9 @@ public class RouteController {
             } catch (GeometryParsingException e) {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
+        }
+        if (routeRequest.getTipIds() != null && routeRequest.getTipIds().size() > Constants.MAX_NUM_WAYPOINTS){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         RouteDetailsDto routeDetailsDto;
         try {
@@ -127,5 +131,11 @@ public class RouteController {
         } catch (InvalidRouteException e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @RequestMapping(value = "/social/route/maxwaypoints", method = RequestMethod.GET)
+    public ResponseEntity<Integer>
+    getMaxWayPoints(){
+        return new ResponseEntity<>(Constants.MAX_NUM_WAYPOINTS,HttpStatus.BAD_REQUEST);
     }
 }

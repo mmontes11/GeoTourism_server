@@ -9,6 +9,7 @@ public class TIPtype {
     private static final String TIPtype_ID_GENERATOR = "TIPtypeIdGenerator";
     private Long id;
     private String name;
+    private String icon;
 
     public TIPtype() {
     }
@@ -32,5 +33,14 @@ public class TIPtype {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    @Column(name = "icon")
+    public String getIcon() {
+        return icon;
+    }
+
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 }

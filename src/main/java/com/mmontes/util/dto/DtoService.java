@@ -65,7 +65,8 @@ public class DtoService {
     public FeatureSearchDto TIP2FeatureSearchDto(TIP tip){
         Long id = tip.getId();
         String geom = GeometryUtils.WKTFromGeometry(tip.getGeom());
-        return new FeatureSearchDto(id,geom);
+        String icon = tip.getType().getIcon();
+        return new FeatureSearchDto(id,geom,icon);
     }
 
     public List<FeatureSearchDto> ListTIP2ListFeatureSearchDto(List<TIP> tips){
@@ -111,7 +112,7 @@ public class DtoService {
     public FeatureSearchDto Route2FeatureSearchDto(Route route){
         Long id = route.getId();
         String geom = GeometryUtils.WKTFromGeometry(route.getGeom());
-        return new FeatureSearchDto(id,geom);
+        return new FeatureSearchDto(id,geom,null);
     }
 
     public List<FeatureSearchDto> ListRoute2ListFeatureSearchDto(List<Route> routes){

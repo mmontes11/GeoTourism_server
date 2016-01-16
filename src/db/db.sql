@@ -55,6 +55,7 @@ CREATE INDEX Route_Geometry_Gix ON Route USING GIST (geom);
 CREATE TABLE TIPtype(
   id SERIAL,
   name VARCHAR(20),
+  icon VARCHAR(20),
   CONSTRAINT TIPtype_PK PRIMARY KEY(id)
 );
 
@@ -124,7 +125,7 @@ CREATE TABLE RouteTIP(
 );
 
 DELETE FROM TIPtype;
-INSERT INTO TIPtype VALUES(1,'Monument');
-INSERT INTO TIPtype VALUES(2,'Natural Space');
-INSERT INTO TIPtype VALUES(3,'Hotel');
-INSERT INTO TIPtype VALUES(4,'Restaurant');
+INSERT INTO TIPtype VALUES(1,'Monument','fa-fort-awesome');
+INSERT INTO TIPtype VALUES(2,'Natural Space','fa-leaf');
+INSERT INTO TIPtype VALUES(3,'Hotel','fa-bed');
+INSERT INTO TIPtype VALUES(4,'Restaurant','fa-cutlery');

@@ -1,24 +1,19 @@
 package com.mmontes.rest.controller;
 
 import com.mmontes.model.service.RouteService;
-import com.mmontes.model.service.TIPService;
 import com.mmontes.rest.request.RoutePatchRequest;
 import com.mmontes.rest.request.RouteRequest;
-import com.mmontes.rest.request.TIPPatchRequest;
+import com.mmontes.rest.response.IntegerResult;
 import com.mmontes.rest.response.ResponseFactory;
 import com.mmontes.service.FacebookService;
-import com.mmontes.service.GoogleMapsService;
 import com.mmontes.util.Constants;
 import com.mmontes.util.GeometryUtils;
-import com.mmontes.util.dto.FeatureSearchDto;
 import com.mmontes.util.dto.RouteDetailsDto;
 import com.mmontes.util.exception.GeometryParsingException;
-import com.mmontes.util.exception.GoogleMapsServiceException;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import com.mmontes.util.exception.InvalidRouteException;
 import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -56,7 +51,7 @@ public class RouteController {
                 return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
             }
         }
-        if (routeRequest.getTipIds() != null && routeRequest.getTipIds().size() > Constants.MAX_NUM_WAYPOINTS){
+        if (routeRequest.getTipIds() != null && routeRequest.getTipIds().size() > Constants.MAX_POINTS_ROUTE){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         RouteDetailsDto routeDetailsDto;
@@ -133,9 +128,9 @@ public class RouteController {
         }
     }
 
-    @RequestMapping(value = "/social/route/maxwaypoints", method = RequestMethod.GET)
-    public ResponseEntity<Integer>
+    @RequestMapping(value = "/social/route/maxpoints", method = RequestMethod.GET)
+    public ResponseEntity<IntegerResult>
     getMaxWayPoints(){
-        return new ResponseEntity<>(Constants.MAX_NUM_WAYPOINTS,HttpStatus.OK);
+        return new ResponseEntity<>(new IntegerResult(Constants.MAX_POINTS_ROUTE),HttpStatus.OK);
     }
 }

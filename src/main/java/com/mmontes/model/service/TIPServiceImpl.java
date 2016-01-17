@@ -13,6 +13,7 @@ import com.mmontes.util.URLvalidator;
 import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.dto.FeatureSearchDto;
 import com.mmontes.util.dto.TIPDetailsDto;
+import com.mmontes.util.dto.TIPMinDto;
 import com.mmontes.util.exception.*;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -90,6 +91,11 @@ public class TIPServiceImpl implements TIPService {
             userAccount = userAccountDao.findByFBUserID(facebooUserId);
         }
         return dtoService.TIP2TIPDetailsDto(tipDao.findById(TIPId), userAccount);
+    }
+
+    @Override
+    public TIPMinDto findById(Long TIPId) throws InstanceNotFoundException {
+        return dtoService.TIP2TIPMinDto(tipDao.findById(TIPId));
     }
 
     public void remove(Long TIPId) throws InstanceNotFoundException, InvalidRouteException {

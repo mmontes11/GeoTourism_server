@@ -20,7 +20,7 @@ public class TIPController {
     @Autowired
     private TIPService tipService;
 
-    @RequestMapping(value = "/admin/tip", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/admin/tip", method = RequestMethod.POST)
     public ResponseEntity<TIPDetailsDto>
     create(@RequestBody TIPRequest tipRequest) {
 

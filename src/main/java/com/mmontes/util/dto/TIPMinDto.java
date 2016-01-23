@@ -4,16 +4,16 @@ public class TIPMinDto {
 
     private Long id;
     private String name;
-    private String googleMapsurl;
+    private String googleMapsUrl;
     private String icon;
 
     public TIPMinDto() {
     }
 
-    public TIPMinDto(Long id, String name, String googleMapsurl, String icon) {
+    public TIPMinDto(Long id, String name, String googleMapsUrl, String icon) {
         this.id = id;
         this.name = name;
-        this.googleMapsurl = googleMapsurl;
+        this.googleMapsUrl = googleMapsUrl;
         this.icon = icon;
     }
 
@@ -33,12 +33,12 @@ public class TIPMinDto {
         this.name = name;
     }
 
-    public String getGoogleMapsurl() {
-        return googleMapsurl;
+    public String getGoogleMapsUrl() {
+        return googleMapsUrl;
     }
 
-    public void setGoogleMapsurl(String googleMapsurl) {
-        this.googleMapsurl = googleMapsurl;
+    public void setGoogleMapsUrl(String googleMapsUrl) {
+        this.googleMapsUrl = googleMapsUrl;
     }
 
     public String getIcon() {

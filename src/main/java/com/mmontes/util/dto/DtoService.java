@@ -81,7 +81,7 @@ public class DtoService {
         TIPMinDto tipMinDto = new TIPMinDto();
         tipMinDto.setId(tip.getId());
         tipMinDto.setName(tip.getName());
-        tipMinDto.setGoogleMapsurl(tip.getGoogleMapsUrl());
+        tipMinDto.setGoogleMapsUrl(tip.getGoogleMapsUrl());
         tipMinDto.setIcon(tip.getType().getIcon());
         return tipMinDto;
     }

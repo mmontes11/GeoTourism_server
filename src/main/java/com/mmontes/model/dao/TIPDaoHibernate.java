@@ -61,7 +61,7 @@ public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements T
         String queryString =
             "SELECT id FROM tip " +
             "WHERE id IN "+tipIdsIn+" " +
-                    "ST_Distance(ST_GeometryFromText('SRID="+Constants.SRID+";"+superGeometryWKT+"'),geom) < " + Constants.MIN_DISTANCE ;
+            "AND ST_Distance(ST_GeometryFromText('SRID="+Constants.SRID+";"+superGeometryWKT+"'),geom) < " + Constants.MIN_DISTANCE ;
         return (getSession().createSQLQuery(queryString).list().size() == tipIds.size());
     }
 }

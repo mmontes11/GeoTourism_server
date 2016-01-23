@@ -36,9 +36,6 @@ public class RouteController {
         if (routeRequest.getName() == null || routeRequest.getName().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        if (routeRequest.getDescription() == null || routeRequest.getDescription().isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
         List<Geometry> partialGeoms = null;
         if (routeRequest.getLineStrings() != null && !routeRequest.getLineStrings().isEmpty()) {
             partialGeoms = new ArrayList<>();

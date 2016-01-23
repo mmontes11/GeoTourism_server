@@ -33,7 +33,7 @@ public class RoutesController {
     public ResponseEntity<List<FeatureSearchDto>>
     find(@RequestParam(value = "bounds", required = false) String boundsWKT,
          @RequestParam(value = "travelModes", required = false) List<String> travelModes,
-         @RequestParam(value = "cityIds", required = false) List<Long> cityIds,
+         @RequestParam(value = "cities", required = false) List<Long> cityIds,
          @RequestParam(value = "createdBy", required = false) Integer createdBy,
          @RequestHeader(value = "AuthorizationFB", required = false) String accessToken,
          @RequestParam(value = "facebookUserId", required = false) Long facebookUserId,

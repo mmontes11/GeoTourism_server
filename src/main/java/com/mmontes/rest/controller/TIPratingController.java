@@ -17,7 +17,7 @@ public class TIPratingController {
     @RequestMapping(value = "/social/tip/{TIPId}/rating", method = RequestMethod.POST)
     public ResponseEntity
     upsertRating(@PathVariable Long TIPId,
-                 @RequestParam(value = "facebookUserId", required = true) Long facebookUserId,
+                 @RequestHeader(value = "FacebookUserId", required = true) Long facebookUserId,
                  @RequestParam(value = "ratingValue", required = true) Double ratingValue){
 
         try {

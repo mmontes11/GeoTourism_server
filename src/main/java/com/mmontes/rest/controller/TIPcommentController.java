@@ -20,7 +20,7 @@ public class TIPcommentController {
     @RequestMapping(value = "/social/tip/{TIPId}/comment", method = RequestMethod.POST)
     public ResponseEntity<List<CommentDto>>
     createComment(@PathVariable Long TIPId,
-                  @RequestParam(value = "facebookUserId", required = true) Long facebookUserId,
+                  @RequestHeader(value = "FacebookUserId", required = true) Long facebookUserId,
                   @RequestParam(value = "commentText", required = true) String commentText){
 
         try {
@@ -35,7 +35,7 @@ public class TIPcommentController {
     public ResponseEntity<List<CommentDto>>
     deleteComment(@PathVariable Long TIPId,
                   @PathVariable Long commentId,
-                  @RequestParam(value = "facebookUserId", required = true) Long facebookUserId){
+                  @RequestHeader(value = "FacebookUserId", required = true) Long facebookUserId){
         try {
             List<CommentDto> commentDtos = commentService.deleteComment(commentId,TIPId,facebookUserId);
             return new ResponseEntity<>(commentDtos,HttpStatus.OK);

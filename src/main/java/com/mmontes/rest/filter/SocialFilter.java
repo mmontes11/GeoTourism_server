@@ -25,7 +25,7 @@ public class SocialFilter extends GenericFilterBean {
         final HttpServletRequest request = (HttpServletRequest) req;
         if (!request.getMethod().equals("OPTIONS")) {
             String accessToken = request.getHeader("AuthorizationFB");
-            String facebookUserIdString = request.getParameter("facebookUserId");
+            String facebookUserIdString = request.getHeader("FacebookUserId");
             Long facebookUserId;
             try{
                 facebookUserId = Long.parseLong(facebookUserIdString);

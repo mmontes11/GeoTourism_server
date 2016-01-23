@@ -50,7 +50,7 @@ public class TIPController {
     public ResponseEntity<TIPDetailsDto>
     findById(@PathVariable Long TIPId,
          @RequestHeader(value="AuthorizationFB", required = false) String accessToken,
-         @RequestParam(value = "facebookUserId", required = false) Long facebookUserId) {
+         @RequestHeader(value = "FacebookUserId", required = false) Long facebookUserId) {
 
         if (!FacebookService.validFBparams(accessToken,facebookUserId)){
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
@@ -82,7 +82,7 @@ public class TIPController {
     patch(@PathVariable Long TIPId,
           @RequestBody TIPPatchRequest tipPatchRequest,
           @RequestHeader(value="AuthorizationFB", required = false) String accessToken,
-          @RequestParam(value = "facebookUserId", required = false) Long facebookUserId) {
+          @RequestHeader(value = "FacebookUserId", required = false) Long facebookUserId) {
 
         if (!FacebookService.validFBparams(accessToken,facebookUserId)){
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);

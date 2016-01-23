@@ -31,7 +31,7 @@ public class RouteController {
     @RequestMapping(value = "/social/route", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RouteDetailsDto>
     create(@RequestBody RouteRequest routeRequest,
-           @RequestParam(value = "facebookUserId", required = true) Long facebookUserId) {
+           @RequestHeader(value = "FacebookUserId", required = true) Long facebookUserId) {
 
         if (routeRequest.getName() == null || routeRequest.getName().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -67,7 +67,7 @@ public class RouteController {
     public ResponseEntity<RouteDetailsDto>
     patch(@PathVariable Long routeID,
           @RequestBody RoutePatchRequest routePatchRequest,
-          @RequestParam(value = "facebookUserId", required = true) Long facebookUserId){
+          @RequestHeader(value = "FacebookUserId", required = true) Long facebookUserId){
         RouteDetailsDto routeDetailsDto;
         try {
             routeDetailsDto = routeService.edit(routeID,facebookUserId,
@@ -84,7 +84,7 @@ public class RouteController {
     public ResponseEntity<RouteDetailsDto>
     findById(@PathVariable Long routeID,
              @RequestHeader(value="AuthorizationFB", required = false) String accessToken,
-             @RequestParam(value = "facebookUserId", required = false) Long facebookUserId){
+             @RequestHeader(value = "FacebookUserId", required = false) Long facebookUserId){
         if (!FacebookService.validFBparams(accessToken,facebookUserId)){
             return new ResponseEntity<>(HttpStatus.FORBIDDEN);
         }
@@ -100,7 +100,7 @@ public class RouteController {
     @RequestMapping(value = "/social/route/{routeID}", method = RequestMethod.DELETE)
     public ResponseEntity
     delete(@PathVariable Long routeID,
-           @RequestParam(value = "facebookUserId", required = true)Long facebookUserId){
+           @RequestHeader(value = "FacebookUserId", required = true)Long facebookUserId){
         try {
             routeService.remove(routeID,facebookUserId);
         } catch (InstanceNotFoundException e) {

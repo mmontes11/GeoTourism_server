@@ -21,7 +21,7 @@ public class TIPfavouriteController {
     @RequestMapping(value = "/social/tip/{TIPId}/favourite", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserAccountDto>>
     favourite(@PathVariable Long TIPId,
-                    @RequestParam(value = "facebookUserId", required = true) Long facebookUserId,
+                    @RequestHeader(value = "FacebookUserId", required = true) Long facebookUserId,
                     @RequestParam(value = "favouriteValue", required = true) boolean favouriteValue) {
         try {
             HttpStatus status = null;

@@ -36,7 +36,7 @@ public class TIPsController {
          @RequestParam(value = "cities", required = false) List<Long> cityIds,
          @RequestParam(value = "favouritedBy", required = false) Integer favouritedBy,
          @RequestHeader(value = "AuthorizationFB", required = false) String accessToken,
-         @RequestParam(value = "facebookUserId", required = false) Long facebookUserId,
+         @RequestHeader(value = "FacebookUserId", required = false) Long facebookUserId,
          @RequestParam(value = "friends", required = false) List<Long> friendsFacebookUserIds) {
 
         if (!FacebookService.validFBparams(accessToken, facebookUserId)) {

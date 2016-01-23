@@ -25,7 +25,7 @@ public class UserController {
     @RequestMapping(value = "/social/user", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<UserAccountDto>
     createOrRetrieveUser(@RequestHeader(value="AuthorizationFB", required = true) String accessToken,
-                         @RequestParam(value = "facebookUserId", required = true) Long facebookUserId) {
+                         @RequestHeader(value = "FacebookUserId", required = true) Long facebookUserId) {
         HashMap<String, Object> result;
         try {
             result = userAccountService.createOrRetrieveUser(accessToken, facebookUserId);
@@ -45,7 +45,7 @@ public class UserController {
 
     @RequestMapping(value = "/social/user/friends", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<UserAccountDto>>
-    getFriends(@RequestParam(value = "facebookUserId", required = true) Long facebookUserId){
+    getFriends(@RequestHeader(value = "FacebookUserId", required = true) Long facebookUserId){
         try {
             List<UserAccountDto> friends = userAccountService.getFriends(facebookUserId);
             return new ResponseEntity<>(friends, HttpStatus.OK);

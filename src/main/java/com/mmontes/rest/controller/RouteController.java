@@ -92,7 +92,7 @@ public class RouteController {
         try {
             routeDetailsDto = routeService.findById(routeID,facebookUserId);
         } catch (InstanceNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         return new ResponseEntity<>(routeDetailsDto, HttpStatus.OK);
     }

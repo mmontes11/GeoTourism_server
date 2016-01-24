@@ -49,12 +49,8 @@ public class TIPController {
     @RequestMapping(value = "/tip/{TIPId}", method = RequestMethod.GET)
     public ResponseEntity<TIPDetailsDto>
     findById(@PathVariable Long TIPId,
-         @RequestHeader(value="AuthorizationFB", required = false) String accessToken,
          @RequestHeader(value = "FacebookUserId", required = false) Long facebookUserId) {
 
-        if (!FacebookService.validFBparams(accessToken,facebookUserId)){
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
         TIPDetailsDto tipDetailsDto;
         try {
             tipDetailsDto = tipService.findById(TIPId,facebookUserId);
@@ -81,12 +77,8 @@ public class TIPController {
     public ResponseEntity
     patch(@PathVariable Long TIPId,
           @RequestBody TIPPatchRequest tipPatchRequest,
-          @RequestHeader(value="AuthorizationFB", required = false) String accessToken,
           @RequestHeader(value = "FacebookUserId", required = false) Long facebookUserId) {
 
-        if (!FacebookService.validFBparams(accessToken,facebookUserId)){
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
         TIPDetailsDto tipDetailsDto;
         try {
             tipDetailsDto = tipService.edit(TIPId, facebookUserId,

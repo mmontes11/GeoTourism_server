@@ -83,11 +83,7 @@ public class RouteController {
     @RequestMapping(value = "/route/{routeID}", method = RequestMethod.GET)
     public ResponseEntity<RouteDetailsDto>
     findById(@PathVariable Long routeID,
-             @RequestHeader(value="AuthorizationFB", required = false) String accessToken,
              @RequestHeader(value = "FacebookUserId", required = false) Long facebookUserId){
-        if (!FacebookService.validFBparams(accessToken,facebookUserId)){
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
         RouteDetailsDto routeDetailsDto;
         try {
             routeDetailsDto = routeService.findById(routeID,facebookUserId);

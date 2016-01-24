@@ -26,22 +26,15 @@ public class TIPsController {
     @Autowired
     private UserAccountService userAccountService;
 
-    @Autowired
-    private DtoService dtoService;
-
     @RequestMapping(value = "/tips", method = RequestMethod.GET)
     public ResponseEntity<List<FeatureSearchDto>>
     find(@RequestParam(value = "bounds", required = false) String boundsWKT,
          @RequestParam(value = "types", required = false) List<Long> typeIds,
          @RequestParam(value = "cities", required = false) List<Long> cityIds,
          @RequestParam(value = "favouritedBy", required = false) Integer favouritedBy,
-         @RequestHeader(value = "AuthorizationFB", required = false) String accessToken,
          @RequestHeader(value = "FacebookUserId", required = false) Long facebookUserId,
          @RequestParam(value = "friends", required = false) List<Long> friendsFacebookUserIds) {
 
-        if (!FacebookService.validFBparams(accessToken, facebookUserId)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
         try {
             if (boundsWKT != null) {
                 GeometryUtils.geometryFromWKT(boundsWKT);

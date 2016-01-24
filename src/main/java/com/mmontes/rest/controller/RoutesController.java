@@ -35,13 +35,9 @@ public class RoutesController {
          @RequestParam(value = "travelModes", required = false) List<String> travelModes,
          @RequestParam(value = "cities", required = false) List<Long> cityIds,
          @RequestParam(value = "createdBy", required = false) Integer createdBy,
-         @RequestHeader(value = "AuthorizationFB", required = false) String accessToken,
-         @RequestParam(value = "facebookUserId", required = false) Long facebookUserId,
+         @RequestHeader(value = "FacebookUserId", required = false) Long facebookUserId,
          @RequestParam(value = "friends", required = false) List<Long> friendsFacebookUserIds) {
 
-        if (!FacebookService.validFBparams(accessToken, facebookUserId)) {
-            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
-        }
         Geometry bounds = null;
         if (boundsWKT != null) {
             try {

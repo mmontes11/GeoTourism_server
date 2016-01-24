@@ -69,7 +69,7 @@ public class RouteServiceImpl implements RouteService {
         if (travelMode != null && !googleMapsService.isValidTravelMode(travelMode)) {
             throw new InvalidRouteException("Invalid travel mode");
         }
-        if (partialGeoms != null && partialGeoms.size() < 2) {
+        if (partialGeoms != null && partialGeoms.size() < 1) {
             throw new InvalidRouteException("Invalid number of partial geometries(" + partialGeoms.size() + ")");
         }
         if (tipIds.size() < 2) {

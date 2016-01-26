@@ -65,13 +65,19 @@ public class RouteServiceImpl implements RouteService {
         return coordinates;
     }
 
-    private void validateRouteParams(String travelMode, List<Geometry> partialGeoms, List<Long> tipIds) throws InvalidRouteException {
+    public void validateTravelMode(String travelMode) throws InvalidRouteException {
         if (travelMode != null && !googleMapsService.isValidTravelMode(travelMode)) {
             throw new InvalidRouteException("Invalid travel mode");
         }
+    }
+
+    public void validatePartialGeoms(List<Geometry> partialGeoms) throws InvalidRouteException {
         if (partialGeoms != null && partialGeoms.size() < 1) {
             throw new InvalidRouteException("Invalid number of partial geometries(" + partialGeoms.size() + ")");
         }
+    }
+
+    public void validateTipIds(List<Long> tipIds) throws InvalidRouteException {
         if (tipIds.size() < 2) {
             throw new InvalidRouteException("Invalid number of TIP IDs(" + tipIds.size() + ")");
         }
@@ -88,7 +94,10 @@ public class RouteServiceImpl implements RouteService {
     @Override
     public RouteDetailsDto create(String name, String description, String travelMode, List<Geometry> partialGeoms, List<Long> tipIds, Long facebookUserId)
             throws InstanceNotFoundException, InvalidRouteException {
-        validateRouteParams(travelMode, partialGeoms, tipIds);
+        validateTravelMode(travelMode);
+        validatePartialGeoms(partialGeoms);
+        validateTipIds(tipIds);
+
         UserAccount creator = userAccountDao.findByFBUserID(facebookUserId);
         Geometry routeGeom = null;
         if (partialGeoms != null && !partialGeoms.isEmpty()) {
@@ -110,13 +119,16 @@ public class RouteServiceImpl implements RouteService {
         route.setGoogleMapsUrl(googleMapsService.getRouteGoogleMapsUrl(coordinates, route.getTravelMode()));
         route.setCreator(creator);
         routeDao.save(route);
-        return dtoService.Route2RouteDetailsDto(route, creator);
+        return dtoService.Route2RouteDetailsDto(route, facebookUserId);
     }
 
     @Override
     public RouteDetailsDto edit(Long routeId, Long facebookUserId, String name, String description, String travelMode, List<Long> tipIds)
             throws InstanceNotFoundException, InvalidRouteException {
-        validateRouteParams(travelMode, null, tipIds);
+        validateTravelMode(travelMode);
+        if (tipIds != null && tipIds.size() < 2) {
+            throw new InvalidRouteException("Invalid number of TIP IDs(" + tipIds.size() + ")");
+        }
         UserAccount creator = userAccountDao.findByFBUserID(facebookUserId);
         Route route = routeDao.getRouteByIDandUser(routeId, facebookUserId);
         route.setName(name);
@@ -134,7 +146,7 @@ public class RouteServiceImpl implements RouteService {
             route.setGoogleMapsUrl(googleMapsService.getRouteGoogleMapsUrl(coordinates, route.getTravelMode()));
         }
         routeDao.save(route);
-        return dtoService.Route2RouteDetailsDto(route, creator);
+        return dtoService.Route2RouteDetailsDto(route, facebookUserId);
     }
 
     @Override
@@ -155,15 +167,8 @@ public class RouteServiceImpl implements RouteService {
 
     @Override
     public RouteDetailsDto findById(Long routeId, Long facebookUserId) throws InstanceNotFoundException {
-        Route route;
-        UserAccount creator = null;
-        if (facebookUserId != null) {
-            creator = userAccountDao.findByFBUserID(facebookUserId);
-            route = routeDao.getRouteByIDandUser(routeId, facebookUserId);
-        } else {
-            route = routeDao.findById(routeId);
-        }
-        return dtoService.Route2RouteDetailsDto(route, creator);
+        Route route = routeDao.findById(routeId);
+        return dtoService.Route2RouteDetailsDto(route, facebookUserId);
     }
 
     @Override
@@ -191,7 +196,8 @@ public class RouteServiceImpl implements RouteService {
         List<Long> tipIds = new ArrayList<>();
         tipIds.add(TIPIdOrigin);
         tipIds.add(TIPIdDestination);
-        validateRouteParams(travelMode, null, tipIds);
+        validateTravelMode(travelMode);
+        validateTipIds(tipIds);
 
         TIP origin = tipDao.findById(TIPIdOrigin);
         TIP destination = tipDao.findById(TIPIdDestination);

@@ -78,7 +78,7 @@ public class RouteServiceImpl implements RouteService {
     }
 
     private Geometry getCompleteRouteGeom(List<Geometry> partialGeoms, List<Long> tipIds) throws InvalidRouteException {
-        Geometry routeGeom = GeometryUtils.apply(partialGeoms,GeometryUtils.GeomOperation.UNION);
+        Geometry routeGeom = GeometryUtils.apply(partialGeoms, GeometryUtils.GeomOperation.UNION);
         if (!tipService.geometryContainsTIPs(routeGeom, tipIds)) {
             throw new InvalidRouteException("TIPs not contained inside geometry");
         }
@@ -122,15 +122,17 @@ public class RouteServiceImpl implements RouteService {
         route.setName(name);
         route.setDescription(description);
         route.setTravelMode(travelMode);
-        route.getRouteTIPs().clear();
-        routeDao.getTIPsInOrder(route.getId());
-        List<Coordinate> coordinates = setRouteTIPsAndGetCoords(route, tipIds);
-        try {
-            route.setGeom(googleMapsService.getRoute(coordinates, route.getTravelMode()));
-        } catch (GoogleMapsServiceException e) {
-            throw new InvalidRouteException("Invalid Route");
+        if (tipIds != null) {
+            route.getRouteTIPs().clear();
+            routeDao.getTIPsInOrder(route.getId());
+            List<Coordinate> coordinates = setRouteTIPsAndGetCoords(route, tipIds);
+            try {
+                route.setGeom(googleMapsService.getRoute(coordinates, route.getTravelMode()));
+            } catch (GoogleMapsServiceException e) {
+                throw new InvalidRouteException("Invalid Route");
+            }
+            route.setGoogleMapsUrl(googleMapsService.getRouteGoogleMapsUrl(coordinates, route.getTravelMode()));
         }
-        route.setGoogleMapsUrl(googleMapsService.getRouteGoogleMapsUrl(coordinates, route.getTravelMode()));
         routeDao.save(route);
         return dtoService.Route2RouteDetailsDto(route, creator);
     }
@@ -189,7 +191,7 @@ public class RouteServiceImpl implements RouteService {
         List<Long> tipIds = new ArrayList<>();
         tipIds.add(TIPIdOrigin);
         tipIds.add(TIPIdDestination);
-        validateRouteParams(travelMode,null,tipIds);
+        validateRouteParams(travelMode, null, tipIds);
 
         TIP origin = tipDao.findById(TIPIdOrigin);
         TIP destination = tipDao.findById(TIPIdDestination);
@@ -197,7 +199,7 @@ public class RouteServiceImpl implements RouteService {
         coordinates.add(origin.getGeom().getCoordinate());
         coordinates.add(destination.getGeom().getCoordinate());
         try {
-            return googleMapsService.getRoute(coordinates,travelMode);
+            return googleMapsService.getRoute(coordinates, travelMode);
         } catch (GoogleMapsServiceException e) {
             throw new InvalidRouteException("Invalid partial route");
         }

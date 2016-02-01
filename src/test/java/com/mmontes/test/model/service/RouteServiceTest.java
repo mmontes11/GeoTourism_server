@@ -6,7 +6,7 @@ import com.mmontes.model.service.TIPService;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.RouteDetailsDto;
 import com.mmontes.util.dto.TIPDetailsDto;
-import com.mmontes.util.dto.TIPMinDto;
+import com.mmontes.util.dto.TIPRouteDto;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import com.mmontes.util.exception.InvalidRouteException;
 import com.vividsolutions.jts.geom.Geometry;
@@ -105,10 +105,10 @@ public class RouteServiceTest {
             assertEquals(3, routeDetailsDto.getTips().size());
             assertEquals(EXISTING_FACEBOOK_USER_ID, routeDetailsDto.getCreator().getFacebookUserId());
 
-            List<TIPMinDto> tipMinDtos = routeService.getTIPsInOrder(routeDetailsDto.getId());
+            List<TIPRouteDto> tipRouteDtos = routeService.getTIPsInOrder(routeDetailsDto.getId());
             for (int i = 0; i < tipIds.size(); i++) {
                 Long tipId = tipIds.get(i);
-                TIPMinDto retrievedTipIds = tipMinDtos.get(i);
+                TIPRouteDto retrievedTipIds = tipRouteDtos.get(i);
                 assertEquals(tipId, retrievedTipIds.getId());
             }
         } catch (Exception e) {
@@ -177,10 +177,10 @@ public class RouteServiceTest {
             assertEquals(2, editedRoute.getTips().size());
             assertEquals(EXISTING_FACEBOOK_USER_ID, routeDetailsDto.getCreator().getFacebookUserId());
 
-            List<TIPMinDto> tipMinDtos = routeService.getTIPsInOrder(routeDetailsDto.getId());
+            List<TIPRouteDto> tipRouteDtos = routeService.getTIPsInOrder(routeDetailsDto.getId());
             for (int i = 0; i < tipIds.size(); i++) {
                 Long tipId = tipIds.get(i);
-                TIPMinDto retrievedTipIds = tipMinDtos.get(i);
+                TIPRouteDto retrievedTipIds = tipRouteDtos.get(i);
                 assertEquals(tipId, retrievedTipIds.getId());
             }
         } catch (Exception e) {

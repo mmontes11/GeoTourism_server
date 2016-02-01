@@ -77,21 +77,22 @@ public class DtoService {
         return featureSearchDtos;
     }
 
-    public TIPMinDto TIP2TIPMinDto(TIP tip){
-        TIPMinDto tipMinDto = new TIPMinDto();
-        tipMinDto.setId(tip.getId());
-        tipMinDto.setName(tip.getName());
-        tipMinDto.setGoogleMapsUrl(tip.getGoogleMapsUrl());
-        tipMinDto.setIcon(tip.getType().getIcon());
-        return tipMinDto;
+    public TIPRouteDto TIP2TIPRouteDto(TIP tip){
+        TIPRouteDto tipRouteDto = new TIPRouteDto();
+        tipRouteDto.setId(tip.getId());
+        tipRouteDto.setName(tip.getName());
+        tipRouteDto.setGoogleMapsUrl(tip.getGoogleMapsUrl());
+        tipRouteDto.setIcon(tip.getType().getIcon());
+        tipRouteDto.setGeom(GeometryUtils.WKTFromGeometry(tip.getGeom()));
+        return tipRouteDto;
     }
 
-    public List<TIPMinDto> ListTIP2ListTIPMinDto(List<TIP> tips){
-        List<TIPMinDto> tipMinDtos = new ArrayList<>();
+    public List<TIPRouteDto> ListTIP2ListTIPMinDto(List<TIP> tips){
+        List<TIPRouteDto> tipRouteDtos = new ArrayList<>();
         for (TIP tip : tips){
-            tipMinDtos.add(TIP2TIPMinDto(tip));
+            tipRouteDtos.add(TIP2TIPRouteDto(tip));
         }
-        return tipMinDtos;
+        return tipRouteDtos;
     }
 
     public RouteDetailsDto Route2RouteDetailsDto(Route route,Long facebooUserId) throws InstanceNotFoundException {

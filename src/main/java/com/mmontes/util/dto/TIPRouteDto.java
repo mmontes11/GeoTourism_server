@@ -1,20 +1,22 @@
 package com.mmontes.util.dto;
 
-public class TIPMinDto {
+public class TIPRouteDto {
 
     private Long id;
     private String name;
     private String googleMapsUrl;
     private String icon;
+    private String geom;
 
-    public TIPMinDto() {
+    public TIPRouteDto() {
     }
 
-    public TIPMinDto(Long id, String name, String googleMapsUrl, String icon) {
+    public TIPRouteDto(Long id, String name, String googleMapsUrl, String icon, String geom) {
         this.id = id;
         this.name = name;
         this.googleMapsUrl = googleMapsUrl;
         this.icon = icon;
+        this.geom = geom;
     }
 
     public Long getId() {
@@ -47,5 +49,13 @@ public class TIPMinDto {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    public String getGeom() {
+        return geom;
+    }
+
+    public void setGeom(String geom) {
+        this.geom = geom;
     }
 }

@@ -10,13 +10,13 @@ public class RouteDetailsDto {
     private String travelMode;
     private String geom;
     private String googleMapsUrl;
-    private List<TIPMinDto> tips;
+    private List<TIPRouteDto> tips;
     private UserAccountDto creator;
 
     public RouteDetailsDto() {
     }
 
-    public RouteDetailsDto(Long id, String name, String description, String travelMode, String geom, String googleMapsUrl, List<TIPMinDto> tips, UserAccountDto creator) {
+    public RouteDetailsDto(Long id, String name, String description, String travelMode, String geom, String googleMapsUrl, List<TIPRouteDto> tips, UserAccountDto creator) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -75,11 +75,11 @@ public class RouteDetailsDto {
         this.googleMapsUrl = googleMapsUrl;
     }
 
-    public List<TIPMinDto> getTips() {
+    public List<TIPRouteDto> getTips() {
         return tips;
     }
 
-    public void setTips(List<TIPMinDto> tips) {
+    public void setTips(List<TIPRouteDto> tips) {
         this.tips = tips;
     }
 

@@ -12,7 +12,7 @@ import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.dto.FeatureSearchDto;
 import com.mmontes.util.dto.RouteDetailsDto;
-import com.mmontes.util.dto.TIPMinDto;
+import com.mmontes.util.dto.TIPRouteDto;
 import com.mmontes.util.exception.GoogleMapsServiceException;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import com.mmontes.util.exception.InvalidRouteException;
@@ -185,7 +185,7 @@ public class RouteServiceImpl implements RouteService {
     }
 
     @Override
-    public List<TIPMinDto> getTIPsInOrder(Long routeID) throws InstanceNotFoundException {
+    public List<TIPRouteDto> getTIPsInOrder(Long routeID) throws InstanceNotFoundException {
         Route route = routeDao.findById(routeID);
         List<TIP> tips = routeDao.getTIPsInOrder(route.getId());
         return dtoService.ListTIP2ListTIPMinDto(tips);

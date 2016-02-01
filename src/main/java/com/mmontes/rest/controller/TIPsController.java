@@ -2,11 +2,9 @@ package com.mmontes.rest.controller;
 
 import com.mmontes.model.service.TIPService;
 import com.mmontes.model.service.UserAccountService;
-import com.mmontes.service.FacebookService;
 import com.mmontes.util.GeometryUtils;
-import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.dto.FeatureSearchDto;
-import com.mmontes.util.dto.TIPMinDto;
+import com.mmontes.util.dto.TIPRouteDto;
 import com.mmontes.util.exception.GeometryParsingException;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -56,16 +54,16 @@ public class TIPsController {
     }
 
     @RequestMapping(value = "/tips/min", method = RequestMethod.GET)
-    public ResponseEntity<List<TIPMinDto>>
+    public ResponseEntity<List<TIPRouteDto>>
     getTIPMinDTOs(@RequestParam(value = "TIPIds", required = true) List<Long> tipIds) {
-        List<TIPMinDto> tipMinDtos = new ArrayList<>();
+        List<TIPRouteDto> tipRouteDtos = new ArrayList<>();
         for (Long id : tipIds) {
             try {
-                tipMinDtos.add(tipService.findById(id));
+                tipRouteDtos.add(tipService.findById(id));
             } catch (InstanceNotFoundException e) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         }
-        return new ResponseEntity<>(tipMinDtos, HttpStatus.OK);
+        return new ResponseEntity<>(tipRouteDtos, HttpStatus.OK);
     }
 }

@@ -3,9 +3,7 @@ package com.mmontes.model.service;
 import com.mmontes.model.entity.route.Route;
 import com.mmontes.util.dto.FeatureSearchDto;
 import com.mmontes.util.dto.RouteDetailsDto;
-import com.mmontes.util.dto.TIPMinDto;
-import com.mmontes.util.exception.GeometryParsingException;
-import com.mmontes.util.exception.GoogleMapsServiceException;
+import com.mmontes.util.dto.TIPRouteDto;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import com.mmontes.util.exception.InvalidRouteException;
 import com.vividsolutions.jts.geom.Geometry;
@@ -25,7 +23,7 @@ public interface RouteService {
             throws InstanceNotFoundException;
     void remove(Long routeId,Long facebookUserId)
             throws InstanceNotFoundException;
-    List<TIPMinDto> getTIPsInOrder(Long routeID)
+    List<TIPRouteDto> getTIPsInOrder(Long routeID)
             throws InstanceNotFoundException;
     Geometry getShortestPath(Long TIPIdOrigin,Long TIPIdDestination,String travelMode) throws InstanceNotFoundException, InvalidRouteException;
 }

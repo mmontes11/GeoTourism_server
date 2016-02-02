@@ -48,7 +48,8 @@
         <jackson.version>2.4.2</jackson.version>
         <servlet.api.version>3.0.1</servlet.api.version>
         <commons.fileupload.version>1.2.1</commons.fileupload.version>
-        <google.maps.services>0.1.9</google.maps.services>
+        <google.maps.services.version>0.1.9</google.maps.services.version>
+        <commons.dbcp.version>1.3</commons.dbcp.version>
         <!-- Plugin versions -->
         <mavenSurefirePlugin.version>2.18.1</mavenSurefirePlugin.version>
         <mavenCompilerPlugin.version>2.3.2</mavenCompilerPlugin.version>
@@ -198,7 +199,23 @@
         <dependency>
             <groupId>com.google.maps</groupId>
             <artifactId>google-maps-services</artifactId>
-            <version>${google.maps.services}</version>
+            <version>${google.maps.services.version}</version>
+        </dependency>
+        <!-- Needed fot OpenShift -->
+        <dependency>
+            <groupId>commons-dbcp</groupId>
+            <artifactId>commons-dbcp</artifactId>
+            <version>${commons.dbcp.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>commons-logging</groupId>
+                    <artifactId>commons-logging</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>xml-apis</groupId>
+                    <artifactId>xml-apis</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
     <repositories>
@@ -394,29 +411,12 @@
                 <artifactId>jetty-maven-plugin</artifactId>
                 <version>${jettyMavenPlugin}</version>
                 <configuration>
-                    <webAppConfig>
-                        <contextPath>/${project.artifactId}</contextPath>
-                        <jettyEnvXml>target/jetty/jetty-config.xml</jettyEnvXml>
-                    </webAppConfig>
                     <reload>manual</reload>
                     <scanIntervalSeconds>10</scanIntervalSeconds>
                     <httpConnector>
                         <port>9090</port>
                     </httpConnector>
                 </configuration>
-                <dependencies>
-                    <dependency>
-                        <groupId>${postgresql.driver.groupId}</groupId>
-                        <artifactId>${postgresql.driver.artifactId}</artifactId>
-                        <version>${postgresql.driver.version}</version>
-                    </dependency>
-                    <dependency>
-                        <groupId>org.springframework</groupId>
-                        <artifactId>spring-jdbc</artifactId>
-                        <version>${spring.version}</version>
-                        <scope>runtime</scope>
-                    </dependency>
-                </dependencies>
             </plugin>
         </plugins>
     </build>

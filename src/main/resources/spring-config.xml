@@ -16,15 +16,42 @@
     <context:component-scan
             base-package="com.mmontes"/>
 
+    <context:property-placeholder/>
+
+
     <!--  For translating native persistence exceptions to Spring's
           DataAccessException hierarchy. -->
     <bean class="org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor"/>
 
     <!--  Data source. -->
-    <bean id="dataSource"
-          class="org.springframework.jndi.JndiObjectFactoryBean"
-          p:jndiName="jdbc/geotourism"
-          p:resourceRef="true" />
+    <!--
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="org.postgresql.Driver"></property>
+        <property name="username" value="${OPENSHIFT_POSTGRESQL_DB_USERNAME}"></property>
+        <property name="password" value="${OPENSHIFT_POSTGRESQL_DB_PASSWORD}"></property>
+        <property name="url" value="jdbc:postgresql://${OPENSHIFT_POSTGRESQL_DB_HOST}:${OPENSHIFT_POSTGRESQL_DB_PORT}/${OPENSHIFT_APP_NAME}"></property>
+        <property name="testOnBorrow" value="true"></property>
+        <property name="testOnReturn" value="true"></property>
+        <property name="testWhileIdle" value="true"></property>
+        <property name="timeBetweenEvictionRunsMillis" value="1800000"></property>
+        <property name="numTestsPerEvictionRun" value="3"></property>
+        <property name="minEvictableIdleTimeMillis" value="1800000"></property>
+        <property name="validationQuery" value="SELECT version()"></property>
+    </bean>
+    -->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="org.postgresql.Driver"></property>
+        <property name="username" value="admin"></property>
+        <property name="password" value="admin"></property>
+        <property name="url" value="jdbc:postgresql://localhost:5432/geotourism"></property>
+        <property name="testOnBorrow" value="true"></property>
+        <property name="testOnReturn" value="true"></property>
+        <property name="testWhileIdle" value="true"></property>
+        <property name="timeBetweenEvictionRunsMillis" value="1800000"></property>
+        <property name="numTestsPerEvictionRun" value="3"></property>
+        <property name="minEvictableIdleTimeMillis" value="1800000"></property>
+        <property name="validationQuery" value="SELECT version()"></property>
+    </bean>
 
     <!-- Hibernate session factory -->
     <bean id="sessionFactory"

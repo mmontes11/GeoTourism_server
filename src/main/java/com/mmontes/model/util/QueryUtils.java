@@ -1,19 +1,23 @@
 package com.mmontes.model.util;
 
 import java.util.List;
-import java.util.StringJoiner;
+import java.lang.StringBuilder;
 
 public class QueryUtils {
 
     public static String getINvalues (List values){
-        StringJoiner joiner = new StringJoiner(",");
-        for (Object o : values){
+        StringBuilder ids = new StringBuilder();
+        for (int i = 0; i<values.size(); i++){
+            Object o = values.get(i);
             if (o instanceof String){
-                joiner.add("'"+o.toString()+"'");
+                ids.append("'").append(o.toString()).append("'");
             }else{
-                joiner.add(o.toString());
+                ids.append(o.toString());
+            }
+            if (i != (values.size()-1)){
+                ids.append(",");
             }
         }
-        return "(" + joiner.toString() + ")";
+        return "(" + ids.toString() + ")";
     }
 }

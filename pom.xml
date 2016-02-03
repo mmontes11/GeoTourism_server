@@ -13,6 +13,10 @@
         <dataSource.url>jdbc:postgresql://localhost:5432/geotourism</dataSource.url>
         <dataSource.user>admin</dataSource.user>
         <dataSource.password>admin</dataSource.password>
+        <!-- Data source OpenShift
+        <dataSource.url>jdbc:postgresql://${OPENSHIFT_POSTGRESQL_DB_HOST}:${OPENSHIFT_POSTGRESQL_DB_PORT}/${OPENSHIFT_APP_NAME}</dataSource.url>
+        <dataSource.user>${OPENSHIFT_POSTGRESQL_DB_USERNAME}</dataSource.user>
+        <dataSource.password>${OPENSHIFT_POSTGRESQL_DB_PASSWORD}</dataSource.password>-->
         <dataSource.driverClassName>org.postgresql.Driver</dataSource.driverClassName>
         <dataSource.jndiName>jdbc/geotourism</dataSource.jndiName>
         <testDataSource.url>jdbc:postgresql://localhost:5432/test</testDataSource.url>
@@ -52,7 +56,7 @@
         <commons.dbcp.version>1.3</commons.dbcp.version>
         <!-- Plugin versions -->
         <mavenSurefirePlugin.version>2.18.1</mavenSurefirePlugin.version>
-        <mavenCompilerPlugin.version>2.3.2</mavenCompilerPlugin.version>
+        <mavenCompilerPlugin.version>3.0</mavenCompilerPlugin.version>
         <mavenResourcesPlugin.version>2.5</mavenResourcesPlugin.version>
         <sqlMavenPlugin.version>1.5</sqlMavenPlugin.version>
         <mavenAssemblyPlugin.version>2.$2.1</mavenAssemblyPlugin.version>
@@ -306,15 +310,6 @@
 				without applying filtering. -->
             <resource>
                 <directory>src/main/resources</directory>
-            </resource>
-            <!-- Filter Jetty configuration -->
-            <resource>
-                <directory>src/main/jetty</directory>
-                <includes>
-                    <include>jetty-config.xml</include>
-                </includes>
-                <targetPath>../jetty</targetPath>
-                <filtering>true</filtering>
             </resource>
         </resources>
         <testResources>

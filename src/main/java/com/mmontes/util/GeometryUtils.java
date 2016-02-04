@@ -44,9 +44,9 @@ public class GeometryUtils {
         for (LatLng latLng : latLngs){
             coordinateList.add(new Coordinate(latLng.lng,latLng.lat));
         }
+        System.out.println(coordinateList);
         Coordinate[] coordinates = coordinateList.toArray(new Coordinate[coordinateList.size()]);
-        GeometryFactory geometryFactory = JTSFactoryFinder.getGeometryFactory();
-        LineString lineString = geometryFactory.createLineString(coordinates);
+        LineString lineString = new GeometryFactory().createLineString(coordinates);
         lineString.setSRID(SRID);
         return lineString;
     }

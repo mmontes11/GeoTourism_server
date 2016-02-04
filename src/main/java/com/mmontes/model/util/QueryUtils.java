@@ -10,7 +10,7 @@ public class QueryUtils {
         for (int i = 0; i<values.size(); i++){
             Object o = values.get(i);
             if (o instanceof String){
-                ids.append("'").append(o.toString()).append("'");
+                ids.append("'"+o.toString()+"'");
             }else{
                 ids.append(o.toString());
             }

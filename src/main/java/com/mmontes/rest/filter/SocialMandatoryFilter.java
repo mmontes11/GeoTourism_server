@@ -3,6 +3,7 @@ package com.mmontes.rest.filter;
 import com.mmontes.service.FacebookService;
 import com.mmontes.util.exception.FacebookServiceException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+@Component
 public class SocialMandatoryFilter extends GenericFilterBean {
 
     private FacebookService facebookService = new FacebookService();

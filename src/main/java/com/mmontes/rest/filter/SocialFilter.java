@@ -1,6 +1,7 @@
 package com.mmontes.rest.filter;
 
 import com.mmontes.service.FacebookService;
+import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -11,7 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
+@Component
 public class SocialFilter extends GenericFilterBean {
 
     @Override

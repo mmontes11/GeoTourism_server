@@ -207,6 +207,7 @@ public class RouteServiceImpl implements RouteService {
         try {
             return googleMapsService.getRoute(coordinates, travelMode);
         } catch (GoogleMapsServiceException e) {
+            e.printStackTrace();
             throw new InvalidRouteException("Invalid partial route");
         }
     }

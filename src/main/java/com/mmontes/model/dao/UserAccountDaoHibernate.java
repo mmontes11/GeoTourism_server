@@ -6,6 +6,7 @@ import com.mmontes.model.util.genericdao.GenericDaoHibernate;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository("UserDao")
@@ -26,6 +27,9 @@ public class UserAccountDaoHibernate extends GenericDaoHibernate<UserAccount, Lo
     @Override
     @SuppressWarnings("unchecked")
     public List<UserAccount> findUserAccountsByFBUserIDs(List<Long> FBUserIDs) {
+        if (FBUserIDs == null || FBUserIDs.isEmpty()){
+            return new ArrayList<>();
+        }
         String friendFBIds = QueryUtils.getINvalues(FBUserIDs);
         String queryString = "SELECT ua FROM UserAccount ua WHERE ua.facebookUserId IN "+friendFBIds;
         return (List<UserAccount>) getSession().createQuery(queryString).list();

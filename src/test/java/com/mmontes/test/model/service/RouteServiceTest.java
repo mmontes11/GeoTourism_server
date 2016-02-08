@@ -3,6 +3,7 @@ package com.mmontes.test.model.service;
 import com.mmontes.model.dao.RouteDao;
 import com.mmontes.model.service.RouteService;
 import com.mmontes.model.service.TIPService;
+import com.mmontes.util.Constants;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.RouteDetailsDto;
 import com.mmontes.util.dto.TIPDetailsDto;
@@ -94,7 +95,7 @@ public class RouteServiceTest {
             tipIds.add(alamedaID);
             tipIds.add(cathedralID);
             tipIds.add(towerOfHerculesID);
-            RouteDetailsDto routeDetailsDto = routeService.create(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID);
+            RouteDetailsDto routeDetailsDto = routeService.create(EXISTING_FACEBOOK_USER_ID, name, description, travelMode, null, tipIds);
 
             assertNotNull(routeDetailsDto.getId());
             assertEquals(name, routeDetailsDto.getName());
@@ -125,7 +126,7 @@ public class RouteServiceTest {
         List<Long> tipIds = new ArrayList<>();
         tipIds.add(alamedaID);
         try {
-            routeService.create(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID);
+            routeService.create(EXISTING_FACEBOOK_USER_ID, name, description, travelMode, null, tipIds);
         } catch (InstanceNotFoundException e) {
             e.printStackTrace();
             fail();
@@ -141,7 +142,7 @@ public class RouteServiceTest {
         tipIds.add(alamedaID);
         tipIds.add(statueOfLibertyID);
         try {
-            routeService.create(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID);
+            routeService.create(EXISTING_FACEBOOK_USER_ID, name, description, travelMode, null, tipIds);
         } catch (InstanceNotFoundException e) {
             e.printStackTrace();
             fail();
@@ -158,7 +159,7 @@ public class RouteServiceTest {
             tipIds.add(alamedaID);
             tipIds.add(cathedralID);
             tipIds.add(towerOfHerculesID);
-            RouteDetailsDto routeDetailsDto = routeService.create(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID);
+            RouteDetailsDto routeDetailsDto = routeService.create(EXISTING_FACEBOOK_USER_ID, name, description, travelMode, null, tipIds);
 
             name = "newName";
             description = "newDescription";
@@ -166,7 +167,8 @@ public class RouteServiceTest {
             tipIds = new ArrayList<>();
             tipIds.add(cathedralID);
             tipIds.add(alamedaID);
-            RouteDetailsDto editedRoute = routeService.edit(routeDetailsDto.getId(), EXISTING_FACEBOOK_USER_ID, name, description, travelMode, tipIds);
+            RouteDetailsDto editedRoute = routeService.edit(routeDetailsDto.getId(), EXISTING_FACEBOOK_USER_ID, name, description, travelMode, null, tipIds);
+            Geometry geomRoute = GeometryUtils.geometryFromWKT(editedRoute.getGeom());
 
             assertNotNull(editedRoute.getId());
             assertEquals(name, editedRoute.getName());
@@ -180,8 +182,46 @@ public class RouteServiceTest {
             List<TIPRouteDto> tipRouteDtos = routeService.getTIPsInOrder(routeDetailsDto.getId());
             for (int i = 0; i < tipIds.size(); i++) {
                 Long tipId = tipIds.get(i);
-                TIPRouteDto retrievedTipIds = tipRouteDtos.get(i);
-                assertEquals(tipId, retrievedTipIds.getId());
+                TIPRouteDto retrievedTipId = tipRouteDtos.get(i);
+                Geometry geomTIP = GeometryUtils.geometryFromWKT(retrievedTipId.getGeom());
+                assertEquals(tipId, retrievedTipId.getId());
+                assertTrue(geomRoute.isWithinDistance(geomTIP, Constants.MIN_DISTANCE));
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    public void editRouteFromPartialGeoms() {
+        try {
+            String name = "From Alameda To Cathedral";
+            String description = "Santiago route";
+            String travelMode = WALKING_TRAVEL_MODE;
+            List<Long> tipIds = new ArrayList<>();
+            tipIds.add(alamedaID);
+            tipIds.add(cathedralID);
+            tipIds.add(towerOfHerculesID);
+            RouteDetailsDto routeDetailsDto = routeService.create(EXISTING_FACEBOOK_USER_ID, name, description, travelMode, null, tipIds);
+
+            List<String> partialGeomsString = new ArrayList<String>(){{
+                add(LINESTRING_PARTIAL_1);
+                add(LINESTRING_PARTIAL_2);
+            }};
+            List<Geometry> partialGeoms = new ArrayList<>();
+            for(String geomString : partialGeomsString){
+                partialGeoms.add(GeometryUtils.geometryFromWKT(geomString));
+            }
+            String newName = "newName";
+            String newDescription = "description";
+            routeDetailsDto = routeService.edit(routeDetailsDto.getId(),EXISTING_FACEBOOK_USER_ID,newName,newDescription,travelMode,partialGeoms,tipIds);
+            Geometry routeGeom = GeometryUtils.geometryFromWKT(routeDetailsDto.getGeom());
+
+            assertEquals(newName,routeDetailsDto.getName());
+            assertEquals(newDescription,routeDetailsDto.getDescription());
+            for(Geometry partialGeom : partialGeoms){
+                assertTrue(routeGeom.contains(partialGeom));
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -199,7 +239,7 @@ public class RouteServiceTest {
             tipIds.add(alamedaID);
             tipIds.add(cathedralID);
             tipIds.add(towerOfHerculesID);
-            RouteDetailsDto routeDetailsDto = routeService.create(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID);
+            RouteDetailsDto routeDetailsDto = routeService.create(EXISTING_FACEBOOK_USER_ID, name, description, travelMode, null, tipIds);
 
             name = "newName";
             description = "newDescription";
@@ -207,7 +247,7 @@ public class RouteServiceTest {
             tipIds = new ArrayList<>();
             tipIds.add(cathedralID);
             tipIds.add(alamedaID);
-            routeService.edit(routeDetailsDto.getId(), EXISTING_FACEBOOK_USER_ID2, name, description, travelMode, tipIds);
+            routeService.edit(routeDetailsDto.getId(), EXISTING_FACEBOOK_USER_ID2, name, description, travelMode, null, tipIds);
         } catch (InvalidRouteException e) {
             fail();
         }
@@ -223,7 +263,7 @@ public class RouteServiceTest {
             tipIds.add(alamedaID);
             tipIds.add(cathedralID);
             tipIds.add(towerOfHerculesID);
-            RouteDetailsDto routeDetailsDto = routeService.create(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID);
+            RouteDetailsDto routeDetailsDto = routeService.create(EXISTING_FACEBOOK_USER_ID, name, description, travelMode, null, tipIds);
             routeService.remove(routeDetailsDto.getId(), EXISTING_FACEBOOK_USER_ID);
             try {
                 assertNotNull(tipService.findById(alamedaID, null));
@@ -248,7 +288,7 @@ public class RouteServiceTest {
             tipIds.add(alamedaID);
             tipIds.add(cathedralID);
             tipIds.add(towerOfHerculesID);
-            RouteDetailsDto routeDetailsDto = routeService.create(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID);
+            RouteDetailsDto routeDetailsDto = routeService.create(EXISTING_FACEBOOK_USER_ID, name, description, travelMode, null, tipIds);
             routeService.remove(routeDetailsDto.getId(), EXISTING_FACEBOOK_USER_ID2);
         } catch (InvalidRouteException e) {
             fail();
@@ -264,7 +304,7 @@ public class RouteServiceTest {
             List<Long> tipIds = new ArrayList<>();
             tipIds.add(cathedralID);
             tipIds.add(towerOfHerculesID);
-            RouteDetailsDto routeDetailsDto = routeService.create(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID);
+            RouteDetailsDto routeDetailsDto = routeService.create(EXISTING_FACEBOOK_USER_ID, name, description, travelMode, null, tipIds);
 
             tipService.remove(cathedralID);
             routeDao.findById(routeDetailsDto.getId());
@@ -283,7 +323,7 @@ public class RouteServiceTest {
             tipIds.add(alamedaID);
             tipIds.add(cathedralID);
             tipIds.add(reisCatolicosID);
-            RouteDetailsDto routeDetailsDto = routeService.create(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID);
+            RouteDetailsDto routeDetailsDto = routeService.create(EXISTING_FACEBOOK_USER_ID, name, description, travelMode, null, tipIds);
             RouteDetailsDto oldRouteDetailsDto = routeDetailsDto;
 
             tipService.remove(cathedralID);

@@ -100,7 +100,7 @@ public class RouteServiceFindTest {
             tipIds.add(alamedaID);
             tipIds.add(cathedralID);
             tipIds.add(reisCatolicosID);
-            RouteDetailsDto routeDetailsDto = routeService.create(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID);
+            RouteDetailsDto routeDetailsDto = routeService.create(EXISTING_FACEBOOK_USER_ID, name, description, travelMode, null, tipIds);
             alamedaToReisCatolicosID = routeDetailsDto.getId();
 
             name = "From Hotel Riazor to Tower of Hercules";
@@ -110,7 +110,7 @@ public class RouteServiceFindTest {
             tipIds.add(hotelRiazorID);
             tipIds.add(almaNegraID);
             tipIds.add(towerOfHerculesID);
-            routeDetailsDto = routeService.create(name, description, travelMode, null, tipIds, EXISTING_FACEBOOK_USER_ID2);
+            routeDetailsDto = routeService.create(EXISTING_FACEBOOK_USER_ID2, name, description, travelMode, null, tipIds);
             hotelRiazorToTorreHerculesID = routeDetailsDto.getId();
         } catch (Exception e) {
             e.printStackTrace();

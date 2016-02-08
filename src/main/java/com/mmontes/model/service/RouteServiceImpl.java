@@ -91,19 +91,18 @@ public class RouteServiceImpl implements RouteService {
         return routeGeom;
     }
 
-    @Override
-    public RouteDetailsDto create(String name, String description, String travelMode, List<Geometry> partialGeoms, List<Long> tipIds, Long facebookUserId)
-            throws InstanceNotFoundException, InvalidRouteException {
+    private Route createOrUpdateRoute(Route route, UserAccount creator, String name, String description, String travelMode, List<Geometry> partialGeoms, List<Long> tipIds)
+            throws InvalidRouteException, InstanceNotFoundException {
         validateTravelMode(travelMode);
         validatePartialGeoms(partialGeoms);
         validateTipIds(tipIds);
-
-        UserAccount creator = userAccountDao.findByFBUserID(facebookUserId);
+        if ((partialGeoms == null || partialGeoms.isEmpty()) && (tipIds == null || tipIds.isEmpty())){
+            throw new InvalidRouteException("Invalid Route: No lineStrings nor tipIds provided");
+        }
         Geometry routeGeom = null;
         if (partialGeoms != null && !partialGeoms.isEmpty()) {
             routeGeom = getCompleteRouteGeom(partialGeoms, tipIds);
         }
-        Route route = new Route();
         route.setName(name);
         route.setDescription(description);
         route.setTravelMode(travelMode);
@@ -112,40 +111,32 @@ public class RouteServiceImpl implements RouteService {
             try {
                 routeGeom = googleMapsService.getRoute(coordinates, route.getTravelMode());
             } catch (GoogleMapsServiceException e) {
-                throw new InvalidRouteException("Invalid Route");
+                throw new InvalidRouteException("Invalid Route: Error requesting Google Maps");
             }
         }
         route.setGeom(routeGeom);
         route.setGoogleMapsUrl(googleMapsService.getRouteGoogleMapsUrl(coordinates, route.getTravelMode()));
         route.setCreator(creator);
         routeDao.save(route);
+        return route;
+    }
+
+    @Override
+    public RouteDetailsDto create( Long facebookUserId, String name, String description, String travelMode, List<Geometry> partialGeoms, List<Long> tipIds)
+            throws InstanceNotFoundException, InvalidRouteException {
+        UserAccount creator = userAccountDao.findByFBUserID(facebookUserId);
+        Route route = createOrUpdateRoute(new Route(),creator,name,description,travelMode,partialGeoms,tipIds);
         return dtoService.Route2RouteDetailsDto(route, facebookUserId);
     }
 
     @Override
-    public RouteDetailsDto edit(Long routeId, Long facebookUserId, String name, String description, String travelMode, List<Long> tipIds)
+    public RouteDetailsDto edit(Long routeId, Long facebookUserId, String name, String description, String travelMode, List<Geometry> partialGeoms, List<Long> tipIds)
             throws InstanceNotFoundException, InvalidRouteException {
-        validateTravelMode(travelMode);
-        if (tipIds != null && tipIds.size() < 2) {
-            throw new InvalidRouteException("Invalid number of TIP IDs(" + tipIds.size() + ")");
-        }
         UserAccount creator = userAccountDao.findByFBUserID(facebookUserId);
-        Route route = routeDao.getRouteByIDandUser(routeId, facebookUserId);
-        route.setName(name);
-        route.setDescription(description);
-        route.setTravelMode(travelMode);
-        if (tipIds != null) {
-            route.getRouteTIPs().clear();
-            routeDao.getTIPsInOrder(route.getId());
-            List<Coordinate> coordinates = setRouteTIPsAndGetCoords(route, tipIds);
-            try {
-                route.setGeom(googleMapsService.getRoute(coordinates, route.getTravelMode()));
-            } catch (GoogleMapsServiceException e) {
-                throw new InvalidRouteException("Invalid Route");
-            }
-            route.setGoogleMapsUrl(googleMapsService.getRouteGoogleMapsUrl(coordinates, route.getTravelMode()));
-        }
-        routeDao.save(route);
+        Route route = routeDao.getRouteByIDandUser(routeId, creator.getFacebookUserId());
+        route.getRouteTIPs().clear();
+        routeDao.getTIPsInOrder(route.getId());
+        route = createOrUpdateRoute(route,creator,name,description,travelMode,partialGeoms,tipIds);
         return dtoService.Route2RouteDetailsDto(route, facebookUserId);
     }
 

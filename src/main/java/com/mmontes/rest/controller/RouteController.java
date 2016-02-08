@@ -1,11 +1,9 @@
 package com.mmontes.rest.controller;
 
 import com.mmontes.model.service.RouteService;
-import com.mmontes.rest.request.RoutePatchRequest;
 import com.mmontes.rest.request.RouteRequest;
 import com.mmontes.rest.response.IntegerResult;
 import com.mmontes.rest.response.ResponseFactory;
-import com.mmontes.service.FacebookService;
 import com.mmontes.util.Constants;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.RouteDetailsDto;
@@ -19,7 +17,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -36,24 +33,18 @@ public class RouteController {
         if (routeRequest.getName() == null || routeRequest.getName().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        List<Geometry> partialGeoms = null;
-        if (routeRequest.getLineStrings() != null && !routeRequest.getLineStrings().isEmpty()) {
-            partialGeoms = new ArrayList<>();
-            try {
-                for (String geometryString : routeRequest.getLineStrings()) {
-                    Geometry lineString = GeometryUtils.geometryFromWKT(geometryString);
-                    partialGeoms.add(lineString);
-                }
-            } catch (GeometryParsingException e) {
-                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-            }
+        List<Geometry> partialGeoms;
+        try {
+            partialGeoms = GeometryUtils.listGeometryFromListWKT(routeRequest.getLineStrings());
+        } catch (GeometryParsingException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        if (routeRequest.getTipIds() != null && routeRequest.getTipIds().size() > Constants.MAX_POINTS_ROUTE){
+        if (routeRequest.getTipIds() != null && routeRequest.getTipIds().size() > Constants.MAX_POINTS_ROUTE) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         RouteDetailsDto routeDetailsDto;
         try {
-            routeDetailsDto = routeService.create(routeRequest.getName(), routeRequest.getDescription(), routeRequest.getTravelMode(), partialGeoms, routeRequest.getTipIds(), facebookUserId);
+            routeDetailsDto = routeService.create(facebookUserId, routeRequest.getName(), routeRequest.getDescription(), routeRequest.getTravelMode(), partialGeoms, routeRequest.getTipIds());
         } catch (InvalidRouteException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -66,12 +57,25 @@ public class RouteController {
     @RequestMapping(value = "/social/route/{routeID}", method = RequestMethod.PATCH, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RouteDetailsDto>
     patch(@PathVariable Long routeID,
-          @RequestBody RoutePatchRequest routePatchRequest,
-          @RequestHeader(value = "FacebookUserId", required = true) Long facebookUserId){
+          @RequestBody RouteRequest routeRequest,
+          @RequestHeader(value = "FacebookUserId", required = true) Long facebookUserId) {
+
+        if (routeRequest.getName() == null || routeRequest.getName().isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        List<Geometry> partialGeoms;
+        try {
+            partialGeoms = GeometryUtils.listGeometryFromListWKT(routeRequest.getLineStrings());
+        } catch (GeometryParsingException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        if (routeRequest.getTipIds() != null && routeRequest.getTipIds().size() > Constants.MAX_POINTS_ROUTE) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
         RouteDetailsDto routeDetailsDto;
         try {
-            routeDetailsDto = routeService.edit(routeID,facebookUserId,
-                    routePatchRequest.getName(),routePatchRequest.getDescription(),routePatchRequest.getTravelMode(),routePatchRequest.getTipIds());
+            routeDetailsDto = routeService.edit(routeID, facebookUserId,
+                    routeRequest.getName(), routeRequest.getDescription(), routeRequest.getTravelMode(), partialGeoms, routeRequest.getTipIds());
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (InvalidRouteException e) {
@@ -83,10 +87,10 @@ public class RouteController {
     @RequestMapping(value = "/route/{routeID}", method = RequestMethod.GET)
     public ResponseEntity<RouteDetailsDto>
     findById(@PathVariable Long routeID,
-             @RequestHeader(value = "FacebookUserId", required = false) Long facebookUserId){
+             @RequestHeader(value = "FacebookUserId", required = false) Long facebookUserId) {
         RouteDetailsDto routeDetailsDto;
         try {
-            routeDetailsDto = routeService.findById(routeID,facebookUserId);
+            routeDetailsDto = routeService.findById(routeID, facebookUserId);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -96,9 +100,9 @@ public class RouteController {
     @RequestMapping(value = "/social/route/{routeID}", method = RequestMethod.DELETE)
     public ResponseEntity
     delete(@PathVariable Long routeID,
-           @RequestHeader(value = "FacebookUserId", required = true)Long facebookUserId){
+           @RequestHeader(value = "FacebookUserId", required = true) Long facebookUserId) {
         try {
-            routeService.remove(routeID,facebookUserId);
+            routeService.remove(routeID, facebookUserId);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity(HttpStatus.NOT_FOUND);
         }
@@ -109,11 +113,11 @@ public class RouteController {
     public ResponseEntity
     getShortestPath(@RequestParam(value = "origin", required = true) Long TIPIdOrigin,
                     @RequestParam(value = "destination", required = true) Long TIPIdDestination,
-                    @RequestParam(value = "travelMode", required = true) String travelMode){
+                    @RequestParam(value = "travelMode", required = true) String travelMode) {
         try {
-            Geometry geom = routeService.getShortestPath(TIPIdOrigin,TIPIdDestination,travelMode);
+            Geometry geom = routeService.getShortestPath(TIPIdOrigin, TIPIdDestination, travelMode);
             String geomWKT = GeometryUtils.WKTFromGeometry(geom);
-            return new ResponseEntity<>(ResponseFactory.getCustomJSON("geom",geomWKT),HttpStatus.OK);
+            return new ResponseEntity<>(ResponseFactory.getCustomJSON("geom", geomWKT), HttpStatus.OK);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (InvalidRouteException e) {
@@ -123,7 +127,7 @@ public class RouteController {
 
     @RequestMapping(value = "/social/route/maxpoints", method = RequestMethod.GET)
     public ResponseEntity<IntegerResult>
-    getMaxWayPoints(){
-        return new ResponseEntity<>(new IntegerResult(Constants.MAX_POINTS_ROUTE),HttpStatus.OK);
+    getMaxWayPoints() {
+        return new ResponseEntity<>(new IntegerResult(Constants.MAX_POINTS_ROUTE), HttpStatus.OK);
     }
 }

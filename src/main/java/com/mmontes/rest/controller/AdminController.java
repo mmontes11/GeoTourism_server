@@ -34,7 +34,13 @@ public class AdminController {
         }
         Calendar now = Calendar.getInstance();
         Calendar expiration = Calendar.getInstance();
-        expiration.setTimeInMillis(now.getTimeInMillis() + Constants.TOKEN_EXPIRATION_IN_MILIS);
+        int expirationOffsetMilis;
+        if (adminLogin.getUsername().equals("etl")){
+            expirationOffsetMilis = Constants.TOKEN_ETL_EXPIRATION_IN_MILIS;
+        }else{
+            expirationOffsetMilis = Constants.TOKEN_EXPIRATION_IN_MILIS;
+        }
+        expiration.setTimeInMillis(now.getTimeInMillis() + expirationOffsetMilis);
 
         String token =
                 Jwts.builder()

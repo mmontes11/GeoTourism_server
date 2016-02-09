@@ -3,14 +3,16 @@ package com.mmontes.rest.controller;
 import com.mmontes.model.service.TIPService;
 import com.mmontes.rest.request.TIPPatchRequest;
 import com.mmontes.rest.request.TIPRequest;
-import com.mmontes.service.FacebookService;
+import com.mmontes.rest.response.ResponseFactory;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.TIPDetailsDto;
-import com.mmontes.util.exception.*;
+import com.mmontes.util.exception.GeometryParsingException;
+import com.mmontes.util.exception.InstanceNotFoundException;
+import com.mmontes.util.exception.InvalidRouteException;
+import com.mmontes.util.exception.InvalidTIPUrlException;
 import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -49,11 +51,11 @@ public class TIPController {
     @RequestMapping(value = "/tip/{TIPId}", method = RequestMethod.GET)
     public ResponseEntity<TIPDetailsDto>
     findById(@PathVariable Long TIPId,
-         @RequestHeader(value = "FacebookUserId", required = false) Long facebookUserId) {
+             @RequestHeader(value = "FacebookUserId", required = false) Long facebookUserId) {
 
         TIPDetailsDto tipDetailsDto;
         try {
-            tipDetailsDto = tipService.findById(TIPId,facebookUserId);
+            tipDetailsDto = tipService.findById(TIPId, facebookUserId);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -89,6 +91,16 @@ public class TIPController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(tipDetailsDto, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/admin/tip/{TIPId}/numroutes", method = RequestMethod.GET)
+    public ResponseEntity
+    patch(@PathVariable Long TIPId) {
+        try {
+            return new ResponseEntity<>(ResponseFactory.getCustomJSON("numRoutes", String.valueOf(tipService.getNumRoutes(TIPId))), HttpStatus.OK);
+        } catch (InstanceNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 }

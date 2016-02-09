@@ -1,10 +1,12 @@
 package com.mmontes.test.model.service;
 
 import com.mmontes.model.service.FavouriteService;
+import com.mmontes.model.service.RouteService;
 import com.mmontes.model.service.TIPService;
 import com.mmontes.model.service.TIPtypeService;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.FeatureSearchDto;
+import com.mmontes.util.dto.RouteDetailsDto;
 import com.mmontes.util.dto.TIPDetailsDto;
 import com.mmontes.util.exception.*;
 import com.vividsolutions.jts.geom.Geometry;
@@ -39,6 +41,9 @@ public class TIPServiceTest {
 
     @Autowired
     private FavouriteService favouriteService;
+
+    @Autowired
+    private RouteService routeService;
 
     private static TIPDetailsDto towerHercules;
     private static TIPDetailsDto alameda;

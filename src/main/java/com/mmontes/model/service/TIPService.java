@@ -21,4 +21,5 @@ public interface TIPService {
     TIPDetailsDto edit(Long TIPId, Long facebookUserId, Long type, String name, String description, String infoUrl, String address, String photoUrl)
             throws InstanceNotFoundException, InvalidTIPUrlException;
     boolean geometryContainsTIPs(Geometry superGeometry,List<Long> tipIds);
+    int getNumRoutes(Long tipId) throws InstanceNotFoundException;
 }

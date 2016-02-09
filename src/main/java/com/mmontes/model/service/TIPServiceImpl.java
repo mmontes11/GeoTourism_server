@@ -139,4 +139,10 @@ public class TIPServiceImpl implements TIPService {
     public boolean geometryContainsTIPs(Geometry superGeometry, List<Long> tipIds) {
         return tipDao.geometryContainsTIPs(superGeometry, tipIds);
     }
+
+    @Override
+    public int getNumRoutes(Long tipId) throws InstanceNotFoundException {
+        TIP tip = tipDao.findById(tipId);
+        return tip.getRouteTIPs().size();
+    }
 }

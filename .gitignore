@@ -6,6 +6,7 @@
 
 admin.sql
 src/main/java/com/mmontes/util/Constants.java
+ETL/config/config.csv
 target/
 lib/
 .idea/

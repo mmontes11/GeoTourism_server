@@ -26,6 +26,7 @@ public class TIP {
     private String photoUrl;
     private String infoUrl;
     private String googleMapsUrl;
+    private Long osmId;
     private City city;
     private Set<UserAccount> favouritedBy = new HashSet<>();
     private Set<RouteTIP> routeTIPs = new HashSet<>();
@@ -119,6 +120,15 @@ public class TIP {
         this.googleMapsUrl = googleMapsUrl;
     }
 
+    @Column(name = "osmid")
+    public Long getOsmId() {
+        return osmId;
+    }
+
+    public void setOsmId(Long osmId) {
+        this.osmId = osmId;
+    }
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cityid")
     public City getCity() {
@@ -155,13 +165,5 @@ public class TIP {
 
     public void setRouteTIPs(Set<RouteTIP> routeTIPs) {
         this.routeTIPs = routeTIPs;
-    }
-
-    @Override
-    public String toString() {
-        return "TIP{" +
-                "id=" + id +
-                ", name='" + name + '\'' +
-                '}';
     }
 }

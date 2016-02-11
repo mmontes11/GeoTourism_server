@@ -18,5 +18,7 @@
         <mapping class="com.mmontes.model.entity.route.Route"/>
         <mapping class="com.mmontes.model.entity.route.RouteTIP"/>
         <mapping class="com.mmontes.model.entity.route.RouteTIPId"/>
+        <mapping class="com.mmontes.model.entity.Config"/>
+        <mapping class="com.mmontes.model.entity.OSMType"/>
     </session-factory>
 </hibernate-configuration>

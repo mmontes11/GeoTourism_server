@@ -65,6 +65,7 @@ CREATE TABLE TIP(
   infoUrl TEXT,
   googleMapsUrl TEXT,
   cityId INTEGER,
+  osmId INTEGER,
   CONSTRAINT TIP_PK PRIMARY KEY(id),
   CONSTRAINT TIP_TIPtype_FK FOREIGN KEY(typeId) REFERENCES TIPtype(id) ON DELETE SET NULL,
   CONSTRAINT TIP_City_FK FOREIGN KEY(cityId) REFERENCES City(id) ON DELETE SET NULL,
@@ -133,10 +134,11 @@ CREATE TABLE Config(
 );
 
 CREATE TABLE OSMType(
+  id SERIAL,
   keyName VARCHAR(50),
   value VARCHAR(50),
   TIPTypeId INTEGER,
-  CONSTRAINT OSMType_PK PRIMARY KEY (keyName,value),
+  CONSTRAINT OSMType_PK PRIMARY KEY (id),
   CONSTRAINT OSMType_TIPType_FK FOREIGN KEY (TIPTypeId) REFERENCES TIPtype(id)
 );
 
@@ -145,4 +147,4 @@ INSERT INTO TIPtype VALUES(2,'Natural Space','fa-leaf');
 INSERT INTO TIPtype VALUES(3,'Hotel','fa-bed');
 INSERT INTO TIPtype VALUES(4,'Restaurant','fa-cutlery');
 
-INSERT INTO OSMType VALUES ('tourism','hostel',3);
+INSERT INTO OSMType(keyName, value, TIPTypeId) VALUES ('tourism','hostel',3);

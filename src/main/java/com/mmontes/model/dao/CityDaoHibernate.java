@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository("cityDao")
+@Repository("CityDao")
 @SuppressWarnings("unchecked")
 public class CityDaoHibernate extends GenericDaoHibernate<City, Long> implements CityDao {
 

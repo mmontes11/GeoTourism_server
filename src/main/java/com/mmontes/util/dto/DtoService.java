@@ -2,6 +2,7 @@ package com.mmontes.util.dto;
 
 import com.mmontes.model.entity.City;
 import com.mmontes.model.entity.Comment;
+import com.mmontes.model.entity.OSMType;
 import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.model.entity.UserAccount;
 import com.mmontes.model.entity.route.Route;
@@ -170,5 +171,21 @@ public class DtoService {
             commentDtos.add(Comment2CommentDto(comment));
         }
         return commentDtos;
+    }
+
+    public OSMTypeDto OSMType2OSMTypeDto(OSMType osmType){
+        OSMTypeDto osmTypeDto = new OSMTypeDto();
+        osmTypeDto.setKey(osmType.getKeyName());
+        osmTypeDto.setValue(osmType.getValue());
+        osmTypeDto.setTipTypeId(osmType.getTIPType().getId());
+        return  osmTypeDto;
+    }
+
+    public List<OSMTypeDto> ListOSMType2ListOSMTypeDto(List<OSMType> osmTypes){
+        List<OSMTypeDto> osmTypeDtos = new ArrayList<>();
+        for(OSMType osmType : osmTypes){
+            osmTypeDtos.add(OSMType2OSMTypeDto(osmType));
+        }
+        return osmTypeDtos;
     }
 }

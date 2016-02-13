@@ -5,7 +5,7 @@ import com.mmontes.model.util.genericdao.GenericDaoHibernate;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.stereotype.Repository;
 
-@Repository("adminDao")
+@Repository("AdminDao")
 public class AdminDaoHibernate extends GenericDaoHibernate<Admin, Long> implements AdminDao {
     public boolean checkPassword(String username, String password) {
         String queryString = "SELECT a FROM Admin a WHERE a.username = :username AND a.password = :password";

@@ -7,8 +7,8 @@ import org.springframework.stereotype.Repository;
 @Repository("ConfigDao")
 public class ConfigDaoHibernate extends GenericDaoHibernate<Config, Long> implements ConfigDao {
     @Override
-    public Config getConfigBoundingBox() {
+    public Config getConfig() {
         String queryString = "SELECT c FROM Config c";
-        return (Config) getSession().createQuery(queryString).setMaxResults(1).uniqueResult();
+        return (Config) getSession().createQuery(queryString).uniqueResult();
     }
 }

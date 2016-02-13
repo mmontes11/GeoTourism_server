@@ -130,7 +130,8 @@ CREATE TABLE Admin(
 CREATE TABLE Config(
   id SERIAL,
   boundingBox GEOMETRY,
-  CONSTRAINT Config_PK PRIMARY KEY (id)
+  CONSTRAINT Config_PK PRIMARY KEY (id),
+  CONSTRAINT City_Geometry CHECK(geometrytype(boundingBox) = ANY(ARRAY['POLYGON']) AND boundingBox IS NOT NULL)
 );
 
 CREATE TABLE OSMType(
@@ -148,3 +149,4 @@ INSERT INTO TIPtype VALUES(3,'Hotel','fa-bed');
 INSERT INTO TIPtype VALUES(4,'Restaurant','fa-cutlery');
 
 INSERT INTO OSMType(keyName, value, TIPTypeId) VALUES ('tourism','hostel',3);
+INSERT INTO OSMType(keyName, value, TIPTypeId) VALUES ('tourism','hotel',3);

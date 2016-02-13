@@ -54,7 +54,8 @@ public class OSMType {
         this.value = value;
     }
 
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "osmType", cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tiptypeid")
     public TIPtype getTIPType() {
         return TIPType;
     }

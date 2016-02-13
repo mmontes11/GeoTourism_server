@@ -47,8 +47,7 @@ public class TIPtype {
         this.icon = icon;
     }
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "TIPType", cascade = CascadeType.ALL)
     public OSMType getOsmType() {
         return osmType;
     }

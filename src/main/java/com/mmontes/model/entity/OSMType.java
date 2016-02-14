@@ -1,27 +1,25 @@
 package com.mmontes.model.entity;
 
-import com.mmontes.model.entity.TIP.TIPtype;
-
 import javax.persistence.*;
 
 @Entity
 @Table(name = "osmtype")
 public class OSMType {
 
+    private static final String OSM_TYPE_ID_GENERATOR = "OSMTypeIdGenerator";
     private Long id;
     private String keyName;
     private String value;
-    private TIPtype TIPType;
-    private static final String OSM_TYPE_ID_GENERATOR = "OSMTypeIdGenerator";
+    private Long TIPTypeId;
 
     public OSMType() {
     }
 
-    public OSMType(Long id, String keyName, String value, TIPtype TIPType) {
+    public OSMType(Long id, String keyName, String value, Long TIPTypeId) {
         this.id = id;
         this.keyName = keyName;
         this.value = value;
-        this.TIPType = TIPType;
+        this.TIPTypeId = TIPTypeId;
     }
 
     @Column(name = "id")
@@ -54,13 +52,12 @@ public class OSMType {
         this.value = value;
     }
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @PrimaryKeyJoinColumn
-    public TIPtype getTIPType() {
-        return TIPType;
+    @Column(name = "tiptypeid")
+    public Long getTIPTypeId() {
+        return TIPTypeId;
     }
 
-    public void setTIPType(TIPtype TIPType) {
-        this.TIPType = TIPType;
+    public void setTIPTypeId(Long TIPTypeId) {
+        this.TIPTypeId = TIPTypeId;
     }
 }

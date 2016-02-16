@@ -13,6 +13,7 @@ public class City {
     private Long id;
     private String name;
     private Geometry geom;
+    private Long osmId;
 
     public City() {
     }
@@ -46,5 +47,14 @@ public class City {
 
     public void setGeom(Geometry geom) {
         this.geom = geom;
+    }
+
+    @Column(name = "osmid")
+    public Long getOsmId() {
+        return osmId;
+    }
+
+    public void setOsmId(Long osmId) {
+        this.osmId = osmId;
     }
 }

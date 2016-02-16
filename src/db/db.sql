@@ -17,6 +17,7 @@ CREATE TABLE City(
   id SERIAL,
   name VARCHAR(50),
   geom GEOMETRY,
+  osmId INTEGER,
   CONSTRAINT City_PK PRIMARY KEY(id),
   CONSTRAINT City_Geometry CHECK(geometrytype(geom) = ANY(ARRAY['POLYGON','MULTIPOLYGON']) AND geom IS NOT NULL)
 );

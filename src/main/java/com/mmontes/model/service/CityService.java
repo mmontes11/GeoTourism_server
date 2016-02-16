@@ -13,4 +13,5 @@ public interface CityService {
     boolean isLocatedInExistingCity(Geometry location);
     List<CityDto> findAll();
     Geometry getGeomUnionCities(List<Long> cityIds) throws InstanceNotFoundException;
+    void syncCities(List<CityDto> cities);
 }

@@ -53,5 +53,10 @@ public class CityServiceImpl implements CityService{
         }
     }
 
+    @Override
+    public void syncCities(List<CityDto> cities) {
+
+    }
+
 
 }

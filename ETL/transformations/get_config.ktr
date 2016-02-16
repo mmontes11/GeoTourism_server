@@ -78,7 +78,7 @@
   <hop> <from>Get Token</from><to>REST Client</to><enabled>Y</enabled> </hop>
   <hop> <from>REST Client</from><to>Switch &#x2f; Case</to><enabled>Y</enabled> </hop>
   <hop> <from>Switch &#x2f; Case</from><to>Abort</to><enabled>Y</enabled> </hop>
-  <hop> <from>Switch &#x2f; Case</from><to>Dummy &#x28;do nothing&#x29;</to><enabled>Y</enabled> </hop>
+  <hop> <from>Switch &#x2f; Case</from><to>Store Config</to><enabled>Y</enabled> </hop>
   </order>
   <step>
     <name>Abort</name>
@@ -98,25 +98,6 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>668</xloc>
       <yloc>160</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Dummy &#x28;do nothing&#x29;</name>
-    <type>Dummy</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>447</xloc>
-      <yloc>327</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -167,7 +148,7 @@
            </partitioning>
     <applicationType>JSON</applicationType>
     <method>GET</method>
-    <url>https&#x3a;&#x2f;&#x2f;geotourism-mmontes.rhcloud.com&#x2f;admin</url>
+    <url>https&#x3a;&#x2f;&#x2f;geotourism-mmontes.rhcloud.com&#x2f;admin&#x2f;config</url>
     <urlInField>N</urlInField>
     <dynamicMethod>N</dynamicMethod>
     <methodFieldName/>
@@ -189,7 +170,7 @@
     <parameters>
       </parameters>
     <result>
-      <name>result</name>
+      <name>config</name>
       <code>code</code>
       <response_time/>
       </result>
@@ -220,11 +201,78 @@
 <case_value_group/>
 <default_target_step>Abort</default_target_step>
 <cases><case><value>200</value>
-<target_step>Dummy &#x28;do nothing&#x29;</target_step>
+<target_step>Store Config</target_step>
 </case></cases>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>445</xloc>
       <yloc>159</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Store Config</name>
+    <type>MongoDbOutput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+
+    <mongo_host>localhost</mongo_host>
+
+    <mongo_port>27017</mongo_port>
+    <use_all_replica_members>N</use_all_replica_members>
+    <auth_kerberos>N</auth_kerberos>
+
+    <mongo_db>geotourism</mongo_db>
+
+    <mongo_collection>config</mongo_collection>
+
+    <batch_insert_size>100</batch_insert_size>
+    <connect_timeout/>
+    <socket_timeout/>
+    <read_preference>primary</read_preference>
+    <write_concern/>
+    <w_timeout/>
+    <journaled_writes>N</journaled_writes>
+
+    <truncate>Y</truncate>
+
+    <update>N</update>
+
+    <upsert>N</upsert>
+
+    <multi>N</multi>
+
+    <modifier_update>N</modifier_update>
+    <write_retries>5</write_retries>
+    <write_retry_delay>10</write_retry_delay>
+
+    <mongo_fields>
+      <mongo_field>
+         <incoming_field_name>config</incoming_field_name>
+
+         <mongo_doc_path/>
+
+         <use_incoming_field_name_as_mongo_field_name>N</use_incoming_field_name_as_mongo_field_name>
+
+         <update_match_field>N</update_match_field>
+
+         <modifier_update_operation>N&#x2f;A</modifier_update_operation>
+
+         <modifier_policy/>
+
+         <json_field>Y</json_field>
+
+      </mongo_field>
+    </mongo_fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>446</xloc>
+      <yloc>328</yloc>
       <draw>Y</draw>
       </GUI>
     </step>

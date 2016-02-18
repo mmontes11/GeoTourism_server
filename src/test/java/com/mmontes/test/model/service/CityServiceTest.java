@@ -52,12 +52,12 @@ public class CityServiceTest {
     }
 
     @Test
-    public void getAllCities(){
-        assertEquals(4,cityService.findAll().size());
+    public void getAllCities() {
+        assertEquals(4, cityService.findAll().size());
     }
 
     @Test
-    public void getCityGeomsWKT(){
+    public void getCityGeomsWKT() {
         try {
             List<Long> cities = new ArrayList<Long>() {{
                 add(A_CORUNA_ID);

@@ -2,10 +2,12 @@ package com.mmontes.model.service;
 
 import com.mmontes.model.dao.CityDao;
 import com.mmontes.model.entity.City;
+import com.mmontes.service.OpenStreetMapService;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.CityDto;
 import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.exception.InstanceNotFoundException;
+import com.mmontes.util.exception.SyncException;
 import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,9 @@ public class CityServiceImpl implements CityService{
 
     @Autowired
     private DtoService dtoService;
+
+    @Autowired
+    private OpenStreetMapService OSMservice;
 
 
     public City getCityFromLocation(Geometry location) {
@@ -54,9 +59,24 @@ public class CityServiceImpl implements CityService{
     }
 
     @Override
-    public void syncCities(List<CityDto> cities) {
-
+    public void syncCities(List<CityDto> cityDtos) throws SyncException {
+        for (CityDto cityDto : cityDtos){
+            Long osmId = cityDto.getId();
+            City city;
+            try {
+                city = cityDao.findByOsmId(osmId);
+            } catch (InstanceNotFoundException e) {
+                try {
+                    Geometry cityGeom = OSMservice.getGeometryByOSMId(osmId);
+                    city = new City();
+                    city.setGeom(cityGeom);
+                    city.setOsmId(osmId);
+                } catch (Exception osmException) {
+                    throw new SyncException("Error Synchronizing cities: "+osmException.getMessage());
+                }
+            }
+            city.setName(cityDto.getName());
+            cityDao.save(city);
+        }
     }
-
-
 }

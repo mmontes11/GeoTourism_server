@@ -367,7 +367,6 @@
                     <srcFiles>
                         <srcFile>${db.script.createDB}</srcFile>
                         <srcFile>${db.script.admin}</srcFile>
-                        <srcFile>${db.script.cities}</srcFile>
                     </srcFiles>
                 </configuration>
                 <executions>
@@ -385,7 +384,6 @@
                             <onError>continue</onError>
                             <srcFiles>
                                 <srcFile>${db.script.createDB}</srcFile>
-                                <srcFile>${db.script.cities}</srcFile>
                                 <srcFile>${db.script.testData}</srcFile>
                             </srcFiles>
                         </configuration>

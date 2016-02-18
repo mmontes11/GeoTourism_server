@@ -3,6 +3,7 @@ package com.mmontes.model.service;
 import com.mmontes.model.entity.City;
 import com.mmontes.util.dto.CityDto;
 import com.mmontes.util.exception.InstanceNotFoundException;
+import com.mmontes.util.exception.SyncException;
 import com.vividsolutions.jts.geom.Geometry;
 
 import java.util.List;
@@ -13,5 +14,5 @@ public interface CityService {
     boolean isLocatedInExistingCity(Geometry location);
     List<CityDto> findAll();
     Geometry getGeomUnionCities(List<Long> cityIds) throws InstanceNotFoundException;
-    void syncCities(List<CityDto> cities);
+    void syncCities(List<CityDto> cities) throws SyncException;
 }

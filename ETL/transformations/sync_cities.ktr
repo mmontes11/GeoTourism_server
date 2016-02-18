@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>get_config</name>
+    <name>sync_cities</name>
     <description/>
     <extended_description/>
     <trans_version/>
@@ -66,19 +66,20 @@
     <clusterschemas>
     </clusterschemas>
   <created_user>-</created_user>
-  <created_date>2016&#x2f;02&#x2f;10 22&#x3a;42&#x3a;54.228</created_date>
+  <created_date>2016&#x2f;02&#x2f;18 20&#x3a;44&#x3a;14.511</created_date>
   <modified_user>-</modified_user>
-  <modified_date>2016&#x2f;02&#x2f;10 22&#x3a;42&#x3a;54.228</modified_date>
+  <modified_date>2016&#x2f;02&#x2f;18 20&#x3a;44&#x3a;14.511</modified_date>
     <key_for_session_key>H4sIAAAAAAAAAAMAAAAAAAAAAAA&#x3d;</key_for_session_key>
     <is_key_private>N</is_key_private>
   </info>
   <notepads>
   </notepads>
   <order>
-  <hop> <from>Get Token</from><to>REST Client</to><enabled>Y</enabled> </hop>
-  <hop> <from>REST Client</from><to>Switch &#x2f; Case</to><enabled>Y</enabled> </hop>
   <hop> <from>Switch &#x2f; Case</from><to>Abort</to><enabled>Y</enabled> </hop>
-  <hop> <from>Switch &#x2f; Case</from><to>Store Config</to><enabled>Y</enabled> </hop>
+  <hop> <from>Sync Cities</from><to>Switch &#x2f; Case</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get Cities</from><to>Get Token</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get Token</from><to>Sync Cities</to><enabled>Y</enabled> </hop>
+  <hop> <from>Switch &#x2f; Case</from><to>Dummy &#x28;do nothing&#x29;</to><enabled>Y</enabled> </hop>
   </order>
   <step>
     <name>Abort</name>
@@ -96,8 +97,54 @@
       <always_log_rows>Y</always_log_rows>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>668</xloc>
-      <yloc>160</yloc>
+      <xloc>723</xloc>
+      <yloc>249</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get Cities</name>
+    <type>MongoDbInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <hostname>localhost</hostname>
+    <port>27017</port>
+    <use_all_replica_members>N</use_all_replica_members>
+    <db_name>geotourism</db_name>
+    <fields_name/>
+    <collection>city</collection>
+    <json_field_name>json</json_field_name>
+    <json_query>&#x7b;&#x22;&#x24;group&#x22;&#x3a;&#x7b;&#xd;&#xa;    _id&#x3a; null,&#xd;&#xa;    cities &#x3a; &#x7b;&#xd;&#xa;        &#x22;&#x24;push&#x22;&#x3a;&#x7b;&#xd;&#xa;            id&#x3a; &#x22;&#x24;id&#x22;,&#xd;&#xa;            name&#x3a; &#x22;&#x24;name&#x22;&#xd;&#xa;        &#x7d;&#xd;&#xa;    &#x7d;&#xd;&#xa;&#x7d;&#x7d;</json_query>
+    <auth_user/>
+    <auth_password>Encrypted </auth_password>
+    <auth_kerberos>N</auth_kerberos>
+    <connect_timeout/>
+    <socket_timeout/>
+    <read_preference>primary</read_preference>
+    <output_json>N</output_json>
+    <query_is_pipeline>Y</query_is_pipeline>
+    <execute_for_each_row>N</execute_for_each_row>
+
+    <mongo_fields>
+      <mongo_field>
+        <field_name>cities</field_name>
+
+        <field_path>&#x24;.cities</field_path>
+
+        <field_type>String</field_type>
+
+      </mongo_field>
+    </mongo_fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>82</xloc>
+      <yloc>115</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -129,122 +176,8 @@
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>75</xloc>
-      <yloc>64</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>REST Client</name>
-    <type>Rest</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <applicationType>JSON</applicationType>
-    <method>GET</method>
-    <url>https&#x3a;&#x2f;&#x2f;geotourism-mmontes.rhcloud.com&#x2f;admin&#x2f;config</url>
-    <urlInField>N</urlInField>
-    <dynamicMethod>N</dynamicMethod>
-    <methodFieldName/>
-    <urlField/>
-    <bodyField/>
-    <httpLogin/>
-    <httpPassword>Encrypted </httpPassword>
-    <proxyHost/>
-    <proxyPort/>
-    <preemptive>N</preemptive>
-    <trustStoreFile/>
-    <trustStorePassword>Encrypted </trustStorePassword>
-    <headers>
-      <header>
-        <field>TOKEN</field>
-        <name>Authorization</name>
-        </header>
-      </headers>
-    <parameters>
-      </parameters>
-    <result>
-      <name>config</name>
-      <code>code</code>
-      <response_time/>
-      </result>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>247</xloc>
-      <yloc>63</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Store Config</name>
-    <type>MongoDbOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-
-    <mongo_host>localhost</mongo_host>
-
-    <mongo_port>27017</mongo_port>
-    <use_all_replica_members>N</use_all_replica_members>
-    <auth_kerberos>N</auth_kerberos>
-
-    <mongo_db>geotourism</mongo_db>
-
-    <mongo_collection>config</mongo_collection>
-
-    <batch_insert_size>100</batch_insert_size>
-    <connect_timeout/>
-    <socket_timeout/>
-    <read_preference>primary</read_preference>
-    <write_concern/>
-    <w_timeout/>
-    <journaled_writes>N</journaled_writes>
-
-    <truncate>Y</truncate>
-
-    <update>N</update>
-
-    <upsert>N</upsert>
-
-    <multi>N</multi>
-
-    <modifier_update>N</modifier_update>
-    <write_retries>5</write_retries>
-    <write_retry_delay>10</write_retry_delay>
-
-    <mongo_fields>
-      <mongo_field>
-         <incoming_field_name>config</incoming_field_name>
-
-         <mongo_doc_path/>
-
-         <use_incoming_field_name_as_mongo_field_name>N</use_incoming_field_name_as_mongo_field_name>
-
-         <update_match_field>N</update_match_field>
-
-         <modifier_update_operation>N&#x2f;A</modifier_update_operation>
-
-         <modifier_policy>Insert&#x26;Update</modifier_policy>
-
-         <json_field>Y</json_field>
-
-      </mongo_field>
-    </mongo_fields>     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>446</xloc>
-      <yloc>328</yloc>
+      <xloc>203</xloc>
+      <yloc>114</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -268,11 +201,77 @@
 <case_value_group/>
 <default_target_step>Abort</default_target_step>
 <cases><case><value>200</value>
-<target_step>Store Config</target_step>
+<target_step>Dummy &#x28;do nothing&#x29;</target_step>
 </case></cases>     <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>445</xloc>
-      <yloc>159</yloc>
+      <xloc>500</xloc>
+      <yloc>248</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Sync Cities</name>
+    <type>Rest</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <applicationType>JSON</applicationType>
+    <method>POST</method>
+    <url>http&#x3a;&#x2f;&#x2f;localhost&#x3a;9090&#x2f;admin&#x2f;cities&#x2f;sync</url>
+    <urlInField>N</urlInField>
+    <dynamicMethod>N</dynamicMethod>
+    <methodFieldName/>
+    <urlField/>
+    <bodyField>cities</bodyField>
+    <httpLogin/>
+    <httpPassword>Encrypted </httpPassword>
+    <proxyHost/>
+    <proxyPort/>
+    <preemptive>N</preemptive>
+    <trustStoreFile/>
+    <trustStorePassword>Encrypted </trustStorePassword>
+    <headers>
+      <header>
+        <field>TOKEN</field>
+        <name>Authorization</name>
+        </header>
+      </headers>
+    <parameters>
+      </parameters>
+    <result>
+      <name/>
+      <code>code</code>
+      <response_time/>
+      </result>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>326</xloc>
+      <yloc>116</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Dummy &#x28;do nothing&#x29;</name>
+    <type>Dummy</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>508</xloc>
+      <yloc>418</yloc>
       <draw>Y</draw>
       </GUI>
     </step>

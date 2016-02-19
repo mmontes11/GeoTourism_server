@@ -2,6 +2,7 @@ package com.mmontes.rest.controller;
 
 import com.mmontes.model.service.CityService;
 import com.mmontes.util.dto.CityDto;
+import com.mmontes.util.dto.CityEnvelopeDto;
 import com.mmontes.util.exception.SyncException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -36,4 +37,12 @@ public class CitiesController {
         }
         return new ResponseEntity(HttpStatus.OK);
     }
+
+    @RequestMapping(value = "/admin/cities/envelopes", method = RequestMethod.GET)
+    public ResponseEntity<List<CityEnvelopeDto>>
+    getCityEnvelopes(){
+        List<CityEnvelopeDto> cityEnvelopeDtos = cityService.getCityEnvelopes();
+        return new ResponseEntity<>(cityEnvelopeDtos,HttpStatus.OK);
+    }
+
 }

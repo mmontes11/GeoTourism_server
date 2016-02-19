@@ -16,6 +16,11 @@ import static com.mmontes.util.Constants.SRID;
 
 public class GeometryUtils {
 
+    public enum GeomOperation {
+        UNION,
+        INTERSECTION
+    }
+
     public static Geometry geometryFromWKT(String wkt) throws GeometryParsingException {
         if (wkt == null || wkt.equals("")) {
             throw new GeometryParsingException("Unable to parse empty or null geometry");
@@ -85,9 +90,23 @@ public class GeometryUtils {
         return all;
     }
 
-    public enum GeomOperation {
-        UNION,
-        INTERSECTION
+    public static String getBBoxString(Geometry geom){
+        final Coordinate[] coords = geom.getCoordinates();
+        List<Coordinate> bboxCoords = new ArrayList<Coordinate>() {{
+            add(coords[0]);
+            add(coords[2]);
+        }};
+        StringBuilder bboxString = new StringBuilder();
+        for (int i = 0; i < bboxCoords.size(); i++) {
+            Coordinate c = bboxCoords.get(i);
+            bboxString.append(c.x).append(",").append(c.y);
+            if (i != (bboxCoords.size() - 1)) {
+                bboxString.append(",");
+            }
+        }
+        return bboxString.toString();
     }
+
+
 }
 

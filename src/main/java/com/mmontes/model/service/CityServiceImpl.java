@@ -5,6 +5,7 @@ import com.mmontes.model.entity.City;
 import com.mmontes.service.OpenStreetMapService;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.CityDto;
+import com.mmontes.util.dto.CityEnvelopeDto;
 import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import com.mmontes.util.exception.SyncException;
@@ -78,5 +79,18 @@ public class CityServiceImpl implements CityService{
             city.setName(cityDto.getName());
             cityDao.save(city);
         }
+    }
+
+    @Override
+    public List<CityEnvelopeDto> getCityEnvelopes() {
+        List<City> cities = cityDao.getCityEnvelopes();
+        List<CityEnvelopeDto> cityEnvelopes = new ArrayList<>();
+        for (City c : cities){
+            CityEnvelopeDto cityEnvelopeDto = new CityEnvelopeDto();
+            cityEnvelopeDto.setId(c.getId());
+            cityEnvelopeDto.setGeom(GeometryUtils.getBBoxString(c.getGeom()));
+            cityEnvelopes.add(cityEnvelopeDto);
+        }
+        return cityEnvelopes;
     }
 }

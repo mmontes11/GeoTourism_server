@@ -1,11 +1,16 @@
 package com.mmontes.model.dao;
 
 import com.mmontes.model.entity.City;
+import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.model.util.genericdao.GenericDaoHibernate;
+import com.mmontes.util.GeometryUtils;
+import com.mmontes.util.dto.CityDto;
+import com.mmontes.util.dto.CityEnvelopeDto;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Repository("CityDao")
@@ -36,5 +41,11 @@ public class CityDaoHibernate extends GenericDaoHibernate<City, Long> implements
         } else {
             return city;
         }
+    }
+
+    @Override
+    public List<City> getCityEnvelopes() {
+        String queryString = "SELECT id ,name,ST_Envelope(geom) as geom,osmid FROM city";
+        return (List<City>) getSession().createSQLQuery(queryString).addEntity(City.class).list();
     }
 }

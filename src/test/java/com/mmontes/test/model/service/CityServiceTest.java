@@ -1,18 +1,15 @@
 package com.mmontes.test.model.service;
 
-import com.mmontes.model.dao.CityDao;
 import com.mmontes.model.entity.City;
 import com.mmontes.model.service.CityService;
 import com.mmontes.util.GeometryUtils;
-import com.mmontes.util.dto.CityDto;
+import com.mmontes.util.dto.CityEnvelopeDto;
 import com.mmontes.util.exception.GeometryParsingException;
 import com.mmontes.util.exception.InstanceNotFoundException;
-import com.mmontes.util.exception.SyncException;
 import com.vividsolutions.jts.geom.Point;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -72,6 +69,13 @@ public class CityServiceTest {
             e.printStackTrace();
             fail();
         }
+    }
+
+    @Test
+    public void getCityEnvelopes(){
+        List<CityEnvelopeDto> cityEnvelopeDtos = cityService.getCityEnvelopes();
+        assertNotNull(cityEnvelopeDtos);
+        assertEquals(4,cityEnvelopeDtos.size());
     }
 
 }

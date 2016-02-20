@@ -1,6 +1,7 @@
 package com.mmontes.rest.controller;
 
 import com.mmontes.model.service.CityService;
+import com.mmontes.rest.response.CityEnvelopeResponse;
 import com.mmontes.util.dto.CityDto;
 import com.mmontes.util.dto.CityEnvelopeDto;
 import com.mmontes.util.exception.SyncException;
@@ -39,10 +40,11 @@ public class CitiesController {
     }
 
     @RequestMapping(value = "/admin/cities/envelopes", method = RequestMethod.GET)
-    public ResponseEntity<List<CityEnvelopeDto>>
+    public ResponseEntity<CityEnvelopeResponse>
     getCityEnvelopes(){
         List<CityEnvelopeDto> cityEnvelopeDtos = cityService.getCityEnvelopes();
-        return new ResponseEntity<>(cityEnvelopeDtos,HttpStatus.OK);
+
+        return new ResponseEntity<>(new CityEnvelopeResponse(cityEnvelopeDtos),HttpStatus.OK);
     }
 
 }

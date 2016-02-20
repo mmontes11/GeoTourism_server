@@ -76,9 +76,9 @@
   </notepads>
   <order>
   <hop> <from>Get Token</from><to>REST Client</to><enabled>Y</enabled> </hop>
-  <hop> <from>REST Client</from><to>Switch &#x2f; Case</to><enabled>Y</enabled> </hop>
-  <hop> <from>Switch &#x2f; Case</from><to>Abort</to><enabled>Y</enabled> </hop>
-  <hop> <from>Switch &#x2f; Case</from><to>Store Config</to><enabled>Y</enabled> </hop>
+  <hop> <from>REST Client</from><to>Check HTTP Status</to><enabled>Y</enabled> </hop>
+  <hop> <from>Check HTTP Status</from><to>Abort</to><enabled>Y</enabled> </hop>
+  <hop> <from>Check HTTP Status</from><to>Store Config</to><enabled>Y</enabled> </hop>
   </order>
   <step>
     <name>Abort</name>
@@ -250,7 +250,7 @@
     </step>
 
   <step>
-    <name>Switch &#x2f; Case</name>
+    <name>Check HTTP Status</name>
     <type>SwitchCase</type>
     <description/>
     <distribute>Y</distribute>

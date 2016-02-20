@@ -75,11 +75,11 @@
   <notepads>
   </notepads>
   <order>
-  <hop> <from>Switch &#x2f; Case</from><to>Abort</to><enabled>Y</enabled> </hop>
-  <hop> <from>Sync Cities</from><to>Switch &#x2f; Case</to><enabled>Y</enabled> </hop>
+  <hop> <from>Check HTTP Status</from><to>Abort</to><enabled>Y</enabled> </hop>
+  <hop> <from>Sync Cities</from><to>Check HTTP Status</to><enabled>Y</enabled> </hop>
   <hop> <from>Get Cities</from><to>Get Token</to><enabled>Y</enabled> </hop>
   <hop> <from>Get Token</from><to>Sync Cities</to><enabled>Y</enabled> </hop>
-  <hop> <from>Switch &#x2f; Case</from><to>Dummy &#x28;do nothing&#x29;</to><enabled>Y</enabled> </hop>
+  <hop> <from>Check HTTP Status</from><to>Dummy &#x28;do nothing&#x29;</to><enabled>Y</enabled> </hop>
   </order>
   <step>
     <name>Abort</name>
@@ -99,6 +99,25 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>723</xloc>
       <yloc>249</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Dummy &#x28;do nothing&#x29;</name>
+    <type>Dummy</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>500</xloc>
+      <yloc>420</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -183,7 +202,7 @@
     </step>
 
   <step>
-    <name>Switch &#x2f; Case</name>
+    <name>Check HTTP Status</name>
     <type>SwitchCase</type>
     <description/>
     <distribute>Y</distribute>
@@ -253,25 +272,6 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>326</xloc>
       <yloc>116</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Dummy &#x28;do nothing&#x29;</name>
-    <type>Dummy</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>508</xloc>
-      <yloc>418</yloc>
       <draw>Y</draw>
       </GUI>
     </step>

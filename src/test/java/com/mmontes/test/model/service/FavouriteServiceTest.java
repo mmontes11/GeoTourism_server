@@ -22,6 +22,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {SPRING_CONFIG_FILE, SPRING_CONFIG_TEST_FILE})
 @Transactional
+@SuppressWarnings("all")
 public class FavouriteServiceTest {
 
     @Autowired
@@ -37,7 +38,7 @@ public class FavouriteServiceTest {
     public void favouriteCreateDeleteTest() {
         try {
             Point geom = (Point) GeometryUtils.geometryFromWKT(POINT_TORRE_HERCULES);
-            TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom);
+            TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom, null, null);
             TIP tip = tipDao.findById(towerHercules.getId());
 
             assertEquals(0, tip.getFavouritedBy().size());
@@ -81,7 +82,7 @@ public class FavouriteServiceTest {
         TIP tip = null;
         try {
             Point geom = (Point) GeometryUtils.geometryFromWKT(POINT_TORRE_HERCULES);
-            TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom);
+            TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom, null, null);
             tip = tipDao.findById(towerHercules.getId());
         } catch (Exception e) {
             fail();
@@ -94,7 +95,7 @@ public class FavouriteServiceTest {
         TIP tip = null;
         try {
             Point geom = (Point) GeometryUtils.geometryFromWKT(POINT_TORRE_HERCULES);
-            TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom);
+            TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom, null, null);
             tip = tipDao.findById(towerHercules.getId());
         } catch (Exception e) {
             fail();

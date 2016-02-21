@@ -54,31 +54,31 @@ public class RouteServiceTest {
             String name = "Alameda Park";
             String description = "Green zone";
             Geometry geom = GeometryUtils.geometryFromWKT(POINT_ALAMEDA);
-            TIPDetailsDto tipDetailsDto = tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom);
+            TIPDetailsDto tipDetailsDto = tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, null);
             alamedaID = tipDetailsDto.getId();
 
             name = "Catedral Santiago de Compostela cathedral";
             description = "Human patrimony";
             geom = GeometryUtils.geometryFromWKT(POINT_CATEDRAL_SANTIAGO);
-            tipDetailsDto = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom);
+            tipDetailsDto = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, null);
             cathedralID = tipDetailsDto.getId();
 
             name = "Hotel Os Reis Catolicos";
             description = "5 estrelas";
             geom = GeometryUtils.geometryFromWKT(POINT_HOTEL_REIS_CATOLICOS);
-            tipDetailsDto = tipService.create(HOTEL_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, geom);
+            tipDetailsDto = tipService.create(HOTEL_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, geom, null, null);
             reisCatolicosID = tipDetailsDto.getId();
 
             name = "Tower of Hercules";
             description = "Human Patrimony";
             geom = GeometryUtils.geometryFromWKT(POINT_TORRE_HERCULES);
-            tipDetailsDto = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom);
+            tipDetailsDto = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, null);
             towerOfHerculesID = tipDetailsDto.getId();
 
             name = "Liberty Statue";
             description = "NY symbol";
             geom = GeometryUtils.geometryFromWKT(POINT_STATUE_OF_LIBERTRY);
-            tipDetailsDto = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, geom);
+            tipDetailsDto = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, geom, null, null);
             statueOfLibertyID = tipDetailsDto.getId();
         } catch (Exception e) {
             fail();

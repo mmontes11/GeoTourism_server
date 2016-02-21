@@ -81,6 +81,6 @@ public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements T
     public void deleteNonExistingFromOSMIds(List<Long> osmIds) {
         String ids = QueryUtils.getINvalues(osmIds);
         String queryString = "DELETE FROM TIP t WHERE t.osmId IS NOT NULL AND t.osmId NOT IN "+ids;
-        getSession().createQuery(queryString);
+        getSession().createSQLQuery(queryString).executeUpdate();
     }
 }

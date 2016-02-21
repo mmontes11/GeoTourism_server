@@ -52,7 +52,7 @@ public class TIPServiceImpl implements TIPService {
     private CityDao cityDao;
 
     public TIPDetailsDto
-    create(Long typeId, String name, String description, String photoUrl, String infoUrl, Geometry geom)
+    create(Long typeId, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long cityId, Long osmId)
             throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException {
 
         TIP tip = new TIP();
@@ -62,6 +62,7 @@ public class TIPServiceImpl implements TIPService {
         tip.setGeom(geom);
         tip.setPhotoUrl(photoUrl);
         tip.setInfoUrl(infoUrl);
+        tip.setOsmId(osmId);
 
         Coordinate coordinate = tip.getGeom().getCoordinate();
         tip.setGoogleMapsUrl(googleMapsService.getTIPGoogleMapsUrl(coordinate));
@@ -72,7 +73,12 @@ public class TIPServiceImpl implements TIPService {
             throw new TIPLocationException("Invalid TIP address");
         }
 
-        City city = cityService.getCityFromLocation(geom);
+        City city;
+        if (cityId != null){
+            city = cityDao.findById(cityId);
+        }else{
+            city = cityService.getCityFromLocation(geom);
+        }
         if (city != null) {
             tip.setCity(city);
         } else {

@@ -3,10 +3,14 @@ package com.mmontes.test.model.service;
 import com.mmontes.model.dao.CityDao;
 import com.mmontes.model.entity.City;
 import com.mmontes.model.service.CityService;
-import com.mmontes.service.OpenStreetMapService;
+import com.mmontes.model.service.TIPService;
+import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.CityDto;
+import com.mmontes.util.dto.FeatureSearchDto;
+import com.mmontes.util.exception.GeometryParsingException;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import com.mmontes.util.exception.SyncException;
+import com.vividsolutions.jts.geom.Geometry;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -18,14 +22,14 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mmontes.test.util.Constants.SPRING_CONFIG_TEST_FILE;
+import static com.mmontes.test.util.Constants.*;
 import static com.mmontes.util.Constants.SPRING_CONFIG_FILE;
 import static org.junit.Assert.*;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {SPRING_CONFIG_FILE, SPRING_CONFIG_TEST_FILE})
 @Transactional
-public class SyncOSMTest {
+public class SyncCityTest {
 
     @Autowired
     private CityService cityService;
@@ -33,9 +37,10 @@ public class SyncOSMTest {
     @Autowired
     private CityDao cityDao;
 
+
     @Before
-    public void removeDefaultCities(){
-        for(City city : cityDao.findAll()){
+    public void removeDefaultCities() {
+        for (City city : cityDao.findAll()) {
             try {
                 cityDao.remove(city.getId());
             } catch (InstanceNotFoundException e) {
@@ -93,4 +98,6 @@ public class SyncOSMTest {
         assertNotNull(city2);
         assertEquals(newName, city2.getName());
     }
+
+
 }

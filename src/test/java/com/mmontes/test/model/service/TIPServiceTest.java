@@ -6,16 +6,16 @@ import com.mmontes.model.service.TIPService;
 import com.mmontes.model.service.TIPtypeService;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.FeatureSearchDto;
-import com.mmontes.util.dto.RouteDetailsDto;
 import com.mmontes.util.dto.TIPDetailsDto;
-import com.mmontes.util.exception.*;
+import com.mmontes.util.exception.GeometryParsingException;
+import com.mmontes.util.exception.InstanceNotFoundException;
+import com.mmontes.util.exception.InvalidTIPUrlException;
+import com.mmontes.util.exception.TIPLocationException;
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.Point;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.test.annotation.Rollback;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,55 +33,51 @@ import static org.junit.Assert.*;
 @SuppressWarnings("all")
 public class TIPServiceTest {
 
-    @Autowired
-    private TIPService tipService;
-
-    @Autowired
-    private TIPtypeService tipTypeService;
-
-    @Autowired
-    private FavouriteService favouriteService;
-
-    @Autowired
-    private RouteService routeService;
-
     private static TIPDetailsDto towerHercules;
     private static TIPDetailsDto alameda;
     private static TIPDetailsDto cathedral;
     private static TIPDetailsDto reisCatolicos;
     private static TIPDetailsDto statueOfLiberty;
+    @Autowired
+    private TIPService tipService;
+    @Autowired
+    private TIPtypeService tipTypeService;
+    @Autowired
+    private FavouriteService favouriteService;
+    @Autowired
+    private RouteService routeService;
 
     @Before
-    public void createData(){
+    public void createData() {
         try {
             String name = "Tower of Hercules";
             String description = "Human Patrimony";
             Geometry geom = GeometryUtils.geometryFromWKT(POINT_TORRE_HERCULES);
-            towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom);
+            towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, null);
 
             name = "Alameda Santiago de Compostela";
             description = "Sitio verde";
             geom = GeometryUtils.geometryFromWKT(POINT_ALAMEDA);
-            alameda = tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom);
+            alameda = tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, null);
 
             name = "Catedral Santiago de Compostela";
             description = "Sitio de peregrinacion";
             geom = GeometryUtils.geometryFromWKT(POINT_CATEDRAL_SANTIAGO);
-            cathedral = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom);
+            cathedral = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, null);
 
             name = "Hotel Os Reis Catolicos";
             description = "5 estrelas";
             geom = GeometryUtils.geometryFromWKT(POINT_HOTEL_REIS_CATOLICOS);
-            reisCatolicos = tipService.create(HOTEL_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom);
+            reisCatolicos = tipService.create(HOTEL_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, null);
 
             name = "Liberty Statue";
             description = "NY symbol";
             geom = GeometryUtils.geometryFromWKT(POINT_STATUE_OF_LIBERTRY);
-            statueOfLiberty = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom);
+            statueOfLiberty = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, null);
 
-            favouriteService.markAsFavourite(statueOfLiberty.getId(),EXISTING_FACEBOOK_USER_ID);
-            favouriteService.markAsFavourite(towerHercules.getId(),EXISTING_FACEBOOK_USER_ID2);
-        } catch (Exception e){
+            favouriteService.markAsFavourite(statueOfLiberty.getId(), EXISTING_FACEBOOK_USER_ID);
+            favouriteService.markAsFavourite(towerHercules.getId(), EXISTING_FACEBOOK_USER_ID2);
+        } catch (Exception e) {
             e.printStackTrace();
             fail();
         }
@@ -131,7 +127,7 @@ public class TIPServiceTest {
             String name = "Alhambra";
             String description = "Patrimonio de la humanidad";
             Geometry geom = GeometryUtils.geometryFromWKT(POINT_ALHAMBRA);
-            tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom);
+            tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, null);
         } catch (InvalidTIPUrlException | GeometryParsingException | InstanceNotFoundException e) {
             e.printStackTrace();
             fail();
@@ -147,7 +143,7 @@ public class TIPServiceTest {
             String newInfoUrl = VALID_TIP_INFO_URL;
             String newAddress = "Fake street";
             String newPhotoUrl = VALID_TIP_PHOTO_URL;
-            TIPDetailsDto tipDetailsDto = tipService.edit(statueOfLiberty.getId(),null,newType,newName,newDescription,newInfoUrl,newAddress,newPhotoUrl);
+            TIPDetailsDto tipDetailsDto = tipService.edit(statueOfLiberty.getId(), null, newType, newName, newDescription, newInfoUrl, newAddress, newPhotoUrl);
 
             assertEquals(newType, tipDetailsDto.getType());
             assertEquals(newName, tipDetailsDto.getName());
@@ -165,12 +161,12 @@ public class TIPServiceTest {
     public void removeTIP() throws InstanceNotFoundException {
         TIPDetailsDto tipDetailsDto = null;
         try {
-            tipDetailsDto = tipService.findById(statueOfLiberty.getId(),null);
+            tipDetailsDto = tipService.findById(statueOfLiberty.getId(), null);
             tipService.remove(tipDetailsDto.getId());
         } catch (Exception e) {
             fail();
         }
-        tipService.findById(tipDetailsDto.getId(),null);
+        tipService.findById(tipDetailsDto.getId(), null);
     }
 
     @Test
@@ -180,7 +176,7 @@ public class TIPServiceTest {
             featureSearchDtos = tipService.find(BOUNDS_SANTIAGO_DE_COMPOSTELA, null, null, null);
             assertEquals(3, featureSearchDtos.size());
             featureSearchDtos = tipService.find(BOUNDS_NEW_YORK, null, null, null);
-            assertEquals(1,featureSearchDtos.size());
+            assertEquals(1, featureSearchDtos.size());
         } catch (InstanceNotFoundException e) {
             fail();
         }
@@ -243,24 +239,24 @@ public class TIPServiceTest {
     }
 
     @Test
-    public void findTipsFavouritedByFacebookUserIDs(){
+    public void findTipsFavouritedByFacebookUserIDs() {
         try {
             List<Long> facebookUserIDs = new ArrayList<>();
             facebookUserIDs.add(EXISTING_FACEBOOK_USER_ID);
-            List<FeatureSearchDto> featureSearchDtos = tipService.find(null,null,null,facebookUserIDs);
+            List<FeatureSearchDto> featureSearchDtos = tipService.find(null, null, null, facebookUserIDs);
             assertEquals(1, featureSearchDtos.size());
 
             facebookUserIDs.clear();
             facebookUserIDs.add(EXISTING_FACEBOOK_USER_ID2);
-            featureSearchDtos = tipService.find(null,null,null,facebookUserIDs);
+            featureSearchDtos = tipService.find(null, null, null, facebookUserIDs);
             assertEquals(1, featureSearchDtos.size());
 
             facebookUserIDs.clear();
             facebookUserIDs.add(EXISTING_FACEBOOK_USER_ID);
             facebookUserIDs.add(EXISTING_FACEBOOK_USER_ID2);
-            featureSearchDtos = tipService.find(null,null,null,facebookUserIDs);
+            featureSearchDtos = tipService.find(null, null, null, facebookUserIDs);
             assertEquals(2, featureSearchDtos.size());
-        }catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail();
         }

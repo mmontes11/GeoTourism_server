@@ -10,6 +10,9 @@ public class TIPSyncDto {
     private String lon;
     private String info_url;
 
+    public TIPSyncDto() {
+    }
+
     public TIPSyncDto(Long osm_id, String name, Long tip_type_id, Long city_id, String lat, String lon, String info_url) {
         this.osm_id = osm_id;
         this.name = name;

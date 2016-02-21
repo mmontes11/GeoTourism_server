@@ -60,37 +60,37 @@ public class RouteServiceFindTest {
             String name = "Alameda Park";
             String description = "Green zone";
             Geometry geom = GeometryUtils.geometryFromWKT(POINT_ALAMEDA);
-            TIPDetailsDto tipDetailsDto = tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom);
+            TIPDetailsDto tipDetailsDto = tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, null);
             alamedaID = tipDetailsDto.getId();
 
             name = "Catedral Santiago de Compostela cathedral";
             description = "Human patrimony";
             geom = GeometryUtils.geometryFromWKT(POINT_CATEDRAL_SANTIAGO);
-            tipDetailsDto = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom);
+            tipDetailsDto = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, null);
             cathedralID = tipDetailsDto.getId();
 
             name = "Hotel Os Reis Catolicos";
             description = "5 estrelas";
             geom = GeometryUtils.geometryFromWKT(POINT_HOTEL_REIS_CATOLICOS);
-            tipDetailsDto = tipService.create(HOTEL_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, geom);
+            tipDetailsDto = tipService.create(HOTEL_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, null, geom, null, null);
             reisCatolicosID = tipDetailsDto.getId();
 
             name = "Tower of Hercules";
             description = "Human Patrimony";
             geom = GeometryUtils.geometryFromWKT(POINT_TORRE_HERCULES);
-            tipDetailsDto = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom);
+            tipDetailsDto = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, null);
             towerOfHerculesID = tipDetailsDto.getId();
 
             name = "Hotel Riazor";
             description = "5 stars";
             geom = GeometryUtils.geometryFromWKT(POINT_HOTEL_RIAZOR);
-            tipDetailsDto = tipService.create(HOTEL_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom);
+            tipDetailsDto = tipService.create(HOTEL_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, null);
             hotelRiazorID = tipDetailsDto.getId();
 
             name = "Restaurante Alma Negra";
             description = "Yummy";
             geom = GeometryUtils.geometryFromWKT(POINT_ALMA_NEGRA);
-            tipDetailsDto = tipService.create(RESTAURANT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom);
+            tipDetailsDto = tipService.create(RESTAURANT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, null);
             almaNegraID = tipDetailsDto.getId();
 
             name = "From Alameda To Reis catolicos";

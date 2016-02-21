@@ -40,7 +40,7 @@ public class TIPController {
         TIPDetailsDto tipDetailsDto;
         try {
             tipDetailsDto = tipService.create(tipRequest.getType(), tipRequest.getName(), tipRequest.getDescription(),
-                    tipRequest.getPhotoUrl(), tipRequest.getInfoUrl(), geometry);
+                    tipRequest.getPhotoUrl(), tipRequest.getInfoUrl(), geometry, null, null);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);

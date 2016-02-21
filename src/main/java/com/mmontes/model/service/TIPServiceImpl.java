@@ -1,19 +1,15 @@
 package com.mmontes.model.service;
 
-import com.mmontes.model.dao.RouteDao;
-import com.mmontes.model.dao.TIPDao;
-import com.mmontes.model.dao.TIPtypeDao;
-import com.mmontes.model.dao.UserAccountDao;
+import com.mmontes.model.dao.*;
 import com.mmontes.model.entity.City;
 import com.mmontes.model.entity.TIP.TIP;
+import com.mmontes.model.entity.TIP.TIPtype;
 import com.mmontes.model.entity.UserAccount;
 import com.mmontes.model.entity.route.Route;
 import com.mmontes.service.GoogleMapsService;
+import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.URLvalidator;
-import com.mmontes.util.dto.DtoService;
-import com.mmontes.util.dto.FeatureSearchDto;
-import com.mmontes.util.dto.TIPDetailsDto;
-import com.mmontes.util.dto.TIPRouteDto;
+import com.mmontes.util.dto.*;
 import com.mmontes.util.exception.*;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
@@ -21,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("TIPService")
@@ -50,6 +47,9 @@ public class TIPServiceImpl implements TIPService {
 
     @Autowired
     private GoogleMapsService googleMapsService;
+
+    @Autowired
+    private CityDao cityDao;
 
     public TIPDetailsDto
     create(Long typeId, String name, String description, String photoUrl, String infoUrl, Geometry geom)
@@ -144,5 +144,55 @@ public class TIPServiceImpl implements TIPService {
     public int getNumRoutes(Long tipId) throws InstanceNotFoundException {
         TIP tip = tipDao.findById(tipId);
         return tip.getRouteTIPs().size();
+    }
+
+    @Override
+    public void syncTIPs(List<TIPSyncDto> tipSyncDtos) throws SyncException {
+        List<Long> osmIds = new ArrayList<>();
+        for (TIPSyncDto tipSyncDto : tipSyncDtos){
+            Long osmId = tipSyncDto.getOsm_id();
+            osmIds.add(osmId);
+
+            Long tipTypeId = tipSyncDto.getTip_type_id();
+            TIPtype tiPtype;
+            try {
+                tiPtype = tipTypeDao.findById(tipTypeId);
+            } catch (InstanceNotFoundException e) {
+                throw new SyncException("TIP Type ID Not Found: "+tipTypeId);
+            }
+
+            Long cityId = tipSyncDto.getCity_id();
+            City city;
+            try {
+                city = cityDao.findById(cityId);
+            } catch (InstanceNotFoundException e) {
+                throw new SyncException("City ID Not Found: "+cityId);
+            }
+
+            Geometry geom;
+            try {
+                geom = GeometryUtils.latLong2Geom(tipSyncDto.getLat(),tipSyncDto.getLon());
+            } catch (GeometryParsingException e) {
+                throw new SyncException("Error Parsing Geometry");
+            }
+
+            TIP tip;
+            try {
+                tip = tipDao.findByOSMId(osmId);
+            } catch (InstanceNotFoundException e) {
+                tip = new TIP();
+            }
+            tip.setOsmId(osmId);
+            tip.setName(tipSyncDto.getName());
+            tip.setGeom(geom);
+            tip.setType(tiPtype);
+            tip.setCity(city);
+            String infoUrl = tipSyncDto.getInfo_url();
+            if (infoUrl != null && !infoUrl.isEmpty()){
+                tip.setInfoUrl(infoUrl);
+            }
+            tipDao.save(tip);
+        }
+        tipDao.deleteNonExistingFromOSMIds(osmIds);
     }
 }

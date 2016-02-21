@@ -5,6 +5,7 @@ import com.mmontes.model.util.QueryUtils;
 import com.mmontes.model.util.genericdao.GenericDaoHibernate;
 import com.mmontes.util.Constants;
 import com.mmontes.util.GeometryUtils;
+import com.mmontes.util.exception.InstanceNotFoundException;
 import com.vividsolutions.jts.geom.Geometry;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
@@ -63,5 +64,23 @@ public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements T
             "WHERE id IN "+tipIdsIn+" " +
             "AND ST_Distance(ST_GeometryFromText('SRID="+Constants.SRID+";"+superGeometryWKT+"'),geom) < " + Constants.MIN_DISTANCE ;
         return (getSession().createSQLQuery(queryString).list().size() == tipIds.size());
+    }
+
+    @Override
+    public TIP findByOSMId(Long osmId) throws InstanceNotFoundException {
+        String queryString = "SELECT t FROM TIP t WHERE t.osmId IS NOT NULL AND t.osmId = :id";
+        TIP t = (TIP) getSession().createQuery(queryString).setParameter("id",osmId).uniqueResult();
+        if (t == null){
+            throw new InstanceNotFoundException(osmId,TIP.class.getName());
+        }else{
+            return t;
+        }
+    }
+
+    @Override
+    public void deleteNonExistingFromOSMIds(List<Long> osmIds) {
+        String ids = QueryUtils.getINvalues(osmIds);
+        String queryString = "DELETE FROM TIP t WHERE t.osmId IS NOT NULL AND t.osmId NOT IN "+ids;
+        getSession().createQuery(queryString);
     }
 }

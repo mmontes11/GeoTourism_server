@@ -4,6 +4,7 @@ package com.mmontes.model.service;
 import com.mmontes.util.dto.FeatureSearchDto;
 import com.mmontes.util.dto.TIPDetailsDto;
 import com.mmontes.util.dto.TIPRouteDto;
+import com.mmontes.util.dto.TIPSyncDto;
 import com.mmontes.util.exception.*;
 import com.vividsolutions.jts.geom.Geometry;
 
@@ -22,4 +23,5 @@ public interface TIPService {
             throws InstanceNotFoundException, InvalidTIPUrlException;
     boolean geometryContainsTIPs(Geometry superGeometry,List<Long> tipIds);
     int getNumRoutes(Long tipId) throws InstanceNotFoundException;
+    void syncTIPs(List<TIPSyncDto> tipSyncDtos) throws SyncException;
 }

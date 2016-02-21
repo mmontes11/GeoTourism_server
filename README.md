@@ -34,4 +34,6 @@ Its architecture consists in the following parts:
 * [Amazon Web Services(S3)](https://aws.amazon.com/es/documentation/s3/)
 * [Google Maps](https://developers.google.com/maps/web-services/overview)
 * [Wikipedia](https://www.wikipedia.org/)
+* [OpenStreetMap](http://wiki.openstreetmap.org/wiki/Overpass_API)
 * [Language Detection](https://detectlanguage.com/)
+

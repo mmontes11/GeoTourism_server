@@ -43,7 +43,6 @@ public class CitiesController {
     public ResponseEntity<CityEnvelopeResponse>
     getCityEnvelopes(){
         List<CityEnvelopeDto> cityEnvelopeDtos = cityService.getCityEnvelopes();
-
         return new ResponseEntity<>(new CityEnvelopeResponse(cityEnvelopeDtos),HttpStatus.OK);
     }
 

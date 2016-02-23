@@ -86,179 +86,6 @@
   <hop> <from>Get TIPs XML</from><to>Insert TIPs</to><enabled>Y</enabled> </hop>
   </order>
   <step>
-    <name>Get City Envelopes</name>
-    <type>Rest</type>
-    <description/>
-    <distribute>N</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <applicationType>JSON</applicationType>
-    <method>GET</method>
-    <url>http&#x3a;&#x2f;&#x2f;localhost&#x3a;9090&#x2f;admin&#x2f;cities&#x2f;envelopes</url>
-    <urlInField>N</urlInField>
-    <dynamicMethod>N</dynamicMethod>
-    <methodFieldName/>
-    <urlField/>
-    <bodyField/>
-    <httpLogin/>
-    <httpPassword>Encrypted </httpPassword>
-    <proxyHost/>
-    <proxyPort/>
-    <preemptive>N</preemptive>
-    <trustStoreFile/>
-    <trustStorePassword>Encrypted </trustStorePassword>
-    <headers>
-      <header>
-        <field>TOKEN</field>
-        <name>Authorization</name>
-        </header>
-      </headers>
-    <parameters>
-      </parameters>
-    <result>
-      <name>cities</name>
-      <code>code</code>
-      <response_time/>
-      </result>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>259</xloc>
-      <yloc>238</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Get Token</name>
-    <type>GetVariable</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <fields>
-      <field>
-        <name>TOKEN</name>
-        <variable>&#x24;&#x7b;TOKEN&#x7d;</variable>
-        <type>String</type>
-        <format/>
-        <currency/>
-        <decimal/>
-        <group/>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
-      </field>
-    </fields>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>118</xloc>
-      <yloc>239</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Get OSM Types</name>
-    <type>MongoDbInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <hostname>localhost</hostname>
-    <port>27017</port>
-    <use_all_replica_members>N</use_all_replica_members>
-    <db_name>geotourism</db_name>
-    <fields_name/>
-    <collection>config</collection>
-    <json_field_name>json</json_field_name>
-    <json_query/>
-    <auth_user/>
-    <auth_password>Encrypted </auth_password>
-    <auth_kerberos>N</auth_kerberos>
-    <connect_timeout/>
-    <socket_timeout/>
-    <read_preference>primary</read_preference>
-    <output_json>N</output_json>
-    <query_is_pipeline>N</query_is_pipeline>
-    <execute_for_each_row>N</execute_for_each_row>
-
-    <mongo_fields>
-      <mongo_field>
-        <field_name>key</field_name>
-
-        <field_path>&#x24;.osmTypes&#x5b;&#x2a;&#x5d;.key</field_path>
-
-        <field_type>String</field_type>
-
-      </mongo_field>
-      <mongo_field>
-        <field_name>value</field_name>
-
-        <field_path>&#x24;.osmTypes&#x5b;&#x2a;&#x5d;.value</field_path>
-
-        <field_type>String</field_type>
-
-      </mongo_field>
-      <mongo_field>
-        <field_name>tip_type_id</field_name>
-
-        <field_path>&#x24;.osmTypes&#x5b;&#x2a;&#x5d;.tipTypeId</field_path>
-
-        <field_type>Integer</field_type>
-
-      </mongo_field>
-    </mongo_fields>     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>576</xloc>
-      <yloc>412</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Join Rows</name>
-    <type>JoinRows</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-      <directory>&#x25;&#x25;java.io.tmpdir&#x25;&#x25;</directory>
-      <prefix>out</prefix>
-      <cache_size>500</cache_size>
-      <main/>
-    <compare>
-<condition>
- <negated>N</negated>
- <leftvalue/>
- <function>&#x3d;</function>
- <rightvalue/>
- </condition>
-    </compare>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>769</xloc>
-      <yloc>340</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
     <name>Abort</name>
     <type>Abort</type>
     <description/>
@@ -304,6 +131,53 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>410</xloc>
       <yloc>234</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get City Envelopes</name>
+    <type>Rest</type>
+    <description/>
+    <distribute>N</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <applicationType>JSON</applicationType>
+    <method>GET</method>
+    <url>http&#x3a;&#x2f;&#x2f;localhost&#x3a;9090&#x2f;admin&#x2f;cities&#x2f;envelopes</url>
+    <urlInField>N</urlInField>
+    <dynamicMethod>N</dynamicMethod>
+    <methodFieldName/>
+    <urlField/>
+    <bodyField/>
+    <httpLogin/>
+    <httpPassword>Encrypted </httpPassword>
+    <proxyHost/>
+    <proxyPort/>
+    <preemptive>N</preemptive>
+    <trustStoreFile/>
+    <trustStorePassword>Encrypted </trustStorePassword>
+    <headers>
+      <header>
+        <field>TOKEN</field>
+        <name>Authorization</name>
+        </header>
+      </headers>
+    <parameters>
+      </parameters>
+    <result>
+      <name>cities</name>
+      <code>code</code>
+      <response_time/>
+      </result>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>259</xloc>
+      <yloc>238</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -409,6 +283,68 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>929</xloc>
       <yloc>339</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get OSM Types</name>
+    <type>MongoDbInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <hostname>localhost</hostname>
+    <port>27017</port>
+    <use_all_replica_members>N</use_all_replica_members>
+    <db_name>geotourism</db_name>
+    <fields_name/>
+    <collection>config</collection>
+    <json_field_name>json</json_field_name>
+    <json_query/>
+    <auth_user/>
+    <auth_password>Encrypted </auth_password>
+    <auth_kerberos>N</auth_kerberos>
+    <connect_timeout/>
+    <socket_timeout/>
+    <read_preference>primary</read_preference>
+    <output_json>N</output_json>
+    <query_is_pipeline>N</query_is_pipeline>
+    <execute_for_each_row>N</execute_for_each_row>
+
+    <mongo_fields>
+      <mongo_field>
+        <field_name>key</field_name>
+
+        <field_path>&#x24;.osmTypes&#x5b;&#x2a;&#x5d;.key</field_path>
+
+        <field_type>String</field_type>
+
+      </mongo_field>
+      <mongo_field>
+        <field_name>value</field_name>
+
+        <field_path>&#x24;.osmTypes&#x5b;&#x2a;&#x5d;.value</field_path>
+
+        <field_type>String</field_type>
+
+      </mongo_field>
+      <mongo_field>
+        <field_name>tip_type_id</field_name>
+
+        <field_path>&#x24;.osmTypes&#x5b;&#x2a;&#x5d;.tipTypeId</field_path>
+
+        <field_type>Integer</field_type>
+
+      </mongo_field>
+    </mongo_fields>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>576</xloc>
+      <yloc>412</yloc>
       <draw>Y</draw>
       </GUI>
     </step>
@@ -559,6 +495,39 @@
     </step>
 
   <step>
+    <name>Get Token</name>
+    <type>GetVariable</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <fields>
+      <field>
+        <name>TOKEN</name>
+        <variable>&#x24;&#x7b;TOKEN&#x7d;</variable>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+    </fields>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>118</xloc>
+      <yloc>239</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
     <name>Insert TIPs</name>
     <type>MongoDbOutput</type>
     <description/>
@@ -612,7 +581,7 @@
 
          <modifier_update_operation>N&#x2f;A</modifier_update_operation>
 
-         <modifier_policy/>
+         <modifier_policy>Insert&#x26;Update</modifier_policy>
 
          <json_field>N</json_field>
 
@@ -628,7 +597,7 @@
 
          <modifier_update_operation>N&#x2f;A</modifier_update_operation>
 
-         <modifier_policy/>
+         <modifier_policy>Insert&#x26;Update</modifier_policy>
 
          <json_field>N</json_field>
 
@@ -644,7 +613,7 @@
 
          <modifier_update_operation>N&#x2f;A</modifier_update_operation>
 
-         <modifier_policy/>
+         <modifier_policy>Insert&#x26;Update</modifier_policy>
 
          <json_field>N</json_field>
 
@@ -660,7 +629,7 @@
 
          <modifier_update_operation>N&#x2f;A</modifier_update_operation>
 
-         <modifier_policy/>
+         <modifier_policy>Insert&#x26;Update</modifier_policy>
 
          <json_field>N</json_field>
 
@@ -676,7 +645,7 @@
 
          <modifier_update_operation>N&#x2f;A</modifier_update_operation>
 
-         <modifier_policy/>
+         <modifier_policy>Insert&#x26;Update</modifier_policy>
 
          <json_field>N</json_field>
 
@@ -692,7 +661,7 @@
 
          <modifier_update_operation>N&#x2f;A</modifier_update_operation>
 
-         <modifier_policy/>
+         <modifier_policy>Insert&#x26;Update</modifier_policy>
 
          <json_field>N</json_field>
 
@@ -708,7 +677,7 @@
 
          <modifier_update_operation>N&#x2f;A</modifier_update_operation>
 
-         <modifier_policy/>
+         <modifier_policy>Insert&#x26;Update</modifier_policy>
 
          <json_field>N</json_field>
 
@@ -724,7 +693,7 @@
 
          <modifier_update_operation>N&#x2f;A</modifier_update_operation>
 
-         <modifier_policy/>
+         <modifier_policy>Insert&#x26;Update</modifier_policy>
 
          <json_field>N</json_field>
 
@@ -733,6 +702,37 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>1271</xloc>
       <yloc>337</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Join Rows</name>
+    <type>JoinRows</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+      <directory>&#x25;&#x25;java.io.tmpdir&#x25;&#x25;</directory>
+      <prefix>out</prefix>
+      <cache_size>500</cache_size>
+      <main/>
+    <compare>
+<condition>
+ <negated>N</negated>
+ <leftvalue/>
+ <function>&#x3d;</function>
+ <rightvalue/>
+ </condition>
+    </compare>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>769</xloc>
+      <yloc>340</yloc>
       <draw>Y</draw>
       </GUI>
     </step>

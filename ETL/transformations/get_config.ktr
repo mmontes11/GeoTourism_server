@@ -103,6 +103,34 @@
     </step>
 
   <step>
+    <name>Check HTTP Status</name>
+    <type>SwitchCase</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+<fieldname>code</fieldname>
+<use_contains>N</use_contains>
+<case_value_type>Number</case_value_type>
+<case_value_format/>
+<case_value_decimal/>
+<case_value_group/>
+<default_target_step>Abort</default_target_step>
+<cases><case><value>200</value>
+<target_step>Store Config</target_step>
+</case></cases>     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>445</xloc>
+      <yloc>159</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
     <name>Get Token</name>
     <type>GetVariable</type>
     <description/>
@@ -148,7 +176,7 @@
            </partitioning>
     <applicationType>JSON</applicationType>
     <method>GET</method>
-    <url>https&#x3a;&#x2f;&#x2f;geotourism-mmontes.rhcloud.com&#x2f;admin&#x2f;config</url>
+    <url>&#x24;&#x7b;URL&#x7d;&#x2f;admin&#x2f;config</url>
     <urlInField>N</urlInField>
     <dynamicMethod>N</dynamicMethod>
     <methodFieldName/>
@@ -245,34 +273,6 @@
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
       <xloc>446</xloc>
       <yloc>328</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Check HTTP Status</name>
-    <type>SwitchCase</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<fieldname>code</fieldname>
-<use_contains>N</use_contains>
-<case_value_type>Number</case_value_type>
-<case_value_format/>
-<case_value_decimal/>
-<case_value_group/>
-<default_target_step>Abort</default_target_step>
-<cases><case><value>200</value>
-<target_step>Store Config</target_step>
-</case></cases>     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>445</xloc>
-      <yloc>159</yloc>
       <draw>Y</draw>
       </GUI>
     </step>

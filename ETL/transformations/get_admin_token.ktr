@@ -121,7 +121,7 @@
     <include_filename>N</include_filename>
     <separator>&#x3b;</separator>
     <enclosure>&#x22;</enclosure>
-    <header>N</header>
+    <header>Y</header>
     <buffer_size>50000</buffer_size>
     <lazy_conversion>Y</lazy_conversion>
     <add_filename_result>N</add_filename_result>
@@ -233,7 +233,7 @@
            </partitioning>
     <applicationType>JSON</applicationType>
     <method>POST</method>
-    <url>https&#x3a;&#x2f;&#x2f;geotourism-mmontes.rhcloud.com&#x2f;logIn</url>
+    <url>&#x24;&#x7b;URL&#x7d;&#x2f;logIn</url>
     <urlInField>N</urlInField>
     <dynamicMethod>N</dynamicMethod>
     <methodFieldName/>

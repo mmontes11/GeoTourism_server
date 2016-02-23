@@ -148,7 +148,7 @@
            </partitioning>
     <applicationType>JSON</applicationType>
     <method>GET</method>
-    <url>http&#x3a;&#x2f;&#x2f;localhost&#x3a;9090&#x2f;admin&#x2f;cities&#x2f;envelopes</url>
+    <url>&#x24;&#x7b;URL&#x7d;&#x2f;admin&#x2f;cities&#x2f;envelopes</url>
     <urlInField>N</urlInField>
     <dynamicMethod>N</dynamicMethod>
     <methodFieldName/>

@@ -6,9 +6,7 @@ import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.FeatureSearchDto;
 import com.mmontes.util.dto.TIPRouteDto;
 import com.mmontes.util.dto.TIPSyncDto;
-import com.mmontes.util.exception.GeometryParsingException;
-import com.mmontes.util.exception.InstanceNotFoundException;
-import com.mmontes.util.exception.SyncException;
+import com.mmontes.util.exception.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -72,11 +70,7 @@ public class TIPsController {
     @RequestMapping(value = "/admin/tips/sync", method = RequestMethod.POST)
     public ResponseEntity
     syncTIPs(@RequestBody List<TIPSyncDto> tipSyncDtos){
-        try {
-            tipService.syncTIPs(tipSyncDtos);
-        } catch (SyncException e) {
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        tipService.syncTIPs(tipSyncDtos);
         return new ResponseEntity(HttpStatus.OK);
     }
 }

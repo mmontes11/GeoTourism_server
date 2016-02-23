@@ -4,7 +4,6 @@ import com.mmontes.model.service.CityService;
 import com.mmontes.rest.response.CityEnvelopeResponse;
 import com.mmontes.util.dto.CityDto;
 import com.mmontes.util.dto.CityEnvelopeDto;
-import com.mmontes.util.exception.SyncException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,19 +30,15 @@ public class CitiesController {
     @RequestMapping(value = "/admin/cities/sync", method = RequestMethod.POST)
     public ResponseEntity
     syncCities(@RequestBody List<CityDto> cities) {
-        try {
-            cityService.syncCities(cities);
-        } catch (SyncException e) {
-            return new ResponseEntity(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+        cityService.syncCities(cities);
         return new ResponseEntity(HttpStatus.OK);
     }
 
     @RequestMapping(value = "/admin/cities/envelopes", method = RequestMethod.GET)
     public ResponseEntity<CityEnvelopeResponse>
-    getCityEnvelopes(){
+    getCityEnvelopes() {
         List<CityEnvelopeDto> cityEnvelopeDtos = cityService.getCityEnvelopes();
-        return new ResponseEntity<>(new CityEnvelopeResponse(cityEnvelopeDtos),HttpStatus.OK);
+        return new ResponseEntity<>(new CityEnvelopeResponse(cityEnvelopeDtos), HttpStatus.OK);
     }
 
 }

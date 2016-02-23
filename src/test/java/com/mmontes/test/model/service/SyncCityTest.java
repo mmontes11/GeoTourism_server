@@ -3,14 +3,8 @@ package com.mmontes.test.model.service;
 import com.mmontes.model.dao.CityDao;
 import com.mmontes.model.entity.City;
 import com.mmontes.model.service.CityService;
-import com.mmontes.model.service.TIPService;
-import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.CityDto;
-import com.mmontes.util.dto.FeatureSearchDto;
-import com.mmontes.util.exception.GeometryParsingException;
 import com.mmontes.util.exception.InstanceNotFoundException;
-import com.mmontes.util.exception.SyncException;
-import com.vividsolutions.jts.geom.Geometry;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -22,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.mmontes.test.util.Constants.*;
+import static com.mmontes.test.util.Constants.SPRING_CONFIG_TEST_FILE;
 import static com.mmontes.util.Constants.SPRING_CONFIG_FILE;
 import static org.junit.Assert.*;
 
@@ -64,7 +58,7 @@ public class SyncCityTest {
         }};
         try {
             cityService.syncCities(cityDtos);
-        } catch (SyncException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail();
         }
@@ -86,7 +80,7 @@ public class SyncCityTest {
         }};
         try {
             cityService.syncCities(cityDtos);
-        } catch (SyncException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             fail();
         }

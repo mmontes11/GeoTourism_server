@@ -107,8 +107,8 @@ public class GeometryUtils {
         return bboxString.toString();
     }
 
-    public static Geometry latLong2Geom(String lat,String lon) throws GeometryParsingException {
-        String geomWKT = "POINT("+lat+" "+lon+")";
+    public static Geometry latLong2Geom(String lon,String lat) throws GeometryParsingException {
+        String geomWKT = "POINT("+lon+" "+lat+")";
         return geometryFromWKT(geomWKT);
     }
 }

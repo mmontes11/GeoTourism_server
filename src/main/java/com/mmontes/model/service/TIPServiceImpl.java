@@ -3,7 +3,6 @@ package com.mmontes.model.service;
 import com.mmontes.model.dao.*;
 import com.mmontes.model.entity.City;
 import com.mmontes.model.entity.TIP.TIP;
-import com.mmontes.model.entity.TIP.TIPtype;
 import com.mmontes.model.entity.UserAccount;
 import com.mmontes.model.entity.route.Route;
 import com.mmontes.service.GoogleMapsService;
@@ -74,9 +73,9 @@ public class TIPServiceImpl implements TIPService {
         }
 
         City city;
-        if (cityId != null){
+        if (cityId != null) {
             city = cityDao.findById(cityId);
-        }else{
+        } else {
             city = cityService.getCityFromLocation(geom);
         }
         if (city != null) {
@@ -153,51 +152,30 @@ public class TIPServiceImpl implements TIPService {
     }
 
     @Override
-    public void syncTIPs(List<TIPSyncDto> tipSyncDtos) throws SyncException {
+    public void syncTIPs(List<TIPSyncDto> tipSyncDtos)  {
         List<Long> osmIds = new ArrayList<>();
-        for (TIPSyncDto tipSyncDto : tipSyncDtos){
-            Long osmId = tipSyncDto.getOsm_id();
-            osmIds.add(osmId);
-
-            Long tipTypeId = tipSyncDto.getTip_type_id();
-            TIPtype tiPtype;
+        for (TIPSyncDto tipSyncDto : tipSyncDtos) {
             try {
-                tiPtype = tipTypeDao.findById(tipTypeId);
-            } catch (InstanceNotFoundException e) {
-                throw new SyncException("TIP Type ID Not Found: "+tipTypeId);
-            }
+                Long osmId = tipSyncDto.getOsm_id();
+                osmIds.add(osmId);
 
-            Long cityId = tipSyncDto.getCity_id();
-            City city;
-            try {
-                city = cityDao.findById(cityId);
-            } catch (InstanceNotFoundException e) {
-                throw new SyncException("City ID Not Found: "+cityId);
-            }
+                Long tipTypeId = tipSyncDto.getTip_type_id();
+                tipTypeDao.findById(tipTypeId);
 
-            Geometry geom;
-            try {
-                geom = GeometryUtils.latLong2Geom(tipSyncDto.getLat(),tipSyncDto.getLon());
-            } catch (GeometryParsingException e) {
-                throw new SyncException("Error Parsing Geometry");
-            }
+                Long cityId = tipSyncDto.getCity_id();
+                cityDao.findById(cityId);
 
-            TIP tip;
-            try {
-                tip = tipDao.findByOSMId(osmId);
-            } catch (InstanceNotFoundException e) {
-                tip = new TIP();
+                Geometry geom = GeometryUtils.latLong2Geom(tipSyncDto.getLon(), tipSyncDto.getLat());
+
+                try {
+                    TIP tip = tipDao.findByOSMId(osmId);
+                    edit(tip.getId(), null, tipTypeId, tipSyncDto.getName(), null, tipSyncDto.getInfo_url(), tip.getAddress(), tipSyncDto.getPhoto_url());
+                } catch (InstanceNotFoundException e) {
+                    create(tipTypeId, tipSyncDto.getName(), null, tipSyncDto.getPhoto_url(), tipSyncDto.getInfo_url(), geom, cityId, osmId);
+                }
+            } catch (Exception e){
+                e.printStackTrace();
             }
-            tip.setOsmId(osmId);
-            tip.setName(tipSyncDto.getName());
-            tip.setGeom(geom);
-            tip.setType(tiPtype);
-            tip.setCity(city);
-            String infoUrl = tipSyncDto.getInfo_url();
-            if (infoUrl != null && !infoUrl.isEmpty()){
-                tip.setInfoUrl(infoUrl);
-            }
-            tipDao.save(tip);
         }
         tipDao.deleteNonExistingFromOSMIds(osmIds);
     }

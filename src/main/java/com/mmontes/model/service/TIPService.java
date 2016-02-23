@@ -23,5 +23,5 @@ public interface TIPService {
             throws InstanceNotFoundException, InvalidTIPUrlException;
     boolean geometryContainsTIPs(Geometry superGeometry,List<Long> tipIds);
     int getNumRoutes(Long tipId) throws InstanceNotFoundException;
-    void syncTIPs(List<TIPSyncDto> tipSyncDtos) throws SyncException;
+    void syncTIPs(List<TIPSyncDto> tipSyncDtos);
 }

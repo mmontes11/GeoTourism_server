@@ -11,6 +11,8 @@ import java.net.URLConnection;
 
 public class URLvalidator {
 
+    private static final int SECONDS_TIMEOUT = 5;
+
     public static boolean isValidURL(String urlStr){
         if (urlStr == null || urlStr.isEmpty()){
             return true;
@@ -18,6 +20,7 @@ public class URLvalidator {
         try {
             URL url = new URL(urlStr);
             URLConnection conn = url.openConnection();
+            conn.setConnectTimeout(SECONDS_TIMEOUT * 1000);
             conn.connect();
             return true;
         } catch (MalformedURLException e) {

@@ -9,11 +9,12 @@ public class TIPSyncDto {
     private String lat;
     private String lon;
     private String info_url;
+    private String photo_url;
 
     public TIPSyncDto() {
     }
 
-    public TIPSyncDto(Long osm_id, String name, Long tip_type_id, Long city_id, String lat, String lon, String info_url) {
+    public TIPSyncDto(Long osm_id, String name, Long tip_type_id, Long city_id, String lat, String lon, String info_url, String photo_url) {
         this.osm_id = osm_id;
         this.name = name;
         this.tip_type_id = tip_type_id;
@@ -21,6 +22,7 @@ public class TIPSyncDto {
         this.lat = lat;
         this.lon = lon;
         this.info_url = info_url;
+        this.photo_url = photo_url;
     }
 
     public Long getOsm_id() {
@@ -77,5 +79,13 @@ public class TIPSyncDto {
 
     public void setInfo_url(String info_url) {
         this.info_url = info_url;
+    }
+
+    public String getPhoto_url() {
+        return photo_url;
+    }
+
+    public void setPhoto_url(String photo_url) {
+        this.photo_url = photo_url;
     }
 }

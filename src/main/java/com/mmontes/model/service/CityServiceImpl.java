@@ -8,7 +8,6 @@ import com.mmontes.util.dto.CityDto;
 import com.mmontes.util.dto.CityEnvelopeDto;
 import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.exception.InstanceNotFoundException;
-import com.mmontes.util.exception.SyncException;
 import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,7 +18,7 @@ import java.util.List;
 
 @Service("cityService")
 @Transactional
-public class CityServiceImpl implements CityService{
+public class CityServiceImpl implements CityService {
 
     @Autowired
     private CityDao cityDao;
@@ -47,21 +46,21 @@ public class CityServiceImpl implements CityService{
 
     @Override
     public Geometry getGeomUnionCities(List<Long> cityIds) throws InstanceNotFoundException {
-        if (cityIds != null && !cityIds.isEmpty()){
+        if (cityIds != null && !cityIds.isEmpty()) {
             List<Geometry> cityGeoms = new ArrayList<>();
-            for (Long id : cityIds){
+            for (Long id : cityIds) {
                 City city = cityDao.findById(id);
                 cityGeoms.add(city.getGeom());
             }
-            return GeometryUtils.apply(cityGeoms,GeometryUtils.GeomOperation.UNION);
-        }else{
+            return GeometryUtils.apply(cityGeoms, GeometryUtils.GeomOperation.UNION);
+        } else {
             return null;
         }
     }
 
     @Override
-    public void syncCities(List<CityDto> cityDtos) throws SyncException {
-        for (CityDto cityDto : cityDtos){
+    public void syncCities(List<CityDto> cityDtos) {
+        for (CityDto cityDto : cityDtos) {
             Long osmId = cityDto.getId();
             City city;
             try {
@@ -73,7 +72,8 @@ public class CityServiceImpl implements CityService{
                     city.setGeom(cityGeom);
                     city.setOsmId(osmId);
                 } catch (Exception osmException) {
-                    throw new SyncException("Error Synchronizing cities: "+osmException.getMessage());
+                    e.printStackTrace();
+                    continue;
                 }
             }
             city.setName(cityDto.getName());
@@ -85,7 +85,7 @@ public class CityServiceImpl implements CityService{
     public List<CityEnvelopeDto> getCityEnvelopes() {
         List<City> cities = cityDao.getCityEnvelopes();
         List<CityEnvelopeDto> cityEnvelopes = new ArrayList<>();
-        for (City c : cities){
+        for (City c : cities) {
             CityEnvelopeDto cityEnvelopeDto = new CityEnvelopeDto();
             cityEnvelopeDto.setId(c.getId());
             cityEnvelopeDto.setGeom(GeometryUtils.getBBoxString(c.getGeom()));

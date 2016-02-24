@@ -37,7 +37,7 @@ public class RatingServiceTest {
     public void rateAndGetAverage() {
         try {
             Point geom = (Point) GeometryUtils.geometryFromWKT(POINT_TORRE_HERCULES);
-            TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom, null, null);
+            TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom, null);
             TIP tip = tipDao.findById(towerHercules.getId());
 
             Double average = ratingService.rate(10.0D, tip.getId(), EXISTING_FACEBOOK_USER_ID);
@@ -61,7 +61,7 @@ public class RatingServiceTest {
     public void rateAndGetUserRating() {
         try {
             Point geom = (Point) GeometryUtils.geometryFromWKT(POINT_TORRE_HERCULES);
-            TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom, null, null);
+            TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom, null);
             TIP tip = tipDao.findById(towerHercules.getId());
 
             Double rate = 10.0D;

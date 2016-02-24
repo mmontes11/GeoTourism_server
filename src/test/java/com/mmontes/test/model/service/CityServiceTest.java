@@ -6,6 +6,7 @@ import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.CityEnvelopeDto;
 import com.mmontes.util.exception.GeometryParsingException;
 import com.mmontes.util.exception.InstanceNotFoundException;
+import com.mmontes.util.exception.TIPLocationException;
 import com.vividsolutions.jts.geom.Point;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,12 +43,19 @@ public class CityServiceTest {
             city = cityService.getCityFromLocation(cityGeometry);
             assertNotNull(city);
             assertEquals(NAME_CITY_SANTIAGO, city.getName());
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
 
-            cityGeometry = (Point) GeometryUtils.geometryFromWKT(POINT_ALHAMBRA);
-            city = cityService.getCityFromLocation(cityGeometry);
+    @Test(expected = TIPLocationException.class)
+    public void getCityFromPointInNonExistingCity() throws TIPLocationException {
+        try {
+            Point cityGeometry = (Point) GeometryUtils.geometryFromWKT(POINT_ALHAMBRA);
+            City city = cityService.getCityFromLocation(cityGeometry);
             assertNull(city);
         } catch (GeometryParsingException e) {
-            e.printStackTrace();
             fail();
         }
     }

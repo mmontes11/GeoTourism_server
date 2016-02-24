@@ -41,12 +41,12 @@ public class SyncTIPTest {
     public void createTIPs() {
         try {
             Geometry geom = GeometryUtils.geometryFromWKT(POINT_TORRE_HERCULES);
-            tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, null);
+            tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null);
             geom = GeometryUtils.geometryFromWKT(POINT_CATEDRAL_SANTIAGO);
-            tipService.create(MONUMENT_DISCRIMINATOR, "Catedral Santiago de Compostela", "Sitio de peregrinacion", VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, CATHEDRAL_OSM_ID);
-            tipService.create(NATURAL_SPACE_DISCRIMINATOR, "Alameda Santiago de Compostela", "Sitio verde", VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, ALAMEDA_OSM_ID);
+            tipService.create(MONUMENT_DISCRIMINATOR, "Catedral Santiago de Compostela", "Sitio de peregrinacion", VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, CATHEDRAL_OSM_ID);
+            tipService.create(NATURAL_SPACE_DISCRIMINATOR, "Alameda Santiago de Compostela", "Sitio verde", VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, ALAMEDA_OSM_ID);
             geom = GeometryUtils.geometryFromWKT(POINT_STATUE_OF_LIBERTRY);
-            tipService.create(MONUMENT_DISCRIMINATOR, "Liberty Statue", "NY symbol", VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, LIBERTY_STATUE_OSM_ID);
+            tipService.create(MONUMENT_DISCRIMINATOR, "Liberty Statue", "NY symbol", VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, LIBERTY_STATUE_OSM_ID);
         } catch (Exception e) {
             e.printStackTrace();
             fail();
@@ -64,7 +64,6 @@ public class SyncTIPTest {
             TIPSyncDto cathedralTIPSyncDto = new TIPSyncDto();
             cathedralTIPSyncDto.setOsm_id(CATHEDRAL_OSM_ID);
             cathedralTIPSyncDto.setName("Cathedral New Name");
-            cathedralTIPSyncDto.setCity_id(SANTIAGO_ID);
             cathedralTIPSyncDto.setTip_type_id(MONUMENT_DISCRIMINATOR);
             cathedralTIPSyncDto.setInfo_url(VALID_TIP_PHOTO_URL);
             cathedralTIPSyncDto.setPhoto_url(VALID_TIP_PHOTO_URL);
@@ -84,7 +83,6 @@ public class SyncTIPTest {
             TIPSyncDto libertyStatueTIPSyncDto = new TIPSyncDto();
             libertyStatueTIPSyncDto.setOsm_id(LIBERTY_STATUE_OSM_ID);
             libertyStatueTIPSyncDto.setName("Liberty Statue New Name");
-            libertyStatueTIPSyncDto.setCity_id(NEW_YORK_ID);
             libertyStatueTIPSyncDto.setTip_type_id(MONUMENT_DISCRIMINATOR);
             libertyStatueTIPSyncDto.setInfo_url(VALID_TIP_PHOTO_URL);
             libertyStatueTIPSyncDto.setPhoto_url(VALID_TIP_PHOTO_URL);

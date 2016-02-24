@@ -47,11 +47,8 @@ public class TIPServiceImpl implements TIPService {
     @Autowired
     private GoogleMapsService googleMapsService;
 
-    @Autowired
-    private CityDao cityDao;
-
     public TIPDetailsDto
-    create(Long typeId, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long cityId, Long osmId)
+    create(Long typeId, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long osmId)
             throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException {
 
         TIP tip = new TIP();
@@ -72,17 +69,8 @@ public class TIPServiceImpl implements TIPService {
             throw new TIPLocationException("Invalid TIP address");
         }
 
-        City city;
-        if (cityId != null) {
-            city = cityDao.findById(cityId);
-        } else {
-            city = cityService.getCityFromLocation(geom);
-        }
-        if (city != null) {
-            tip.setCity(city);
-        } else {
-            throw new TIPLocationException("TIP location is incorrect. It should be located in a single City");
-        }
+        City city = cityService.getCityFromLocation(geom);
+        tip.setCity(city);
 
         URLvalidator.checkURLs(tip);
 
@@ -162,16 +150,13 @@ public class TIPServiceImpl implements TIPService {
                 Long tipTypeId = tipSyncDto.getTip_type_id();
                 tipTypeDao.findById(tipTypeId);
 
-                Long cityId = tipSyncDto.getCity_id();
-                cityDao.findById(cityId);
-
                 Geometry geom = GeometryUtils.latLong2Geom(tipSyncDto.getLon(), tipSyncDto.getLat());
 
                 try {
                     TIP tip = tipDao.findByOSMId(osmId);
                     edit(tip.getId(), null, tipTypeId, tipSyncDto.getName(), null, tipSyncDto.getInfo_url(), tip.getAddress(), tipSyncDto.getPhoto_url());
                 } catch (InstanceNotFoundException e) {
-                    create(tipTypeId, tipSyncDto.getName(), null, tipSyncDto.getPhoto_url(), tipSyncDto.getInfo_url(), geom, cityId, osmId);
+                    create(tipTypeId, tipSyncDto.getName(), null, tipSyncDto.getPhoto_url(), tipSyncDto.getInfo_url(), geom, osmId);
                 }
             } catch (Exception e){
                 e.printStackTrace();

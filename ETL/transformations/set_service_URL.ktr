@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <transformation>
   <info>
-    <name>sync_TIPs</name>
+    <name>set_service_URL</name>
     <description/>
     <extended_description/>
     <trans_version/>
@@ -66,139 +66,20 @@
     <clusterschemas>
     </clusterschemas>
   <created_user>-</created_user>
-  <created_date>2016&#x2f;02&#x2f;23 10&#x3a;39&#x3a;28.970</created_date>
+  <created_date>2016&#x2f;02&#x2f;24 00&#x3a;16&#x3a;07.295</created_date>
   <modified_user>-</modified_user>
-  <modified_date>2016&#x2f;02&#x2f;23 10&#x3a;39&#x3a;28.970</modified_date>
+  <modified_date>2016&#x2f;02&#x2f;24 00&#x3a;16&#x3a;07.295</modified_date>
     <key_for_session_key>H4sIAAAAAAAAAAMAAAAAAAAAAAA&#x3d;</key_for_session_key>
     <is_key_private>N</is_key_private>
   </info>
   <notepads>
   </notepads>
   <order>
-  <hop> <from>Get TIPs</from><to>Get Token</to><enabled>Y</enabled> </hop>
-  <hop> <from>Get Token</from><to>Sync TIPs</to><enabled>Y</enabled> </hop>
-  <hop> <from>Check HTTP Status</from><to>Abort</to><enabled>Y</enabled> </hop>
-  <hop> <from>Check HTTP Status</from><to>Dummy &#x28;do nothing&#x29;</to><enabled>Y</enabled> </hop>
-  <hop> <from>Sync TIPs</from><to>Check HTTP Status</to><enabled>Y</enabled> </hop>
+  <hop> <from>Get Config</from><to>Set URL</to><enabled>Y</enabled> </hop>
   </order>
   <step>
-    <name>Abort</name>
-    <type>Abort</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-      <row_threshold>0</row_threshold>
-      <message/>
-      <always_log_rows>Y</always_log_rows>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>761</xloc>
-      <yloc>193</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Check HTTP Status</name>
-    <type>SwitchCase</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-<fieldname>code</fieldname>
-<use_contains>N</use_contains>
-<case_value_type>Number</case_value_type>
-<case_value_format/>
-<case_value_decimal/>
-<case_value_group/>
-<default_target_step>Abort</default_target_step>
-<cases><case><value>200</value>
-<target_step>Dummy &#x28;do nothing&#x29;</target_step>
-</case></cases>     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>538</xloc>
-      <yloc>192</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Dummy &#x28;do nothing&#x29;</name>
-    <type>Dummy</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>538</xloc>
-      <yloc>364</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Get TIPs</name>
-    <type>MongoDbInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <hostname>localhost</hostname>
-    <port>27017</port>
-    <use_all_replica_members>N</use_all_replica_members>
-    <db_name>geotourism</db_name>
-    <fields_name/>
-    <collection>TIP</collection>
-    <json_field_name>json</json_field_name>
-    <json_query>&#x7b;&#x22;&#x24;group&#x22;&#x3a;&#x7b;&#xd;&#xa;	_id&#x3a;null,&#xd;&#xa;	tips &#x3a; &#x7b;&#xd;&#xa;        &#x22;&#x24;push&#x22;&#x3a;&#x7b;&#xd;&#xa;            osm_id&#x3a; &#x22;&#x24;osm_id&#x22;,&#xd;&#xa;            lat&#x3a; &#x22;&#x24;lat&#x22;,&#xd;&#xa;			lon&#x3a; &#x22;&#x24;lon&#x22;,&#xd;&#xa;			name&#x3a; &#x22;&#x24;name&#x22;,&#xd;&#xa;			info_url&#x3a; &#x22;&#x24;info_url&#x22;,&#xd;&#xa;			tip_type_id&#x3a; &#x22;&#x24;tip_type_id&#x22;,&#xd;&#xa;			photo_url&#x3a; &#x22;&#x24;photo_url&#x22;&#xd;&#xa;        &#x7d;&#xd;&#xa;    &#x7d;&#xd;&#xa;	&#x7d;&#xd;&#xa;&#x7d;</json_query>
-    <auth_user/>
-    <auth_password>Encrypted </auth_password>
-    <auth_kerberos>N</auth_kerberos>
-    <connect_timeout/>
-    <socket_timeout/>
-    <read_preference>primary</read_preference>
-    <output_json>N</output_json>
-    <query_is_pipeline>Y</query_is_pipeline>
-    <execute_for_each_row>N</execute_for_each_row>
-
-    <mongo_fields>
-      <mongo_field>
-        <field_name>tips</field_name>
-
-        <field_path>&#x24;.tips</field_path>
-
-        <field_type>String</field_type>
-
-      </mongo_field>
-    </mongo_fields>     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>99</xloc>
-      <yloc>64</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Get Token</name>
-    <type>GetVariable</type>
+    <name>Set URL</name>
+    <type>SetVariable</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -209,8 +90,70 @@
            </partitioning>
     <fields>
       <field>
-        <name>TOKEN</name>
-        <variable>&#x24;&#x7b;TOKEN&#x7d;</variable>
+        <field_name>url</field_name>
+        <variable_name>URL</variable_name>
+        <variable_type>PARENT_JOB</variable_type>
+        <default_value>https&#x3a;&#x2f;&#x2f;geotourism-mmontes.rhcloud.com</default_value>
+        </field>
+      </fields>
+    <use_formatting>Y</use_formatting>
+     <cluster_schema/>
+ <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
+      <xloc>216</xloc>
+      <yloc>62</yloc>
+      <draw>Y</draw>
+      </GUI>
+    </step>
+
+  <step>
+    <name>Get Config</name>
+    <type>CsvInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+         <partitioning>
+           <method>none</method>
+           <schema_name/>
+           </partitioning>
+    <filename>&#x24;&#x7b;Internal.Job.Filename.Directory&#x7d;&#x2f;config&#x2f;config.csv</filename>
+    <filename_field/>
+    <rownum_field/>
+    <include_filename>N</include_filename>
+    <separator>&#x3b;</separator>
+    <enclosure>&#x22;</enclosure>
+    <header>Y</header>
+    <buffer_size>50000</buffer_size>
+    <lazy_conversion>Y</lazy_conversion>
+    <add_filename_result>N</add_filename_result>
+    <parallel>N</parallel>
+    <newline_possible>N</newline_possible>
+    <encoding/>
+    <fields>
+      <field>
+        <name>username</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>password</name>
+        <type>String</type>
+        <format/>
+        <currency/>
+        <decimal/>
+        <group/>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>url</name>
         <type>String</type>
         <format/>
         <currency/>
@@ -223,54 +166,7 @@
     </fields>
      <cluster_schema/>
  <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>218</xloc>
-      <yloc>63</yloc>
-      <draw>Y</draw>
-      </GUI>
-    </step>
-
-  <step>
-    <name>Sync TIPs</name>
-    <type>Rest</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-         <partitioning>
-           <method>none</method>
-           <schema_name/>
-           </partitioning>
-    <applicationType>JSON</applicationType>
-    <method>POST</method>
-    <url>&#x24;&#x7b;URL&#x7d;&#x2f;admin&#x2f;tips&#x2f;sync</url>
-    <urlInField>N</urlInField>
-    <dynamicMethod>N</dynamicMethod>
-    <methodFieldName/>
-    <urlField/>
-    <bodyField>tips</bodyField>
-    <httpLogin/>
-    <httpPassword>Encrypted </httpPassword>
-    <proxyHost/>
-    <proxyPort/>
-    <preemptive>N</preemptive>
-    <trustStoreFile/>
-    <trustStorePassword>Encrypted </trustStorePassword>
-    <headers>
-      <header>
-        <field>TOKEN</field>
-        <name>Authorization</name>
-        </header>
-      </headers>
-    <parameters>
-      </parameters>
-    <result>
-      <name/>
-      <code>code</code>
-      <response_time/>
-      </result>
-     <cluster_schema/>
- <remotesteps>   <input>   </input>   <output>   </output> </remotesteps>    <GUI>
-      <xloc>349</xloc>
+      <xloc>60</xloc>
       <yloc>65</yloc>
       <draw>Y</draw>
       </GUI>

@@ -8,6 +8,7 @@ import com.mmontes.util.dto.CityDto;
 import com.mmontes.util.dto.CityEnvelopeDto;
 import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.exception.InstanceNotFoundException;
+import com.mmontes.util.exception.TIPLocationException;
 import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -30,13 +31,18 @@ public class CityServiceImpl implements CityService {
     private OpenStreetMapService OSMservice;
 
 
-    public City getCityFromLocation(Geometry location) {
-        return cityDao.getCityFromLocation(location);
+    public City getCityFromLocation(Geometry location) throws TIPLocationException {
+        List<City> cities = cityDao.getCitiesFromTIPLocation(location);
+        if (cities.size() != 1){
+            throw new TIPLocationException("A TIP must be located in exactly one City");
+        }else{
+            return cities.get(0);
+        }
     }
 
     @Override
     public boolean isLocatedInExistingCity(Geometry location) {
-        return (cityDao.getCityFromLocation(location) != null);
+        return (cityDao.getCitiesFromTIPLocation(location).size() > 0);
     }
 
     @Override

@@ -3,7 +3,7 @@ package com.mmontes.rest.controller;
 import com.mmontes.model.service.AdminService;
 import com.mmontes.rest.request.AdminLoginRequest;
 import com.mmontes.rest.response.ResponseFactory;
-import com.mmontes.util.Constants;
+import com.mmontes.util.PrivateConstants;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,9 +36,9 @@ public class AdminController {
         Calendar expiration = Calendar.getInstance();
         int expirationOffsetMilis;
         if (adminLogin.getUsername().equals("etl")){
-            expirationOffsetMilis = Constants.TOKEN_ETL_EXPIRATION_IN_MILIS;
+            expirationOffsetMilis = PrivateConstants.TOKEN_ETL_EXPIRATION_IN_MILIS;
         }else{
-            expirationOffsetMilis = Constants.TOKEN_EXPIRATION_IN_MILIS;
+            expirationOffsetMilis = PrivateConstants.TOKEN_EXPIRATION_IN_MILIS;
         }
         expiration.setTimeInMillis(now.getTimeInMillis() + expirationOffsetMilis);
 
@@ -47,7 +47,7 @@ public class AdminController {
                         .setSubject(adminLogin.getUsername())
                         .setIssuedAt(now.getTime())
                         .setExpiration(expiration.getTime())
-                        .signWith(SignatureAlgorithm.HS512, Constants.TOKEN_SECRET_KEY)
+                        .signWith(SignatureAlgorithm.HS512, PrivateConstants.TOKEN_SECRET_KEY)
                         .compact();
 
         return new ResponseEntity<>(ResponseFactory.getCustomJSON("token", token), HttpStatus.OK);

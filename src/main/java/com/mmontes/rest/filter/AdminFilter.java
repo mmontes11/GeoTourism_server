@@ -1,6 +1,6 @@
 package com.mmontes.rest.filter;
 
-import com.mmontes.util.Constants;
+import com.mmontes.util.PrivateConstants;
 import io.jsonwebtoken.Jwts;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.GenericFilterBean;
@@ -31,7 +31,7 @@ public class AdminFilter extends GenericFilterBean {
             }
             final String token = authHeader.substring("Bearer ".length());
             try {
-                Jwts.parser().setSigningKey(Constants.TOKEN_SECRET_KEY).parse(token).getBody();
+                Jwts.parser().setSigningKey(PrivateConstants.TOKEN_SECRET_KEY).parse(token).getBody();
             } catch (Exception e) {
                 final HttpServletResponse response = (HttpServletResponse) res;
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);

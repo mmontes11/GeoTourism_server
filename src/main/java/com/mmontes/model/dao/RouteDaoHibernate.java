@@ -5,9 +5,7 @@ import com.mmontes.model.entity.route.Route;
 import com.mmontes.model.util.QueryUtils;
 import com.mmontes.model.util.genericdao.GenericDaoHibernate;
 import com.mmontes.util.Constants;
-import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.exception.InstanceNotFoundException;
-import com.vividsolutions.jts.geom.Geometry;
 import org.hibernate.Query;
 import org.springframework.stereotype.Repository;
 

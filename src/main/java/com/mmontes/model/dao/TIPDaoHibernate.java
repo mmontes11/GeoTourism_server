@@ -5,6 +5,7 @@ import com.mmontes.model.util.QueryUtils;
 import com.mmontes.model.util.genericdao.GenericDaoHibernate;
 import com.mmontes.util.Constants;
 import com.mmontes.util.GeometryUtils;
+import com.mmontes.util.PrivateConstants;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import com.vividsolutions.jts.geom.Geometry;
 import org.hibernate.Query;
@@ -56,23 +57,23 @@ public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements T
     }
 
     @Override
-    public boolean geometryContainsTIPs(Geometry superGeometry,List<Long> tipIds) {
+    public boolean geometryContainsTIPs(Geometry superGeometry, List<Long> tipIds) {
         String tipIdsIn = QueryUtils.getINvalues(tipIds);
         String superGeometryWKT = GeometryUtils.WKTFromGeometry(superGeometry);
         String queryString =
-            "SELECT id FROM tip " +
-            "WHERE id IN "+tipIdsIn+" " +
-            "AND ST_Distance(ST_GeometryFromText('SRID="+Constants.SRID+";"+superGeometryWKT+"'),geom) < " + Constants.MIN_DISTANCE ;
+                "SELECT id FROM tip " +
+                        "WHERE id IN " + tipIdsIn + " " +
+                        "AND ST_Distance(ST_GeometryFromText('SRID=" + Constants.SRID + ";" + superGeometryWKT + "'),geom) < " + Constants.MIN_DISTANCE;
         return (getSession().createSQLQuery(queryString).list().size() == tipIds.size());
     }
 
     @Override
     public TIP findByOSMId(Long osmId) throws InstanceNotFoundException {
         String queryString = "SELECT t FROM TIP t WHERE t.osmId IS NOT NULL AND t.osmId = :id";
-        TIP t = (TIP) getSession().createQuery(queryString).setParameter("id",osmId).uniqueResult();
-        if (t == null){
-            throw new InstanceNotFoundException(osmId,TIP.class.getName());
-        }else{
+        TIP t = (TIP) getSession().createQuery(queryString).setParameter("id", osmId).uniqueResult();
+        if (t == null) {
+            throw new InstanceNotFoundException(osmId, TIP.class.getName());
+        } else {
             return t;
         }
     }
@@ -80,7 +81,7 @@ public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements T
     @Override
     public void deleteNonExistingFromOSMIds(List<Long> osmIds) {
         String ids = QueryUtils.getINvalues(osmIds);
-        String queryString = "DELETE FROM TIP t WHERE t.osmId IS NOT NULL AND t.osmId NOT IN "+ids;
+        String queryString = "DELETE FROM TIP t WHERE t.osmId IS NOT NULL AND t.osmId NOT IN " + ids;
         getSession().createSQLQuery(queryString).executeUpdate();
     }
 }

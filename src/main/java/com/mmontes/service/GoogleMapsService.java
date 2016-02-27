@@ -7,7 +7,7 @@ import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
 import com.google.maps.model.TravelMode;
-import com.mmontes.util.Constants;
+import com.mmontes.util.PrivateConstants;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.exception.GoogleMapsServiceException;
 import com.vividsolutions.jts.geom.Coordinate;
@@ -25,7 +25,7 @@ public class GoogleMapsService {
 
     public GoogleMapsService() {
         this.context = new GeoApiContext();
-        this.context.setApiKey(Constants.GOOGLE_MAPS_KEY)
+        this.context.setApiKey(PrivateConstants.GOOGLE_MAPS_KEY)
                 .setQueryRateLimit(5)
                 .setConnectTimeout(5, TimeUnit.SECONDS)
                 .setReadTimeout(5, TimeUnit.SECONDS)

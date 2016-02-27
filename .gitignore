@@ -5,7 +5,7 @@
 *.ear
 
 admin.sql
-src/main/java/com/mmontes/util/Constants.java
+src/main/java/com/mmontes/util/PrivateConstants.java
 ETL/config/config.csv
 target/
 lib/

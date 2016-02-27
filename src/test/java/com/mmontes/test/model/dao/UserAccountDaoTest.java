@@ -1,7 +1,6 @@
 package com.mmontes.test.model.dao;
 
 import com.mmontes.model.dao.UserAccountDao;
-import com.mmontes.model.entity.UserAccount;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Calendar;
 
 import static com.mmontes.test.util.Constants.*;
 import static com.mmontes.test.util.Constants.SPRING_CONFIG_TEST_FILE;

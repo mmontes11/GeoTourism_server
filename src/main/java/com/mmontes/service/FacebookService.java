@@ -3,12 +3,10 @@ package com.mmontes.service;
 import com.amazonaws.util.json.JSONArray;
 import com.amazonaws.util.json.JSONException;
 import com.amazonaws.util.json.JSONObject;
-import com.mmontes.util.Constants;
+import com.mmontes.util.PrivateConstants;
 import com.mmontes.util.HashUtils;
 import com.mmontes.util.JSONParser;
 import com.mmontes.util.exception.FacebookServiceException;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -34,8 +32,8 @@ public class FacebookService {
     public void setParams(String accessToken, Long userID) {
         this.accessToken = accessToken;
         this.userID = userID;
-        this.appSecretProof = HashUtils.hmacDigest(this.accessToken,Constants.FB_APP_SECRET,"HmacSHA256");
-        this.rootUrl = Constants.FB_ROOT_URL;
+        this.appSecretProof = HashUtils.hmacDigest(this.accessToken, PrivateConstants.FB_APP_SECRET,"HmacSHA256");
+        this.rootUrl = PrivateConstants.FB_ROOT_URL;
         this.urlParams = "?access_token=" + this.accessToken + "&appsecret_proof=" + this.appSecretProof + "&format=json&redirect=false";
     }
 

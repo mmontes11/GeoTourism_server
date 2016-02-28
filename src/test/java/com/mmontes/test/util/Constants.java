@@ -49,6 +49,8 @@ public final class Constants {
 
     public static final Long NON_EXISTING_TIP_ID = 342342354654L;
 
+    public static final int NON_EXISTING_METRIC_ID = 1000;
+
     private Constants() {}
 }
 

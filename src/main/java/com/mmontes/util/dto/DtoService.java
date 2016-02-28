@@ -1,10 +1,7 @@
 package com.mmontes.util.dto;
 
-import com.mmontes.model.entity.City;
-import com.mmontes.model.entity.Comment;
-import com.mmontes.model.entity.OSMType;
+import com.mmontes.model.entity.*;
 import com.mmontes.model.entity.TIP.TIP;
-import com.mmontes.model.entity.UserAccount;
 import com.mmontes.model.entity.route.Route;
 import com.mmontes.model.service.CommentService;
 import com.mmontes.model.service.FavouriteService;
@@ -187,5 +184,12 @@ public class DtoService {
             osmTypeDtos.add(OSMType2OSMTypeDto(osmType));
         }
         return osmTypeDtos;
+    }
+
+    public MetricDto Metric2MetricDto(Metric metric){
+        MetricDto metricDto = new MetricDto();
+        metricDto.setId(metric.getId());
+        metricDto.setName(metric.getName());
+        return metricDto;
     }
 }

@@ -4,7 +4,6 @@ import com.mmontes.model.dao.StatsDao;
 import com.mmontes.model.entity.Metric;
 import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.dto.MetricDto;
-import com.mmontes.util.dto.StatsDto;
 import com.mmontes.util.exception.InvalidMetricException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,23 +25,23 @@ public class StatsServiceImpl implements StatsService {
     @Override
     public List<MetricDto> getMetrics() {
         List<MetricDto> metricDtos = new ArrayList<>();
-        for (Metric m : Metric.values()){
+        for (Metric m : Metric.values()) {
             metricDtos.add(dtoService.Metric2MetricDto(m));
         }
         return metricDtos;
     }
 
     @Override
-    public StatsDto getStats(int metricID) throws InvalidMetricException {
-        if (metricID == Metric.MOST_FAVOURITED.getId()){
+    public List<List<Double>> getStats(Metric metric) throws InvalidMetricException {
+        if (metric.equals(Metric.MOST_FAVOURITED)) {
             return null;
         }
-        if (metricID == Metric.MOST_COMMENTED.getId()){
+        if (metric.equals(Metric.MOST_COMMENTED)) {
             return null;
         }
-        if (metricID == Metric.BEST_RATED.getId()){
+        if (metric.equals(Metric.BEST_RATED)) {
             return null;
         }
-        throw new InvalidMetricException(metricID);
+        throw new InvalidMetricException(metric.getId());
     }
 }

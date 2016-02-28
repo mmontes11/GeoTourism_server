@@ -1,5 +1,7 @@
 package com.mmontes.model.entity;
 
+import com.mmontes.util.exception.InvalidMetricException;
+
 public enum Metric {
 
     MOST_FAVOURITED(0),
@@ -27,6 +29,15 @@ public enum Metric {
             default:
                 return null;
         }
+    }
+
+    public static Metric getMetricFromID(int metricID) throws InvalidMetricException {
+        for(Metric metric : values()){
+            if (metric.getId() == metricID){
+                return metric;
+            }
+        }
+        throw new InvalidMetricException(metricID);
     }
 
     public String toString() {

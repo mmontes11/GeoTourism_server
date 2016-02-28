@@ -1,5 +1,7 @@
 package com.mmontes.model.util;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.lang.StringBuilder;
 
@@ -10,7 +12,7 @@ public class QueryUtils {
         for (int i = 0; i<values.size(); i++){
             Object o = values.get(i);
             if (o instanceof String){
-                ids.append("'"+o.toString()+"'");
+                ids.append("'").append(o.toString()).append("'");
             }else{
                 ids.append(o.toString());
             }
@@ -19,5 +21,9 @@ public class QueryUtils {
             }
         }
         return "(" + ids.toString() + ")";
+    }
+
+    private static List<List<Double>> result2DoubleList(List result){
+        return null;
     }
 }

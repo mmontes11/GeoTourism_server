@@ -9,4 +9,5 @@ public interface CommentDao extends GenericDao<Comment,Long>{
 
     List<Comment> getComments(Long TIPId);
     Comment findComment(Long commentId,Long TIPId,Long facebookUserId);
+    Integer getMaxNumOfComments();
 }

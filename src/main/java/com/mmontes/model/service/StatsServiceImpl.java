@@ -1,5 +1,7 @@
 package com.mmontes.model.service;
 
+import com.mmontes.model.dao.CommentDao;
+import com.mmontes.model.dao.FavouriteDao;
 import com.mmontes.model.dao.StatsDao;
 import com.mmontes.model.entity.Metric;
 import com.mmontes.util.dto.DtoService;
@@ -22,6 +24,12 @@ public class StatsServiceImpl implements StatsService {
     @Autowired
     private StatsDao statsDao;
 
+    @Autowired
+    private FavouriteDao favouriteDao;
+
+    @Autowired
+    private CommentDao commentDao;
+
     @Override
     public List<MetricDto> getMetrics() {
         List<MetricDto> metricDtos = new ArrayList<>();
@@ -34,10 +42,12 @@ public class StatsServiceImpl implements StatsService {
     @Override
     public List<List<Double>> getStats(Metric metric) throws InvalidMetricException {
         if (metric.equals(Metric.MOST_FAVOURITED)) {
-            return null;
+            Integer maxNumOfFavs = favouriteDao.getMaxNumOfFavs();
+            return statsDao.getMostFavourited(maxNumOfFavs);
         }
         if (metric.equals(Metric.MOST_COMMENTED)) {
-            return null;
+            Integer maxNumOfComments = commentDao.getMaxNumOfComments();
+            return statsDao.getMostCommented(maxNumOfComments);
         }
         if (metric.equals(Metric.BEST_RATED)) {
             return statsDao.getBestRated();

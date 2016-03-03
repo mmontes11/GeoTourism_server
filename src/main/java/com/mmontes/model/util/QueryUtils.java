@@ -1,29 +1,38 @@
 package com.mmontes.model.util;
 
-import java.util.ArrayList;
-import java.util.Iterator;
+import org.hibernate.Query;
+import org.hibernate.transform.AliasToEntityMapResultTransformer;
+
 import java.util.List;
-import java.lang.StringBuilder;
+import java.util.Map;
 
 public class QueryUtils {
 
-    public static String getINvalues (List values){
+    public static String getINvalues(List values) {
         StringBuilder ids = new StringBuilder();
-        for (int i = 0; i<values.size(); i++){
+        for (int i = 0; i < values.size(); i++) {
             Object o = values.get(i);
-            if (o instanceof String){
+            if (o instanceof String) {
                 ids.append("'").append(o.toString()).append("'");
-            }else{
+            } else {
                 ids.append(o.toString());
             }
-            if (i != (values.size()-1)){
+            if (i != (values.size() - 1)) {
                 ids.append(",");
             }
         }
         return "(" + ids.toString() + ")";
     }
 
-    private static List<List<Double>> result2DoubleList(List result){
-        return null;
+    @SuppressWarnings("unchecked")
+    public static List<Map<String, Object>> query2MapList(Query query) {
+        query.setResultTransformer(AliasToEntityMapResultTransformer.INSTANCE);
+        return query.list();
     }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
 }

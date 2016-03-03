@@ -40,7 +40,7 @@ public class StatsServiceImpl implements StatsService {
             return null;
         }
         if (metric.equals(Metric.BEST_RATED)) {
-            return null;
+            return statsDao.getBestRated();
         }
         throw new InvalidMetricException(metric.getId());
     }

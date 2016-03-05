@@ -3,10 +3,11 @@ package com.mmontes.model.service;
 import com.mmontes.model.dao.CommentDao;
 import com.mmontes.model.dao.FavouriteDao;
 import com.mmontes.model.dao.StatsDao;
-import com.mmontes.model.entity.Metric;
+import com.mmontes.model.entity.metric.BestRatedMetric;
+import com.mmontes.model.entity.metric.Metric;
 import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.dto.MetricDto;
-import com.mmontes.util.exception.InvalidMetricException;
+import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -30,28 +31,31 @@ public class StatsServiceImpl implements StatsService {
     @Autowired
     private CommentDao commentDao;
 
+    @Autowired
+    private List<Metric> metrics;
+
     @Override
-    public List<MetricDto> getMetrics() {
-        List<MetricDto> metricDtos = new ArrayList<>();
-        for (Metric m : Metric.values()) {
-            metricDtos.add(dtoService.Metric2MetricDto(m));
+    public List<MetricDto> getAllMetrics() {
+        return dtoService.ListMetric2ListMetricDto(metrics);
+    }
+
+    private Metric getMetricByID(String id) throws InstanceNotFoundException {
+        Metric metricFound = null;
+        for (Metric metric : metrics){
+            if (metric.getId().equals(id)){
+                metricFound = metric;
+                break;
+            }
         }
-        return metricDtos;
+        if (metricFound == null){
+            throw new InstanceNotFoundException(id,Metric.class.getName());
+        }
+        return metricFound;
     }
 
     @Override
-    public List<List<Double>> getStats(Metric metric) throws InvalidMetricException {
-        if (metric.equals(Metric.MOST_FAVOURITED)) {
-            Integer maxNumOfFavs = favouriteDao.getMaxNumOfFavs();
-            return statsDao.getMostFavourited(maxNumOfFavs);
-        }
-        if (metric.equals(Metric.MOST_COMMENTED)) {
-            Integer maxNumOfComments = commentDao.getMaxNumOfComments();
-            return statsDao.getMostCommented(maxNumOfComments);
-        }
-        if (metric.equals(Metric.BEST_RATED)) {
-            return statsDao.getBestRated();
-        }
-        throw new InvalidMetricException(metric.getId());
+    public List<List<Double>> getStats(String metricID) throws InstanceNotFoundException {
+        Metric metric = getMetricByID(metricID);
+        return metric.getStats();
     }
 }

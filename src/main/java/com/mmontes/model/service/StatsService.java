@@ -1,12 +1,12 @@
 package com.mmontes.model.service;
 
-import com.mmontes.model.entity.Metric;
 import com.mmontes.util.dto.MetricDto;
-import com.mmontes.util.exception.InvalidMetricException;
+import com.mmontes.util.exception.InstanceNotFoundException;
 
 import java.util.List;
 
 public interface StatsService {
-    List<MetricDto> getMetrics();
-    List<List<Double>> getStats(Metric metric) throws InvalidMetricException;
+    List<MetricDto> getAllMetrics();
+
+    List<List<Double>> getStats(String metricID) throws InstanceNotFoundException;
 }

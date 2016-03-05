@@ -1,14 +1,16 @@
-package com.mmontes.util.dto;
+package com.mmontes.model.entity.metric;
 
-public class MetricDto {
+import java.util.List;
+
+public abstract class Metric {
 
     private String id;
     private String name;
 
-    public MetricDto() {
+    public Metric() {
     }
 
-    public MetricDto(String id, String name) {
+    public Metric(String id, String name) {
         this.id = id;
         this.name = name;
     }
@@ -28,4 +30,6 @@ public class MetricDto {
     public void setName(String name) {
         this.name = name;
     }
+
+    public abstract List<List<Double>> getStats();
 }

@@ -74,4 +74,18 @@
          annotations. -->
     <tx:annotation-driven transaction-manager="transactionManager" />
 
+    <!-- Metrics -->
+    <bean id="bestRatedMetric" class="com.mmontes.model.entity.metric.BestRatedMetric">
+        <property name="id" value="bestRated" />
+        <property name="name" value="Best Rated" />
+    </bean>
+
+    <bean id="metrics" class="java.util.ArrayList">
+        <constructor-arg>
+            <list>
+                <ref bean="bestRatedMetric"/>
+            </list>
+        </constructor-arg>
+    </bean>
+
 </beans>

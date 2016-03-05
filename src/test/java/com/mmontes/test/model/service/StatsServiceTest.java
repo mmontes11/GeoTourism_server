@@ -1,13 +1,12 @@
 package com.mmontes.test.model.service;
 
-import com.mmontes.model.entity.Metric;
 import com.mmontes.model.service.RatingService;
 import com.mmontes.model.service.StatsService;
 import com.mmontes.model.service.TIPService;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.MetricDto;
 import com.mmontes.util.dto.TIPDetailsDto;
-import com.mmontes.util.exception.InvalidMetricException;
+import com.mmontes.util.exception.InstanceNotFoundException;
 import com.vividsolutions.jts.geom.Geometry;
 import org.junit.Before;
 import org.junit.Test;
@@ -56,14 +55,14 @@ public class StatsServiceTest {
             geom = GeometryUtils.geometryFromWKT(POINT_CATEDRAL_SANTIAGO);
             cathedral = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null);
 
-            ratingService.rate(2D,towerHercules.getId(),EXISTING_FACEBOOK_USER_ID);
-            ratingService.rate(3D,towerHercules.getId(),EXISTING_FACEBOOK_USER_ID2);
+            ratingService.rate(2D, towerHercules.getId(), EXISTING_FACEBOOK_USER_ID);
+            ratingService.rate(3D, towerHercules.getId(), EXISTING_FACEBOOK_USER_ID2);
 
-            ratingService.rate(3D,alameda.getId(),EXISTING_FACEBOOK_USER_ID);
-            ratingService.rate(4D,alameda.getId(),EXISTING_FACEBOOK_USER_ID2);
+            ratingService.rate(3D, alameda.getId(), EXISTING_FACEBOOK_USER_ID);
+            ratingService.rate(4D, alameda.getId(), EXISTING_FACEBOOK_USER_ID2);
 
-            ratingService.rate(5D,cathedral.getId(),EXISTING_FACEBOOK_USER_ID);
-            ratingService.rate(5D,cathedral.getId(),EXISTING_FACEBOOK_USER_ID2);
+            ratingService.rate(5D, cathedral.getId(), EXISTING_FACEBOOK_USER_ID);
+            ratingService.rate(5D, cathedral.getId(), EXISTING_FACEBOOK_USER_ID2);
         } catch (Exception e) {
             e.printStackTrace();
             fail();
@@ -72,35 +71,25 @@ public class StatsServiceTest {
 
     @Test
     public void getMetrics() {
-        for (MetricDto metricDto : statsService.getMetrics()) {
+        for (MetricDto metricDto : statsService.getAllMetrics()) {
             assertNotNull(metricDto.getId());
             assertNotNull(metricDto.getName());
         }
     }
 
-    @Test(expected = InvalidMetricException.class)
-    public void getInvalidMetricException() throws InvalidMetricException {
-        Metric.getMetricFromID(NON_EXISTING_METRIC_ID);
-    }
-
-    @Test
-    public void getMetricFromID() {
-        try {
-            assertEquals(Metric.MOST_FAVOURITED, Metric.getMetricFromID(0));
-            assertEquals(Metric.MOST_COMMENTED, Metric.getMetricFromID(1));
-            assertEquals(Metric.BEST_RATED, Metric.getMetricFromID(2));
-        } catch (InvalidMetricException e) {
-            fail();
-        }
+    @Test(expected = InstanceNotFoundException.class)
+    public void getNonExistingMetricStats() throws InstanceNotFoundException {
+        statsService.getStats(NON_EXISTING_METRIC_ID);
     }
 
     @Test
     public void getBestRatedStats() {
         try {
-            List<List<Double>> stats = statsService.getStats(Metric.BEST_RATED);
+            List<List<Double>> stats = statsService.getStats(BEST_RATED_METRIC_ID);
             assertNotNull(stats);
-            assertNotEquals(3,stats.size());
-        } catch (InvalidMetricException e) {
+            assertEquals(3, stats.size());
+        } catch (Exception e) {
+            e.printStackTrace();
             fail();
         }
     }

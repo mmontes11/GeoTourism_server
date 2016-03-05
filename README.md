@@ -1,14 +1,15 @@
 # GeoTourism
 Tourism interest points and routes management platform.
 
+[DEMO](https://geotourism11.firebaseapp.com)
+
+### Preview
+![GeoTourism Preview](https://raw.githubusercontent.com/mmontes11/mmontes11.github.io/master/img/geotourism/overview.png)
+
 ### Architecture
 Its architecture consists in the following parts:
 * [GeoTourism Web](https://github.com/mmontes11/GeoTourism_Web/)
 * [GeoTourism Server](https://github.com/mmontes11/GeoTourism_Server/)
-
-### Preview
-![GeoTourism Preview](https://raw.githubusercontent.com/mmontes11/mmontes11.github.io/master/img/geotourism/overview.png)
-[DEMO](https://geotourism11.firebaseapp.com)
 
 ### Technology Stack
 * [PostgreSQL](http://www.postgresql.org/)

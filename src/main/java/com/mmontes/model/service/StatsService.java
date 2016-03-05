@@ -7,6 +7,5 @@ import java.util.List;
 
 public interface StatsService {
     List<MetricDto> getAllMetrics();
-
     List<List<Double>> getStats(String metricID) throws InstanceNotFoundException;
 }

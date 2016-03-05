@@ -80,10 +80,22 @@
         <property name="name" value="Best Rated" />
     </bean>
 
+    <bean id="mostCommentedMetric" class="com.mmontes.model.entity.metric.MostCommentedMetric">
+        <property name="id" value="mostCommented" />
+        <property name="name" value="Most Commented" />
+    </bean>
+
+    <bean id="mostFavouritedMetric" class="com.mmontes.model.entity.metric.MostFavouritedMetric">
+        <property name="id" value="mostFavourited" />
+        <property name="name" value="Most Favourited" />
+    </bean>
+
     <bean id="metrics" class="java.util.ArrayList">
         <constructor-arg>
             <list>
                 <ref bean="bestRatedMetric"/>
+                <ref bean="mostCommentedMetric"/>
+                <ref bean="mostFavouritedMetric"/>
             </list>
         </constructor-arg>
     </bean>

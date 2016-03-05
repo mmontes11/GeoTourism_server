@@ -4,6 +4,7 @@ import com.mmontes.model.entity.Comment;
 import com.mmontes.model.util.genericdao.GenericDaoHibernate;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
 import java.util.List;
 
 @Repository("CommentDao")
@@ -29,8 +30,8 @@ public class CommentDaoHibernate extends GenericDaoHibernate<Comment, Long> impl
 
     @Override
     public Integer getMaxNumOfComments() {
-        String queryString = "SELECT MAX(num_comments) FROM (SELECT COUNT(*) AS num_comments,tipid FROM comment GROUP BY tipid) AS num_comments_tip";
-        Object result = getSession().createSQLQuery(queryString).uniqueResult();
-        return (result == null) ? null : (int) result;
+        String queryString = "SELECT CAST(MAX(num_comments) AS INTEGER) FROM (SELECT COUNT(*) AS num_comments,tipid FROM comment GROUP BY tipid) AS num_comments_tip";
+        Integer result = (Integer) getSession().createSQLQuery(queryString).uniqueResult();
+        return (result == null) ? null : result;
     }
 }

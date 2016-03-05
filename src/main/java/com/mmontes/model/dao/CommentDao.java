@@ -3,6 +3,7 @@ package com.mmontes.model.dao;
 import com.mmontes.model.entity.Comment;
 import com.mmontes.model.util.genericdao.GenericDao;
 
+import java.math.BigInteger;
 import java.util.List;
 
 public interface CommentDao extends GenericDao<Comment,Long>{

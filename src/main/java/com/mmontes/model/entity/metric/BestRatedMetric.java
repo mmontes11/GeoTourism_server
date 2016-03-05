@@ -1,15 +1,9 @@
 package com.mmontes.model.entity.metric;
 
 
-import com.mmontes.model.dao.StatsDao;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.List;
 
 public class BestRatedMetric extends Metric{
-
-    @Autowired
-    private StatsDao statsDao;
 
     public BestRatedMetric() {
     }
@@ -20,6 +14,6 @@ public class BestRatedMetric extends Metric{
 
     @Override
     public List<List<Double>> getStats() {
-        return statsDao.getBestRated();
+        return super.statsDao.getBestRated();
     }
 }

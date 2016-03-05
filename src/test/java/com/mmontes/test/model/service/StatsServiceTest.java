@@ -1,8 +1,6 @@
 package com.mmontes.test.model.service;
 
-import com.mmontes.model.service.RatingService;
-import com.mmontes.model.service.StatsService;
-import com.mmontes.model.service.TIPService;
+import com.mmontes.model.service.*;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.MetricDto;
 import com.mmontes.util.dto.TIPDetailsDto;
@@ -25,6 +23,7 @@ import static org.junit.Assert.*;
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {SPRING_CONFIG_FILE, SPRING_CONFIG_TEST_FILE})
 @Transactional
+@SuppressWarnings("all")
 public class StatsServiceTest {
 
     private static TIPDetailsDto towerHercules;
@@ -36,6 +35,8 @@ public class StatsServiceTest {
     private TIPService tipService;
     @Autowired
     private RatingService ratingService;
+    @Autowired
+    private CommentService commentService;
 
     @Before
     public void createData() {
@@ -63,6 +64,21 @@ public class StatsServiceTest {
 
             ratingService.rate(5D, cathedral.getId(), EXISTING_FACEBOOK_USER_ID);
             ratingService.rate(5D, cathedral.getId(), EXISTING_FACEBOOK_USER_ID2);
+
+            commentService.comment("Bad", EXISTING_FACEBOOK_USER_ID, towerHercules.getId());
+            commentService.comment("Bad", EXISTING_FACEBOOK_USER_ID2, towerHercules.getId());
+
+            commentService.comment("More or Less", EXISTING_FACEBOOK_USER_ID, alameda.getId());
+            commentService.comment("More or Less", EXISTING_FACEBOOK_USER_ID, alameda.getId());
+            commentService.comment("More or Less", EXISTING_FACEBOOK_USER_ID2, alameda.getId());
+            commentService.comment("More or Less", EXISTING_FACEBOOK_USER_ID2, alameda.getId());
+
+            commentService.comment("Awesome", EXISTING_FACEBOOK_USER_ID, cathedral.getId());
+            commentService.comment("Awesome", EXISTING_FACEBOOK_USER_ID, cathedral.getId());
+            commentService.comment("Awesome", EXISTING_FACEBOOK_USER_ID, cathedral.getId());
+            commentService.comment("Awesome", EXISTING_FACEBOOK_USER_ID2, cathedral.getId());
+            commentService.comment("Awesome", EXISTING_FACEBOOK_USER_ID2, cathedral.getId());
+            commentService.comment("Awesome", EXISTING_FACEBOOK_USER_ID2, cathedral.getId());
         } catch (Exception e) {
             e.printStackTrace();
             fail();
@@ -87,6 +103,20 @@ public class StatsServiceTest {
         try {
             List<List<Double>> stats = statsService.getStats(BEST_RATED_METRIC_ID);
             assertNotNull(stats);
+            System.out.println(stats);
+            assertEquals(3, stats.size());
+        } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    public void getMostCommentedStats() {
+        try {
+            List<List<Double>> stats = statsService.getStats(MOST_COMMENTED_METRIC_ID);
+            assertNotNull(stats);
+            System.out.println(stats);
             assertEquals(3, stats.size());
         } catch (Exception e) {
             e.printStackTrace();

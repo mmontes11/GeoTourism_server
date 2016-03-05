@@ -1,11 +1,17 @@
 package com.mmontes.model.entity.metric;
 
+import com.mmontes.model.dao.StatsDao;
+import org.springframework.beans.factory.annotation.Autowired;
+
 import java.util.List;
 
 public abstract class Metric {
 
     private String id;
     private String name;
+
+    @Autowired
+    protected StatsDao statsDao;
 
     public Metric() {
     }

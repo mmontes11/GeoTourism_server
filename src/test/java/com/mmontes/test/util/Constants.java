@@ -51,6 +51,8 @@ public final class Constants {
 
     public static final String NON_EXISTING_METRIC_ID = "NonExistingMetric";
     public static final String BEST_RATED_METRIC_ID = "bestRated";
+    public static final String MOST_COMMENTED_METRIC_ID = "mostCommented";
+    public static final String MOST_FAVOURITED_METRIC_ID = "mostFavourited";
 
     private Constants() {}
 }

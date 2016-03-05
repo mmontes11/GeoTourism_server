@@ -28,7 +28,7 @@ public class StatsDaoHibernate implements StatsDao {
         return sessionFactory.getCurrentSession();
     }
 
-    private List<List<Double>> getResulStats(List<Map<String, Object>> statRows){
+    private List<List<Double>> getResulStats(List<Map<String, Object>> statRows) {
         List<List<Double>> stats = new ArrayList<>();
         for (Map<String, Object> row : statRows) {
             List<Double> rowStats = new ArrayList<>();
@@ -40,17 +40,25 @@ public class StatsDaoHibernate implements StatsDao {
         return stats;
     }
 
+    private int normalizeDenominator(Integer value){
+        if (value == null || value == 0) {
+            return 1;
+        }else{
+            return value;
+        }
+    }
 
     @Override
-    public List<List<Double>> getMostFavourited(Integer maxNumOfFavs) {
+    public List<List<Double>> getBestRated() {
         String queryString =
-                "SELECT ST_Y(t.geom) AS latitude,ST_X(t.geom) AS longitude,COALESCE(COUNT(t.id)/:maxNumOfFavs,0) AS intensity " +
-                "FROM tip t " +
-                "JOIN tipuseraccount tu " +
-                "ON t.id = tu.tipid " +
-                "GROUP BY t.id " +
-                "ORDER BY intensity DESC";
-        Query query = getSession().createSQLQuery(queryString).setParameter("maxNumOfFavs", maxNumOfFavs);
+                "SELECT ST_Y(t.geom) AS latitude,ST_X(t.geom) AS longitude," +
+                        "ROUND(CAST(AVG(r.ratingvalue) AS DECIMAL),3)/:maxRatingValue  AS intensity " +
+                        "FROM tip t " +
+                        "JOIN rating r " +
+                        "ON t.id = r.tipid " +
+                        "GROUP BY t.id " +
+                        "ORDER BY intensity DESC";
+        Query query = getSession().createSQLQuery(queryString).setParameter("maxRatingValue", Constants.MAX_RATING_VALUE);
         List<Map<String, Object>> queryResult = QueryUtils.query2MapList(query);
         return getResulStats(queryResult);
     }
@@ -58,27 +66,34 @@ public class StatsDaoHibernate implements StatsDao {
     @Override
     public List<List<Double>> getMostCommented(Integer maxNumOfComments) {
         String queryString =
-                "SELECT ST_Y(t.geom) AS latitude,ST_X(t.geom) AS longitude,COALESCE(COUNT(t.id)/:maxNumOfComments,0) AS intensity " +
+                "SELECT ST_Y(t.geom) AS latitude,ST_X(t.geom) AS longitude," +
+                        "ROUND(CAST(COUNT(t.id) AS DECIMAL)/:maxNumOfComments,3) AS intensity " +
                         "FROM tip t " +
                         "JOIN comment c " +
                         "ON t.id = c.tipid " +
                         "GROUP BY t.id " +
                         "ORDER BY intensity DESC";
+        if (maxNumOfComments == null || maxNumOfComments == 0) {
+            maxNumOfComments = 1;
+        }
+        maxNumOfComments = normalizeDenominator(maxNumOfComments);
         Query query = getSession().createSQLQuery(queryString).setParameter("maxNumOfComments", maxNumOfComments);
         List<Map<String, Object>> queryResult = QueryUtils.query2MapList(query);
         return getResulStats(queryResult);
     }
 
     @Override
-    public List<List<Double>> getBestRated() {
+    public List<List<Double>> getMostFavourited(Integer maxNumOfFavs) {
         String queryString =
-                "SELECT ST_Y(t.geom) AS latitude,ST_X(t.geom) AS longitude,AVG(r.ratingvalue)/:maxRatingValue AS intensity " +
-                "FROM tip t " +
-                "JOIN rating r " +
-                "ON t.id = r.tipid " +
-                "GROUP BY t.id " +
-                "ORDER BY intensity DESC";
-        Query query = getSession().createSQLQuery(queryString).setParameter("maxRatingValue", Constants.MAX_RATING_VALUE);
+                "SELECT ST_Y(t.geom) AS latitude,ST_X(t.geom) AS longitude," +
+                        "ROUND(CAST(COUNT(t.id) AS DECIMAL),3)/:maxNumOfFavs AS intensity " +
+                        "FROM tip t " +
+                        "JOIN tipuseraccount tu " +
+                        "ON t.id = tu.tipid " +
+                        "GROUP BY t.id " +
+                        "ORDER BY intensity DESC";
+        maxNumOfFavs = normalizeDenominator(maxNumOfFavs);
+        Query query = getSession().createSQLQuery(queryString).setParameter("maxNumOfFavs", maxNumOfFavs);
         List<Map<String, Object>> queryResult = QueryUtils.query2MapList(query);
         return getResulStats(queryResult);
     }

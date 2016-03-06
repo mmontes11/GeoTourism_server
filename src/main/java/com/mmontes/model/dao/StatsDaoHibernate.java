@@ -34,66 +34,47 @@ public class StatsDaoHibernate implements StatsDao {
             List<Double> rowStats = new ArrayList<>();
             rowStats.add((Double) row.get("latitude"));
             rowStats.add((Double) row.get("longitude"));
-            rowStats.add(((BigDecimal)row.get("intensity")).doubleValue());
+            if (row.get("intensity") != null){
+                rowStats.add(((BigDecimal)row.get("intensity")).doubleValue());
+            }
             stats.add(rowStats);
         }
         return stats;
-    }
-
-    private int normalizeDenominator(Integer value){
-        if (value == null || value == 0) {
-            return 1;
-        }else{
-            return value;
-        }
     }
 
     @Override
     public List<List<Double>> getBestRated() {
         String queryString =
                 "SELECT ST_Y(t.geom) AS latitude,ST_X(t.geom) AS longitude," +
-                        "ROUND(CAST(AVG(r.ratingvalue) AS DECIMAL),3)/:maxRatingValue  AS intensity " +
+                        "ROUND(CAST(r.ratingvalue AS DECIMAL)/:maxRatingValue,3)  AS intensity " +
                         "FROM tip t " +
                         "JOIN rating r " +
-                        "ON t.id = r.tipid " +
-                        "GROUP BY t.id " +
-                        "ORDER BY intensity DESC";
+                        "ON t.id = r.tipid ";
         Query query = getSession().createSQLQuery(queryString).setParameter("maxRatingValue", Constants.MAX_RATING_VALUE);
         List<Map<String, Object>> queryResult = QueryUtils.query2MapList(query);
         return getResulStats(queryResult);
     }
 
     @Override
-    public List<List<Double>> getMostCommented(Integer maxNumOfComments) {
+    public List<List<Double>> getMostCommented() {
         String queryString =
-                "SELECT ST_Y(t.geom) AS latitude,ST_X(t.geom) AS longitude," +
-                        "ROUND(CAST(COUNT(t.id) AS DECIMAL)/:maxNumOfComments,3) AS intensity " +
+                "SELECT ST_Y(t.geom) AS latitude,ST_X(t.geom) AS longitude " +
                         "FROM tip t " +
                         "JOIN comment c " +
-                        "ON t.id = c.tipid " +
-                        "GROUP BY t.id " +
-                        "ORDER BY intensity DESC";
-        if (maxNumOfComments == null || maxNumOfComments == 0) {
-            maxNumOfComments = 1;
-        }
-        maxNumOfComments = normalizeDenominator(maxNumOfComments);
-        Query query = getSession().createSQLQuery(queryString).setParameter("maxNumOfComments", maxNumOfComments);
+                        "ON t.id = c.tipid " ;
+        Query query = getSession().createSQLQuery(queryString);
         List<Map<String, Object>> queryResult = QueryUtils.query2MapList(query);
         return getResulStats(queryResult);
     }
 
     @Override
-    public List<List<Double>> getMostFavourited(Integer maxNumOfFavs) {
+    public List<List<Double>> getMostFavourited() {
         String queryString =
-                "SELECT ST_Y(t.geom) AS latitude,ST_X(t.geom) AS longitude," +
-                        "ROUND(CAST(COUNT(t.id) AS DECIMAL),3)/:maxNumOfFavs AS intensity " +
+                "SELECT ST_Y(t.geom) AS latitude,ST_X(t.geom) AS longitude " +
                         "FROM tip t " +
                         "JOIN tipuseraccount tu " +
-                        "ON t.id = tu.tipid " +
-                        "GROUP BY t.id " +
-                        "ORDER BY intensity DESC";
-        maxNumOfFavs = normalizeDenominator(maxNumOfFavs);
-        Query query = getSession().createSQLQuery(queryString).setParameter("maxNumOfFavs", maxNumOfFavs);
+                        "ON t.id = tu.tipid ";
+        Query query = getSession().createSQLQuery(queryString);
         List<Map<String, Object>> queryResult = QueryUtils.query2MapList(query);
         return getResulStats(queryResult);
     }

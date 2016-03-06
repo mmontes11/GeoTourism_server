@@ -103,9 +103,11 @@ public class StatsServiceTest {
         try {
             List<List<Double>> stats = statsService.getStats(BEST_RATED_METRIC_ID);
             assertNotNull(stats);
-            System.out.println(stats);
-            assertEquals(3, stats.size());
+            for(List<Double> statsEelement: stats){
+                assertEquals(3,statsEelement.size());
+            }
         } catch (Exception e) {
+            e.printStackTrace();
             e.printStackTrace();
             fail();
         }
@@ -116,8 +118,9 @@ public class StatsServiceTest {
         try {
             List<List<Double>> stats = statsService.getStats(MOST_COMMENTED_METRIC_ID);
             assertNotNull(stats);
-            System.out.println(stats);
-            assertEquals(3, stats.size());
+            for(List<Double> statsEelement: stats){
+                assertEquals(2,statsEelement.size());
+            }
         } catch (Exception e) {
             e.printStackTrace();
             fail();

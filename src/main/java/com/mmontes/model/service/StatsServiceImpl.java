@@ -1,9 +1,5 @@
 package com.mmontes.model.service;
 
-import com.mmontes.model.dao.CommentDao;
-import com.mmontes.model.dao.FavouriteDao;
-import com.mmontes.model.dao.StatsDao;
-import com.mmontes.model.entity.metric.BestRatedMetric;
 import com.mmontes.model.entity.metric.Metric;
 import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.dto.MetricDto;
@@ -12,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service("StatsService")
@@ -21,15 +16,6 @@ public class StatsServiceImpl implements StatsService {
 
     @Autowired
     private DtoService dtoService;
-
-    @Autowired
-    private StatsDao statsDao;
-
-    @Autowired
-    private FavouriteDao favouriteDao;
-
-    @Autowired
-    private CommentDao commentDao;
 
     @Autowired
     private List<Metric> metrics;
@@ -41,14 +27,14 @@ public class StatsServiceImpl implements StatsService {
 
     private Metric getMetricByID(String id) throws InstanceNotFoundException {
         Metric metricFound = null;
-        for (Metric metric : metrics){
-            if (metric.getId().equals(id)){
+        for (Metric metric : metrics) {
+            if (metric.getId().equals(id)) {
                 metricFound = metric;
                 break;
             }
         }
-        if (metricFound == null){
-            throw new InstanceNotFoundException(id,Metric.class.getName());
+        if (metricFound == null) {
+            throw new InstanceNotFoundException(id, Metric.class.getName());
         }
         return metricFound;
     }

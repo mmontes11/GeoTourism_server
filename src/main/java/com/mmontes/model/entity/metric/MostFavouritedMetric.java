@@ -1,14 +1,8 @@
 package com.mmontes.model.entity.metric;
 
-import com.mmontes.model.dao.FavouriteDao;
-import org.springframework.beans.factory.annotation.Autowired;
-
 import java.util.List;
 
-public class MostFavouritedMetric extends Metric{
-
-    @Autowired
-    private FavouriteDao favouriteDao;
+public class MostFavouritedMetric extends Metric {
 
     public MostFavouritedMetric() {
     }
@@ -19,9 +13,6 @@ public class MostFavouritedMetric extends Metric{
 
     @Override
     public List<List<Double>> getStats() {
-        Integer maxNumOfFavs = favouriteDao.getMaxNumOfFavs();
-        return super.statsDao.getMostFavourited(maxNumOfFavs);
+        return super.statsDao.getMostFavourited();
     }
-
-
 }

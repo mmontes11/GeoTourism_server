@@ -1,8 +1,8 @@
 package com.mmontes.rest.controller;
 
 import com.mmontes.model.service.StatsService;
-import com.mmontes.rest.response.StatsResponse;
 import com.mmontes.util.dto.MetricDto;
+import com.mmontes.util.dto.StatsDto;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,11 +27,11 @@ public class StatsController {
     }
 
     @RequestMapping(value = "/social/stats/metric/{metricID}", method = RequestMethod.GET)
-    public ResponseEntity<StatsResponse>
+    public ResponseEntity<StatsDto>
     getMetricStats(@PathVariable String metricID) {
         try {
-            List<List<Double>> stats = statsService.getStats(metricID);
-            return new ResponseEntity<>(new StatsResponse(stats), HttpStatus.OK);
+            StatsDto statsDto = statsService.getStats(metricID);
+            return new ResponseEntity<>(statsDto, HttpStatus.OK);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

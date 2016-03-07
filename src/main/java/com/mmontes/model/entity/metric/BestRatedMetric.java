@@ -1,9 +1,13 @@
 package com.mmontes.model.entity.metric;
 
 
+import com.mmontes.util.Constants;
+import com.mmontes.util.dto.LatLngWeight;
+import com.mmontes.util.dto.StatsDto;
+
 import java.util.List;
 
-public class BestRatedMetric extends Metric{
+public class BestRatedMetric extends Metric {
 
     public BestRatedMetric() {
     }
@@ -13,7 +17,9 @@ public class BestRatedMetric extends Metric{
     }
 
     @Override
-    public List<List<Double>> getStats() {
-        return super.statsDao.getBestRated();
+    public StatsDto getStats() {
+        Integer max = Constants.MAX_RATING_VALUE;
+        List<LatLngWeight> data = super.statsDao.getBestRated();
+        return new StatsDto(max, data);
     }
 }

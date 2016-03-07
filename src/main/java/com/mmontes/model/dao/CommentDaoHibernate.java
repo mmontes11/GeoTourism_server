@@ -27,4 +27,11 @@ public class CommentDaoHibernate extends GenericDaoHibernate<Comment, Long> impl
                             .setParameter("facebookUserId", facebookUserId)
                             .uniqueResult();
     }
+
+    @Override
+    public Integer getMaxNumOfComments() {
+        String queryString = "SELECT MAX(num_comments) FROM (SELECT COUNT(*) AS num_comments,tipid FROM comment GROUP BY tipid) AS num_comments_tip";
+        BigInteger result = (BigInteger)getSession().createSQLQuery(queryString).uniqueResult();
+        return (result == null) ? null : result.intValue();
+    }
 }

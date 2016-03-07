@@ -3,6 +3,7 @@ package com.mmontes.model.service;
 import com.mmontes.model.entity.metric.Metric;
 import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.dto.MetricDto;
+import com.mmontes.util.dto.StatsDto;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -40,7 +41,7 @@ public class StatsServiceImpl implements StatsService {
     }
 
     @Override
-    public List<List<Double>> getStats(String metricID) throws InstanceNotFoundException {
+    public StatsDto getStats(String metricID) throws InstanceNotFoundException {
         Metric metric = getMetricByID(metricID);
         return metric.getStats();
     }

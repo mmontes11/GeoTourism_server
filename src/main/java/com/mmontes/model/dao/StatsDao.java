@@ -1,10 +1,11 @@
 package com.mmontes.model.dao;
 
+import com.mmontes.util.dto.LatLngWeight;
+
 import java.util.List;
 
 public interface StatsDao {
-
-    List<List<Double>> getMostFavourited();
-    List<List<Double>> getMostCommented();
-    List<List<Double>> getBestRated();
+    List<LatLngWeight> getMostFavourited();
+    List<LatLngWeight> getMostCommented();
+    List<LatLngWeight> getBestRated();
 }

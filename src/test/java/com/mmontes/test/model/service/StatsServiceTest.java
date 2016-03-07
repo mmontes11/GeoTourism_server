@@ -3,6 +3,7 @@ package com.mmontes.test.model.service;
 import com.mmontes.model.service.*;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.MetricDto;
+import com.mmontes.util.dto.StatsDto;
 import com.mmontes.util.dto.TIPDetailsDto;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import com.vividsolutions.jts.geom.Geometry;
@@ -101,11 +102,9 @@ public class StatsServiceTest {
     @Test
     public void getBestRatedStats() {
         try {
-            List<List<Double>> stats = statsService.getStats(BEST_RATED_METRIC_ID);
-            assertNotNull(stats);
-            for(List<Double> statsEelement: stats){
-                assertEquals(3,statsEelement.size());
-            }
+            StatsDto statsDto = statsService.getStats(BEST_RATED_METRIC_ID);
+            assertNotNull(statsDto);
+            assertEquals(3,statsDto.getData().size());
         } catch (Exception e) {
             e.printStackTrace();
             e.printStackTrace();
@@ -116,11 +115,9 @@ public class StatsServiceTest {
     @Test
     public void getMostCommentedStats() {
         try {
-            List<List<Double>> stats = statsService.getStats(MOST_COMMENTED_METRIC_ID);
-            assertNotNull(stats);
-            for(List<Double> statsEelement: stats){
-                assertEquals(2,statsEelement.size());
-            }
+            StatsDto statsDto = statsService.getStats(MOST_COMMENTED_METRIC_ID);
+            assertNotNull(statsDto);
+            assertEquals(3,statsDto.getData().size());
         } catch (Exception e) {
             e.printStackTrace();
             fail();

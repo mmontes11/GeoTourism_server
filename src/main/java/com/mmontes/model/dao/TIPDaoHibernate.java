@@ -17,17 +17,22 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements TIPDao {
 
-    public List<TIP> find(String boundsWKT, List<Long> typeIds, List<Long> cityIds, List<Long> facebookUserIds) {
+    public List<TIP> find(String boundsWKT, List<Long> typeIds, List<Long> cityIds, List<Long> facebookUserIds, List<Long> routes) {
 
         boolean filterByBounds = false;
         boolean filterByType = false;
         boolean filterByCity = false;
         boolean filterByFacebookUserIds = facebookUserIds != null && !facebookUserIds.isEmpty();
+        boolean filterByContainedInRoutes = routes != null && !routes.isEmpty();
 
         String queryString = "SELECT * FROM tip t ";
         if (filterByFacebookUserIds) {
             queryString += "JOIN tipuseraccount tu ON t.id = tu.tipid ";
             queryString += "JOIN useraccount u ON tu.userid = u.id ";
+        }
+        if (filterByContainedInRoutes){
+            String routeIDs = QueryUtils.getINvalues(routes);
+            queryString += "JOIN routetip rt ON t.id = rt.tipid AND rt.routeid IN "+routeIDs+" ";
         }
 
         if (boundsWKT != null) {

@@ -96,13 +96,13 @@ public class StatsServiceTest {
 
     @Test(expected = InstanceNotFoundException.class)
     public void getNonExistingMetricStats() throws InstanceNotFoundException {
-        statsService.getStats(NON_EXISTING_METRIC_ID);
+        statsService.getStats(NON_EXISTING_METRIC_ID,null);
     }
 
     @Test
     public void getBestRatedStats() {
         try {
-            StatsDto statsDto = statsService.getStats(BEST_RATED_METRIC_ID);
+            StatsDto statsDto = statsService.getStats(BEST_RATED_METRIC_ID,null);
             assertNotNull(statsDto);
             assertEquals(3,statsDto.getData().size());
         } catch (Exception e) {
@@ -115,7 +115,7 @@ public class StatsServiceTest {
     @Test
     public void getMostCommentedStats() {
         try {
-            StatsDto statsDto = statsService.getStats(MOST_COMMENTED_METRIC_ID);
+            StatsDto statsDto = statsService.getStats(MOST_COMMENTED_METRIC_ID,null);
             assertNotNull(statsDto);
             assertEquals(3,statsDto.getData().size());
         } catch (Exception e) {

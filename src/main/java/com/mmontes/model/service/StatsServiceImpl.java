@@ -41,8 +41,8 @@ public class StatsServiceImpl implements StatsService {
     }
 
     @Override
-    public StatsDto getStats(String metricID) throws InstanceNotFoundException {
+    public StatsDto getStats(String metricID,List<Long> TIPs) throws InstanceNotFoundException {
         Metric metric = getMetricByID(metricID);
-        return metric.getStats();
+        return metric.getStats(TIPs);
     }
 }

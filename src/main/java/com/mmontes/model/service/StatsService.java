@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface StatsService {
     List<MetricDto> getAllMetrics();
-    StatsDto getStats(String metricID) throws InstanceNotFoundException;
+    StatsDto getStats(String metricID,List<Long> TIPs) throws InstanceNotFoundException;
 }

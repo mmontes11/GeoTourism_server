@@ -7,10 +7,7 @@ import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -28,9 +25,10 @@ public class StatsController {
 
     @RequestMapping(value = "/social/stats/metric/{metricID}", method = RequestMethod.GET)
     public ResponseEntity<StatsDto>
-    getMetricStats(@PathVariable String metricID) {
+    getMetricStats(@PathVariable String metricID,
+                   @RequestParam(value = "tips", required = true) List<Long> TIPs) {
         try {
-            StatsDto statsDto = statsService.getStats(metricID);
+            StatsDto statsDto = statsService.getStats(metricID,TIPs);
             return new ResponseEntity<>(statsDto, HttpStatus.OK);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

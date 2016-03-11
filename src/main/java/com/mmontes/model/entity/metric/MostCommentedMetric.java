@@ -21,9 +21,9 @@ public class MostCommentedMetric extends Metric {
     }
 
     @Override
-    public StatsDto getStats() {
+    public StatsDto getStats(List<Long> TIPs) {
         Integer max = commentDao.getMaxNumOfComments();
-        List<LatLngWeight> data = super.statsDao.getMostCommented();
+        List<LatLngWeight> data = super.statsDao.getMostCommented(TIPs);
         return new StatsDto(max,data);
     }
 }

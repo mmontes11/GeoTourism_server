@@ -20,9 +20,9 @@ public class MostFavouritedMetric extends Metric {
     }
 
     @Override
-    public StatsDto getStats() {
+    public StatsDto getStats(List<Long> TIPs) {
         Integer max = favouriteDao.getMaxNumOfFavs();
-        List<LatLngWeight> data = super.statsDao.getMostFavourited();
+        List<LatLngWeight> data = super.statsDao.getMostFavourited(TIPs);
         return new StatsDto(max,data);
     }
 }

@@ -17,9 +17,9 @@ public class BestRatedMetric extends Metric {
     }
 
     @Override
-    public StatsDto getStats() {
+    public StatsDto getStats(List<Long> TIPs) {
         Integer max = Constants.MAX_RATING_VALUE;
-        List<LatLngWeight> data = super.statsDao.getBestRated();
+        List<LatLngWeight> data = super.statsDao.getBestRated(TIPs);
         return new StatsDto(max, data);
     }
 }

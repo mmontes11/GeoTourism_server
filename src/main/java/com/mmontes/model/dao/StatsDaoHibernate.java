@@ -41,39 +41,52 @@ public class StatsDaoHibernate implements StatsDao {
     }
 
     @Override
-    public List<LatLngWeight> getBestRated() {
+    public List<LatLngWeight> getBestRated(List<Long> TIPs) {
         String queryString =
                 "SELECT ST_Y(t.geom) AS latitude,ST_X(t.geom) AS longitude,CAST(AVG(r.ratingvalue) AS DECIMAL) AS weight " +
                         "FROM tip t " +
                         "JOIN rating r " +
-                        "ON t.id = r.tipid " +
-                        "GROUP BY t.id ";
+                        "ON t.id = r.tipid ";
+        if (TIPs != null && !TIPs.isEmpty()){
+            String tipIds = QueryUtils.getINvalues(TIPs);
+            queryString += "WHERE t.id IN "+tipIds;
+        }
+        queryString += "GROUP BY t.id ";
         Query query = getSession().createSQLQuery(queryString);
         List<Map<String, Object>> queryResult = QueryUtils.query2MapList(query);
         return getResulStats(queryResult);
     }
 
     @Override
-    public List<LatLngWeight> getMostCommented() {
+    public List<LatLngWeight> getMostCommented(List<Long> TIPs) {
         String queryString =
                 "SELECT ST_Y(t.geom) AS latitude,ST_X(t.geom) AS longitude, CAST(COUNT(c.tipid) AS DECIMAL) AS weight " +
                         "FROM tip t " +
                         "JOIN comment c " +
-                        "ON t.id = c.tipid " +
-                        "GROUP BY t.id ";
+                        "ON t.id = c.tipid ";
+        if (TIPs != null && !TIPs.isEmpty()){
+            String tipIds = QueryUtils.getINvalues(TIPs);
+            queryString += "WHERE t.id IN "+tipIds;
+        }
+        queryString += "GROUP BY t.id ";
         Query query = getSession().createSQLQuery(queryString);
         List<Map<String, Object>> queryResult = QueryUtils.query2MapList(query);
         return getResulStats(queryResult);
     }
 
     @Override
-    public List<LatLngWeight> getMostFavourited() {
+    public List<LatLngWeight> getMostFavourited(List<Long> TIPs) {
         String queryString =
                 "SELECT ST_Y(t.geom) AS latitude,ST_X(t.geom) AS longitude, CAST(COUNT(tu.tipid) AS DECIMAL) AS weight " +
                         "FROM tip t " +
                         "JOIN tipuseraccount tu " +
-                        "ON t.id = tu.tipid " +
-                        "GROUP BY t.id ";
+                        "ON t.id = tu.tipid ";
+        if (TIPs != null && !TIPs.isEmpty()){
+            String tipIds = QueryUtils.getINvalues(TIPs);
+            queryString += "WHERE t.id IN "+tipIds;
+        }
+        queryString += "GROUP BY t.id ";
+
         Query query = getSession().createSQLQuery(queryString);
         List<Map<String, Object>> queryResult = QueryUtils.query2MapList(query);
         return getResulStats(queryResult);

@@ -38,6 +38,7 @@ public class TIPServiceTest {
     private static TIPDetailsDto cathedral;
     private static TIPDetailsDto reisCatolicos;
     private static TIPDetailsDto statueOfLiberty;
+    private static TIPDetailsDto unreviewed;
     @Autowired
     private TIPService tipService;
     @Autowired
@@ -77,7 +78,7 @@ public class TIPServiceTest {
 
             name = "Unreviewed Place";
             description = "Unreviewed";
-            tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, false);
+            unreviewed = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, false);
 
             favouriteService.markAsFavourite(statueOfLiberty.getId(), EXISTING_FACEBOOK_USER_ID);
             favouriteService.markAsFavourite(towerHercules.getId(), EXISTING_FACEBOOK_USER_ID2);
@@ -320,6 +321,22 @@ public class TIPServiceTest {
             featureSearchDtos = tipService.find(BOUNDS_GALICIA, typeIds, cityIds, null, null);
             assertEquals(3, featureSearchDtos.size());
         } catch (Exception e) {
+            e.printStackTrace();
+            fail();
+        }
+    }
+
+    @Test
+    public void reviewTIP(){
+        List<FeatureSearchDto> featureSearchDtos = null;
+        try {
+            featureSearchDtos = tipService.find(null, null, null, null, null);
+            assertEquals(5, featureSearchDtos.size());
+
+            tipService.review(unreviewed.getId());
+            featureSearchDtos = tipService.find(null, null, null, null, null);
+            assertEquals(6, featureSearchDtos.size());
+        } catch (InstanceNotFoundException e) {
             e.printStackTrace();
             fail();
         }

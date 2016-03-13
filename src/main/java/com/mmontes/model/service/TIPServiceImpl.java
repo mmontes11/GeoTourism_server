@@ -166,4 +166,11 @@ public class TIPServiceImpl implements TIPService {
         }
         tipDao.deleteNonExistingFromOSMIds(osmIds);
     }
+
+    @Override
+    public void review(Long tipId) throws InstanceNotFoundException {
+        TIP tip = tipDao.findById(tipId);
+        tip.setReviewed(true);
+        tipDao.save(tip);
+    }
 }

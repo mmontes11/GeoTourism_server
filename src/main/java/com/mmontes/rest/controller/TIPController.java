@@ -111,4 +111,15 @@ public class TIPController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
+
+    @RequestMapping(value = "/admin/tip/{TIPId}/reviewed", method = RequestMethod.PATCH)
+    public ResponseEntity
+    review(@PathVariable Long TIPId){
+        try {
+            tipService.review(TIPId);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (InstanceNotFoundException e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+    }
 }

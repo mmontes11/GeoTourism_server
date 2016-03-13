@@ -1,9 +1,14 @@
 package com.mmontes.rest.controller;
 
+import com.mmontes.model.entity.OSMType;
 import com.mmontes.model.service.AdminService;
+import com.mmontes.model.service.ConfigService;
 import com.mmontes.rest.request.AdminLoginRequest;
 import com.mmontes.rest.response.ResponseFactory;
 import com.mmontes.util.PrivateConstants;
+import com.mmontes.util.dto.ConfigDto;
+import com.mmontes.util.dto.DtoService;
+import com.mmontes.util.dto.OSMTypeDto;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +22,19 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.ServletException;
 import java.util.Calendar;
+import java.util.List;
 
 @RestController
 public class AdminController {
 
     @Autowired
     private AdminService adminService;
+
+    @Autowired
+    private ConfigService configService;
+
+    @Autowired
+    private DtoService dtoService;
 
     @RequestMapping(value = "/logIn", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity
@@ -35,9 +47,9 @@ public class AdminController {
         Calendar now = Calendar.getInstance();
         Calendar expiration = Calendar.getInstance();
         int expirationOffsetMilis;
-        if (adminLogin.getUsername().equals("etl")){
+        if (adminLogin.getUsername().equals("etl")) {
             expirationOffsetMilis = PrivateConstants.TOKEN_ETL_EXPIRATION_IN_MILIS;
-        }else{
+        } else {
             expirationOffsetMilis = PrivateConstants.TOKEN_EXPIRATION_IN_MILIS;
         }
         expiration.setTimeInMillis(now.getTimeInMillis() + expirationOffsetMilis);
@@ -57,5 +69,26 @@ public class AdminController {
     public ResponseEntity
     validateToken() {
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    @RequestMapping(value = "/admin/config", method = RequestMethod.GET)
+    public ResponseEntity<ConfigDto>
+    getConfig() {
+        return new ResponseEntity<>(configService.getConfig(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/admin/config/bbox", method = RequestMethod.GET)
+    public ResponseEntity
+    getBBox() {
+        String bbox = configService.getBBox();
+        return new ResponseEntity<>(ResponseFactory.getCustomJSON("bbox", bbox), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/admin/config/osmtypes", method = RequestMethod.GET)
+    public ResponseEntity<List<OSMTypeDto>>
+    getOSMtypes() {
+        List<OSMTypeDto> osmTypes = configService.getOSMTypes();
+        return new ResponseEntity<>(osmTypes, HttpStatus.OK);
     }
 }

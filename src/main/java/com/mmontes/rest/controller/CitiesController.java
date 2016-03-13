@@ -2,7 +2,7 @@ package com.mmontes.rest.controller;
 
 import com.mmontes.model.service.CityService;
 import com.mmontes.rest.response.CityEnvelopeResponse;
-import com.mmontes.util.dto.CityDto;
+import com.mmontes.util.dto.IDnameDto;
 import com.mmontes.util.dto.CityEnvelopeDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -21,15 +21,15 @@ public class CitiesController {
     private CityService cityService;
 
     @RequestMapping(value = "/cities", method = RequestMethod.GET)
-    public ResponseEntity<List<CityDto>>
+    public ResponseEntity<List<IDnameDto>>
     findAllCities() {
-        List<CityDto> cities = cityService.findAll();
+        List<IDnameDto> cities = cityService.findAll();
         return new ResponseEntity<>(cities, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/admin/cities/sync", method = RequestMethod.POST)
     public ResponseEntity
-    syncCities(@RequestBody List<CityDto> cities) {
+    syncCities(@RequestBody List<IDnameDto> cities) {
         cityService.syncCities(cities);
         return new ResponseEntity(HttpStatus.OK);
     }

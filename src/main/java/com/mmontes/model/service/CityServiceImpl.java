@@ -4,7 +4,7 @@ import com.mmontes.model.dao.CityDao;
 import com.mmontes.model.entity.City;
 import com.mmontes.service.OpenStreetMapService;
 import com.mmontes.util.GeometryUtils;
-import com.mmontes.util.dto.CityDto;
+import com.mmontes.util.dto.IDnameDto;
 import com.mmontes.util.dto.CityEnvelopeDto;
 import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.exception.InstanceNotFoundException;
@@ -46,7 +46,7 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public List<CityDto> findAll() {
+    public List<IDnameDto> findAll() {
         return dtoService.ListCity2ListCityDto(cityDao.findAll());
     }
 
@@ -65,9 +65,9 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
-    public void syncCities(List<CityDto> cityDtos) {
-        for (CityDto cityDto : cityDtos) {
-            Long osmId = cityDto.getId();
+    public void syncCities(List<IDnameDto> IDnameDtos) {
+        for (IDnameDto IDnameDto : IDnameDtos) {
+            Long osmId = IDnameDto.getId();
             City city;
             try {
                 city = cityDao.findByOsmId(osmId);
@@ -82,7 +82,7 @@ public class CityServiceImpl implements CityService {
                     continue;
                 }
             }
-            city.setName(cityDto.getName());
+            city.setName(IDnameDto.getName());
             cityDao.save(city);
         }
     }

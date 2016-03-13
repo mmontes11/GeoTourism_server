@@ -1,7 +1,7 @@
 package com.mmontes.model.service;
 
 import com.mmontes.model.entity.City;
-import com.mmontes.util.dto.CityDto;
+import com.mmontes.util.dto.IDnameDto;
 import com.mmontes.util.dto.CityEnvelopeDto;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import com.mmontes.util.exception.TIPLocationException;
@@ -15,11 +15,11 @@ public interface CityService {
 
     boolean isLocatedInExistingCity(Geometry location);
 
-    List<CityDto> findAll();
+    List<IDnameDto> findAll();
 
     Geometry getGeomUnionCities(List<Long> cityIds) throws InstanceNotFoundException;
 
-    void syncCities(List<CityDto> cities);
+    void syncCities(List<IDnameDto> cities);
 
     List<CityEnvelopeDto> getCityEnvelopes();
 }

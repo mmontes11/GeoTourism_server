@@ -7,11 +7,17 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository("OSMTypeDao")
+@SuppressWarnings("all")
 public class OSMTypeDaoHibernate extends GenericDaoHibernate<OSMType,Long> implements OSMTypeDao {
     @Override
-    @SuppressWarnings("all")
-    public List<OSMType> getOSMTypes() {
-        String queryString = "SELECT o FROM OSMType o";
-        return (List<OSMType>)getSession().createQuery(queryString).list();
+    public List<OSMType> getAllOSMTypes() {
+        String queryString = "SELECT * FROM osmtype o";
+        return (List<OSMType>)getSession().createSQLQuery(queryString).addEntity(OSMType.class).list();
+    }
+
+    @Override
+    public List<OSMType> getUsedOSMTypes() {
+        String queryString = "SELECT * FROM osmtype o JOIN tiptype t ON o.tiptypeid = t.id";
+        return (List<OSMType>)getSession().createSQLQuery(queryString).addEntity(OSMType.class).list();
     }
 }

@@ -3,6 +3,8 @@ package com.mmontes.model.service;
 
 import com.mmontes.model.dao.TIPtypeDao;
 import com.mmontes.model.entity.TIP.TIPtype;
+import com.mmontes.util.dto.DtoService;
+import com.mmontes.util.dto.TIPtypeDetailsDto;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -17,9 +19,18 @@ public class TIPtypeServiceImpl implements TIPtypeService {
     @Autowired
     private TIPtypeDao tipTypeDao;
 
+    @Autowired
+    private DtoService dtoService;
+
     @Override
     public List<TIPtype> findAllTypes() {
         return tipTypeDao.findAll();
+    }
+
+    @Override
+    public TIPtypeDetailsDto findById(Long TIPtypeId) throws InstanceNotFoundException {
+        TIPtype tipType = tipTypeDao.findById(TIPtypeId);
+        return dtoService.TIPtype2TIPtypeDetailsDto(tipType);
     }
 
     @Override

@@ -1,6 +1,9 @@
 package com.mmontes.model.entity.TIP;
 
+import com.mmontes.model.entity.OSMType;
+
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "tiptype")
@@ -10,6 +13,7 @@ public class TIPtype {
     private Long id;
     private String name;
     private String icon;
+    private Set<OSMType> OSMtypes;
 
     public TIPtype() {
     }
@@ -42,5 +46,14 @@ public class TIPtype {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "TIPtype",orphanRemoval=true, cascade=CascadeType.ALL)
+    public Set<OSMType> getOSMtypes() {
+        return OSMtypes;
+    }
+
+    public void setOSMtypes(Set<OSMType> OSMtypes) {
+        this.OSMtypes = OSMtypes;
     }
 }

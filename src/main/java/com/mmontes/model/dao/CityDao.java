@@ -2,10 +2,7 @@ package com.mmontes.model.dao;
 
 import com.mmontes.model.entity.City;
 import com.mmontes.model.util.genericdao.GenericDao;
-import com.mmontes.util.dto.CityDto;
-import com.mmontes.util.dto.CityEnvelopeDto;
 import com.mmontes.util.exception.InstanceNotFoundException;
-import com.mmontes.util.exception.TIPLocationException;
 import com.vividsolutions.jts.geom.Geometry;
 
 import java.util.List;

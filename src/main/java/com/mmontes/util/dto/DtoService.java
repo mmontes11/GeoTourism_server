@@ -4,6 +4,7 @@ import com.mmontes.model.entity.City;
 import com.mmontes.model.entity.Comment;
 import com.mmontes.model.entity.OSMType;
 import com.mmontes.model.entity.TIP.TIP;
+import com.mmontes.model.entity.TIP.TIPtype;
 import com.mmontes.model.entity.UserAccount;
 import com.mmontes.model.entity.metric.Metric;
 import com.mmontes.model.entity.route.Route;
@@ -126,19 +127,19 @@ public class DtoService {
         return featureSearchDtos;
     }
 
-    public CityDto City2CityDto(City city) {
-        CityDto cityDto = new CityDto();
-        cityDto.setId(city.getId());
-        cityDto.setName(city.getName());
-        return cityDto;
+    public IDnameDto City2CityDto(City city) {
+        IDnameDto IDnameDto = new IDnameDto();
+        IDnameDto.setId(city.getId());
+        IDnameDto.setName(city.getName());
+        return IDnameDto;
     }
 
-    public List<CityDto> ListCity2ListCityDto(List<City> cities) {
-        List<CityDto> cityDtos = new ArrayList<>();
+    public List<IDnameDto> ListCity2ListCityDto(List<City> cities) {
+        List<IDnameDto> IDnameDtos = new ArrayList<>();
         for (City c : cities) {
-            cityDtos.add(City2CityDto(c));
+            IDnameDtos.add(City2CityDto(c));
         }
-        return cityDtos;
+        return IDnameDtos;
     }
 
     public UserAccountDto UserAccount2UserAccountDto(UserAccount user) {
@@ -176,9 +177,10 @@ public class DtoService {
 
     public OSMTypeDto OSMType2OSMTypeDto(OSMType osmType) {
         OSMTypeDto osmTypeDto = new OSMTypeDto();
+        osmTypeDto.setId(osmType.getId());
         osmTypeDto.setKey(osmType.getKeyName());
         osmTypeDto.setValue(osmType.getValue());
-        osmTypeDto.setTipTypeId(osmType.getTIPTypeId());
+        osmTypeDto.setTipTypeId(osmType.getTIPtype().getId());
         return osmTypeDto;
     }
 
@@ -203,5 +205,31 @@ public class DtoService {
             metricDtos.add(Metric2MetricDto(metric));
         }
         return metricDtos;
+    }
+
+    public IDnameDto TIPtype2IDnameDto(TIPtype TIPtype){
+        IDnameDto iDnameDto = new IDnameDto();
+        iDnameDto.setId(TIPtype.getId());
+        iDnameDto.setName(TIPtype.getName());
+        return iDnameDto;
+    }
+
+    public List<IDnameDto> ListTIPtype2IDnameDtos(List<TIPtype> TIPtypes){
+        List<IDnameDto> IDnameDtos = new ArrayList<>();
+        for (TIPtype tiPtype : TIPtypes){
+            IDnameDtos.add(TIPtype2IDnameDto(tiPtype));
+        }
+        return IDnameDtos;
+    }
+
+    public TIPtypeDetailsDto TIPtype2TIPtypeDetailsDto(TIPtype tipType){
+        TIPtypeDetailsDto tipTypeDetailsDto = new TIPtypeDetailsDto();
+        tipTypeDetailsDto.setId(tipType.getId());
+        tipTypeDetailsDto.setName(tipType.getName());
+        tipTypeDetailsDto.setIcon(tipType.getIcon());
+        List<OSMType> osmTypes = new ArrayList<>();
+        osmTypes.addAll(tipType.getOSMtypes());
+        tipTypeDetailsDto.setOsmTypes(ListOSMType2ListOSMTypeDto(osmTypes));
+        return tipTypeDetailsDto;
     }
 }

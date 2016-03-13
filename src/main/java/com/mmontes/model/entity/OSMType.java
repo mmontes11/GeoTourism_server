@@ -1,5 +1,7 @@
 package com.mmontes.model.entity;
 
+import com.mmontes.model.entity.TIP.TIPtype;
+
 import javax.persistence.*;
 
 @Entity
@@ -10,16 +12,16 @@ public class OSMType {
     private Long id;
     private String keyName;
     private String value;
-    private Long TIPTypeId;
+    private TIPtype TIPtype;
 
     public OSMType() {
     }
 
-    public OSMType(Long id, String keyName, String value, Long TIPTypeId) {
+    public OSMType(Long id, String keyName, String value, com.mmontes.model.entity.TIP.TIPtype TIPtype) {
         this.id = id;
         this.keyName = keyName;
         this.value = value;
-        this.TIPTypeId = TIPTypeId;
+        this.TIPtype = TIPtype;
     }
 
     @Column(name = "id")
@@ -52,12 +54,13 @@ public class OSMType {
         this.value = value;
     }
 
-    @Column(name = "tiptypeid")
-    public Long getTIPTypeId() {
-        return TIPTypeId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "TIPTypeId")
+    public TIPtype getTIPtype() {
+        return TIPtype;
     }
 
-    public void setTIPTypeId(Long TIPTypeId) {
-        this.TIPTypeId = TIPTypeId;
+    public void setTIPtype(com.mmontes.model.entity.TIP.TIPtype TIPtype) {
+        this.TIPtype = TIPtype;
     }
 }

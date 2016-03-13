@@ -1,15 +1,15 @@
 package com.mmontes.util.dto;
 
-public class CityDto {
+public class IDnameDto {
     private Long id;
     private String name;
 
-    public CityDto(Long id, String name) {
+    public IDnameDto(Long id, String name) {
         this.id = id;
         this.name = name;
     }
 
-    public CityDto() {
+    public IDnameDto() {
     }
 
     public Long getId() {

@@ -3,7 +3,7 @@ package com.mmontes.test.model.service;
 import com.mmontes.model.dao.CityDao;
 import com.mmontes.model.entity.City;
 import com.mmontes.model.service.CityService;
-import com.mmontes.util.dto.CityDto;
+import com.mmontes.util.dto.IDnameDto;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import org.junit.Before;
 import org.junit.Test;
@@ -52,12 +52,12 @@ public class SyncCityTest {
         City city1 = null;
         City city2 = null;
 
-        List<CityDto> cityDtos = new ArrayList<CityDto>() {{
-            add(new CityDto(osmId1, cityName1));
-            add(new CityDto(osmId2, cityName2));
+        List<IDnameDto> IDnameDtos = new ArrayList<IDnameDto>() {{
+            add(new IDnameDto(osmId1, cityName1));
+            add(new IDnameDto(osmId2, cityName2));
         }};
         try {
-            cityService.syncCities(cityDtos);
+            cityService.syncCities(IDnameDtos);
         } catch (Exception e) {
             e.printStackTrace();
             fail();
@@ -75,11 +75,11 @@ public class SyncCityTest {
         assertEquals(2, cityDao.findAll().size());
 
         final String newName = "newName";
-        cityDtos = new ArrayList<CityDto>() {{
-            add(new CityDto(osmId2, newName));
+        IDnameDtos = new ArrayList<IDnameDto>() {{
+            add(new IDnameDto(osmId2, newName));
         }};
         try {
-            cityService.syncCities(cityDtos);
+            cityService.syncCities(IDnameDtos);
         } catch (Exception e) {
             e.printStackTrace();
             fail();

@@ -6,5 +6,6 @@ import com.mmontes.model.util.genericdao.GenericDao;
 import java.util.List;
 
 public interface OSMTypeDao extends GenericDao<OSMType, Long> {
-    List<OSMType> getOSMTypes();
+    List<OSMType> getAllOSMTypes();
+    List<OSMType> getUsedOSMTypes();
 }

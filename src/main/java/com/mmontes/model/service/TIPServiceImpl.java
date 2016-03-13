@@ -48,7 +48,7 @@ public class TIPServiceImpl implements TIPService {
     private GoogleMapsService googleMapsService;
 
     public TIPDetailsDto
-    create(Long typeId, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long osmId)
+    create(Long typeId, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long osmId, boolean reviewed)
             throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException {
 
         TIP tip = new TIP();
@@ -59,6 +59,7 @@ public class TIPServiceImpl implements TIPService {
         tip.setPhotoUrl(photoUrl);
         tip.setInfoUrl(infoUrl);
         tip.setOsmId(osmId);
+        tip.setReviewed(reviewed);
 
         Coordinate coordinate = tip.getGeom().getCoordinate();
         tip.setGoogleMapsUrl(googleMapsService.getTIPGoogleMapsUrl(coordinate));
@@ -157,7 +158,7 @@ public class TIPServiceImpl implements TIPService {
                     TIP tip = tipDao.findByOSMId(osmId);
                     edit(tip.getId(), null, tipTypeId, tipSyncDto.getName(), null, tipSyncDto.getInfo_url(), tip.getAddress(), tipSyncDto.getPhoto_url());
                 } catch (InstanceNotFoundException e) {
-                    create(tipTypeId, tipSyncDto.getName(), null, tipSyncDto.getPhoto_url(), tipSyncDto.getInfo_url(), geom, osmId);
+                    create(tipTypeId, tipSyncDto.getName(), null, tipSyncDto.getPhoto_url(), tipSyncDto.getInfo_url(), geom, osmId, true);
                 }
             } catch (Exception e){
                 e.printStackTrace();

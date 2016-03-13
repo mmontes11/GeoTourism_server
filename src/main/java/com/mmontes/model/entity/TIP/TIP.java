@@ -27,6 +27,7 @@ public class TIP {
     private String infoUrl;
     private String googleMapsUrl;
     private Long osmId;
+    private boolean reviewed;
     private City city;
     private Set<UserAccount> favouritedBy = new HashSet<>();
     private Set<RouteTIP> routeTIPs = new HashSet<>();
@@ -127,6 +128,15 @@ public class TIP {
 
     public void setOsmId(Long osmId) {
         this.osmId = osmId;
+    }
+
+    @Column(name = "reviewed")
+    public boolean isReviewed() {
+        return reviewed;
+    }
+
+    public void setReviewed(boolean reviewed) {
+        this.reviewed = reviewed;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)

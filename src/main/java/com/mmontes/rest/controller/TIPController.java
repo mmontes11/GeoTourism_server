@@ -22,10 +22,7 @@ public class TIPController {
     @Autowired
     private TIPService tipService;
 
-    @RequestMapping(value = "/admin/tip", method = RequestMethod.POST)
-    public ResponseEntity<TIPDetailsDto>
-    create(@RequestBody TIPRequest tipRequest) {
-
+    private ResponseEntity<TIPDetailsDto> createTIP(TIPRequest tipRequest,boolean reviewed){
         if (tipRequest.getName() == null || tipRequest.getName().isEmpty() ||
                 tipRequest.getGeometry() == null || tipRequest.getGeometry().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -40,12 +37,24 @@ public class TIPController {
         TIPDetailsDto tipDetailsDto;
         try {
             tipDetailsDto = tipService.create(tipRequest.getType(), tipRequest.getName(), tipRequest.getDescription(),
-                    tipRequest.getPhotoUrl(), tipRequest.getInfoUrl(), geometry, null);
+                    tipRequest.getPhotoUrl(), tipRequest.getInfoUrl(), geometry, null, reviewed);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         return new ResponseEntity<>(tipDetailsDto, HttpStatus.CREATED);
+    }
+
+    @RequestMapping(value = "/admin/tip", method = RequestMethod.POST)
+    public ResponseEntity<TIPDetailsDto>
+    createAdmin(@RequestBody TIPRequest tipRequest) {
+        return createTIP(tipRequest,true);
+    }
+
+    @RequestMapping(value = "/social/tip", method = RequestMethod.POST)
+    public ResponseEntity<TIPDetailsDto>
+    createSocial(@RequestBody TIPRequest tipRequest) {
+        return createTIP(tipRequest,false);
     }
 
     @RequestMapping(value = "/tip/{TIPId}", method = RequestMethod.GET)

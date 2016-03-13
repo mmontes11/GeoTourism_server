@@ -45,17 +45,17 @@ public class StatsServiceTest {
             String name = "Tower of Hercules";
             String description = "Human Patrimony";
             Geometry geom = GeometryUtils.geometryFromWKT(POINT_TORRE_HERCULES);
-            towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null);
+            towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, true);
 
             name = "Alameda Santiago de Compostela";
             description = "Sitio verde";
             geom = GeometryUtils.geometryFromWKT(POINT_ALAMEDA);
-            alameda = tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null);
+            alameda = tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, true);
 
             name = "Catedral Santiago de Compostela";
             description = "Sitio de peregrinacion";
             geom = GeometryUtils.geometryFromWKT(POINT_CATEDRAL_SANTIAGO);
-            cathedral = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null);
+            cathedral = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, true);
 
             ratingService.rate(2D, towerHercules.getId(), EXISTING_FACEBOOK_USER_ID);
             ratingService.rate(3D, towerHercules.getId(), EXISTING_FACEBOOK_USER_ID2);

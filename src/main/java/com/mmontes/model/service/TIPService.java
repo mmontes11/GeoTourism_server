@@ -12,7 +12,7 @@ import java.util.List;
 
 public interface TIPService {
 
-    TIPDetailsDto create(Long typeId, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long osmId)
+    TIPDetailsDto create(Long typeId, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long osmId, boolean reviewed)
             throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException;
     TIPDetailsDto findById(Long TIPId,Long facebooUserId) throws InstanceNotFoundException;
     TIPRouteDto findById(Long TIPId) throws InstanceNotFoundException;

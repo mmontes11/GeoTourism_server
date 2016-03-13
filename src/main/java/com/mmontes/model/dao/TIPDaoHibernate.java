@@ -19,9 +19,6 @@ public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements T
 
     public List<TIP> find(String boundsWKT, List<Long> typeIds, List<Long> cityIds, List<Long> facebookUserIds, List<Long> routes) {
 
-        boolean filterByBounds = false;
-        boolean filterByType = false;
-        boolean filterByCity = false;
         boolean filterByFacebookUserIds = facebookUserIds != null && !facebookUserIds.isEmpty();
         boolean filterByContainedInRoutes = routes != null && !routes.isEmpty();
 
@@ -35,28 +32,22 @@ public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements T
             queryString += "JOIN routetip rt ON t.id = rt.tipid AND rt.routeid IN "+routeIDs+" ";
         }
 
+        queryString += "WHERE t.reviewed = true ";
         if (boundsWKT != null) {
-            queryString += "WHERE ST_Within(t.geom,ST_GeometryFromText('SRID=" + Constants.SRID + ";" + boundsWKT + "'))";
-            filterByBounds = true;
+            queryString += "AND ST_Within(t.geom,ST_GeometryFromText('SRID=" + Constants.SRID + ";" + boundsWKT + "'))";
         }
         if (typeIds != null && !typeIds.isEmpty()) {
             String types = QueryUtils.getINvalues(typeIds);
-            String partialQuery = "t.typeid IN " + types + " ";
-            queryString += (filterByBounds ? "AND " : "WHERE ") + partialQuery;
-            filterByType = true;
+            queryString += "AND t.typeid IN " + types + " ";
         }
         if (cityIds != null && !cityIds.isEmpty()) {
             String cities = QueryUtils.getINvalues(cityIds);
-            String partialQuery = "t.cityid IN " + cities + " ";
-            queryString += ((filterByBounds || filterByType) ? "AND " : "WHERE ") + partialQuery;
-            filterByCity = true;
+            queryString += "AND t.cityid IN " + cities + " ";
         }
         if (filterByFacebookUserIds) {
             String FBuserIds = QueryUtils.getINvalues(facebookUserIds);
-            String partialQuery = "u.facebookuserid IN " + FBuserIds + " ";
-            queryString += ((filterByBounds || filterByType || filterByCity) ? "AND " : "WHERE ") + partialQuery;
+            queryString += "AND u.facebookuserid IN " + FBuserIds + " ";
         }
-
         Query query = getSession().createSQLQuery(queryString).addEntity(TIP.class);
         return query.list();
     }

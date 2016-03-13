@@ -23,7 +23,7 @@ public class WikipediaController {
     @Autowired
     private WikipediaService wikipediaService;
 
-    @RequestMapping(value = "/admin/wikipedia", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "/wikipedia", method = RequestMethod.GET, produces = "application/json")
     public ResponseEntity<List<WikipediaResult>>
     getLanguage (@RequestParam(value = "keywords", required = true) String keywords){
         String language;

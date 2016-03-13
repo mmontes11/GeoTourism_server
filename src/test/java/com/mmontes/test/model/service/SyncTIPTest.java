@@ -41,12 +41,12 @@ public class SyncTIPTest {
     public void createTIPs() {
         try {
             Geometry geom = GeometryUtils.geometryFromWKT(POINT_TORRE_HERCULES);
-            tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null);
+            tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, true);
             geom = GeometryUtils.geometryFromWKT(POINT_CATEDRAL_SANTIAGO);
-            tipService.create(MONUMENT_DISCRIMINATOR, "Catedral Santiago de Compostela", "Sitio de peregrinacion", VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, CATHEDRAL_OSM_ID);
-            tipService.create(NATURAL_SPACE_DISCRIMINATOR, "Alameda Santiago de Compostela", "Sitio verde", VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, ALAMEDA_OSM_ID);
+            tipService.create(MONUMENT_DISCRIMINATOR, "Catedral Santiago de Compostela", "Sitio de peregrinacion", VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, CATHEDRAL_OSM_ID, true);
+            tipService.create(NATURAL_SPACE_DISCRIMINATOR, "Alameda Santiago de Compostela", "Sitio verde", VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, ALAMEDA_OSM_ID, true);
             geom = GeometryUtils.geometryFromWKT(POINT_STATUE_OF_LIBERTRY);
-            tipService.create(MONUMENT_DISCRIMINATOR, "Liberty Statue", "NY symbol", VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, LIBERTY_STATUE_OSM_ID);
+            tipService.create(MONUMENT_DISCRIMINATOR, "Liberty Statue", "NY symbol", VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, LIBERTY_STATUE_OSM_ID, true);
         } catch (Exception e) {
             e.printStackTrace();
             fail();

@@ -4,6 +4,7 @@ import com.mmontes.model.dao.StatsDao;
 import com.mmontes.util.dto.StatsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Date;
 import java.util.List;
 
 public abstract class Metric {
@@ -37,5 +38,5 @@ public abstract class Metric {
         this.name = name;
     }
 
-    public abstract StatsDto getStats(List<Long> TIPs);
+    public abstract StatsDto getStats(List<Long> TIPs, Date fromDate, Date toDate);
 }

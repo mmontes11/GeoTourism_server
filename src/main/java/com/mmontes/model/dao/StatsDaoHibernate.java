@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -41,46 +42,86 @@ public class StatsDaoHibernate implements StatsDao {
     }
 
     @Override
-    public List<LatLngWeight> getBestRated(List<Long> TIPs) {
+    public List<LatLngWeight> getBestRated(List<Long> TIPs, Date fromDate, Date toDate) {
+        boolean filterByTIPs = false;
+        boolean filterByFromDate = false;
+        boolean filterByToDate = false;
         String queryString =
                 "SELECT ST_Y(t.geom) AS latitude,ST_X(t.geom) AS longitude,CAST(AVG(r.ratingvalue) AS DECIMAL) AS weight " +
-                        "FROM tip t " +
-                        "JOIN rating r " +
-                        "ON t.id = r.tipid ";
+                "FROM tip t " +
+                "JOIN rating r " +
+                "ON t.id = r.tipid ";
         if (TIPs != null && !TIPs.isEmpty()){
             String tipIds = QueryUtils.getINvalues(TIPs);
             queryString += "WHERE t.id IN "+tipIds;
+            filterByTIPs = true;
+        }
+        if (fromDate != null){
+            String partialQuery = " r.ratingdate >= :fromDate ";
+            queryString += (filterByTIPs? "AND" : "WHERE") + partialQuery;
+            filterByFromDate = true;
+        }
+        if (toDate != null){
+            String partialQuery = " r.ratingdate <= :toDate ";
+            queryString += ((filterByTIPs || filterByFromDate)? "AND" : "WHERE") + partialQuery;
+            filterByToDate = true;
         }
         queryString += "GROUP BY t.id ";
         Query query = getSession().createSQLQuery(queryString);
+        if (filterByFromDate){
+            query.setTimestamp("fromDate",fromDate);
+        }
+        if (filterByToDate){
+            query.setTimestamp("toDate",toDate);
+        }
         List<Map<String, Object>> queryResult = QueryUtils.query2MapList(query);
         return getResulStats(queryResult);
     }
 
     @Override
-    public List<LatLngWeight> getMostCommented(List<Long> TIPs) {
+    public List<LatLngWeight> getMostCommented(List<Long> TIPs,Date fromDate,Date toDate) {
+        boolean filterByTIPs = false;
+        boolean filterByFromDate = false;
+        boolean filterByToDate = false;
         String queryString =
                 "SELECT ST_Y(t.geom) AS latitude,ST_X(t.geom) AS longitude, CAST(COUNT(c.tipid) AS DECIMAL) AS weight " +
-                        "FROM tip t " +
-                        "JOIN comment c " +
-                        "ON t.id = c.tipid ";
+                "FROM tip t " +
+                "JOIN comment c " +
+                "ON t.id = c.tipid ";
         if (TIPs != null && !TIPs.isEmpty()){
             String tipIds = QueryUtils.getINvalues(TIPs);
-            queryString += "WHERE t.id IN "+tipIds;
+            queryString += "WHERE t.id IN "+tipIds+" ";
+            filterByTIPs = true;
+        }
+        if (fromDate != null){
+            String partialQuery = " c.commentdate >= :fromDate ";
+            queryString += (filterByTIPs? "AND" : "WHERE") + partialQuery;
+            filterByFromDate = true;
+        }
+        if (toDate != null){
+            String partialQuery = " c.commentdate <= :toDate ";
+            queryString += ((filterByTIPs || filterByFromDate)? "AND" : "WHERE") + partialQuery;
+            filterByToDate = true;
         }
         queryString += "GROUP BY t.id ";
         Query query = getSession().createSQLQuery(queryString);
+        if (filterByFromDate){
+            query.setTimestamp("fromDate",fromDate);
+        }
+        if (filterByToDate){
+            query.setTimestamp("toDate",toDate);
+        }
         List<Map<String, Object>> queryResult = QueryUtils.query2MapList(query);
         return getResulStats(queryResult);
     }
 
     @Override
-    public List<LatLngWeight> getMostFavourited(List<Long> TIPs) {
+    public List<LatLngWeight> getMostFavourited(List<Long> TIPs,Date fromDate,Date toDate) {
         String queryString =
                 "SELECT ST_Y(t.geom) AS latitude,ST_X(t.geom) AS longitude, CAST(COUNT(tu.tipid) AS DECIMAL) AS weight " +
-                        "FROM tip t " +
-                        "JOIN tipuseraccount tu " +
-                        "ON t.id = tu.tipid ";
+                "FROM tip t " +
+                "JOIN tipuseraccount tu " +
+                "ON t.id = tu.tipid ";
         if (TIPs != null && !TIPs.isEmpty()){
             String tipIds = QueryUtils.getINvalues(TIPs);
             queryString += "WHERE t.id IN "+tipIds;

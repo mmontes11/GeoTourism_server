@@ -7,4 +7,6 @@ public class Constants {
     public static final int MIN_DISTANCE = 100;
     public static final int MAX_POINTS_ROUTE = 10;
     public static final int MAX_RATING_VALUE = 5;
+
+    public static final String DATE_FORMAT = "yyyy-MM-dd";
 }

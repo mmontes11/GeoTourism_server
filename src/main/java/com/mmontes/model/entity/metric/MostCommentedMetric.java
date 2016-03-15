@@ -6,6 +6,7 @@ import com.mmontes.util.dto.LatLngWeight;
 import com.mmontes.util.dto.StatsDto;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.Date;
 import java.util.List;
 
 public class MostCommentedMetric extends Metric {
@@ -21,9 +22,9 @@ public class MostCommentedMetric extends Metric {
     }
 
     @Override
-    public StatsDto getStats(List<Long> TIPs) {
+    public StatsDto getStats(List<Long> TIPs, Date fromDate, Date toDate) {
         Integer max = commentDao.getMaxNumOfComments();
-        List<LatLngWeight> data = super.statsDao.getMostCommented(TIPs);
+        List<LatLngWeight> data = super.statsDao.getMostCommented(TIPs,fromDate,toDate);
         return new StatsDto(max,data);
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service("StatsService")
@@ -41,8 +42,8 @@ public class StatsServiceImpl implements StatsService {
     }
 
     @Override
-    public StatsDto getStats(String metricID,List<Long> TIPs) throws InstanceNotFoundException {
+    public StatsDto getStats(String metricID, List<Long> TIPs, Date fromDate, Date toDate) throws InstanceNotFoundException {
         Metric metric = getMetricByID(metricID);
-        return metric.getStats(TIPs);
+        return metric.getStats(TIPs,fromDate,toDate);
     }
 }

@@ -68,7 +68,7 @@ public class TIPtypeController {
         try {
             TIPtypeDetailsDto tiPtypeDetailsDto = tipTypeService.create(tipTypeRequest.getName(), tipTypeRequest.getIcon());
             gcmService.sendMessageTypesUpdated();
-            gcmService.sendMessageGlobal("New type of place: " + tiPtypeDetailsDto.getName());
+            gcmService.sendMessageGlobal("New type of Place: " + tiPtypeDetailsDto.getName());
             return new ResponseEntity<>(tiPtypeDetailsDto, HttpStatus.CREATED);
         } catch (InstanceNotFoundException e) {
             e.printStackTrace();

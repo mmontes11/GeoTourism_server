@@ -1,5 +1,6 @@
 package com.mmontes.service;
 
+import com.mmontes.util.Constants;
 import com.mmontes.util.PrivateConstants;
 import java.io.IOException;
 import java.io.InputStream;
@@ -27,7 +28,7 @@ public class GCMService {
 	// Donde la constante es un string (en este caso para actualizar los tipos de TIPs).
 
 	// Mensajes predeterminados
-	public static final String GCM_TYPES_UPDATED = "TYPES_UPDATED";
+	public void sendMessageTypesUpdated() { sendMessageGlobal(Constants.GCM_TYPES_UPDATED);}
 
 	public void sendMessageGlobal(String message) {
 		sendMessageByTopic("global", message);

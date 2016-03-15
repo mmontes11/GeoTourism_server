@@ -228,8 +228,6 @@ public class DtoService {
         tipTypeDetailsDto.setName(tipType.getName());
         tipTypeDetailsDto.setIcon(tipType.getIcon());
         List<OSMType> osmTypes = new ArrayList<>();
-        osmTypes.addAll(tipType.getOSMtypes());
-        tipTypeDetailsDto.setOsmTypes(ListOSMType2ListOSMTypeDto(osmTypes));
         return tipTypeDetailsDto;
     }
 }

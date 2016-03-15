@@ -1,22 +1,18 @@
 package com.mmontes.util.dto;
 
-import java.util.List;
-
 public class TIPtypeDetailsDto {
 
     private Long id;
     private String name;
     private String icon;
-    private List<OSMTypeDto> osmTypes;
 
     public TIPtypeDetailsDto() {
     }
 
-    public TIPtypeDetailsDto(Long id, String name, String icon, List<OSMTypeDto> osmTypes) {
+    public TIPtypeDetailsDto(Long id, String name, String icon) {
         this.id = id;
         this.name = name;
         this.icon = icon;
-        this.osmTypes = osmTypes;
     }
 
     public Long getId() {
@@ -41,13 +37,5 @@ public class TIPtypeDetailsDto {
 
     public void setIcon(String icon) {
         this.icon = icon;
-    }
-
-    public List<OSMTypeDto> getOsmTypes() {
-        return osmTypes;
-    }
-
-    public void setOsmTypes(List<OSMTypeDto> osmTypes) {
-        this.osmTypes = osmTypes;
     }
 }

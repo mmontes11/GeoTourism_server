@@ -9,4 +9,6 @@ public class Constants {
     public static final int MAX_RATING_VALUE = 5;
 
     public static final String DATE_FORMAT = "yyyy-MM-dd";
+
+    public static final String GCM_TYPES_UPDATED = "TYPES_UPDATED";
 }

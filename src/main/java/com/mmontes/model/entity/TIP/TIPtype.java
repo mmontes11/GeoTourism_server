@@ -3,6 +3,7 @@ package com.mmontes.model.entity.TIP;
 import com.mmontes.model.entity.OSMType;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -13,7 +14,6 @@ public class TIPtype {
     private Long id;
     private String name;
     private String icon;
-    private Set<OSMType> OSMtypes;
 
     public TIPtype() {
     }
@@ -21,7 +21,7 @@ public class TIPtype {
     @Column(name = "id")
     @Id
     @SequenceGenerator(name = TIPtype_ID_GENERATOR, sequenceName = "tiptype_id_seq")
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = TIPtype_ID_GENERATOR)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = TIPtype_ID_GENERATOR)
     public Long getId() {
         return id;
     }
@@ -46,14 +46,5 @@ public class TIPtype {
 
     public void setIcon(String icon) {
         this.icon = icon;
-    }
-
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "TIPtype",orphanRemoval=true, cascade=CascadeType.ALL)
-    public Set<OSMType> getOSMtypes() {
-        return OSMtypes;
-    }
-
-    public void setOSMtypes(Set<OSMType> OSMtypes) {
-        this.OSMtypes = OSMtypes;
     }
 }

@@ -29,7 +29,7 @@ public class StatsController {
     @RequestMapping(value = "/social/stats/metric/{metricID}", method = RequestMethod.GET)
     public ResponseEntity<StatsDto>
     getMetricStats(@PathVariable String metricID,
-                   @RequestParam(value = "tips", required = true) List<Long> TIPs,
+                   @RequestParam(value = "tips", required = false) List<Long> TIPs,
                    @RequestParam(value = "fromDate", required = false) @DateTimeFormat(pattern = Constants.DATE_FORMAT) Date fromDate,
                    @RequestParam(value = "toDate", required = false) @DateTimeFormat(pattern = Constants.DATE_FORMAT) Date toDate) {
         try {

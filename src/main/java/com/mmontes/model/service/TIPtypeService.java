@@ -11,4 +11,5 @@ public interface TIPtypeService {
     List<TIPtype> findAllTypes();
     TIPtypeDetailsDto findById(Long TIPtypeId) throws InstanceNotFoundException;
     String findTypeName(Long TIPtypeId) throws InstanceNotFoundException;
+    TIPtypeDetailsDto create(String name,String icon) throws InstanceNotFoundException;
 }

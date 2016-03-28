@@ -1,30 +1,43 @@
 package com.mmontes.model.dao;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.mmontes.model.entity.Favourite;
+import com.mmontes.model.entity.UserAccount;
+import com.mmontes.model.util.genericdao.GenericDaoHibernate;
+import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigInteger;
+import java.util.List;
 
 @Repository("FavouriteDao")
-public class FavouriteDaoHibernate implements FavouriteDao {
-
-    private SessionFactory sessionFactory;
-
-    @Autowired
-    public void setSessionFactory(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
-
-    private Session getSession() {
-        return sessionFactory.getCurrentSession();
-    }
+@SuppressWarnings("all")
+public class FavouriteDaoHibernate extends GenericDaoHibernate<Favourite, Long> implements FavouriteDao {
 
     @Override
     public Integer getMaxNumOfFavs() {
         String queryString = "SELECT MAX(num_favs) FROM (SELECT COUNT(*) AS  num_favs FROM tipuseraccount GROUP BY tipid) AS num_favs_tip";
-        BigInteger result = (BigInteger)getSession().createSQLQuery(queryString).uniqueResult();
+        BigInteger result = (BigInteger) getSession().createSQLQuery(queryString).uniqueResult();
         return (result == null) ? null : result.intValue();
+    }
+
+    @Override
+    public Favourite findByTIPIdFBUserId(Long TIPId, Long facebookUserId) {
+        String queryString = "SELECT f FROM Favourite f WHERE f.tip.id = :TIPId AND f.userAccount.facebookUserId = :facebookUserId";
+        return (Favourite)
+                getSession()
+                    .createQuery(queryString)
+                    .setParameter("TIPId", TIPId)
+                    .setParameter("facebookUserId", facebookUserId)
+                    .uniqueResult();
+    }
+
+    @Override
+    public List<UserAccount> getFavouritedBy(Long TIPId) {
+        String queryString = "SELECT f.userAccount FROM Favourite f WHERE f.tip.id = :TIPId";
+        return (List<UserAccount>)
+                getSession()
+                    .createQuery(queryString)
+                    .setParameter("TIPId", TIPId)
+                    .list();
     }
 }

@@ -29,7 +29,6 @@ public class TIP {
     private Long osmId;
     private boolean reviewed;
     private City city;
-    private Set<UserAccount> favouritedBy = new HashSet<>();
     private Set<RouteTIP> routeTIPs = new HashSet<>();
 
     public TIP() {
@@ -147,25 +146,6 @@ public class TIP {
 
     public void setCity(City city) {
         this.city = city;
-    }
-
-
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JoinTable(
-            name = "tipuseraccount",
-            joinColumns = {
-                    @JoinColumn(name = "tipid", nullable = false, updatable = false)
-            },
-            inverseJoinColumns = {
-                    @JoinColumn(name = "userid", nullable = false, updatable = false)
-            }
-    )
-    public Set<UserAccount> getFavouritedBy() {
-        return favouritedBy;
-    }
-
-    public void setFavouritedBy(Set<UserAccount> favouritedBy) {
-        this.favouritedBy = favouritedBy;
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.tip", orphanRemoval=true, cascade=CascadeType.ALL)

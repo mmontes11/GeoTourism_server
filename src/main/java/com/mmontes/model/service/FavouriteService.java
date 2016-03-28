@@ -13,5 +13,5 @@ public interface FavouriteService {
 
     boolean isFavourite(Long TIPId, Long facebookUserId) throws InstanceNotFoundException;
 
-    List<UserAccountDto> getFavourites(Long TIPId) throws InstanceNotFoundException;
+    List<UserAccountDto> getFavouritedBy(Long TIPId) throws InstanceNotFoundException;
 }

@@ -57,7 +57,7 @@ public class DtoService {
             Double ratingValue = ratingService.getUserTIPRate(tip.getId(), userAccount.getFacebookUserId());
             tipDetailsDto.setMyRate(ratingValue);
 
-            tipDetailsDto.setFavouritedBy(favouriteService.getFavourites(tip.getId()));
+            tipDetailsDto.setFavouritedBy(favouriteService.getFavouritedBy(tip.getId()));
             tipDetailsDto.setMyFavourite(favouriteService.isFavourite(tip.getId(), userAccount.getFacebookUserId()));
 
             tipDetailsDto.setComments(commentService.getComments(tip.getId()));

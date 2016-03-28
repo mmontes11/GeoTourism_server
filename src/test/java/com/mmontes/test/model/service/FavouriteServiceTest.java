@@ -41,27 +41,27 @@ public class FavouriteServiceTest {
             TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom, null, true);
             TIP tip = tipDao.findById(towerHercules.getId());
 
-            assertEquals(0, tip.getFavouritedBy().size());
+            assertEquals(0, favouriteService.getFavouritedBy(tip.getId()).size());
 
             favouriteService.markAsFavourite(tip.getId(), EXISTING_FACEBOOK_USER_ID);
 
             assertTrue(favouriteService.isFavourite(tip.getId(), EXISTING_FACEBOOK_USER_ID));
-            assertEquals(1, tip.getFavouritedBy().size());
+            assertEquals(1, favouriteService.getFavouritedBy(tip.getId()).size());
 
             favouriteService.markAsFavourite(tip.getId(), EXISTING_FACEBOOK_USER_ID2);
 
             assertTrue(favouriteService.isFavourite(tip.getId(), EXISTING_FACEBOOK_USER_ID2));
-            assertEquals(2, tip.getFavouritedBy().size());
+            assertEquals(2, favouriteService.getFavouritedBy(tip.getId()).size());
 
             favouriteService.deleteFavourite(tip.getId(), EXISTING_FACEBOOK_USER_ID2);
 
             assertFalse(favouriteService.isFavourite(tip.getId(), EXISTING_FACEBOOK_USER_ID2));
-            assertEquals(1, tip.getFavouritedBy().size());
+            assertEquals(1, favouriteService.getFavouritedBy(tip.getId()).size());
 
             favouriteService.deleteFavourite(tip.getId(), EXISTING_FACEBOOK_USER_ID);
 
             assertFalse(favouriteService.isFavourite(tip.getId(), EXISTING_FACEBOOK_USER_ID));
-            assertEquals(0, tip.getFavouritedBy().size());
+            assertEquals(0, favouriteService.getFavouritedBy(tip.getId()).size());
         } catch (Exception e) {
             fail();
         }

@@ -9,7 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -37,7 +36,7 @@ public class TIPfavouriteController {
             if (status == null){
                 status = HttpStatus.NOT_MODIFIED;
             }
-            List<UserAccountDto> userAccountDtos = favouriteService.getFavourites(TIPId);
+            List<UserAccountDto> userAccountDtos = favouriteService.getFavouritedBy(TIPId);
             return new ResponseEntity<>(userAccountDtos,status);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

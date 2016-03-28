@@ -13,6 +13,7 @@
         <mapping class="com.mmontes.model.entity.City"/>
         <mapping class="com.mmontes.model.entity.Admin"/>
         <mapping class="com.mmontes.model.entity.Comment"/>
+        <mapping class="com.mmontes.model.entity.Favourite"/>
         <mapping class="com.mmontes.model.entity.UserAccount"/>
         <mapping class="com.mmontes.model.entity.Rating"/>
         <mapping class="com.mmontes.model.entity.route.Route"/>

@@ -1,10 +1,6 @@
 package com.mmontes.model.entity.TIP;
 
-import com.mmontes.model.entity.OSMType;
-
 import javax.persistence.*;
-import java.util.HashSet;
-import java.util.Set;
 
 @Entity
 @Table(name = "tiptype")

@@ -1,6 +1,7 @@
 package com.mmontes.rest.controller;
 
-import com.mmontes.model.entity.OSMType;
+import com.mmontes.model.entity.OSM.OSMKey;
+import com.mmontes.model.entity.OSM.OSMValue;
 import com.mmontes.model.service.AdminService;
 import com.mmontes.model.service.ConfigService;
 import com.mmontes.rest.request.AdminLoginRequest;
@@ -15,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.ServletException;
 import java.util.Calendar;
@@ -87,8 +85,22 @@ public class AdminController {
 
     @RequestMapping(value = "/admin/config/osmtypes", method = RequestMethod.GET)
     public ResponseEntity<List<OSMTypeDto>>
-    getOSMtypes() {
-        List<OSMTypeDto> osmTypes = configService.getOSMTypes();
+    getOSMtypes(@RequestParam Boolean tipTypeSetted) {
+        List<OSMTypeDto> osmTypes = configService.getOSMTypes((tipTypeSetted != null && tipTypeSetted));
         return new ResponseEntity<>(osmTypes, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/admin/config/osmkeys", method = RequestMethod.GET)
+    public ResponseEntity<List<OSMKey>>
+    getOSMkeys() {
+        List<OSMKey> osmKeys = configService.getOSMKeys();
+        return new ResponseEntity<>(osmKeys, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/admin/config/osmkey/{OSMKey}/osmvalues", method = RequestMethod.GET)
+    public ResponseEntity<List<OSMValue>>
+    getOSMvalues(@PathVariable String OSMKey) {
+        List<OSMValue> osmValues = configService.findOSMValuesByOSMKey(OSMKey);
+        return new ResponseEntity<>(osmValues, HttpStatus.OK);
     }
 }

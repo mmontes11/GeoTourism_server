@@ -2,7 +2,8 @@ package com.mmontes.util.dto;
 
 import com.mmontes.model.entity.City;
 import com.mmontes.model.entity.Comment;
-import com.mmontes.model.entity.OSMType;
+import com.mmontes.model.entity.OSM.OSMType;
+import com.mmontes.model.entity.OSM.OSMValue;
 import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.model.entity.TIP.TIPtype;
 import com.mmontes.model.entity.UserAccount;
@@ -178,8 +179,9 @@ public class DtoService {
     public OSMTypeDto OSMType2OSMTypeDto(OSMType osmType) {
         OSMTypeDto osmTypeDto = new OSMTypeDto();
         osmTypeDto.setId(osmType.getId());
-        osmTypeDto.setKey(osmType.getKeyName());
-        osmTypeDto.setValue(osmType.getValue());
+        OSMValue osmValue = osmType.getOsmValue();
+        osmTypeDto.setKey(osmValue.getOsmKey().getKey());
+        osmTypeDto.setValue(osmValue.getValue());
         osmTypeDto.setTipTypeId(osmType.getTIPtype().getId());
         return osmTypeDto;
     }
@@ -227,7 +229,6 @@ public class DtoService {
         tipTypeDetailsDto.setId(tipType.getId());
         tipTypeDetailsDto.setName(tipType.getName());
         tipTypeDetailsDto.setIcon(tipType.getIcon());
-        List<OSMType> osmTypes = new ArrayList<>();
         return tipTypeDetailsDto;
     }
 }

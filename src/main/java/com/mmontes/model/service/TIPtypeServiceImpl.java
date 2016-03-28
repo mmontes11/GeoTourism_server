@@ -3,7 +3,6 @@ package com.mmontes.model.service;
 
 import com.mmontes.model.dao.OSMTypeDao;
 import com.mmontes.model.dao.TIPtypeDao;
-import com.mmontes.model.entity.OSMType;
 import com.mmontes.model.entity.TIP.TIPtype;
 import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.dto.TIPtypeDetailsDto;
@@ -12,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service("TIPtypeService")

@@ -1,4 +1,4 @@
-package com.mmontes.model.entity;
+package com.mmontes.model.entity.OSM;
 
 import com.mmontes.model.entity.TIP.TIPtype;
 
@@ -10,19 +10,8 @@ public class OSMType {
 
     private static final String OSM_TYPE_ID_GENERATOR = "OSMTypeIdGenerator";
     private Long id;
-    private String keyName;
-    private String value;
+    private OSMValue osmValue;
     private TIPtype TIPtype;
-
-    public OSMType() {
-    }
-
-    public OSMType(Long id, String keyName, String value, com.mmontes.model.entity.TIP.TIPtype TIPtype) {
-        this.id = id;
-        this.keyName = keyName;
-        this.value = value;
-        this.TIPtype = TIPtype;
-    }
 
     @Column(name = "id")
     @Id
@@ -36,22 +25,14 @@ public class OSMType {
         this.id = id;
     }
 
-    @Column(name = "keyname")
-    public String getKeyName() {
-        return keyName;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "osmvalueid")
+    public OSMValue getOsmValue() {
+        return osmValue;
     }
 
-    public void setKeyName(String keyName) {
-        this.keyName = keyName;
-    }
-
-    @Column(name = "value")
-    public String getValue() {
-        return value;
-    }
-
-    public void setValue(String value) {
-        this.value = value;
+    public void setOsmValue(OSMValue osmValue) {
+        this.osmValue = osmValue;
     }
 
     @ManyToOne(fetch = FetchType.LAZY)

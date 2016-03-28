@@ -1,13 +1,18 @@
 package com.mmontes.model.service;
 
 import com.mmontes.model.dao.ConfigDao;
+import com.mmontes.model.dao.OSMKeyDao;
 import com.mmontes.model.dao.OSMTypeDao;
+import com.mmontes.model.dao.OSMValueDao;
 import com.mmontes.model.entity.Config;
-import com.mmontes.model.entity.OSMType;
+import com.mmontes.model.entity.OSM.OSMKey;
+import com.mmontes.model.entity.OSM.OSMType;
+import com.mmontes.model.entity.OSM.OSMValue;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.ConfigDto;
 import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.dto.OSMTypeDto;
+import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,6 +30,12 @@ public class ConfigServiceImpl implements ConfigService {
     private OSMTypeDao osmTypeDao;
 
     @Autowired
+    private OSMKeyDao osmKeyDao;
+
+    @Autowired
+    private OSMValueDao osmValueDao;
+
+    @Autowired
     private DtoService dtoService;
 
     @Override
@@ -33,7 +44,7 @@ public class ConfigServiceImpl implements ConfigService {
         Config config = configDao.getConfig();
         String bbox = GeometryUtils.getBBoxString(config.getBoundingBox());
         configDto.setBbox(bbox);
-        List<OSMType> osmTypes = osmTypeDao.getUsedOSMTypes();
+        List<OSMType> osmTypes = osmTypeDao.getOSMTypes(true);
         configDto.setOsmTypes(dtoService.ListOSMType2ListOSMTypeDto(osmTypes));
         return configDto;
     }
@@ -45,10 +56,18 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
-    public List<OSMTypeDto> getOSMTypes() {
-        List<OSMType> osmTypes = osmTypeDao.getAllOSMTypes();
+    public List<OSMTypeDto> getOSMTypes(Boolean tipTypeSetted) {
+        List<OSMType> osmTypes = osmTypeDao.getOSMTypes(tipTypeSetted);
         return dtoService.ListOSMType2ListOSMTypeDto(osmTypes);
     }
 
+    @Override
+    public List<OSMKey> getOSMKeys() {
+        return osmKeyDao.findAll();
+    }
 
+    @Override
+    public List<OSMValue> findOSMValuesByOSMKey(String OSMKey){
+        return osmValueDao.findOSMValuesByOSMKey(OSMKey);
+    }
 }

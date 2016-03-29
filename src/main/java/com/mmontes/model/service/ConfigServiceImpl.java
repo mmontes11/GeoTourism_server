@@ -11,6 +11,7 @@ import com.mmontes.model.entity.OSM.OSMValue;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.ConfigDto;
 import com.mmontes.util.dto.DtoService;
+import com.mmontes.util.dto.IDnameDto;
 import com.mmontes.util.dto.OSMTypeDto;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -62,12 +63,12 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
-    public List<OSMKey> getOSMKeys() {
-        return osmKeyDao.findAll();
+    public List<IDnameDto> getOSMKeys() {
+        return dtoService.ListOSMKey2ListIDnameDto(osmKeyDao.findAll());
     }
 
     @Override
-    public List<OSMValue> findOSMValuesByOSMKey(String OSMKey){
-        return osmValueDao.findOSMValuesByOSMKey(OSMKey);
+    public List<IDnameDto> findOSMValuesByOSMKey(String OSMKey){
+        return dtoService.ListOSMValue2ListIDnameDto(osmValueDao.findOSMValuesByOSMKey(OSMKey));
     }
 }

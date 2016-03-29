@@ -12,7 +12,7 @@ public class OSMValueDaoHibernate extends GenericDaoHibernate<OSMValue, Long> im
 
     @Override
     public List<OSMValue> findOSMValuesByOSMKey(String OSMKey) {
-        String queryString = "SELECT o FROM OSMValue WHERE o.key = :OSMKey";
+        String queryString = "SELECT o FROM OSMValue o WHERE o.osmKey.key = :OSMKey";
         return (List<OSMValue>)
                 getSession()
                         .createQuery(queryString)

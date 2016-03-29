@@ -15,7 +15,7 @@ public class FavouriteDaoHibernate extends GenericDaoHibernate<Favourite, Long> 
 
     @Override
     public Integer getMaxNumOfFavs() {
-        String queryString = "SELECT MAX(num_favs) FROM (SELECT COUNT(*) AS  num_favs FROM tipuseraccount GROUP BY tipid) AS num_favs_tip";
+        String queryString = "SELECT MAX(num_favs) FROM (SELECT COUNT(*) AS  num_favs FROM favourite GROUP BY tipid) AS num_favs_tip";
         BigInteger result = (BigInteger) getSession().createSQLQuery(queryString).uniqueResult();
         return (result == null) ? null : result.intValue();
     }

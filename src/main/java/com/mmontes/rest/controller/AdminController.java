@@ -9,6 +9,7 @@ import com.mmontes.rest.response.ResponseFactory;
 import com.mmontes.util.PrivateConstants;
 import com.mmontes.util.dto.ConfigDto;
 import com.mmontes.util.dto.DtoService;
+import com.mmontes.util.dto.IDnameDto;
 import com.mmontes.util.dto.OSMTypeDto;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -30,9 +31,6 @@ public class AdminController {
 
     @Autowired
     private ConfigService configService;
-
-    @Autowired
-    private DtoService dtoService;
 
     @RequestMapping(value = "/logIn", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity
@@ -85,22 +83,22 @@ public class AdminController {
 
     @RequestMapping(value = "/admin/config/osmtypes", method = RequestMethod.GET)
     public ResponseEntity<List<OSMTypeDto>>
-    getOSMtypes(@RequestParam Boolean tipTypeSetted) {
+    getOSMtypes(@RequestParam(required = false) Boolean tipTypeSetted) {
         List<OSMTypeDto> osmTypes = configService.getOSMTypes((tipTypeSetted != null && tipTypeSetted));
         return new ResponseEntity<>(osmTypes, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/admin/config/osmkeys", method = RequestMethod.GET)
-    public ResponseEntity<List<OSMKey>>
+    public ResponseEntity<List<IDnameDto>>
     getOSMkeys() {
-        List<OSMKey> osmKeys = configService.getOSMKeys();
+        List<IDnameDto> osmKeys = configService.getOSMKeys();
         return new ResponseEntity<>(osmKeys, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/admin/config/osmkey/{OSMKey}/osmvalues", method = RequestMethod.GET)
-    public ResponseEntity<List<OSMValue>>
+    public ResponseEntity<List<IDnameDto>>
     getOSMvalues(@PathVariable String OSMKey) {
-        List<OSMValue> osmValues = configService.findOSMValuesByOSMKey(OSMKey);
+        List<IDnameDto> osmValues = configService.findOSMValuesByOSMKey(OSMKey);
         return new ResponseEntity<>(osmValues, HttpStatus.OK);
     }
 }

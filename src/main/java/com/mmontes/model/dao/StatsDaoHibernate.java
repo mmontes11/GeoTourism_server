@@ -117,18 +117,37 @@ public class StatsDaoHibernate implements StatsDao {
 
     @Override
     public List<LatLngWeight> getMostFavourited(List<Long> TIPs,Date fromDate,Date toDate) {
+        boolean filterByTIPs = false;
+        boolean filterByFromDate = false;
+        boolean filterByToDate = false;
         String queryString =
-                "SELECT ST_Y(t.geom) AS latitude,ST_X(t.geom) AS longitude, CAST(COUNT(tu.tipid) AS DECIMAL) AS weight " +
+                "SELECT ST_Y(t.geom) AS latitude,ST_X(t.geom) AS longitude, CAST(COUNT(f.tipid) AS DECIMAL) AS weight " +
                 "FROM tip t " +
-                "JOIN tipuseraccount tu " +
-                "ON t.id = tu.tipid ";
+                "JOIN favourite f " +
+                "ON t.id = f.tipid ";
         if (TIPs != null && !TIPs.isEmpty()){
             String tipIds = QueryUtils.getINvalues(TIPs);
             queryString += "WHERE t.id IN "+tipIds;
+            filterByTIPs = true;
+        }
+        if (fromDate != null){
+            String partialQuery = " f.favouritedate >= :fromDate ";
+            queryString += (filterByTIPs? "AND" : "WHERE") + partialQuery;
+            filterByFromDate = true;
+        }
+        if (toDate != null){
+            String partialQuery = " f.favouritedate <= :toDate ";
+            queryString += ((filterByTIPs || filterByFromDate)? "AND" : "WHERE") + partialQuery;
+            filterByToDate = true;
         }
         queryString += "GROUP BY t.id ";
-
         Query query = getSession().createSQLQuery(queryString);
+        if (filterByFromDate){
+            query.setTimestamp("fromDate",fromDate);
+        }
+        if (filterByToDate){
+            query.setTimestamp("toDate",toDate);
+        }
         List<Map<String, Object>> queryResult = QueryUtils.query2MapList(query);
         return getResulStats(queryResult);
     }

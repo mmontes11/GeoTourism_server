@@ -8,4 +8,5 @@ import java.util.List;
 public interface TIPtypeDao extends GenericDao<TIPtype, Long> {
 
     List<TIPtype> findAll();
+
 }

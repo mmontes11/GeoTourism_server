@@ -1,16 +1,16 @@
 package com.mmontes.rest.controller;
 
-import com.mmontes.model.entity.OSM.OSMKey;
-import com.mmontes.model.entity.OSM.OSMValue;
 import com.mmontes.model.service.AdminService;
 import com.mmontes.model.service.ConfigService;
 import com.mmontes.rest.request.AdminLoginRequest;
+import com.mmontes.rest.request.OSMtypeRequest;
 import com.mmontes.rest.response.ResponseFactory;
 import com.mmontes.util.PrivateConstants;
 import com.mmontes.util.dto.ConfigDto;
-import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.dto.IDnameDto;
 import com.mmontes.util.dto.OSMTypeDto;
+import com.mmontes.util.exception.DuplicateInstanceException;
+import com.mmontes.util.exception.InstanceNotFoundException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -86,6 +86,22 @@ public class AdminController {
     getOSMtypes(@RequestParam(required = false) Boolean tipTypeSetted) {
         List<OSMTypeDto> osmTypes = configService.getOSMTypes((tipTypeSetted != null && tipTypeSetted));
         return new ResponseEntity<>(osmTypes, HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/admin/config/osmtype", method = RequestMethod.POST)
+    public ResponseEntity<OSMTypeDto>
+    createOSMType(@RequestBody OSMtypeRequest osmTypeRequest){
+        if (osmTypeRequest.getTipTypeId() == null || osmTypeRequest.getOsmValueId() == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        try {
+            OSMTypeDto osmTypeDto = configService.createOSMType(osmTypeRequest.getOsmValueId(),osmTypeRequest.getTipTypeId());
+            return new ResponseEntity<>(osmTypeDto,HttpStatus.NOT_FOUND);
+        } catch (InstanceNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (DuplicateInstanceException e) {
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
     }
 
     @RequestMapping(value = "/admin/config/osmkeys", method = RequestMethod.GET)

@@ -20,9 +20,13 @@ public class OSMTypeDaoHibernate extends GenericDaoHibernate<OSMType,Long> imple
     }
 
     @Override
-    public OSMType findByOSMvalueIdAndTIPtypeId(Long osmValueId, Long tipTypeId) throws InstanceNotFoundException {
-        String queryString = "SELECT o FROM OSMType o WHERE o.osmValue.id = : osmValueId AND o.TIPtype.id = :tipTypeId";
-        OSMType osmType = (OSMType) getSession().createQuery(queryString).uniqueResult();
+    public OSMType findByOSMvalueId(Long osmValueId) throws InstanceNotFoundException {
+        String queryString = "SELECT o FROM OSMType o WHERE o.osmValue.id = :osmValueId";
+        OSMType osmType =
+                (OSMType) getSession()
+                        .createQuery(queryString)
+                        .setParameter("osmValueId",osmValueId)
+                        .uniqueResult();
         if (osmType == null){
             throw new InstanceNotFoundException();
         }else{

@@ -8,5 +8,5 @@ import java.util.List;
 
 public interface OSMTypeDao extends GenericDao<OSMType, Long> {
     List<OSMType> getOSMTypes(Boolean tipTypeSetted);
-    OSMType findByOSMvalueIdAndTIPtypeId(Long osmValueId,Long tipTypeId) throws InstanceNotFoundException;
+    OSMType findByOSMvalueId(Long osmValueId) throws InstanceNotFoundException;
 }

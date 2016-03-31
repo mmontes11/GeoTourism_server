@@ -181,8 +181,8 @@ public class DtoService {
         OSMTypeDto osmTypeDto = new OSMTypeDto();
         osmTypeDto.setId(osmType.getId());
         OSMValue osmValue = osmType.getOsmValue();
-        osmTypeDto.setKey(osmValue.getOsmKey().getKey());
-        osmTypeDto.setValue(osmValue.getValue());
+        osmTypeDto.setKey(OSMKey2IDnameDto(osmValue.getOsmKey()));
+        osmTypeDto.setValue(OSMValue2IDnameDto(osmValue));
         osmTypeDto.setTipTypeId(osmType.getTIPtype().getId());
         return osmTypeDto;
     }
@@ -233,7 +233,7 @@ public class DtoService {
         return tipTypeDetailsDto;
     }
 
-    public IDnameDto OSMKey2OSMKeyDto(OSMKey osmKey){
+    public IDnameDto OSMKey2IDnameDto(OSMKey osmKey){
         IDnameDto idNameDto = new IDnameDto();
         idNameDto.setId(osmKey.getId());
         idNameDto.setName(osmKey.getKey());
@@ -243,12 +243,12 @@ public class DtoService {
     public List<IDnameDto> ListOSMKey2ListIDnameDto(List<OSMKey> osmKeys){
         List<IDnameDto> idNameDtos = new ArrayList<>();
         for (OSMKey osmKey : osmKeys){
-            idNameDtos.add(OSMKey2OSMKeyDto(osmKey));
+            idNameDtos.add(OSMKey2IDnameDto(osmKey));
         }
         return idNameDtos;
     }
 
-    public IDnameDto OSMValue2ListOSMValueDto(OSMValue osmValue){
+    public IDnameDto OSMValue2IDnameDto(OSMValue osmValue){
         IDnameDto idNameDto = new IDnameDto();
         idNameDto.setId(osmValue.getId());
         idNameDto.setName(osmValue.getValue());
@@ -258,7 +258,7 @@ public class DtoService {
     public List<IDnameDto> ListOSMValue2ListIDnameDto(List<OSMValue> osmValues){
         List<IDnameDto> idNameDtos = new ArrayList<>();
         for (OSMValue osmValue : osmValues){
-            idNameDtos.add(OSMValue2ListOSMValueDto(osmValue));
+            idNameDtos.add(OSMValue2IDnameDto(osmValue));
         }
         return idNameDtos;
     }

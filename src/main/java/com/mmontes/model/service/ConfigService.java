@@ -15,6 +15,8 @@ public interface ConfigService {
     String getBBox();
     List<OSMTypeDto> getOSMTypes(Boolean tipTypeSetted);
     OSMTypeDto createOSMType(Long osmValueId,Long tipTypeId) throws InstanceNotFoundException, DuplicateInstanceException;
+    OSMTypeDto updateOSMType(Long osmTypeId,Long tipTypeId) throws InstanceNotFoundException;
+    void deleteOSMType(Long osmValueId) throws InstanceNotFoundException;
     List<IDnameDto> getOSMKeys();
     List<IDnameDto> findOSMValuesByOSMKey(String OSMKey);
 }

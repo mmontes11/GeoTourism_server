@@ -5,6 +5,9 @@ public class OSMtypeRequest {
     private Long osmValueId;
     private Long tipTypeId;
 
+    public OSMtypeRequest() {
+    }
+
     public OSMtypeRequest(Long osmValudeId, Long tipTypeId) {
         this.osmValueId = osmValudeId;
         this.tipTypeId = tipTypeId;

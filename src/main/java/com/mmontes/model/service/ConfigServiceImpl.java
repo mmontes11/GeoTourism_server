@@ -65,18 +65,32 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Override
     public OSMTypeDto createOSMType(Long osmValueId, Long tipTypeId) throws InstanceNotFoundException, DuplicateInstanceException {
-        OSMValue osmValue = osmValueDao.findById(osmValueId);
-        TIPtype tipType = tipTypeDao.findById(tipTypeId);
         try {
-            OSMType osmType = osmTypeDao.findByOSMvalueIdAndTIPtypeId(osmValueId,tipTypeId);
+            OSMType osmType = osmTypeDao.findByOSMvalueId(osmValueId);
             throw new DuplicateInstanceException(osmType.getId(),OSMType.class.getName());
         }catch (InstanceNotFoundException e){
+            OSMValue osmValue = osmValueDao.findById(osmValueId);
+            TIPtype tipType = tipTypeDao.findById(tipTypeId);
             OSMType osmType = new OSMType();
             osmType.setOsmValue(osmValue);
             osmType.setTIPtype(tipType);
             osmTypeDao.save(osmType);
             return dtoService.OSMType2OSMTypeDto(osmType);
         }
+    }
+
+    @Override
+    public OSMTypeDto updateOSMType(Long osmTypeId, Long tipTypeId) throws InstanceNotFoundException {
+        OSMType osmType = osmTypeDao.findById(osmTypeId);
+        TIPtype tipType = tipTypeDao.findById(tipTypeId);
+        osmType.setTIPtype(tipType);
+        osmTypeDao.save(osmType);
+        return dtoService.OSMType2OSMTypeDto(osmType);
+    }
+
+    @Override
+    public void deleteOSMType(Long osmValueId) throws InstanceNotFoundException {
+        osmTypeDao.remove(osmValueId);
     }
 
     @Override

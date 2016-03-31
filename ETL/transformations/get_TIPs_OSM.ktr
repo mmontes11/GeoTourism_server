@@ -320,7 +320,7 @@
       <mongo_field>
         <field_name>key</field_name>
 
-        <field_path>&#x24;.osmTypes&#x5b;&#x2a;&#x5d;.key</field_path>
+        <field_path>&#x24;.osmTypes&#x5b;&#x2a;&#x5d;.key.name</field_path>
 
         <field_type>String</field_type>
 
@@ -328,7 +328,7 @@
       <mongo_field>
         <field_name>value</field_name>
 
-        <field_path>&#x24;.osmTypes&#x5b;&#x2a;&#x5d;.value</field_path>
+        <field_path>&#x24;.osmTypes&#x5b;&#x2a;&#x5d;.value.name</field_path>
 
         <field_type>String</field_type>
 

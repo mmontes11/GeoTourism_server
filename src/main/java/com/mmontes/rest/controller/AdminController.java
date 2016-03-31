@@ -96,13 +96,42 @@ public class AdminController {
         }
         try {
             OSMTypeDto osmTypeDto = configService.createOSMType(osmTypeRequest.getOsmValueId(),osmTypeRequest.getTipTypeId());
-            return new ResponseEntity<>(osmTypeDto,HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>(osmTypeDto,HttpStatus.CREATED);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         } catch (DuplicateInstanceException e) {
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
+
+    @RequestMapping(value = "/admin/config/osmtype/{OSMTypeId}", method = RequestMethod.PUT)
+    public ResponseEntity<OSMTypeDto>
+    updateOSMType(@PathVariable Long OSMTypeId,@RequestBody OSMtypeRequest osmTypeRequest){
+        if (osmTypeRequest.getTipTypeId() == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        try {
+            OSMTypeDto osmTypeDto = configService.updateOSMType(OSMTypeId,osmTypeRequest.getTipTypeId());
+            return new ResponseEntity<>(osmTypeDto,HttpStatus.OK);
+        } catch (InstanceNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(value = "/admin/config/osmtype/{OSMTypeId}", method = RequestMethod.DELETE)
+    public ResponseEntity<OSMTypeDto>
+    deleteOSMType(@PathVariable Long OSMTypeId){
+        if (OSMTypeId == null){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        try {
+            configService.deleteOSMType(OSMTypeId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (InstanceNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 
     @RequestMapping(value = "/admin/config/osmkeys", method = RequestMethod.GET)
     public ResponseEntity<List<IDnameDto>>

@@ -11,11 +11,8 @@ import java.util.List;
 @SuppressWarnings("all")
 public class OSMTypeDaoHibernate extends GenericDaoHibernate<OSMType,Long> implements OSMTypeDao {
     @Override
-    public List<OSMType> getOSMTypes(Boolean tipTypeSetted) {
-        String queryString = "SELECT * FROM osmtype o ";
-        if (tipTypeSetted != null && tipTypeSetted){
-            queryString += "JOIN tiptype t ON o.tiptypeid = t.id";
-        }
+    public List<OSMType> getOSMTypes() {
+        String queryString = "SELECT * FROM osmtype o JOIN tiptype t ON o.tiptypeid = t.id ";
         return (List<OSMType>)getSession().createSQLQuery(queryString).addEntity(OSMType.class).list();
     }
 

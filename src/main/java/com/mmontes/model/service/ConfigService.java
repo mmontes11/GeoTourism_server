@@ -11,9 +11,7 @@ import com.mmontes.util.exception.InstanceNotFoundException;
 import java.util.List;
 
 public interface ConfigService {
-    ConfigDto getConfig();
-    String getBBox();
-    List<OSMTypeDto> getOSMTypes(Boolean tipTypeSetted);
+    ConfigDto getConfig(boolean BBoxMin);
     OSMTypeDto createOSMType(Long osmValueId,Long tipTypeId) throws InstanceNotFoundException, DuplicateInstanceException;
     OSMTypeDto updateOSMType(Long osmTypeId,Long tipTypeId) throws InstanceNotFoundException;
     void deleteOSMType(Long osmValueId) throws InstanceNotFoundException;

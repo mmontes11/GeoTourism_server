@@ -70,22 +70,9 @@ public class AdminController {
 
     @RequestMapping(value = "/admin/config", method = RequestMethod.GET)
     public ResponseEntity<ConfigDto>
-    getConfig() {
-        return new ResponseEntity<>(configService.getConfig(), HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/admin/config/bbox", method = RequestMethod.GET)
-    public ResponseEntity
-    getBBox() {
-        String bbox = configService.getBBox();
-        return new ResponseEntity<>(ResponseFactory.getCustomJSON("bbox", bbox), HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/admin/config/osmtypes", method = RequestMethod.GET)
-    public ResponseEntity<List<OSMTypeDto>>
-    getOSMtypes(@RequestParam(required = false) Boolean tipTypeSetted) {
-        List<OSMTypeDto> osmTypes = configService.getOSMTypes((tipTypeSetted != null && tipTypeSetted));
-        return new ResponseEntity<>(osmTypes, HttpStatus.OK);
+    getConfig(@RequestParam(required = false) Boolean BBoxMin) {
+        BBoxMin = BBoxMin != null? BBoxMin : false;
+        return new ResponseEntity<>(configService.getConfig(BBoxMin), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/admin/config/osmtype", method = RequestMethod.POST)

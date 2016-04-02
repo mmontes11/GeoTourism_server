@@ -41,26 +41,19 @@ public class ConfigServiceImpl implements ConfigService {
     private DtoService dtoService;
 
     @Override
-    public ConfigDto getConfig() {
+    public ConfigDto getConfig(boolean BBoxMin) {
         ConfigDto configDto = new ConfigDto();
         Config config = configDao.getConfig();
-        String bbox = GeometryUtils.getBBoxString(config.getBoundingBox());
+        String bbox;
+        if (BBoxMin){
+            bbox = GeometryUtils.getBBoxString(config.getBoundingBox());
+        }else{
+            bbox = GeometryUtils.WKTFromGeometry(config.getBoundingBox());
+        }
         configDto.setBbox(bbox);
-        List<OSMType> osmTypes = osmTypeDao.getOSMTypes(true);
+        List<OSMType> osmTypes = osmTypeDao.getOSMTypes();
         configDto.setOsmTypes(dtoService.ListOSMType2ListOSMTypeDto(osmTypes));
         return configDto;
-    }
-
-    @Override
-    public String getBBox() {
-        Config config = configDao.getConfig();
-        return GeometryUtils.WKTFromGeometry(config.getBoundingBox());
-    }
-
-    @Override
-    public List<OSMTypeDto> getOSMTypes(Boolean tipTypeSetted) {
-        List<OSMType> osmTypes = osmTypeDao.getOSMTypes(tipTypeSetted);
-        return dtoService.ListOSMType2ListOSMTypeDto(osmTypes);
     }
 
     @Override

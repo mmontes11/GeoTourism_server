@@ -45,13 +45,47 @@ public class TIPtypeServiceImpl implements TIPtypeService {
 
     @Override
     public TIPtypeDto create(String name, String icon, String OSMKey, String OSMValue) throws InstanceNotFoundException {
-        OSMType osmType = osmTypeDao.findByKeyValue(OSMKey,OSMValue);
+        OSMType osmType = null;
+        if (OSMKey != null && !OSMKey.isEmpty() && OSMValue != null && !OSMValue.isEmpty()){
+            osmType = osmTypeDao.findByKeyValue(OSMKey,OSMValue);
+        }
         TIPtype tipType = new TIPtype();
         tipType.setName(name);
         tipType.setIcon(icon);
         tipTypeDao.save(tipType);
-        osmType.setTipType(tipType);
-        osmTypeDao.save(osmType);
+        if (osmType != null){
+            osmType.setTipType(tipType);
+            osmTypeDao.save(osmType);
+        }
         return dtoService.TIPtype2TIPtypeDto(tipType);
+    }
+
+    @Override
+    public TIPtypeDto update(Long TIPtypeID, String name, String icon, String OSMKey, String OSMValue) throws InstanceNotFoundException {
+        TIPtype tiType = tipTypeDao.findById(TIPtypeID);
+        OSMType osmType = null;
+        if (OSMKey != null && !OSMKey.isEmpty() && OSMValue != null && !OSMValue.isEmpty()){
+            osmType = osmTypeDao.findByKeyValue(OSMKey,OSMValue);
+        }
+        tiType.setName(name);
+        tiType.setIcon(icon);
+        tipTypeDao.save(tiType);
+        if (osmType != null){
+            osmType.setTipType(tiType);
+            osmTypeDao.save(osmType);
+        }
+        return dtoService.TIPtype2TIPtypeDto(tiType);
+
+    }
+
+    @Override
+    public void delete(Long TIPtypeID) throws InstanceNotFoundException {
+        TIPtype tipType = tipTypeDao.findById(TIPtypeID);
+        OSMType osmType = tipType.getOsmType();
+        if (osmType != null){
+            osmType.setTipType(null);
+            osmTypeDao.save(osmType);
+        }
+        tipTypeDao.remove(tipType.getId());
     }
 }

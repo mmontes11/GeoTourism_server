@@ -12,4 +12,6 @@ public interface TIPtypeService {
     TIPtypeDto findById(Long TIPtypeId) throws InstanceNotFoundException;
     String findTypeName(Long TIPtypeId) throws InstanceNotFoundException;
     TIPtypeDto create(String name, String icon, String OSMKey, String OSMValue) throws InstanceNotFoundException;
+    TIPtypeDto update(Long TIPtypeID,String name, String icon, String OSMKey, String OSMValue) throws InstanceNotFoundException;
+    void delete(Long TIPtypeID) throws InstanceNotFoundException;
 }

@@ -75,4 +75,35 @@ public class TIPtypeController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
+    @RequestMapping(value = "/admin/tip/type/{TIPtypeID}", method = RequestMethod.PUT)
+    public ResponseEntity<TIPtypeDto>
+    update(@PathVariable Long TIPtypeID, @RequestBody TIPtypeRequest tipTypeRequest) {
+        if (TIPtypeID == null ||tipTypeRequest.getName() == null || tipTypeRequest.getName().isEmpty() ||
+                tipTypeRequest.getIcon() == null || tipTypeRequest.getIcon().isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        try {
+            tipTypeService.update(TIPtypeID,tipTypeRequest.getName(),tipTypeRequest.getIcon(),tipTypeRequest.getOsmKey(),tipTypeRequest.getOsmValue());
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (InstanceNotFoundException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @RequestMapping(value = "/admin/tip/type/{TIPtypeID}", method = RequestMethod.DELETE)
+    public ResponseEntity
+    delete(@PathVariable Long TIPtypeID) {
+        if (TIPtypeID == null){
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+        try {
+            tipTypeService.delete(TIPtypeID);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (InstanceNotFoundException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 }

@@ -579,7 +579,7 @@
 
     <mongo_collection>TIP</mongo_collection>
 
-    <batch_insert_size>100</batch_insert_size>
+    <batch_insert_size>10000</batch_insert_size>
     <connect_timeout/>
     <socket_timeout/>
     <read_preference>primary</read_preference>

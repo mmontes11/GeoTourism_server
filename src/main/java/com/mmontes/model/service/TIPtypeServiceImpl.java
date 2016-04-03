@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("TIPtypeService")
@@ -81,11 +82,6 @@ public class TIPtypeServiceImpl implements TIPtypeService {
     @Override
     public void delete(Long TIPtypeID) throws InstanceNotFoundException {
         TIPtype tipType = tipTypeDao.findById(TIPtypeID);
-        OSMType osmType = tipType.getOsmType();
-        if (osmType != null){
-            osmType.setTipType(null);
-            osmTypeDao.save(osmType);
-        }
         tipTypeDao.remove(tipType.getId());
     }
 }

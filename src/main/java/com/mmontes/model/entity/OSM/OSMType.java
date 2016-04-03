@@ -46,7 +46,7 @@ public class OSMType {
         this.osmKey = osmKey;
     }
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne (fetch = FetchType.LAZY)
     @JoinColumn(name = "tiptypeid")
     public TIPtype getTipType() {
         return tipType;

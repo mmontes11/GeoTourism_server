@@ -7,7 +7,7 @@ import com.mmontes.rest.response.ResponseFactory;
 import com.mmontes.service.GCMService;
 import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.dto.IDnameDto;
-import com.mmontes.util.dto.TIPtypeDetailsDto;
+import com.mmontes.util.dto.TIPtypeDto;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -30,17 +30,17 @@ public class TIPtypeController {
 
 
     @RequestMapping(value = "/tip/types", method = RequestMethod.GET)
-    public ResponseEntity<List<IDnameDto>>
+    public ResponseEntity<List<TIPtypeDto>>
     findAllTIPtypes() {
         List<TIPtype> types = tipTypeService.findAllTypes();
-        return new ResponseEntity<>(dtoService.ListTIPtype2IDnameDtos(types), HttpStatus.OK);
+        return new ResponseEntity<>(dtoService.ListTIPtype2TIPtypeDto(types), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/admin/tip/type/{TIPtypeId}", method = RequestMethod.GET)
-    public ResponseEntity<TIPtypeDetailsDto>
+    public ResponseEntity<TIPtypeDto>
     findById(@PathVariable Long TIPtypeId) {
         try {
-            TIPtypeDetailsDto tiPtypeDetailsDto = tipTypeService.findById(TIPtypeId);
+            TIPtypeDto tiPtypeDetailsDto = tipTypeService.findById(TIPtypeId);
             return new ResponseEntity<>(tiPtypeDetailsDto, HttpStatus.OK);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -59,14 +59,14 @@ public class TIPtypeController {
     }
 
     @RequestMapping(value = "/admin/tip/type", method = RequestMethod.POST)
-    public ResponseEntity<TIPtypeDetailsDto>
+    public ResponseEntity<TIPtypeDto>
     create(@RequestBody TIPtypeRequest tipTypeRequest) {
         if (tipTypeRequest.getName() == null || tipTypeRequest.getName().isEmpty() ||
                 tipTypeRequest.getIcon() == null || tipTypeRequest.getIcon().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         try {
-            TIPtypeDetailsDto tiPtypeDetailsDto = tipTypeService.create(tipTypeRequest.getName(), tipTypeRequest.getIcon());
+            TIPtypeDto tiPtypeDetailsDto = tipTypeService.create(tipTypeRequest.getName(), tipTypeRequest.getIcon(), tipTypeRequest.getOsmKey(), tipTypeRequest.getOsmValue());
             gcmService.sendMessageTypesUpdated();
             gcmService.sendMessageGlobal("New type of Place: " + tiPtypeDetailsDto.getName());
             return new ResponseEntity<>(tiPtypeDetailsDto, HttpStatus.CREATED);

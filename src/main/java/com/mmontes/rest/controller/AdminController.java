@@ -3,14 +3,14 @@ package com.mmontes.rest.controller;
 import com.mmontes.model.service.AdminService;
 import com.mmontes.model.service.ConfigService;
 import com.mmontes.rest.request.AdminLoginRequest;
-import com.mmontes.rest.request.OSMtypeRequest;
+import com.mmontes.rest.request.ConfigBBoxRequest;
 import com.mmontes.rest.response.ResponseFactory;
+import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.PrivateConstants;
 import com.mmontes.util.dto.ConfigDto;
 import com.mmontes.util.dto.IDnameDto;
-import com.mmontes.util.dto.OSMTypeDto;
-import com.mmontes.util.exception.DuplicateInstanceException;
-import com.mmontes.util.exception.InstanceNotFoundException;
+import com.mmontes.util.exception.GeometryParsingException;
+import com.vividsolutions.jts.geom.Geometry;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,67 +70,39 @@ public class AdminController {
 
     @RequestMapping(value = "/admin/config", method = RequestMethod.GET)
     public ResponseEntity<ConfigDto>
-    getConfig(@RequestParam(required = false) Boolean BBoxMin) {
-        BBoxMin = BBoxMin != null? BBoxMin : false;
-        return new ResponseEntity<>(configService.getConfig(BBoxMin), HttpStatus.OK);
+    getConfig(@RequestParam(value = "bboxMin", required = false) Boolean BBoxMin,
+              @RequestParam(value = "hasTIPtype", required = false) Boolean hasTIPtype) {
+        BBoxMin = BBoxMin != null ? BBoxMin : false;
+        hasTIPtype = hasTIPtype != null ? hasTIPtype : false;
+        return new ResponseEntity<>(configService.getConfig(BBoxMin, hasTIPtype), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/admin/config/osmtype", method = RequestMethod.POST)
-    public ResponseEntity<OSMTypeDto>
-    createOSMType(@RequestBody OSMtypeRequest osmTypeRequest){
-        if (osmTypeRequest.getTipTypeId() == null || osmTypeRequest.getOsmValueId() == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    @RequestMapping(value = "/admin/config/bbox", method = RequestMethod.POST)
+    public ResponseEntity
+    upsertBBox(@RequestBody ConfigBBoxRequest configBBoxRequest) {
+        Geometry bbox;
+        if (configBBoxRequest.getBbox() != null) {
+            try {
+                bbox = GeometryUtils.geometryFromWKT(configBBoxRequest.getBbox());
+            } catch (GeometryParsingException e) {
+                return new ResponseEntity(HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        try {
-            OSMTypeDto osmTypeDto = configService.createOSMType(osmTypeRequest.getOsmValueId(),osmTypeRequest.getTipTypeId());
-            return new ResponseEntity<>(osmTypeDto,HttpStatus.CREATED);
-        } catch (InstanceNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (DuplicateInstanceException e) {
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
-        }
+        configService.upsertConfigBBox(bbox);
+        return new ResponseEntity(HttpStatus.OK);
     }
-
-    @RequestMapping(value = "/admin/config/osmtype/{OSMTypeId}", method = RequestMethod.PUT)
-    public ResponseEntity<OSMTypeDto>
-    updateOSMType(@PathVariable Long OSMTypeId,@RequestBody OSMtypeRequest osmTypeRequest){
-        if (osmTypeRequest.getTipTypeId() == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        try {
-            OSMTypeDto osmTypeDto = configService.updateOSMType(OSMTypeId,osmTypeRequest.getTipTypeId());
-            return new ResponseEntity<>(osmTypeDto,HttpStatus.OK);
-        } catch (InstanceNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-    @RequestMapping(value = "/admin/config/osmtype/{OSMTypeId}", method = RequestMethod.DELETE)
-    public ResponseEntity<OSMTypeDto>
-    deleteOSMType(@PathVariable Long OSMTypeId){
-        if (OSMTypeId == null){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
-        try {
-            configService.deleteOSMType(OSMTypeId);
-            return new ResponseEntity<>(HttpStatus.OK);
-        } catch (InstanceNotFoundException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
 
     @RequestMapping(value = "/admin/config/osmkeys", method = RequestMethod.GET)
-    public ResponseEntity<List<IDnameDto>>
-    getOSMkeys() {
-        List<IDnameDto> osmKeys = configService.getOSMKeys();
-        return new ResponseEntity<>(osmKeys, HttpStatus.OK);
+    public ResponseEntity<List<String>>
+    getOSMKeys() {
+        return new ResponseEntity<>(configService.getOSMKeys(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/admin/config/osmkey/{OSMKey}/osmvalues", method = RequestMethod.GET)
-    public ResponseEntity<List<IDnameDto>>
-    getOSMvalues(@PathVariable String OSMKey) {
-        List<IDnameDto> osmValues = configService.findOSMValuesByOSMKey(OSMKey);
-        return new ResponseEntity<>(osmValues, HttpStatus.OK);
+    @RequestMapping(value = "/admin/config/osmkey/{OSMKey}/osmtypes", method = RequestMethod.GET)
+    public ResponseEntity<List<String>>
+    getOSMTypes(@PathVariable String OSMKey) {
+        return new ResponseEntity<>(configService.findOSMTypesByOSMKey(OSMKey), HttpStatus.OK);
     }
 }

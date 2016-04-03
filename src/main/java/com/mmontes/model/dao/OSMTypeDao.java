@@ -7,6 +7,7 @@ import com.mmontes.util.exception.InstanceNotFoundException;
 import java.util.List;
 
 public interface OSMTypeDao extends GenericDao<OSMType, Long> {
-    List<OSMType> getOSMTypes();
-    OSMType findByOSMvalueId(Long osmValueId) throws InstanceNotFoundException;
+    List<String> findOSMTypeByOSMKey(String OSMKey);
+    List<OSMType> find(boolean hasTIPtype);
+    OSMType findByKeyValue(String OSMKey,String OSMValue) throws InstanceNotFoundException;
 }

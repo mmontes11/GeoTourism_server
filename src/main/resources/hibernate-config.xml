@@ -21,7 +21,6 @@
         <mapping class="com.mmontes.model.entity.route.RouteTIPId"/>
         <mapping class="com.mmontes.model.entity.Config"/>
         <mapping class="com.mmontes.model.entity.OSM.OSMKey"/>
-        <mapping class="com.mmontes.model.entity.OSM.OSMValue"/>
         <mapping class="com.mmontes.model.entity.OSM.OSMType"/>
     </session-factory>
 </hibernate-configuration>

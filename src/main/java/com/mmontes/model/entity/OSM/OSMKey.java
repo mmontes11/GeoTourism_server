@@ -11,7 +11,7 @@ public class OSMKey {
     private static final String OSM_KEY_ID_GENERATOR = "OSMKeyIdGenerator";
     private Long id;
     private String key;
-    private Set<OSMValue> osmValues = new HashSet<>();
+    private Set<OSMType> osmTypes = new HashSet<>();
 
     public OSMKey() {
     }
@@ -43,11 +43,11 @@ public class OSMKey {
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "osmKey")
-    public Set<OSMValue> getOsmValues() {
-        return osmValues;
+    public Set<OSMType> getOsmTypes() {
+        return osmTypes;
     }
 
-    public void setOsmValues(Set<OSMValue> osmValues) {
-        this.osmValues = osmValues;
+    public void setOsmTypes(Set<OSMType> osmTypes) {
+        this.osmTypes = osmTypes;
     }
 }

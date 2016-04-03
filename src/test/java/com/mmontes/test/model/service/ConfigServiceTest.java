@@ -23,12 +23,12 @@ public class ConfigServiceTest {
 
     @Test
     public void getConfig(){
-        ConfigDto configDto = configService.getConfig(false);
+        ConfigDto configDto = configService.getConfig(false,false);
         assertNotNull(configDto);
         assertNotNull(configDto.getBbox());
         assertNotNull(configDto.getOsmTypes());
 
-        configDto = configService.getConfig(true);
+        configDto = configService.getConfig(true,true);
         assertNotNull(configDto);
         assertNotNull(configDto.getBbox());
         assertNotNull(configDto.getOsmTypes());

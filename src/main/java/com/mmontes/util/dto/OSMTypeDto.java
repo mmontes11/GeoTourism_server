@@ -3,18 +3,18 @@ package com.mmontes.util.dto;
 public class OSMTypeDto {
 
     private Long id;
-    private IDnameDto key;
-    private IDnameDto value;
-    private Long tipTypeId;
+    private String key;
+    private String value;
+    private TIPtypeDto tipType;
 
     public OSMTypeDto() {
     }
 
-    public OSMTypeDto(Long id, IDnameDto key, IDnameDto value, Long tipTypeId) {
+    public OSMTypeDto(Long id, String key, String value, TIPtypeDto tipType) {
         this.id = id;
         this.key = key;
         this.value = value;
-        this.tipTypeId = tipTypeId;
+        this.tipType = tipType;
     }
 
     public Long getId() {
@@ -25,27 +25,27 @@ public class OSMTypeDto {
         this.id = id;
     }
 
-    public IDnameDto getKey() {
+    public String getKey() {
         return key;
     }
 
-    public void setKey(IDnameDto key) {
+    public void setKey(String key) {
         this.key = key;
     }
 
-    public IDnameDto getValue() {
+    public String getValue() {
         return value;
     }
 
-    public void setValue(IDnameDto value) {
+    public void setValue(String value) {
         this.value = value;
     }
 
-    public Long getTipTypeId() {
-        return tipTypeId;
+    public TIPtypeDto getTipType() {
+        return tipType;
     }
 
-    public void setTipTypeId(Long tipTypeId) {
-        this.tipTypeId = tipTypeId;
+    public void setTipType(TIPtypeDto tipType) {
+        this.tipType = tipType;
     }
 }

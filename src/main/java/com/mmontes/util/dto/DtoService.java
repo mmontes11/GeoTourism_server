@@ -4,7 +4,6 @@ import com.mmontes.model.entity.City;
 import com.mmontes.model.entity.Comment;
 import com.mmontes.model.entity.OSM.OSMKey;
 import com.mmontes.model.entity.OSM.OSMType;
-import com.mmontes.model.entity.OSM.OSMValue;
 import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.model.entity.TIP.TIPtype;
 import com.mmontes.model.entity.UserAccount;
@@ -177,24 +176,6 @@ public class DtoService {
         return commentDtos;
     }
 
-    public OSMTypeDto OSMType2OSMTypeDto(OSMType osmType) {
-        OSMTypeDto osmTypeDto = new OSMTypeDto();
-        osmTypeDto.setId(osmType.getId());
-        OSMValue osmValue = osmType.getOsmValue();
-        osmTypeDto.setKey(OSMKey2IDnameDto(osmValue.getOsmKey()));
-        osmTypeDto.setValue(OSMValue2IDnameDto(osmValue));
-        osmTypeDto.setTipTypeId(osmType.getTIPtype().getId());
-        return osmTypeDto;
-    }
-
-    public List<OSMTypeDto> ListOSMType2ListOSMTypeDto(List<OSMType> osmTypes) {
-        List<OSMTypeDto> osmTypeDtos = new ArrayList<>();
-        for (OSMType osmType : osmTypes) {
-            osmTypeDtos.add(OSMType2OSMTypeDto(osmType));
-        }
-        return osmTypeDtos;
-    }
-
     public MetricDto Metric2MetricDto(Metric metric) {
         MetricDto metricDto = new MetricDto();
         metricDto.setId(metric.getId());
@@ -210,56 +191,38 @@ public class DtoService {
         return metricDtos;
     }
 
-    public IDnameDto TIPtype2IDnameDto(TIPtype TIPtype){
-        IDnameDto iDnameDto = new IDnameDto();
-        iDnameDto.setId(TIPtype.getId());
-        iDnameDto.setName(TIPtype.getName());
-        return iDnameDto;
-    }
-
-    public List<IDnameDto> ListTIPtype2IDnameDtos(List<TIPtype> TIPtypes){
-        List<IDnameDto> IDnameDtos = new ArrayList<>();
-        for (TIPtype tiPtype : TIPtypes){
-            IDnameDtos.add(TIPtype2IDnameDto(tiPtype));
-        }
-        return IDnameDtos;
-    }
-
-    public TIPtypeDetailsDto TIPtype2TIPtypeDetailsDto(TIPtype tipType){
-        TIPtypeDetailsDto tipTypeDetailsDto = new TIPtypeDetailsDto();
+    public TIPtypeDto TIPtype2TIPtypeDto(TIPtype tipType){
+        TIPtypeDto tipTypeDetailsDto = new TIPtypeDto();
         tipTypeDetailsDto.setId(tipType.getId());
         tipTypeDetailsDto.setName(tipType.getName());
         tipTypeDetailsDto.setIcon(tipType.getIcon());
         return tipTypeDetailsDto;
     }
 
-    public IDnameDto OSMKey2IDnameDto(OSMKey osmKey){
-        IDnameDto idNameDto = new IDnameDto();
-        idNameDto.setId(osmKey.getId());
-        idNameDto.setName(osmKey.getKey());
-        return idNameDto;
-    }
-
-    public List<IDnameDto> ListOSMKey2ListIDnameDto(List<OSMKey> osmKeys){
-        List<IDnameDto> idNameDtos = new ArrayList<>();
-        for (OSMKey osmKey : osmKeys){
-            idNameDtos.add(OSMKey2IDnameDto(osmKey));
+    public List<TIPtypeDto> ListTIPtype2TIPtypeDto(List<TIPtype> tipTypes){
+        List<TIPtypeDto> tipTypeDtos = new ArrayList<>();
+        for (TIPtype tipType : tipTypes){
+            tipTypeDtos.add(TIPtype2TIPtypeDto(tipType));
         }
-        return idNameDtos;
+        return tipTypeDtos;
     }
 
-    public IDnameDto OSMValue2IDnameDto(OSMValue osmValue){
-        IDnameDto idNameDto = new IDnameDto();
-        idNameDto.setId(osmValue.getId());
-        idNameDto.setName(osmValue.getValue());
-        return idNameDto;
-    }
-
-    public List<IDnameDto> ListOSMValue2ListIDnameDto(List<OSMValue> osmValues){
-        List<IDnameDto> idNameDtos = new ArrayList<>();
-        for (OSMValue osmValue : osmValues){
-            idNameDtos.add(OSMValue2IDnameDto(osmValue));
+    public OSMTypeDto OSMType2OSMTypeDto(OSMType osmType) {
+        OSMTypeDto osmTypeDto = new OSMTypeDto();
+        osmTypeDto.setId(osmType.getId());
+        osmTypeDto.setKey(osmType.getOsmKey().getKey());
+        osmTypeDto.setValue(osmType.getValue());
+        if (osmType.getTipType() != null){
+            osmTypeDto.setTipType(TIPtype2TIPtypeDto(osmType.getTipType()));
         }
-        return idNameDtos;
+        return osmTypeDto;
+    }
+
+    public List<OSMTypeDto> ListOSMType2ListOSMTypeDto(List<OSMType> osmTypes) {
+        List<OSMTypeDto> osmTypeDtos = new ArrayList<>();
+        for (OSMType osmType : osmTypes) {
+            osmTypeDtos.add(OSMType2OSMTypeDto(osmType));
+        }
+        return osmTypeDtos;
     }
 }

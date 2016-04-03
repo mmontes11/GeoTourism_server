@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface OSMKeyDao extends GenericDao<OSMKey,Long>{
 
-    List<OSMKey> findAll();
+    List<String> findAll();
 }

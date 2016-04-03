@@ -3,9 +3,10 @@ package com.mmontes.model.service;
 
 import com.mmontes.model.dao.OSMTypeDao;
 import com.mmontes.model.dao.TIPtypeDao;
+import com.mmontes.model.entity.OSM.OSMType;
 import com.mmontes.model.entity.TIP.TIPtype;
 import com.mmontes.util.dto.DtoService;
-import com.mmontes.util.dto.TIPtypeDetailsDto;
+import com.mmontes.util.dto.TIPtypeDto;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,9 +33,9 @@ public class TIPtypeServiceImpl implements TIPtypeService {
     }
 
     @Override
-    public TIPtypeDetailsDto findById(Long TIPtypeId) throws InstanceNotFoundException {
+    public TIPtypeDto findById(Long TIPtypeId) throws InstanceNotFoundException {
         TIPtype tipType = tipTypeDao.findById(TIPtypeId);
-        return dtoService.TIPtype2TIPtypeDetailsDto(tipType);
+        return dtoService.TIPtype2TIPtypeDto(tipType);
     }
 
     @Override
@@ -43,11 +44,14 @@ public class TIPtypeServiceImpl implements TIPtypeService {
     }
 
     @Override
-    public TIPtypeDetailsDto create(String name, String icon) throws InstanceNotFoundException {
+    public TIPtypeDto create(String name, String icon, String OSMKey, String OSMValue) throws InstanceNotFoundException {
+        OSMType osmType = osmTypeDao.findByKeyValue(OSMKey,OSMValue);
         TIPtype tipType = new TIPtype();
         tipType.setName(name);
         tipType.setIcon(icon);
         tipTypeDao.save(tipType);
-        return dtoService.TIPtype2TIPtypeDetailsDto(tipType);
+        osmType.setTipType(tipType);
+        osmTypeDao.save(osmType);
+        return dtoService.TIPtype2TIPtypeDto(tipType);
     }
 }

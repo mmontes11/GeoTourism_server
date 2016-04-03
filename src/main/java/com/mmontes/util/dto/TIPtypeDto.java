@@ -1,15 +1,15 @@
 package com.mmontes.util.dto;
 
-public class TIPtypeDetailsDto {
+public class TIPtypeDto {
 
     private Long id;
     private String name;
     private String icon;
 
-    public TIPtypeDetailsDto() {
+    public TIPtypeDto() {
     }
 
-    public TIPtypeDetailsDto(Long id, String name, String icon) {
+    public TIPtypeDto(Long id, String name, String icon) {
         this.id = id;
         this.name = name;
         this.icon = icon;

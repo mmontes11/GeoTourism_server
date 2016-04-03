@@ -11,9 +11,9 @@ import java.util.List;
 @SuppressWarnings("all")
 public class OSMKeyDaoHibernate extends GenericDaoHibernate<OSMKey,Long> implements OSMKeyDao{
     @Override
-    public List<OSMKey> findAll() {
-        String queryString = "SELECT o FROM OSMKey o";
-        return (List<OSMKey>)
+    public List<String> findAll() {
+        String queryString = "SELECT o.key FROM OSMKey o";
+        return (List<String>)
                 getSession()
                     .createQuery(queryString)
                     .list();

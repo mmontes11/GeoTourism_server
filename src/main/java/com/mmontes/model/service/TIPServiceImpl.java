@@ -104,9 +104,9 @@ public class TIPServiceImpl implements TIPService {
         }
     }
 
-    public List<FeatureSearchDto> find(String boundsWKT, List<Long> typeIds, List<Long> cityIds, List<Long> facebookUserIds, List<Long> routes)
+    public List<FeatureSearchDto> find(String boundsWKT, List<Long> typeIds, List<Long> cityIds, List<Long> facebookUserIds, List<Long> routes, boolean reviewed)
             throws InstanceNotFoundException {
-        List<TIP> tips = tipDao.find(boundsWKT, typeIds, cityIds, facebookUserIds, routes);
+        List<TIP> tips = tipDao.find(boundsWKT, typeIds, cityIds, facebookUserIds, routes, reviewed);
         return dtoService.ListTIP2ListFeatureSearchDto(tips);
     }
 

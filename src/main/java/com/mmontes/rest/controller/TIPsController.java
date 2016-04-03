@@ -32,7 +32,8 @@ public class TIPsController {
          @RequestParam(value = "favouritedBy", required = false) Integer favouritedBy,
          @RequestHeader(value = "FacebookUserId", required = false) Long facebookUserId,
          @RequestParam(value = "friends", required = false) List<Long> friendsFacebookUserIds,
-         @RequestParam(value = "routes", required = false) List<Long> routes) {
+         @RequestParam(value = "routes", required = false) List<Long> routes,
+         @RequestParam(value = "reviewed", required = false) Boolean reviewed) {
 
         try {
             if (boundsWKT != null) {
@@ -44,10 +45,11 @@ public class TIPsController {
         if (favouritedBy != null && favouritedBy != 0 && favouritedBy != 1) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+        reviewed = reviewed != null? reviewed : true;
         List<FeatureSearchDto> tips;
         try {
             List<Long> facebookUserIds = userAccountService.getFacebookUserIds(favouritedBy, facebookUserId, friendsFacebookUserIds);
-            tips = tipService.find(boundsWKT, typeIds, cityIds, facebookUserIds, routes);
+            tips = tipService.find(boundsWKT, typeIds, cityIds, facebookUserIds, routes, reviewed);
         } catch (InstanceNotFoundException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

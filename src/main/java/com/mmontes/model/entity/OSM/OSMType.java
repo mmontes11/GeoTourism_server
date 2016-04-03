@@ -8,15 +8,26 @@ import javax.persistence.*;
 @Table(name = "osmtype")
 public class OSMType {
 
-    private static final String OSM_TYPE_ID_GENERATOR = "OSMTypeIdGenerator";
+    private static final String OSM_VALUE_ID_GENERATOR = "OSMTypeIdGenerator";
     private Long id;
-    private OSMValue osmValue;
-    private TIPtype TIPtype;
+    private OSMKey osmKey;
+    private TIPtype tipType;
+    private String value;
+
+    public OSMType() {
+    }
+
+    public OSMType(Long id, OSMKey osmKey, String value, TIPtype tipType) {
+        this.id = id;
+        this.osmKey = osmKey;
+        this.tipType = tipType;
+        this.value = value;
+    }
 
     @Column(name = "id")
     @Id
-    @SequenceGenerator(name = OSM_TYPE_ID_GENERATOR, sequenceName = "osmtype_id_seq")
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = OSM_TYPE_ID_GENERATOR)
+    @SequenceGenerator(name = OSM_VALUE_ID_GENERATOR, sequenceName = "osmvalue_id_seq")
+    @GeneratedValue(strategy = GenerationType.AUTO, generator = OSM_VALUE_ID_GENERATOR)
     public Long getId() {
         return id;
     }
@@ -26,22 +37,31 @@ public class OSMType {
     }
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "osmvalueid")
-    public OSMValue getOsmValue() {
-        return osmValue;
+    @JoinColumn(name = "osmkeyid")
+    public OSMKey getOsmKey() {
+        return osmKey;
     }
 
-    public void setOsmValue(OSMValue osmValue) {
-        this.osmValue = osmValue;
+    public void setOsmKey(OSMKey osmKey) {
+        this.osmKey = osmKey;
     }
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tiptypeid")
-    public TIPtype getTIPtype() {
-        return TIPtype;
+    public TIPtype getTipType() {
+        return tipType;
     }
 
-    public void setTIPtype(com.mmontes.model.entity.TIP.TIPtype TIPtype) {
-        this.TIPtype = TIPtype;
+    public void setTipType(TIPtype tipType) {
+        this.tipType = tipType;
+    }
+
+    @Column(name = "value")
+    public String getValue() {
+        return value;
+    }
+
+    public void setValue(String value) {
+        this.value = value;
     }
 }

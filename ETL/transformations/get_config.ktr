@@ -176,7 +176,7 @@
            </partitioning>
     <applicationType>JSON</applicationType>
     <method>GET</method>
-    <url>&#x24;&#x7b;URL&#x7d;&#x2f;admin&#x2f;config&#x3f;BBoxMin&#x3d;true</url>
+    <url>&#x24;&#x7b;URL&#x7d;&#x2f;admin&#x2f;config&#x3f;bboxMin&#x3d;true&#x26;hasTIPtype&#x3d;true</url>
     <urlInField>N</urlInField>
     <dynamicMethod>N</dynamicMethod>
     <methodFieldName/>

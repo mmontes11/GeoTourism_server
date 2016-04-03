@@ -9,23 +9,39 @@ import java.util.List;
 
 @Repository("OSMTypeDao")
 @SuppressWarnings("all")
-public class OSMTypeDaoHibernate extends GenericDaoHibernate<OSMType,Long> implements OSMTypeDao {
+public class OSMTypeDaoHibernate extends GenericDaoHibernate<OSMType, Long> implements OSMTypeDao {
+
     @Override
-    public List<OSMType> getOSMTypes() {
-        String queryString = "SELECT * FROM osmtype o JOIN tiptype t ON o.tiptypeid = t.id ";
-        return (List<OSMType>)getSession().createSQLQuery(queryString).addEntity(OSMType.class).list();
+    public List<String> findOSMTypeByOSMKey(String OSMKey) {
+        String queryString = "SELECT o.value FROM OSMType o WHERE o.osmKey.key = :OSMKey";
+        return (List<String>)
+                getSession()
+                        .createQuery(queryString)
+                        .setParameter("OSMKey", OSMKey)
+                        .list();
     }
 
     @Override
-    public OSMType findByOSMvalueId(Long osmValueId) throws InstanceNotFoundException {
-        String queryString = "SELECT o FROM OSMType o WHERE o.osmValue.id = :osmValueId";
-        OSMType osmType =
-                (OSMType) getSession()
+    public List<OSMType> find(boolean hasTIPtype) {
+        String queryString = "SELECT o FROM OSMType o ";
+        if (hasTIPtype){
+            queryString += "WHERE o.tipType IS NOT NULL";
+        }
+        return (List<OSMType>) getSession().createQuery(queryString).list();
+    }
+
+    @Override
+    public OSMType findByKeyValue(String OSMKey,String OSMValue) throws InstanceNotFoundException {
+        String queryString = "SELECT o FROM OSMType o WHERE o.osmKey.key = :OSMKey AND o.value = :OSMValue";
+        OSMType osmType=
+                (OSMType)
+                getSession()
                         .createQuery(queryString)
-                        .setParameter("osmValueId",osmValueId)
+                        .setParameter("OSMKey", OSMKey)
+                        .setParameter("OSMValue", OSMValue)
                         .uniqueResult();
         if (osmType == null){
-            throw new InstanceNotFoundException();
+            throw new InstanceNotFoundException(OSMType.class.getName(),OSMValue);
         }else{
             return osmType;
         }

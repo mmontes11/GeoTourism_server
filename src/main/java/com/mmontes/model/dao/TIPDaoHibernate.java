@@ -17,7 +17,7 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements TIPDao {
 
-    public List<TIP> find(String boundsWKT, List<Long> typeIds, List<Long> cityIds, List<Long> facebookUserIds, List<Long> routes) {
+    public List<TIP> find(String boundsWKT, List<Long> typeIds, List<Long> cityIds, List<Long> facebookUserIds, List<Long> routes, boolean reviewed) {
 
         boolean filterByFacebookUserIds = facebookUserIds != null && !facebookUserIds.isEmpty();
         boolean filterByContainedInRoutes = routes != null && !routes.isEmpty();
@@ -32,7 +32,7 @@ public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements T
             queryString += "JOIN routetip rt ON t.id = rt.tipid AND rt.routeid IN "+routeIDs+" ";
         }
 
-        queryString += "WHERE t.reviewed = true ";
+        queryString += "WHERE t.reviewed =  "+reviewed+" ";
         if (boundsWKT != null) {
             queryString += "AND ST_Within(t.geom,ST_GeometryFromText('SRID=" + Constants.SRID + ";" + boundsWKT + "'))";
         }

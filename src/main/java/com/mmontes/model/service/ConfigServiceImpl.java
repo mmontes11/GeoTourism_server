@@ -1,17 +1,15 @@
 package com.mmontes.model.service;
 
-import com.mmontes.model.dao.*;
+import com.mmontes.model.dao.ConfigDao;
+import com.mmontes.model.dao.OSMKeyDao;
+import com.mmontes.model.dao.OSMTypeDao;
 import com.mmontes.model.entity.Config;
 import com.mmontes.model.entity.OSM.OSMType;
-import com.mmontes.model.entity.OSM.OSMValue;
-import com.mmontes.model.entity.TIP.TIPtype;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.ConfigDto;
 import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.dto.IDnameDto;
-import com.mmontes.util.dto.OSMTypeDto;
-import com.mmontes.util.exception.DuplicateInstanceException;
-import com.mmontes.util.exception.InstanceNotFoundException;
+import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,73 +24,47 @@ public class ConfigServiceImpl implements ConfigService {
     private ConfigDao configDao;
 
     @Autowired
-    private OSMTypeDao osmTypeDao;
-
-    @Autowired
     private OSMKeyDao osmKeyDao;
 
     @Autowired
-    private OSMValueDao osmValueDao;
-
-    @Autowired
-    private TIPtypeDao tipTypeDao;
+    private OSMTypeDao osmTypeDao;
 
     @Autowired
     private DtoService dtoService;
 
     @Override
-    public ConfigDto getConfig(boolean BBoxMin) {
+    public ConfigDto getConfig(boolean BBoxMin, boolean hasTIPtype) {
         ConfigDto configDto = new ConfigDto();
         Config config = configDao.getConfig();
         String bbox;
-        if (BBoxMin){
+        if (BBoxMin) {
             bbox = GeometryUtils.getBBoxString(config.getBoundingBox());
-        }else{
+        } else {
             bbox = GeometryUtils.WKTFromGeometry(config.getBoundingBox());
         }
         configDto.setBbox(bbox);
-        List<OSMType> osmTypes = osmTypeDao.getOSMTypes();
+        List<OSMType> osmTypes = osmTypeDao.find(hasTIPtype);
         configDto.setOsmTypes(dtoService.ListOSMType2ListOSMTypeDto(osmTypes));
         return configDto;
     }
 
     @Override
-    public OSMTypeDto createOSMType(Long osmValueId, Long tipTypeId) throws InstanceNotFoundException, DuplicateInstanceException {
-        try {
-            OSMType osmType = osmTypeDao.findByOSMvalueId(osmValueId);
-            throw new DuplicateInstanceException(osmType.getId(),OSMType.class.getName());
-        }catch (InstanceNotFoundException e){
-            OSMValue osmValue = osmValueDao.findById(osmValueId);
-            TIPtype tipType = tipTypeDao.findById(tipTypeId);
-            OSMType osmType = new OSMType();
-            osmType.setOsmValue(osmValue);
-            osmType.setTIPtype(tipType);
-            osmTypeDao.save(osmType);
-            return dtoService.OSMType2OSMTypeDto(osmType);
+    public void upsertConfigBBox(Geometry bbox) {
+        Config config = configDao.getConfig();
+        if (config == null) {
+            config = new Config();
         }
+        config.setBoundingBox(bbox);
+        configDao.save(config);
     }
 
     @Override
-    public OSMTypeDto updateOSMType(Long osmTypeId, Long tipTypeId) throws InstanceNotFoundException {
-        OSMType osmType = osmTypeDao.findById(osmTypeId);
-        TIPtype tipType = tipTypeDao.findById(tipTypeId);
-        osmType.setTIPtype(tipType);
-        osmTypeDao.save(osmType);
-        return dtoService.OSMType2OSMTypeDto(osmType);
+    public List<String> getOSMKeys() {
+        return osmKeyDao.findAll();
     }
 
     @Override
-    public void deleteOSMType(Long osmValueId) throws InstanceNotFoundException {
-        osmTypeDao.remove(osmValueId);
-    }
-
-    @Override
-    public List<IDnameDto> getOSMKeys() {
-        return dtoService.ListOSMKey2ListIDnameDto(osmKeyDao.findAll());
-    }
-
-    @Override
-    public List<IDnameDto> findOSMValuesByOSMKey(String OSMKey){
-        return dtoService.ListOSMValue2ListIDnameDto(osmValueDao.findOSMValuesByOSMKey(OSMKey));
+    public List<String> findOSMTypesByOSMKey(String OSMKey) {
+        return osmTypeDao.findOSMTypeByOSMKey(OSMKey);
     }
 }

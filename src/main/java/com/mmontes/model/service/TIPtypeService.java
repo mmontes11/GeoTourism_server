@@ -1,7 +1,7 @@
 package com.mmontes.model.service;
 
 import com.mmontes.model.entity.TIP.TIPtype;
-import com.mmontes.util.dto.TIPtypeDetailsDto;
+import com.mmontes.util.dto.TIPtypeDto;
 import com.mmontes.util.exception.InstanceNotFoundException;
 
 import java.util.List;
@@ -9,7 +9,7 @@ import java.util.List;
 public interface TIPtypeService {
 
     List<TIPtype> findAllTypes();
-    TIPtypeDetailsDto findById(Long TIPtypeId) throws InstanceNotFoundException;
+    TIPtypeDto findById(Long TIPtypeId) throws InstanceNotFoundException;
     String findTypeName(Long TIPtypeId) throws InstanceNotFoundException;
-    TIPtypeDetailsDto create(String name,String icon) throws InstanceNotFoundException;
+    TIPtypeDto create(String name, String icon, String OSMKey, String OSMValue) throws InstanceNotFoundException;
 }

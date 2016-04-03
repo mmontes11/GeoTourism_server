@@ -2,23 +2,23 @@ package com.mmontes.rest.request;
 
 public class OSMtypeRequest {
 
-    private Long osmValueId;
+    private Long osmTypeId;
     private Long tipTypeId;
 
     public OSMtypeRequest() {
     }
 
-    public OSMtypeRequest(Long osmValudeId, Long tipTypeId) {
-        this.osmValueId = osmValudeId;
+    public OSMtypeRequest(Long osmTypeId, Long tipTypeId) {
+        this.osmTypeId = osmTypeId;
         this.tipTypeId = tipTypeId;
     }
 
-    public Long getOsmValueId() {
-        return osmValueId;
+    public Long getOsmTypeId() {
+        return osmTypeId;
     }
 
-    public void setOsmValueId(Long osmValueId) {
-        this.osmValueId = osmValueId;
+    public void setOsmTypeId(Long osmTypeId) {
+        this.osmTypeId = osmTypeId;
     }
 
     public Long getTipTypeId() {

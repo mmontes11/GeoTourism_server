@@ -9,6 +9,7 @@ import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.ConfigDto;
 import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.dto.IDnameDto;
+import com.mmontes.util.dto.OSMTypeDto;
 import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,6 +50,12 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
+    public String getBBox() {
+        Config config = configDao.getConfig();
+        return GeometryUtils.WKTFromGeometry(config.getBoundingBox());
+    }
+
+    @Override
     public void upsertConfigBBox(Geometry bbox) {
         Config config = configDao.getConfig();
         if (config == null) {
@@ -56,6 +63,12 @@ public class ConfigServiceImpl implements ConfigService {
         }
         config.setBoundingBox(bbox);
         configDao.save(config);
+    }
+
+    @Override
+    public List<OSMTypeDto> getOSMtypes() {
+        List<OSMType> osmTypes = osmTypeDao.find(true);
+        return dtoService.ListOSMType2ListOSMTypeDto(osmTypes);
     }
 
     @Override

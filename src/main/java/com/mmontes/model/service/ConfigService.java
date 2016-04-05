@@ -11,7 +11,9 @@ import java.util.List;
 
 public interface ConfigService {
     ConfigDto getConfig(boolean BBoxMin,boolean hasTIPtype);
+    String getBBox();
     void upsertConfigBBox(Geometry bbox);
+    List<OSMTypeDto> getOSMtypes();
     List<String> getOSMKeys();
     List<String> findOSMTypesByOSMKey(String OSMKey);
 }

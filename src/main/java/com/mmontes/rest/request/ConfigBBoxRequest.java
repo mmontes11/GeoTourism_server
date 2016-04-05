@@ -2,20 +2,20 @@ package com.mmontes.rest.request;
 
 public class ConfigBBoxRequest {
 
-    String bbox;
+    String geom;
 
     public ConfigBBoxRequest() {
     }
 
-    public ConfigBBoxRequest(String bbox) {
-        this.bbox = bbox;
+    public ConfigBBoxRequest(String geom) {
+        this.geom = geom;
     }
 
-    public String getBbox() {
-        return bbox;
+    public String getGeom() {
+        return geom;
     }
 
-    public void setBbox(String bbox) {
-        this.bbox = bbox;
+    public void setGeom(String geom) {
+        this.geom = geom;
     }
 }

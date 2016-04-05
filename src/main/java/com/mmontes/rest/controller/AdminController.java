@@ -9,6 +9,7 @@ import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.PrivateConstants;
 import com.mmontes.util.dto.ConfigDto;
 import com.mmontes.util.dto.IDnameDto;
+import com.mmontes.util.dto.OSMTypeDto;
 import com.mmontes.util.exception.GeometryParsingException;
 import com.vividsolutions.jts.geom.Geometry;
 import io.jsonwebtoken.Jwts;
@@ -77,20 +78,33 @@ public class AdminController {
         return new ResponseEntity<>(configService.getConfig(BBoxMin, hasTIPtype), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/admin/config/bbox", method = RequestMethod.GET)
+    public ResponseEntity
+    getConfigBBox() {
+        return new ResponseEntity<>(ResponseFactory.getCustomJSON("geom",configService.getBBox()), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/admin/config/osmtypes", method = RequestMethod.GET)
+    public ResponseEntity<List<OSMTypeDto>>
+    getConfigOSMtypes() {
+        return new ResponseEntity<>(configService.getOSMtypes(), HttpStatus.OK);
+    }
+
+
     @RequestMapping(value = "/admin/config/bbox", method = RequestMethod.POST)
     public ResponseEntity
     upsertBBox(@RequestBody ConfigBBoxRequest configBBoxRequest) {
-        Geometry bbox;
-        if (configBBoxRequest.getBbox() != null) {
+        Geometry geom;
+        if (configBBoxRequest.getGeom() != null) {
             try {
-                bbox = GeometryUtils.geometryFromWKT(configBBoxRequest.getBbox());
+                geom = GeometryUtils.geometryFromWKT(configBBoxRequest.getGeom());
             } catch (GeometryParsingException e) {
                 return new ResponseEntity(HttpStatus.BAD_REQUEST);
             }
         } else {
             return new ResponseEntity(HttpStatus.BAD_REQUEST);
         }
-        configService.upsertConfigBBox(bbox);
+        configService.upsertConfigBBox(geom);
         return new ResponseEntity(HttpStatus.OK);
     }
 

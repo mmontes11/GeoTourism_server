@@ -99,6 +99,24 @@ public class DtoService {
         return tipRouteDtos;
     }
 
+    public TIPReviewDto TIP2TIPReviewDto(TIP tip){
+        TIPReviewDto tipReviewDto = new TIPReviewDto();
+        tipReviewDto.setId(tip.getId());
+        tipReviewDto.setTypeIcon(tip.getType().getIcon());
+        tipReviewDto.setName(tip.getName());
+        tipReviewDto.setGeom(GeometryUtils.WKTFromGeometry(tip.getGeom()));
+        tipReviewDto.setCityName(tip.getCity().getName());
+        return tipReviewDto;
+    }
+
+    public List<TIPReviewDto> ListTIP2ListTIPReviewDto(List<TIP> tips){
+        List<TIPReviewDto> tipReviewDtos = new ArrayList<>();
+        for(TIP tip : tips){
+            tipReviewDtos.add(TIP2TIPReviewDto(tip));
+        }
+        return tipReviewDtos;
+    }
+
     public RouteDetailsDto Route2RouteDetailsDto(Route route, Long facebooUserId) throws InstanceNotFoundException {
         RouteDetailsDto routeDetailsDto = new RouteDetailsDto();
         routeDetailsDto.setId(route.getId());

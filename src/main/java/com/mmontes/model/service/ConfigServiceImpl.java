@@ -3,13 +3,12 @@ package com.mmontes.model.service;
 import com.mmontes.model.dao.ConfigDao;
 import com.mmontes.model.dao.OSMKeyDao;
 import com.mmontes.model.dao.OSMTypeDao;
+import com.mmontes.model.dao.TIPDao;
 import com.mmontes.model.entity.Config;
 import com.mmontes.model.entity.OSM.OSMType;
+import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.util.GeometryUtils;
-import com.mmontes.util.dto.ConfigDto;
-import com.mmontes.util.dto.DtoService;
-import com.mmontes.util.dto.IDnameDto;
-import com.mmontes.util.dto.OSMTypeDto;
+import com.mmontes.util.dto.*;
 import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -32,6 +31,9 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Autowired
     private DtoService dtoService;
+
+    @Autowired
+    private TIPDao tipDao;
 
     @Override
     public ConfigDto getConfig(boolean BBoxMin, boolean hasTIPtype) {
@@ -79,5 +81,11 @@ public class ConfigServiceImpl implements ConfigService {
     @Override
     public List<String> findOSMTypesByOSMKey(String OSMKey) {
         return osmTypeDao.findOSMTypeByOSMKey(OSMKey);
+    }
+
+    @Override
+    public List<TIPReviewDto> findUnreviewedTIPs() {
+        List<TIP> tips = tipDao.find(null,null,null,null,null,false);
+        return dtoService.ListTIP2ListTIPReviewDto(tips);
     }
 }

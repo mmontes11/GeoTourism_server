@@ -3,6 +3,7 @@ package com.mmontes.model.service;
 import com.mmontes.util.dto.ConfigDto;
 import com.mmontes.util.dto.IDnameDto;
 import com.mmontes.util.dto.OSMTypeDto;
+import com.mmontes.util.dto.TIPReviewDto;
 import com.mmontes.util.exception.DuplicateInstanceException;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import com.vividsolutions.jts.geom.Geometry;
@@ -16,4 +17,5 @@ public interface ConfigService {
     List<OSMTypeDto> getOSMtypes();
     List<String> getOSMKeys();
     List<String> findOSMTypesByOSMKey(String OSMKey);
+    List<TIPReviewDto> findUnreviewedTIPs();
 }

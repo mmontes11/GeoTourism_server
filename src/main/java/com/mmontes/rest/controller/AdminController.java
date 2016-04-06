@@ -10,6 +10,7 @@ import com.mmontes.util.PrivateConstants;
 import com.mmontes.util.dto.ConfigDto;
 import com.mmontes.util.dto.IDnameDto;
 import com.mmontes.util.dto.OSMTypeDto;
+import com.mmontes.util.dto.TIPReviewDto;
 import com.mmontes.util.exception.GeometryParsingException;
 import com.vividsolutions.jts.geom.Geometry;
 import io.jsonwebtoken.Jwts;
@@ -118,5 +119,11 @@ public class AdminController {
     public ResponseEntity<List<String>>
     getOSMTypes(@PathVariable String OSMKey) {
         return new ResponseEntity<>(configService.findOSMTypesByOSMKey(OSMKey), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/admin/config/tips", method = RequestMethod.GET)
+    public ResponseEntity<List<TIPReviewDto>>
+    getUnreviewedTIPs() {
+        return new ResponseEntity<>(configService.findUnreviewedTIPs(), HttpStatus.OK);
     }
 }

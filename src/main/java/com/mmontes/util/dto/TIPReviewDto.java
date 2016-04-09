@@ -1,12 +1,9 @@
 package com.mmontes.util.dto;
 
-/**
- * Created by Martin on 07/04/2016.
- */
 public class TIPReviewDto {
 
     private Long id;
-    private String typeIcon;
+    private String icon;
     private String name;
     private String geom;
     private String cityName;
@@ -14,9 +11,9 @@ public class TIPReviewDto {
     public TIPReviewDto() {
     }
 
-    public TIPReviewDto(Long id, String typeIcon, String name, String geom, String cityName) {
+    public TIPReviewDto(Long id, String icon, String name, String geom, String cityName) {
         this.id = id;
-        this.typeIcon = typeIcon;
+        this.icon = icon;
         this.name = name;
         this.geom = geom;
         this.cityName = cityName;
@@ -30,12 +27,12 @@ public class TIPReviewDto {
         this.id = id;
     }
 
-    public String getTypeIcon() {
-        return typeIcon;
+    public String getIcon() {
+        return icon;
     }
 
-    public void setTypeIcon(String typeIcon) {
-        this.typeIcon = typeIcon;
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
     public String getName() {

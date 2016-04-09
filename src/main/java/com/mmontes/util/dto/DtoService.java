@@ -2,7 +2,6 @@ package com.mmontes.util.dto;
 
 import com.mmontes.model.entity.City;
 import com.mmontes.model.entity.Comment;
-import com.mmontes.model.entity.OSM.OSMKey;
 import com.mmontes.model.entity.OSM.OSMType;
 import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.model.entity.TIP.TIPtype;
@@ -102,7 +101,7 @@ public class DtoService {
     public TIPReviewDto TIP2TIPReviewDto(TIP tip){
         TIPReviewDto tipReviewDto = new TIPReviewDto();
         tipReviewDto.setId(tip.getId());
-        tipReviewDto.setTypeIcon(tip.getType().getIcon());
+        tipReviewDto.setIcon(tip.getType().getIcon());
         tipReviewDto.setName(tip.getName());
         tipReviewDto.setGeom(GeometryUtils.WKTFromGeometry(tip.getGeom()));
         tipReviewDto.setCityName(tip.getCity().getName());

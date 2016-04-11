@@ -68,7 +68,6 @@ public class TIPtypeController {
         try {
             TIPtypeDto tiPtypeDetailsDto = tipTypeService.create(tipTypeRequest.getName(), tipTypeRequest.getIcon(), tipTypeRequest.getOsmKey(), tipTypeRequest.getOsmValue());
             gcmService.sendMessageTypesUpdated();
-            gcmService.sendMessageGlobal("New type of Place: " + tiPtypeDetailsDto.getName());
             return new ResponseEntity<>(tiPtypeDetailsDto, HttpStatus.CREATED);
         } catch (InstanceNotFoundException e) {
             e.printStackTrace();
@@ -85,6 +84,7 @@ public class TIPtypeController {
         }
         try {
             tipTypeService.update(TIPtypeID,tipTypeRequest.getName(),tipTypeRequest.getIcon(),tipTypeRequest.getOsmKey(),tipTypeRequest.getOsmValue());
+            gcmService.sendMessageTypesUpdated();
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (InstanceNotFoundException e) {
             e.printStackTrace();
@@ -100,6 +100,7 @@ public class TIPtypeController {
         }
         try {
             tipTypeService.delete(TIPtypeID);
+            gcmService.sendMessageTypesUpdated();
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (InstanceNotFoundException e) {
             e.printStackTrace();

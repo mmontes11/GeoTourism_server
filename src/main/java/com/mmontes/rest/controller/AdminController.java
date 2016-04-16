@@ -96,13 +96,13 @@ public class AdminController {
 
     @RequestMapping(value = "/admin/config/osmkey/{OSMKey}/osmtype/{OSMType}", method = RequestMethod.GET)
     public ResponseEntity
-    checkOSMtypeByKeyValue(@PathVariable String OSMKey,@PathVariable String OSMType,@RequestParam(value = "unMapped",required = false)Boolean unMappedRequest) {
-        boolean unMapped = unMappedRequest != null? unMappedRequest : false;
+    checkOSMtypeByKeyValue(@PathVariable String OSMKey,@PathVariable String OSMType,@RequestParam(value = "hasTIPtype",required = false)Boolean hasTIPtypeRequest) {
+        boolean hasTIPtype = hasTIPtypeRequest != null? hasTIPtypeRequest : false;
         if (OSMKey == null || OSMKey.isEmpty() || OSMType == null || OSMType.isEmpty()){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         try {
-            configService.getOSMtypeByKeyValue(OSMKey, OSMType, unMapped);
+            configService.getOSMtypeByKeyValue(OSMKey, OSMType, hasTIPtype);
             return new ResponseEntity(HttpStatus.OK);
         } catch (InstanceNotFoundException e) {
             e.printStackTrace();

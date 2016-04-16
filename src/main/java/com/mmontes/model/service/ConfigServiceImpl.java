@@ -71,7 +71,7 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Override
     public List<OSMTypeDto> getOSMtypes() {
-        List<OSMType> osmTypes = osmTypeDao.find(true);
+        List<OSMType> osmTypes = osmTypeDao.find(false);
         return dtoService.ListOSMType2ListOSMTypeDto(osmTypes);
     }
 
@@ -92,9 +92,9 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
-    public OSMType getOSMtypeByKeyValue(String OSMKey, String OSMValue, boolean unMapped) throws InstanceNotFoundException, DuplicateInstanceException {
+    public OSMType getOSMtypeByKeyValue(String OSMKey, String OSMValue, boolean hasTIPtype) throws InstanceNotFoundException, DuplicateInstanceException {
         OSMType osmType = osmTypeDao.findByKeyValue(OSMKey,OSMValue);
-        if (unMapped && osmType.getTipType() != null){
+        if (hasTIPtype && osmType.getTipType() != null){
             throw new DuplicateInstanceException(OSMType.class.getName(),OSMValue);
         }
         return osmType;

@@ -1,5 +1,6 @@
 package com.mmontes.model.service;
 
+import com.mmontes.model.entity.OSM.OSMType;
 import com.mmontes.util.dto.ConfigDto;
 import com.mmontes.util.dto.IDnameDto;
 import com.mmontes.util.dto.OSMTypeDto;
@@ -18,4 +19,5 @@ public interface ConfigService {
     List<String> getOSMKeys();
     List<String> findOSMTypesByOSMKey(String OSMKey);
     List<TIPReviewDto> findUnreviewedTIPs();
+    OSMType getOSMtypeByKeyValue(String OSMKey, String OSMValue, boolean unMapped) throws InstanceNotFoundException, DuplicateInstanceException;
 }

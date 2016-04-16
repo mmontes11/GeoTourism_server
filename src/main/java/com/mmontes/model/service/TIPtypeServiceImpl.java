@@ -7,6 +7,7 @@ import com.mmontes.model.entity.OSM.OSMType;
 import com.mmontes.model.entity.TIP.TIPtype;
 import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.dto.TIPtypeDto;
+import com.mmontes.util.exception.DuplicateInstanceException;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,9 @@ public class TIPtypeServiceImpl implements TIPtypeService {
     @Autowired
     private DtoService dtoService;
 
+    @Autowired
+    private ConfigService configService;
+
     @Override
     public List<TIPtype> findAllTypes() {
         return tipTypeDao.findAll();
@@ -45,10 +49,10 @@ public class TIPtypeServiceImpl implements TIPtypeService {
     }
 
     @Override
-    public TIPtypeDto create(String name, String icon, String OSMKey, String OSMValue) throws InstanceNotFoundException {
+    public TIPtypeDto create(String name, String icon, String OSMKey, String OSMValue) throws InstanceNotFoundException, DuplicateInstanceException {
         OSMType osmType = null;
         if (OSMKey != null && !OSMKey.isEmpty() && OSMValue != null && !OSMValue.isEmpty()){
-            osmType = osmTypeDao.findByKeyValue(OSMKey,OSMValue);
+            osmType = configService.getOSMtypeByKeyValue(OSMKey,OSMValue,true);
         }
         TIPtype tipType = new TIPtype();
         tipType.setName(name);

@@ -6,8 +6,8 @@ import com.mmontes.rest.request.TIPtypeRequest;
 import com.mmontes.rest.response.ResponseFactory;
 import com.mmontes.service.GCMService;
 import com.mmontes.util.dto.DtoService;
-import com.mmontes.util.dto.IDnameDto;
 import com.mmontes.util.dto.TIPtypeDto;
+import com.mmontes.util.exception.DuplicateInstanceException;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,7 +27,6 @@ public class TIPtypeController {
 
     @Autowired
     private GCMService gcmService;
-
 
     @RequestMapping(value = "/tip/types", method = RequestMethod.GET)
     public ResponseEntity<List<TIPtypeDto>>
@@ -72,18 +71,21 @@ public class TIPtypeController {
         } catch (InstanceNotFoundException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (DuplicateInstanceException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
 
     @RequestMapping(value = "/admin/tip/type/{TIPtypeID}", method = RequestMethod.PUT)
     public ResponseEntity<TIPtypeDto>
     update(@PathVariable Long TIPtypeID, @RequestBody TIPtypeRequest tipTypeRequest) {
-        if (TIPtypeID == null ||tipTypeRequest.getName() == null || tipTypeRequest.getName().isEmpty() ||
+        if (TIPtypeID == null || tipTypeRequest.getName() == null || tipTypeRequest.getName().isEmpty() ||
                 tipTypeRequest.getIcon() == null || tipTypeRequest.getIcon().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         try {
-            tipTypeService.update(TIPtypeID,tipTypeRequest.getName(),tipTypeRequest.getIcon(),tipTypeRequest.getOsmKey(),tipTypeRequest.getOsmValue());
+            tipTypeService.update(TIPtypeID, tipTypeRequest.getName(), tipTypeRequest.getIcon(), tipTypeRequest.getOsmKey(), tipTypeRequest.getOsmValue());
             gcmService.sendMessageTypesUpdated();
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (InstanceNotFoundException e) {
@@ -95,7 +97,7 @@ public class TIPtypeController {
     @RequestMapping(value = "/admin/tip/type/{TIPtypeID}", method = RequestMethod.DELETE)
     public ResponseEntity
     delete(@PathVariable Long TIPtypeID) {
-        if (TIPtypeID == null){
+        if (TIPtypeID == null) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
         try {

@@ -52,7 +52,7 @@ CREATE INDEX Route_Geometry_Gix ON Route USING GIST (geom);
 CREATE TABLE TIPtype(
   id SERIAL,
   name VARCHAR(20),
-  icon VARCHAR(20),
+  icon VARCHAR(40),
   CONSTRAINT TIPtype_PK PRIMARY KEY(id)
 );
 
@@ -157,12 +157,12 @@ CREATE TABLE OSMType(
   CONSTRAINT OSMType_Unique_Value UNIQUE(value)
 );
 
-INSERT INTO TIPtype VALUES(1,'Monument','fa-university');
-INSERT INTO TIPtype VALUES(2,'Natural Space','fa-leaf');
-INSERT INTO TIPtype VALUES(3,'Hotel','fa-bed');
-INSERT INTO TIPtype VALUES(4,'Restaurant','fa-cutlery');
-INSERT INTO TIPtype VALUES(5,'Bar','fa-beer');
-INSERT INTO TIPtype VALUES(6,'Pub','fa-glass');
+INSERT INTO TIPtype VALUES(1,'Monument','fa fa-university');
+INSERT INTO TIPtype VALUES(2,'Natural Space','fa fa-leaf');
+INSERT INTO TIPtype VALUES(3,'Hotel','fa fa-bed');
+INSERT INTO TIPtype VALUES(4,'Restaurant','fa fa-cutlery');
+INSERT INTO TIPtype VALUES(5,'Bar','fa fa-beer');
+INSERT INTO TIPtype VALUES(6,'Pub','fa fa-glass');
 
 INSERT INTO OSMKey VALUES(1,'historic');
 INSERT INTO OSMKey VALUES(2,'tourism');

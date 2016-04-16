@@ -9,6 +9,8 @@ import com.mmontes.model.entity.OSM.OSMType;
 import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.*;
+import com.mmontes.util.exception.DuplicateInstanceException;
+import com.mmontes.util.exception.InstanceNotFoundException;
 import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -87,5 +89,14 @@ public class ConfigServiceImpl implements ConfigService {
     public List<TIPReviewDto> findUnreviewedTIPs() {
         List<TIP> tips = tipDao.find(null,null,null,null,null,false);
         return dtoService.ListTIP2ListTIPReviewDto(tips);
+    }
+
+    @Override
+    public OSMType getOSMtypeByKeyValue(String OSMKey, String OSMValue, boolean unMapped) throws InstanceNotFoundException, DuplicateInstanceException {
+        OSMType osmType = osmTypeDao.findByKeyValue(OSMKey,OSMValue);
+        if (unMapped && osmType.getTipType() != null){
+            throw new DuplicateInstanceException(OSMType.class.getName(),OSMValue);
+        }
+        return osmType;
     }
 }

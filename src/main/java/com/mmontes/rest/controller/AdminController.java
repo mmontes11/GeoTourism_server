@@ -1,5 +1,6 @@
 package com.mmontes.rest.controller;
 
+import com.mmontes.model.entity.OSM.OSMType;
 import com.mmontes.model.service.AdminService;
 import com.mmontes.model.service.ConfigService;
 import com.mmontes.rest.request.AdminLoginRequest;
@@ -7,11 +8,10 @@ import com.mmontes.rest.request.ConfigBBoxRequest;
 import com.mmontes.rest.response.ResponseFactory;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.PrivateConstants;
-import com.mmontes.util.dto.ConfigDto;
-import com.mmontes.util.dto.IDnameDto;
-import com.mmontes.util.dto.OSMTypeDto;
-import com.mmontes.util.dto.TIPReviewDto;
+import com.mmontes.util.dto.*;
+import com.mmontes.util.exception.DuplicateInstanceException;
 import com.mmontes.util.exception.GeometryParsingException;
+import com.mmontes.util.exception.InstanceNotFoundException;
 import com.vividsolutions.jts.geom.Geometry;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -33,6 +33,9 @@ public class AdminController {
 
     @Autowired
     private ConfigService configService;
+    
+    @Autowired
+    private DtoService dtoService;
 
     @RequestMapping(value = "/logIn", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity
@@ -91,6 +94,24 @@ public class AdminController {
         return new ResponseEntity<>(configService.getOSMtypes(), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/admin/config/osmkey/{OSMKey}/osmtype/{OSMType}", method = RequestMethod.GET)
+    public ResponseEntity
+    checkOSMtypeByKeyValue(@PathVariable String OSMKey,@PathVariable String OSMType,@RequestParam(value = "unMapped",required = false)Boolean unMappedRequest) {
+        boolean unMapped = unMappedRequest != null? unMappedRequest : false;
+        if (OSMKey == null || OSMKey.isEmpty() || OSMType == null || OSMType.isEmpty()){
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        try {
+            configService.getOSMtypeByKeyValue(OSMKey, OSMType, unMapped);
+            return new ResponseEntity(HttpStatus.OK);
+        } catch (InstanceNotFoundException e) {
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        } catch (DuplicateInstanceException e) {
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.CONFLICT);
+        }
+    }
 
     @RequestMapping(value = "/admin/config/bbox", method = RequestMethod.POST)
     public ResponseEntity

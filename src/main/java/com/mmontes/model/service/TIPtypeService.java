@@ -12,7 +12,7 @@ public interface TIPtypeService {
     List<TIPtype> findAllTypes();
     TIPtypeDto findById(Long TIPtypeId) throws InstanceNotFoundException;
     String findTypeName(Long TIPtypeId) throws InstanceNotFoundException;
-    TIPtypeDto create(String name, String icon, String OSMKey, String OSMValue) throws InstanceNotFoundException, DuplicateInstanceException;
-    TIPtypeDto update(Long TIPtypeID,String name, String icon, String OSMKey, String OSMValue) throws InstanceNotFoundException;
+    TIPtypeDto create(String name, String icon, String OSMType) throws InstanceNotFoundException, DuplicateInstanceException;
+    TIPtypeDto update(Long TIPtypeID,String name, String icon, String OSMtype) throws InstanceNotFoundException;
     void delete(Long TIPtypeID) throws InstanceNotFoundException;
 }

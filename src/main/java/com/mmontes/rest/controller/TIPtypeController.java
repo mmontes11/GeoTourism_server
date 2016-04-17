@@ -65,9 +65,9 @@ public class TIPtypeController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         try {
-            TIPtypeDto tiPtypeDetailsDto = tipTypeService.create(tipTypeRequest.getName(), tipTypeRequest.getIcon(), tipTypeRequest.getOsmKey(), tipTypeRequest.getOsmValue());
+            TIPtypeDto tipTypeDetailsDto = tipTypeService.create(tipTypeRequest.getName(), tipTypeRequest.getIcon(), tipTypeRequest.getOsmType());
             gcmService.sendMessageTypesUpdated();
-            return new ResponseEntity<>(tiPtypeDetailsDto, HttpStatus.CREATED);
+            return new ResponseEntity<>(tipTypeDetailsDto, HttpStatus.CREATED);
         } catch (InstanceNotFoundException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -85,7 +85,7 @@ public class TIPtypeController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         try {
-            tipTypeService.update(TIPtypeID, tipTypeRequest.getName(), tipTypeRequest.getIcon(), tipTypeRequest.getOsmKey(), tipTypeRequest.getOsmValue());
+            tipTypeService.update(TIPtypeID, tipTypeRequest.getName(), tipTypeRequest.getIcon(), tipTypeRequest.getOsmType());
             gcmService.sendMessageTypesUpdated();
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (InstanceNotFoundException e) {

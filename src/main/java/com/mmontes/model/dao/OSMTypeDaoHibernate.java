@@ -31,13 +31,12 @@ public class OSMTypeDaoHibernate extends GenericDaoHibernate<OSMType, Long> impl
     }
 
     @Override
-    public OSMType findByKeyValue(String OSMKey,String OSMValue) throws InstanceNotFoundException {
-        String queryString = "SELECT o FROM OSMType o WHERE o.osmKey.key = :OSMKey AND o.value = :OSMValue";
+    public OSMType findByValue(String OSMValue) throws InstanceNotFoundException {
+        String queryString = "SELECT o FROM OSMType o WHERE o.value = :OSMValue";
         OSMType osmType=
                 (OSMType)
                 getSession()
                         .createQuery(queryString)
-                        .setParameter("OSMKey", OSMKey)
                         .setParameter("OSMValue", OSMValue)
                         .uniqueResult();
         if (osmType == null){

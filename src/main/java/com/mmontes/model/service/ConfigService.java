@@ -15,9 +15,9 @@ public interface ConfigService {
     ConfigDto getConfig(boolean BBoxMin,boolean hasTIPtype);
     String getBBox();
     void upsertConfigBBox(Geometry bbox);
-    List<OSMTypeDto> getOSMtypes();
+    List<OSMTypeDto> getOSMtypes(boolean hasTIPtype);
     List<String> getOSMKeys();
     List<String> findOSMTypesByOSMKey(String OSMKey);
     List<TIPReviewDto> findUnreviewedTIPs();
-    OSMType getOSMtypeByKeyValue(String OSMKey, String OSMValue, boolean unMapped) throws InstanceNotFoundException, DuplicateInstanceException;
+    OSMType getOSMtypeByValue(String OSMValue, boolean hasTIPtype) throws InstanceNotFoundException, DuplicateInstanceException;
 }

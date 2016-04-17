@@ -33,9 +33,6 @@ public class AdminController {
 
     @Autowired
     private ConfigService configService;
-    
-    @Autowired
-    private DtoService dtoService;
 
     @RequestMapping(value = "/logIn", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity
@@ -90,19 +87,20 @@ public class AdminController {
 
     @RequestMapping(value = "/admin/config/osmtypes", method = RequestMethod.GET)
     public ResponseEntity<List<OSMTypeDto>>
-    getConfigOSMtypes() {
-        return new ResponseEntity<>(configService.getOSMtypes(), HttpStatus.OK);
+    getConfigOSMtypes(@RequestParam(value = "hasTIPtype",required = false)Boolean hasTIPtypeRequest) {
+        boolean hasTIPtype = hasTIPtypeRequest != null? hasTIPtypeRequest : false;
+        return new ResponseEntity<>(configService.getOSMtypes(hasTIPtype), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/admin/config/osmkey/{OSMKey}/osmtype/{OSMType}", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/config/osmtype/{OSMType}", method = RequestMethod.GET)
     public ResponseEntity
-    checkOSMtypeByKeyValue(@PathVariable String OSMKey,@PathVariable String OSMType,@RequestParam(value = "hasTIPtype",required = false)Boolean hasTIPtypeRequest) {
+    checkOSMtypeByKeyValue(@PathVariable String OSMType,@RequestParam(value = "hasTIPtype",required = false)Boolean hasTIPtypeRequest) {
         boolean hasTIPtype = hasTIPtypeRequest != null? hasTIPtypeRequest : false;
-        if (OSMKey == null || OSMKey.isEmpty() || OSMType == null || OSMType.isEmpty()){
+        if (OSMType == null || OSMType.isEmpty()){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         try {
-            configService.getOSMtypeByKeyValue(OSMKey, OSMType, hasTIPtype);
+            configService.getOSMtypeByValue(OSMType, hasTIPtype);
             return new ResponseEntity(HttpStatus.OK);
         } catch (InstanceNotFoundException e) {
             e.printStackTrace();

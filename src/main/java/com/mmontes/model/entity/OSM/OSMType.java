@@ -26,7 +26,7 @@ public class OSMType {
 
     @Column(name = "id")
     @Id
-    @SequenceGenerator(name = OSM_VALUE_ID_GENERATOR, sequenceName = "osmvalue_id_seq")
+    @SequenceGenerator(name = OSM_VALUE_ID_GENERATOR, sequenceName = "osmtype_id_seq")
     @GeneratedValue(strategy = GenerationType.AUTO, generator = OSM_VALUE_ID_GENERATOR)
     public Long getId() {
         return id;

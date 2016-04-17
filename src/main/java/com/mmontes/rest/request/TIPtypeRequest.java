@@ -4,17 +4,15 @@ public class TIPtypeRequest {
 
     private String name;
     private String icon;
-    private String osmKey;
-    private String osmValue;
+    private String osmType;
 
     public TIPtypeRequest() {
     }
 
-    public TIPtypeRequest(String name, String icon, String osmKey, String osmValue) {
+    public TIPtypeRequest(String name, String icon, String osmType) {
         this.name = name;
         this.icon = icon;
-        this.osmKey = osmKey;
-        this.osmValue = osmValue;
+        this.osmType = osmType;
     }
 
     public String getName() {
@@ -33,19 +31,11 @@ public class TIPtypeRequest {
         this.icon = icon;
     }
 
-    public String getOsmKey() {
-        return osmKey;
+    public String getOsmType() {
+        return osmType;
     }
 
-    public void setOsmKey(String osmKey) {
-        this.osmKey = osmKey;
-    }
-
-    public String getOsmValue() {
-        return osmValue;
-    }
-
-    public void setOsmValue(String osmValue) {
-        this.osmValue = osmValue;
+    public void setOsmType(String osmType) {
+        this.osmType = osmType;
     }
 }

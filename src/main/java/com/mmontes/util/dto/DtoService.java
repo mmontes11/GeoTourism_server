@@ -227,7 +227,9 @@ public class DtoService {
     public OSMTypeDto OSMType2OSMTypeDto(OSMType osmType) {
         OSMTypeDto osmTypeDto = new OSMTypeDto();
         osmTypeDto.setId(osmType.getId());
-        osmTypeDto.setKey(osmType.getOsmKey().getKey());
+        if (osmType.getOsmKey() != null){
+            osmTypeDto.setKey(osmType.getOsmKey().getKey());
+        }
         osmTypeDto.setValue(osmType.getValue());
         if (osmType.getTipType() != null){
             osmTypeDto.setTipType(TIPtype2TIPtypeDto(osmType.getTipType()));

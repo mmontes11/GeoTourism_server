@@ -7,6 +7,7 @@ import com.mmontes.rest.response.ResponseFactory;
 import com.mmontes.service.GCMService;
 import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.dto.TIPtypeDto;
+import com.mmontes.util.dto.TIPtypeOSMDto;
 import com.mmontes.util.exception.DuplicateInstanceException;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;

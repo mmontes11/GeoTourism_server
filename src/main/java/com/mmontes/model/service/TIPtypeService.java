@@ -1,7 +1,9 @@
 package com.mmontes.model.service;
 
 import com.mmontes.model.entity.TIP.TIPtype;
+import com.mmontes.util.dto.OSMTypeDto;
 import com.mmontes.util.dto.TIPtypeDto;
+import com.mmontes.util.dto.TIPtypeOSMDto;
 import com.mmontes.util.exception.DuplicateInstanceException;
 import com.mmontes.util.exception.InstanceNotFoundException;
 

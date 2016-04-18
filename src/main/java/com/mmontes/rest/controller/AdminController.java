@@ -1,6 +1,5 @@
 package com.mmontes.rest.controller;
 
-import com.mmontes.model.entity.OSM.OSMType;
 import com.mmontes.model.service.AdminService;
 import com.mmontes.model.service.ConfigService;
 import com.mmontes.rest.request.AdminLoginRequest;
@@ -8,7 +7,9 @@ import com.mmontes.rest.request.ConfigBBoxRequest;
 import com.mmontes.rest.response.ResponseFactory;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.PrivateConstants;
-import com.mmontes.util.dto.*;
+import com.mmontes.util.dto.ConfigDto;
+import com.mmontes.util.dto.OSMTypeDto;
+import com.mmontes.util.dto.TIPReviewDto;
 import com.mmontes.util.exception.DuplicateInstanceException;
 import com.mmontes.util.exception.GeometryParsingException;
 import com.mmontes.util.exception.InstanceNotFoundException;
@@ -82,21 +83,21 @@ public class AdminController {
     @RequestMapping(value = "/admin/config/bbox", method = RequestMethod.GET)
     public ResponseEntity
     getConfigBBox() {
-        return new ResponseEntity<>(ResponseFactory.getCustomJSON("geom",configService.getBBox()), HttpStatus.OK);
+        return new ResponseEntity<>(ResponseFactory.getCustomJSON("geom", configService.getBBox()), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/admin/config/osmtypes", method = RequestMethod.GET)
     public ResponseEntity<List<OSMTypeDto>>
-    getConfigOSMtypes(@RequestParam(value = "hasTIPtype",required = false)Boolean hasTIPtypeRequest) {
-        boolean hasTIPtype = hasTIPtypeRequest != null? hasTIPtypeRequest : false;
+    getConfigOSMtypes(@RequestParam(value = "hasTIPtype", required = false) Boolean hasTIPtypeRequest) {
+        boolean hasTIPtype = hasTIPtypeRequest != null ? hasTIPtypeRequest : false;
         return new ResponseEntity<>(configService.getOSMtypes(hasTIPtype), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/admin/config/osmtype/{OSMType}", method = RequestMethod.GET)
     public ResponseEntity
-    checkOSMtypeByKeyValue(@PathVariable String OSMType,@RequestParam(value = "hasTIPtype",required = false)Boolean hasTIPtypeRequest) {
-        boolean hasTIPtype = hasTIPtypeRequest != null? hasTIPtypeRequest : false;
-        if (OSMType == null || OSMType.isEmpty()){
+    checkOSMtypeByKeyValue(@PathVariable String OSMType, @RequestParam(value = "hasTIPtype", required = false) Boolean hasTIPtypeRequest) {
+        boolean hasTIPtype = hasTIPtypeRequest != null ? hasTIPtypeRequest : false;
+        if (OSMType == null || OSMType.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         try {
@@ -144,5 +145,15 @@ public class AdminController {
     public ResponseEntity<List<TIPReviewDto>>
     getUnreviewedTIPs() {
         return new ResponseEntity<>(configService.findUnreviewedTIPs(), HttpStatus.OK);
+    }
+
+    @RequestMapping(value = "/admin/config/tip/type/{TIPtypeId}/osmtypes", method = RequestMethod.GET)
+    public ResponseEntity<List<OSMTypeDto>>
+    getTIPtypeOSMtypes(@PathVariable Long TIPtypeId){
+        try {
+            return new ResponseEntity<>(configService.getOSMtypes(TIPtypeId),HttpStatus.OK);
+        } catch (InstanceNotFoundException e) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }

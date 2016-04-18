@@ -1,12 +1,10 @@
 package com.mmontes.model.service;
 
-import com.mmontes.model.dao.ConfigDao;
-import com.mmontes.model.dao.OSMKeyDao;
-import com.mmontes.model.dao.OSMTypeDao;
-import com.mmontes.model.dao.TIPDao;
+import com.mmontes.model.dao.*;
 import com.mmontes.model.entity.Config;
 import com.mmontes.model.entity.OSM.OSMType;
 import com.mmontes.model.entity.TIP.TIP;
+import com.mmontes.model.entity.TIP.TIPtype;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.dto.*;
 import com.mmontes.util.exception.DuplicateInstanceException;
@@ -16,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service("ConfigService")
@@ -30,6 +29,9 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Autowired
     private OSMTypeDao osmTypeDao;
+
+    @Autowired
+    private TIPtypeDao tipTypeDao;
 
     @Autowired
     private DtoService dtoService;
@@ -98,5 +100,11 @@ public class ConfigServiceImpl implements ConfigService {
             throw new DuplicateInstanceException(OSMType.class.getName(),OSMValue);
         }
         return osmType;
+    }
+
+    @Override
+    public List<OSMTypeDto> getOSMtypes(Long TIPtypeID) throws InstanceNotFoundException {
+        TIPtype tipType = tipTypeDao.findById(TIPtypeID);
+        return dtoService.ListOSMType2ListOSMTypeDto(new ArrayList<>(tipType.getOsmTypes()));
     }
 }

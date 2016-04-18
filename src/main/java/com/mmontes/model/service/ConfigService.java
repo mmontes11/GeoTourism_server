@@ -20,4 +20,5 @@ public interface ConfigService {
     List<String> findOSMTypesByOSMKey(String OSMKey);
     List<TIPReviewDto> findUnreviewedTIPs();
     OSMType getOSMtypeByValue(String OSMValue, boolean hasTIPtype) throws InstanceNotFoundException, DuplicateInstanceException;
+    List<OSMTypeDto> getOSMtypes(Long TIPtypeID) throws InstanceNotFoundException;
 }

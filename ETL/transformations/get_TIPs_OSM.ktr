@@ -366,7 +366,7 @@
       <mongo_field>
         <field_name>tip_type_id</field_name>
 
-        <field_path>&#x24;.osmTypes&#x5b;&#x2a;&#x5d;.tipType.id</field_path>
+        <field_path>&#x24;.osmTypes&#x5b;&#x2a;&#x5d;.tipTypeID</field_path>
 
         <field_type>Integer</field_type>
 

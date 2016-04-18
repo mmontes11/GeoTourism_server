@@ -14,6 +14,7 @@ public class TIPtype {
     private Long id;
     private String name;
     private String icon;
+    private Set<OSMType> osmTypes = new HashSet<>();
 
     public TIPtype() {
     }
@@ -46,5 +47,14 @@ public class TIPtype {
 
     public void setIcon(String icon) {
         this.icon = icon;
+    }
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "tipType")
+    public Set<OSMType> getOsmTypes() {
+        return osmTypes;
+    }
+
+    public void setOsmTypes(Set<OSMType> osmTypes) {
+        this.osmTypes = osmTypes;
     }
 }

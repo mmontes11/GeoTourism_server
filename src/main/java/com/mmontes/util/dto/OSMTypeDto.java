@@ -5,16 +5,9 @@ public class OSMTypeDto {
     private Long id;
     private String key;
     private String value;
-    private TIPtypeDto tipType;
+    private Long tipTypeID;
 
     public OSMTypeDto() {
-    }
-
-    public OSMTypeDto(Long id, String key, String value, TIPtypeDto tipType) {
-        this.id = id;
-        this.key = key;
-        this.value = value;
-        this.tipType = tipType;
     }
 
     public Long getId() {
@@ -41,11 +34,11 @@ public class OSMTypeDto {
         this.value = value;
     }
 
-    public TIPtypeDto getTipType() {
-        return tipType;
+    public Long getTipTypeID() {
+        return tipTypeID;
     }
 
-    public void setTipType(TIPtypeDto tipType) {
-        this.tipType = tipType;
+    public void setTipTypeID(Long tipTypeID) {
+        this.tipTypeID = tipTypeID;
     }
 }

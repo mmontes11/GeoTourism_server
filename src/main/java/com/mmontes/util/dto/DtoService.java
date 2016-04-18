@@ -232,7 +232,7 @@ public class DtoService {
         }
         osmTypeDto.setValue(osmType.getValue());
         if (osmType.getTipType() != null){
-            osmTypeDto.setTipType(TIPtype2TIPtypeDto(osmType.getTipType()));
+            osmTypeDto.setTipTypeID(osmType.getTipType().getId());
         }
         return osmTypeDto;
     }

@@ -43,7 +43,8 @@ public class DtoService {
         String geom = GeometryUtils.WKTFromGeometry(tip.getGeom());
 
         tipDetailsDto.setId(tip.getId());
-        tipDetailsDto.setType(tip.getType().getId());
+        Long tipTypeId = tip.getType()!=null? tip.getType().getId() : null;
+        tipDetailsDto.setType(tipTypeId);
         tipDetailsDto.setName(tip.getName());
         tipDetailsDto.setDescription(tip.getDescription());
         tipDetailsDto.setGeom(geom);
@@ -68,7 +69,7 @@ public class DtoService {
     public FeatureSearchDto TIP2FeatureSearchDto(TIP tip) {
         Long id = tip.getId();
         String geom = GeometryUtils.WKTFromGeometry(tip.getGeom());
-        String icon = tip.getType().getIcon();
+        String icon = tip.getType() != null? tip.getType().getIcon() : null;
         return new FeatureSearchDto(id, geom, icon);
     }
 

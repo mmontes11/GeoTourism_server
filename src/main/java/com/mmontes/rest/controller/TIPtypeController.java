@@ -98,9 +98,6 @@ public class TIPtypeController {
     @RequestMapping(value = "/admin/tip/type/{TIPtypeID}", method = RequestMethod.DELETE)
     public ResponseEntity
     delete(@PathVariable Long TIPtypeID) {
-        if (TIPtypeID == null) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
         try {
             tipTypeService.delete(TIPtypeID);
             gcmService.sendMessageTypesUpdated();

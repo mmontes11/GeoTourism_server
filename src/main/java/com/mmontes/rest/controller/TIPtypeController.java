@@ -1,13 +1,15 @@
 package com.mmontes.rest.controller;
 
+import com.mmontes.model.entity.OSM.OSMType;
 import com.mmontes.model.entity.TIP.TIPtype;
+import com.mmontes.model.service.ConfigService;
 import com.mmontes.model.service.TIPtypeService;
 import com.mmontes.rest.request.TIPtypeRequest;
 import com.mmontes.rest.response.ResponseFactory;
 import com.mmontes.service.GCMService;
+import com.mmontes.util.KeyValue;
 import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.dto.TIPtypeDto;
-import com.mmontes.util.dto.TIPtypeOSMDto;
 import com.mmontes.util.exception.DuplicateInstanceException;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -24,10 +27,22 @@ public class TIPtypeController {
     private TIPtypeService tipTypeService;
 
     @Autowired
+    private ConfigService configService;
+
+    @Autowired
     private DtoService dtoService;
 
     @Autowired
     private GCMService gcmService;
+
+    private List<OSMType> ListKeyValue2ListOSMType(List<KeyValue> keyValueList) throws DuplicateInstanceException, InstanceNotFoundException {
+        List<OSMType> osmTypes = new ArrayList<>();
+        for (KeyValue keyValue : keyValueList) {
+            OSMType osmType = configService.getOSMTypeByKeyValue(keyValue.getKey(), keyValue.getValue(), false);
+            osmTypes.add(osmType);
+        }
+        return osmTypes;
+    }
 
     @RequestMapping(value = "/tip/types", method = RequestMethod.GET)
     public ResponseEntity<List<TIPtypeDto>>
@@ -61,12 +76,12 @@ public class TIPtypeController {
     @RequestMapping(value = "/admin/tip/type", method = RequestMethod.POST)
     public ResponseEntity<TIPtypeDto>
     create(@RequestBody TIPtypeRequest tipTypeRequest) {
-        if (tipTypeRequest.getName() == null || tipTypeRequest.getName().isEmpty() ||
-                tipTypeRequest.getIcon() == null || tipTypeRequest.getIcon().isEmpty()) {
+        if (tipTypeRequest.getName() == null || tipTypeRequest.getName().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         try {
-            TIPtypeDto tipTypeDetailsDto = tipTypeService.create(tipTypeRequest.getName(), tipTypeRequest.getIcon(), tipTypeRequest.getOsmType());
+            List<OSMType> osmTypes = ListKeyValue2ListOSMType(tipTypeRequest.getOsmTypes());
+            TIPtypeDto tipTypeDetailsDto = tipTypeService.create(tipTypeRequest.getName(), tipTypeRequest.getIcon(), osmTypes);
             gcmService.sendMessageTypesUpdated();
             return new ResponseEntity<>(tipTypeDetailsDto, HttpStatus.CREATED);
         } catch (InstanceNotFoundException e) {
@@ -81,17 +96,20 @@ public class TIPtypeController {
     @RequestMapping(value = "/admin/tip/type/{TIPtypeID}", method = RequestMethod.PUT)
     public ResponseEntity<TIPtypeDto>
     update(@PathVariable Long TIPtypeID, @RequestBody TIPtypeRequest tipTypeRequest) {
-        if (TIPtypeID == null || tipTypeRequest.getName() == null || tipTypeRequest.getName().isEmpty() ||
-                tipTypeRequest.getIcon() == null || tipTypeRequest.getIcon().isEmpty()) {
+        if (TIPtypeID == null || tipTypeRequest.getName() == null || tipTypeRequest.getName().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         try {
-            tipTypeService.update(TIPtypeID, tipTypeRequest.getName(), tipTypeRequest.getIcon(), tipTypeRequest.getOsmType());
+            List<OSMType> osmTypes = ListKeyValue2ListOSMType(tipTypeRequest.getOsmTypes());
+            tipTypeService.update(TIPtypeID, tipTypeRequest.getName(), tipTypeRequest.getIcon(), osmTypes);
             gcmService.sendMessageTypesUpdated();
             return new ResponseEntity<>(HttpStatus.OK);
         } catch (InstanceNotFoundException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        } catch (DuplicateInstanceException e) {
+            e.printStackTrace();
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
 

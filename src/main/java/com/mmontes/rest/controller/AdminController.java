@@ -101,7 +101,7 @@ public class AdminController {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
         try {
-            configService.getOSMtypeByValue(OSMType, hasTIPtype);
+            configService.getOSMTypeByKeyValue(null,OSMType, hasTIPtype);
             return new ResponseEntity(HttpStatus.OK);
         } catch (InstanceNotFoundException e) {
             e.printStackTrace();

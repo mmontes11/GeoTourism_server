@@ -356,6 +356,6 @@ public class TIPServiceTest {
 
     @Test
     public void getAllTIPtypes() {
-        assertEquals(4, tipTypeService.findAllTypes().size());
+        assertTrue(tipTypeService.findAllTypes().size() > 0);
     }
 }

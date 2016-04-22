@@ -1,18 +1,21 @@
 package com.mmontes.rest.request;
 
-public class TIPtypeRequest {
+import com.mmontes.util.KeyValue;
 
+import java.util.List;
+
+public class TIPtypeRequest {
     private String name;
     private String icon;
-    private String osmType;
+    private List<KeyValue> osmTypes;
 
     public TIPtypeRequest() {
     }
 
-    public TIPtypeRequest(String name, String icon, String osmType) {
+    public TIPtypeRequest(String name, String icon, List<KeyValue> osmTypes) {
         this.name = name;
         this.icon = icon;
-        this.osmType = osmType;
+        this.osmTypes = osmTypes;
     }
 
     public String getName() {
@@ -31,11 +34,11 @@ public class TIPtypeRequest {
         this.icon = icon;
     }
 
-    public String getOsmType() {
-        return osmType;
+    public List<KeyValue> getOsmTypes() {
+        return osmTypes;
     }
 
-    public void setOsmType(String osmType) {
-        this.osmType = osmType;
+    public void setOsmTypes(List<KeyValue> osmTypes) {
+        this.osmTypes = osmTypes;
     }
 }

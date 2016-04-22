@@ -72,9 +72,21 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
+    public List<TIPReviewDto> findUnreviewedTIPs() {
+        List<TIP> tips = tipDao.find(null,null,null,null,null,false);
+        return dtoService.ListTIP2ListTIPReviewDto(tips);
+    }
+
+    @Override
     public List<OSMTypeDto> getOSMtypes(boolean hasTIPtype) {
         List<OSMType> osmTypes = osmTypeDao.find(hasTIPtype);
         return dtoService.ListOSMType2ListOSMTypeDto(osmTypes);
+    }
+
+    @Override
+    public List<OSMTypeDto> getOSMtypes(Long TIPtypeID) throws InstanceNotFoundException {
+        TIPtype tipType = tipTypeDao.findById(TIPtypeID);
+        return dtoService.ListOSMType2ListOSMTypeDto(new ArrayList<>(tipType.getOsmTypes()));
     }
 
     @Override
@@ -84,27 +96,15 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Override
     public List<String> findOSMTypesByOSMKey(String OSMKey) {
-        return osmTypeDao.findOSMTypeByOSMKey(OSMKey);
+        return osmTypeDao.findByKey(OSMKey);
     }
 
     @Override
-    public List<TIPReviewDto> findUnreviewedTIPs() {
-        List<TIP> tips = tipDao.find(null,null,null,null,null,false);
-        return dtoService.ListTIP2ListTIPReviewDto(tips);
-    }
-
-    @Override
-    public OSMType getOSMtypeByValue(String OSMValue, boolean hasTIPtype) throws InstanceNotFoundException, DuplicateInstanceException {
-        OSMType osmType = osmTypeDao.findByValue(OSMValue);
+    public OSMType getOSMTypeByKeyValue(String OSMKey, String OSMValue, boolean hasTIPtype) throws InstanceNotFoundException, DuplicateInstanceException {
+        OSMType osmType = osmTypeDao.findByKeyValue(OSMKey,OSMValue);
         if (!hasTIPtype && osmType.getTipType() != null){
             throw new DuplicateInstanceException(OSMType.class.getName(),OSMValue);
         }
         return osmType;
-    }
-
-    @Override
-    public List<OSMTypeDto> getOSMtypes(Long TIPtypeID) throws InstanceNotFoundException {
-        TIPtype tipType = tipTypeDao.findById(TIPtypeID);
-        return dtoService.ListOSMType2ListOSMTypeDto(new ArrayList<>(tipType.getOsmTypes()));
     }
 }

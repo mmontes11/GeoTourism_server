@@ -12,7 +12,7 @@ import java.util.List;
 public class OSMKeyDaoHibernate extends GenericDaoHibernate<OSMKey,Long> implements OSMKeyDao{
     @Override
     public List<String> findAll() {
-        String queryString = "SELECT o.key FROM OSMKey o";
+        String queryString = "SELECT o.key FROM OSMKey o ORDER BY o.key";
         return (List<String>)
                 getSession()
                     .createQuery(queryString)

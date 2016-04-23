@@ -55,8 +55,12 @@ public class TIPtypeServiceImpl implements TIPtypeService {
         TIPtype tipType = new TIPtype();
         tipType.setName(name);
         tipType.setIcon(icon);
+        for (OSMType osmType : osmTypes){
+            osmType.setTipType(tipType);
+            tipType.getOsmTypes().add(osmType);
+            osmTypeDao.save(osmType);
+        }
         tipTypeDao.save(tipType);
-        tipType.getOsmTypes().addAll(osmTypes);
         return dtoService.TIPtype2TIPtypeDto(tipType);
     }
 
@@ -66,7 +70,11 @@ public class TIPtypeServiceImpl implements TIPtypeService {
         tipType.setName(name);
         tipType.setIcon(icon);
         tipType.getOsmTypes().clear();
-        tipType.getOsmTypes().addAll(osmTypes);
+        for (OSMType osmType : osmTypes){
+            osmType.setTipType(tipType);
+            tipType.getOsmTypes().add(osmType);
+            osmTypeDao.save(osmType);
+        }
         tipTypeDao.save(tipType);
         return dtoService.TIPtype2TIPtypeDto(tipType);
 

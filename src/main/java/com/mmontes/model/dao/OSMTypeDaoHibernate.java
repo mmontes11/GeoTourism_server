@@ -23,7 +23,7 @@ public class OSMTypeDaoHibernate extends GenericDaoHibernate<OSMType, Long> impl
 
     @Override
     public List<String> findByKey(String OSMKey) {
-        String queryString = "SELECT o.value FROM OSMType o WHERE o.osmKey.key = :OSMKey";
+        String queryString = "SELECT o.value FROM OSMType o WHERE o.osmKey.key = :OSMKey ORDER BY o.value";
         return (List<String>)
                 getSession()
                         .createQuery(queryString)
@@ -34,9 +34,9 @@ public class OSMTypeDaoHibernate extends GenericDaoHibernate<OSMType, Long> impl
 
     @Override
     public OSMType findByKeyValue(String OSMKey,String OSMValue) throws InstanceNotFoundException {
-        String queryString = "SELECT o FROM OSMType o WHERE o.value = :OSMValue";
+        String queryString = "SELECT o FROM OSMType o ";
         if (OSMKey != null){
-            queryString += "WHERE o.key = :OSMKey ";
+            queryString += "WHERE o.osmKey.key = :OSMKey ";
         }
         if (OSMValue != null){
             String partialQueryString = "o.value = :OSMValue";

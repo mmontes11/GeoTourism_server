@@ -100,11 +100,15 @@ public class ConfigServiceImpl implements ConfigService {
     }
 
     @Override
-    public OSMType getOSMTypeByKeyValue(String OSMKey, String OSMValue, boolean hasTIPtype) throws InstanceNotFoundException, DuplicateInstanceException {
+    public void checkUnmappedOSMtype(String OSMKey, String OSMValue) throws DuplicateInstanceException, InstanceNotFoundException {
         OSMType osmType = osmTypeDao.findByKeyValue(OSMKey,OSMValue);
-        if (!hasTIPtype && osmType.getTipType() != null){
+        if (osmType.getTipType() != null){
             throw new DuplicateInstanceException(OSMType.class.getName(),OSMValue);
         }
-        return osmType;
+    }
+
+    @Override
+    public OSMType getOSMTypeByKeyValue(String OSMKey, String OSMValue) throws InstanceNotFoundException {
+        return osmTypeDao.findByKeyValue(OSMKey,OSMValue);
     }
 }

@@ -35,10 +35,10 @@ public class TIPtypeController {
     @Autowired
     private GCMService gcmService;
 
-    private List<OSMType> ListKeyValue2ListOSMType(List<KeyValue> keyValueList) throws DuplicateInstanceException, InstanceNotFoundException {
+    private List<OSMType> ListKeyValue2ListOSMType(List<KeyValue> keyValueList) throws InstanceNotFoundException {
         List<OSMType> osmTypes = new ArrayList<>();
         for (KeyValue keyValue : keyValueList) {
-            OSMType osmType = configService.getOSMTypeByKeyValue(keyValue.getKey(), keyValue.getValue(), false);
+            OSMType osmType = configService.getOSMTypeByKeyValue(keyValue.getKey(), keyValue.getValue());
             osmTypes.add(osmType);
         }
         return osmTypes;
@@ -87,9 +87,6 @@ public class TIPtypeController {
         } catch (InstanceNotFoundException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (DuplicateInstanceException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
 
@@ -107,9 +104,6 @@ public class TIPtypeController {
         } catch (InstanceNotFoundException e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        } catch (DuplicateInstanceException e) {
-            e.printStackTrace();
-            return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
 

@@ -8,6 +8,8 @@ public interface GenericDao <E, PK extends Serializable>{
 
 	void save(E entity);
 
+	void merge(E entity);
+
 	E findById(PK id) throws InstanceNotFoundException;
 
 	boolean exists(PK id);

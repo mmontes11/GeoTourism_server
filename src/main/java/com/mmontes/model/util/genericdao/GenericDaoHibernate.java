@@ -36,6 +36,11 @@ GenericDao<E, PK> {
 		getSession().saveOrUpdate(entity);
 	}
 
+	@Override
+	public void merge(E entity) {
+		getSession().merge(entity);
+	}
+
 	public boolean exists(PK id) {
 		return getSession().createCriteria(entityClass).add(
 				Restrictions.idEq(id)).setProjection(Projections.id())

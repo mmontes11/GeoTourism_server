@@ -102,7 +102,9 @@ public class DtoService {
     public TIPReviewDto TIP2TIPReviewDto(TIP tip){
         TIPReviewDto tipReviewDto = new TIPReviewDto();
         tipReviewDto.setId(tip.getId());
-        tipReviewDto.setIcon(tip.getType().getIcon());
+        if (tip.getType() != null){
+            tipReviewDto.setIcon(tip.getType().getIcon());
+        }
         tipReviewDto.setName(tip.getName());
         tipReviewDto.setGeom(GeometryUtils.WKTFromGeometry(tip.getGeom()));
         tipReviewDto.setCityName(tip.getCity().getName());

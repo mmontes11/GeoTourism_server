@@ -93,15 +93,11 @@ public class AdminController {
         return new ResponseEntity<>(configService.getOSMtypes(hasTIPtype), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/admin/config/osmtype/{OSMType}", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/config/osmtype/{OSMType}/check", method = RequestMethod.GET)
     public ResponseEntity
-    checkOSMtypeByKeyValue(@PathVariable String OSMType, @RequestParam(value = "hasTIPtype", required = false) Boolean hasTIPtypeRequest) {
-        boolean hasTIPtype = hasTIPtypeRequest != null ? hasTIPtypeRequest : false;
-        if (OSMType == null || OSMType.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-        }
+    checkOSMtypeByKeyValue(@PathVariable String OSMType) {
         try {
-            configService.getOSMTypeByKeyValue(null,OSMType, hasTIPtype);
+            configService.checkUnmappedOSMtype(null,OSMType);
             return new ResponseEntity(HttpStatus.OK);
         } catch (InstanceNotFoundException e) {
             e.printStackTrace();

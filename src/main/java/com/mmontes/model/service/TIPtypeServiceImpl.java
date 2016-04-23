@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
 @Service("TIPtypeService")
@@ -31,8 +33,12 @@ public class TIPtypeServiceImpl implements TIPtypeService {
     @Autowired
     private DtoService dtoService;
 
-    @Autowired
-    private ConfigService configService;
+    private void setTIPtype(Collection<OSMType> osmTypes, TIPtype tipType){
+        for (OSMType osmType : osmTypes){
+            osmType.setTipType(tipType);
+            osmTypeDao.merge(osmType);
+        }
+    }
 
     @Override
     public List<TIPtype> findAllTypes() {
@@ -51,16 +57,12 @@ public class TIPtypeServiceImpl implements TIPtypeService {
     }
 
     @Override
-    public TIPtypeDto create(String name, String icon, List<OSMType> osmTypes) throws InstanceNotFoundException, DuplicateInstanceException {
+    public TIPtypeDto create(String name, String icon, List<OSMType> osmTypes) throws InstanceNotFoundException {
         TIPtype tipType = new TIPtype();
         tipType.setName(name);
         tipType.setIcon(icon);
-        for (OSMType osmType : osmTypes){
-            osmType.setTipType(tipType);
-            tipType.getOsmTypes().add(osmType);
-            osmTypeDao.save(osmType);
-        }
         tipTypeDao.save(tipType);
+        setTIPtype(osmTypes,tipType);
         return dtoService.TIPtype2TIPtypeDto(tipType);
     }
 
@@ -69,13 +71,9 @@ public class TIPtypeServiceImpl implements TIPtypeService {
         TIPtype tipType = tipTypeDao.findById(TIPtypeID);
         tipType.setName(name);
         tipType.setIcon(icon);
-        tipType.getOsmTypes().clear();
-        for (OSMType osmType : osmTypes){
-            osmType.setTipType(tipType);
-            tipType.getOsmTypes().add(osmType);
-            osmTypeDao.save(osmType);
-        }
         tipTypeDao.save(tipType);
+        setTIPtype(tipType.getOsmTypes(),null);
+        setTIPtype(osmTypes,tipType);
         return dtoService.TIPtype2TIPtypeDto(tipType);
 
     }
@@ -83,6 +81,7 @@ public class TIPtypeServiceImpl implements TIPtypeService {
     @Override
     public void delete(Long TIPtypeID) throws InstanceNotFoundException {
         TIPtype tipType = tipTypeDao.findById(TIPtypeID);
+        tipType.getOsmTypes().clear();
         tipTypeDao.remove(tipType.getId());
     }
 }

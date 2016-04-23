@@ -20,5 +20,6 @@ public interface ConfigService {
     List<OSMTypeDto> getOSMtypes(Long TIPtypeID) throws InstanceNotFoundException;
     List<String> getOSMKeys();
     List<String> findOSMTypesByOSMKey(String OSMKey);
-    OSMType getOSMTypeByKeyValue(String OSMKey, String OSMValue, boolean hasTIPtype) throws InstanceNotFoundException, DuplicateInstanceException;
+    void checkUnmappedOSMtype(String OSMKey, String OSMValue) throws DuplicateInstanceException, InstanceNotFoundException;
+    OSMType getOSMTypeByKeyValue(String OSMKey, String OSMValue) throws InstanceNotFoundException;
 }

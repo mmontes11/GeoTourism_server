@@ -168,7 +168,7 @@
     <fields_name/>
     <collection>TIP</collection>
     <json_field_name>json</json_field_name>
-    <json_query>&#x7b;&#x22;&#x24;group&#x22;&#x3a;&#x7b;&#xd;&#xa;	_id&#x3a;&#x22;&#x24;city_id&#x22;,&#xd;&#xa;	tips &#x3a; &#x7b;&#xd;&#xa;        &#x22;&#x24;push&#x22;&#x3a;&#x7b;&#xd;&#xa;            osm_id&#x3a; &#x22;&#x24;osm_id&#x22;,&#xd;&#xa;            lat&#x3a; &#x22;&#x24;lat&#x22;,&#xd;&#xa;			lon&#x3a; &#x22;&#x24;lon&#x22;,&#xd;&#xa;			name&#x3a; &#x22;&#x24;name&#x22;,&#xd;&#xa;			info_url&#x3a; &#x22;&#x24;info_url&#x22;,&#xd;&#xa;			tip_type_id&#x3a; &#x22;&#x24;tip_type_id&#x22;,&#xd;&#xa;			photo_url&#x3a; &#x22;&#x24;photo_url&#x22;&#xd;&#xa;        &#x7d;&#xd;&#xa;    &#x7d;&#xd;&#xa;	&#x7d;&#xd;&#xa;&#x7d;</json_query>
+    <json_query>&#x7b;&#x22;&#x24;group&#x22;&#x3a;&#x7b;&#xd;&#xa;	_id&#x3a;null,&#xd;&#xa;	tips &#x3a; &#x7b;&#xd;&#xa;        &#x22;&#x24;push&#x22;&#x3a;&#x7b;&#xd;&#xa;            osm_id&#x3a; &#x22;&#x24;osm_id&#x22;,&#xd;&#xa;            lat&#x3a; &#x22;&#x24;lat&#x22;,&#xd;&#xa;			lon&#x3a; &#x22;&#x24;lon&#x22;,&#xd;&#xa;			name&#x3a; &#x22;&#x24;name&#x22;,&#xd;&#xa;			info_url&#x3a; &#x22;&#x24;info_url&#x22;,&#xd;&#xa;			tip_type_id&#x3a; &#x22;&#x24;tip_type_id&#x22;,&#xd;&#xa;			photo_url&#x3a; &#x22;&#x24;photo_url&#x22;&#xd;&#xa;        &#x7d;&#xd;&#xa;    &#x7d;&#xd;&#xa;	&#x7d;&#xd;&#xa;&#x7d;</json_query>
     <auth_user/>
     <auth_password>Encrypted </auth_password>
     <auth_kerberos>N</auth_kerberos>

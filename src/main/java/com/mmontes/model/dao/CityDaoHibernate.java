@@ -46,7 +46,7 @@ public class CityDaoHibernate extends GenericDaoHibernate<City, Long> implements
     @Override
     public void deleteNonExistingCities(List<Long> cityIds) {
         String ids = QueryUtils.getINvalues(cityIds);
-        String queryString = "DELETE FROM City c WHERE c.osmId NOT IN "+ids;
-        getSession().createQuery(queryString);
+        String queryString = "DELETE FROM City c WHERE c.osmId IS NOT NULL AND c.osmId NOT IN "+ids;
+        getSession().createSQLQuery(queryString).executeUpdate();
     }
 }

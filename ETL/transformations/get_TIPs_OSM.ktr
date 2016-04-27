@@ -587,7 +587,7 @@
     <w_timeout/>
     <journaled_writes>N</journaled_writes>
 
-    <truncate>N</truncate>
+    <truncate>Y</truncate>
 
     <update>N</update>
 

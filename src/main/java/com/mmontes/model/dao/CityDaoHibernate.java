@@ -1,6 +1,7 @@
 package com.mmontes.model.dao;
 
 import com.mmontes.model.entity.City;
+import com.mmontes.model.util.QueryUtils;
 import com.mmontes.model.util.genericdao.GenericDaoHibernate;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import com.mmontes.util.exception.TIPLocationException;
@@ -40,5 +41,12 @@ public class CityDaoHibernate extends GenericDaoHibernate<City, Long> implements
     public List<City> getCityEnvelopes() {
         String queryString = "SELECT id,name,ST_Envelope(geom) AS geom,osmid FROM city";
         return (List<City>) getSession().createSQLQuery(queryString).addEntity(City.class).list();
+    }
+
+    @Override
+    public void deleteNonExistingCities(List<Long> cityIds) {
+        String ids = QueryUtils.getINvalues(cityIds);
+        String queryString = "DELETE FROM City c WHERE c.osmId NOT IN "+ids;
+        getSession().createQuery(queryString);
     }
 }

@@ -66,6 +66,7 @@ public class CityServiceImpl implements CityService {
 
     @Override
     public void syncCities(List<IDnameDto> IDnameDtos) {
+        List<Long> cityIds = new ArrayList<>();
         for (IDnameDto IDnameDto : IDnameDtos) {
             Long osmId = IDnameDto.getId();
             City city;
@@ -84,7 +85,9 @@ public class CityServiceImpl implements CityService {
             }
             city.setName(IDnameDto.getName());
             cityDao.save(city);
+            cityIds.add(IDnameDto.getId());
         }
+        cityDao.deleteNonExistingCities(cityIds);
     }
 
     @Override

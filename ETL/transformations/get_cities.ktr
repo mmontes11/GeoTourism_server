@@ -324,7 +324,7 @@
 
          <modifier_update_operation>N&#x2f;A</modifier_update_operation>
 
-         <modifier_policy>Insert&#x26;Update</modifier_policy>
+         <modifier_policy>Insert</modifier_policy>
 
          <json_field>N</json_field>
 
@@ -340,7 +340,7 @@
 
          <modifier_update_operation>N&#x2f;A</modifier_update_operation>
 
-         <modifier_policy>Insert&#x26;Update</modifier_policy>
+         <modifier_policy>Insert</modifier_policy>
 
          <json_field>N</json_field>
 

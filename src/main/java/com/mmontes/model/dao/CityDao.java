@@ -13,4 +13,5 @@ public interface CityDao extends GenericDao<City,Long>{
     List<City> findAll();
     City findByOsmId(Long osmId) throws InstanceNotFoundException;
     List<City> getCityEnvelopes();
+    void deleteNonExistingCities(List<Long> cityIds);
 }

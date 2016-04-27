@@ -44,11 +44,13 @@ public class ConfigServiceImpl implements ConfigService {
         ConfigDto configDto = new ConfigDto();
         Config config = configDao.getConfig();
         String bbox;
+        System.out.println(config.getBoundingBox());
         if (BBoxMin) {
             bbox = GeometryUtils.getBBoxString(config.getBoundingBox());
         } else {
             bbox = GeometryUtils.WKTFromGeometry(config.getBoundingBox());
         }
+        System.out.println(bbox);
         configDto.setBbox(bbox);
         List<OSMType> osmTypes = osmTypeDao.find(hasTIPtype);
         configDto.setOsmTypes(dtoService.ListOSMType2ListOSMTypeDto(osmTypes));

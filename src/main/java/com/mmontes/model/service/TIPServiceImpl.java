@@ -3,10 +3,12 @@ package com.mmontes.model.service;
 import com.mmontes.model.dao.*;
 import com.mmontes.model.entity.City;
 import com.mmontes.model.entity.TIP.TIP;
+import com.mmontes.model.entity.TIP.TIPtype;
 import com.mmontes.model.entity.UserAccount;
 import com.mmontes.model.entity.route.Route;
 import com.mmontes.service.GoogleMapsService;
 import com.mmontes.util.GeometryUtils;
+import com.mmontes.util.PrivateConstants;
 import com.mmontes.util.URLvalidator;
 import com.mmontes.util.dto.*;
 import com.mmontes.util.exception.*;
@@ -51,8 +53,23 @@ public class TIPServiceImpl implements TIPService {
     create(Long typeId, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long osmId, boolean reviewed)
             throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException {
 
+        TIPtype tipType = tipTypeDao.findById(typeId);
+        googleMapsService.setAPIkey(PrivateConstants.GOOGLE_MAPS_KEY);
+        return create(tipType,name,description,photoUrl,infoUrl,geom,osmId,reviewed,true);
+    }
+
+    public TIPDetailsDto
+    createSyncTIPs(TIPtype tipType, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long osmId, boolean reviewed)
+            throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException {
+        googleMapsService.setAPIkey(PrivateConstants.GOOGLE_MAPS_KEY_ETL);
+        return create(tipType,name,description,photoUrl,infoUrl,geom,osmId,reviewed,false);
+    }
+
+    public TIPDetailsDto
+    create(TIPtype tipType, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long osmId, boolean reviewed, boolean getAddress)
+            throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException {
         TIP tip = new TIP();
-        tip.setType(tipTypeDao.findById(typeId));
+        tip.setType(tipType);
         tip.setName(name);
         tip.setDescription(description);
         tip.setGeom(geom);
@@ -62,9 +79,12 @@ public class TIPServiceImpl implements TIPService {
         tip.setReviewed(reviewed);
 
         Coordinate coordinate = tip.getGeom().getCoordinate();
+
         tip.setGoogleMapsUrl(googleMapsService.getTIPGoogleMapsUrl(coordinate));
         try {
-            tip.setAddress(googleMapsService.getAddress(coordinate));
+            if (getAddress){
+                tip.setAddress(googleMapsService.getAddress(coordinate));
+            }
         } catch (Exception e) {
             e.printStackTrace();
             throw new TIPLocationException("Invalid TIP address");
@@ -77,6 +97,24 @@ public class TIPServiceImpl implements TIPService {
 
         tipDao.save(tip);
         return dtoService.TIP2TIPDetailsDto(tip, null);
+    }
+
+
+    public TIPDetailsDto edit(Long TIPId, Long facebookUserId, Long type, String name, String description, String infoUrl, String address, String photoUrl)
+            throws InstanceNotFoundException, InvalidTIPUrlException {
+        TIP tip = tipDao.findById(TIPId);
+        UserAccount userAccount = null;
+        if (facebookUserId != null) {
+            userAccount = userAccountDao.findByFBUserID(facebookUserId);
+        }
+        TIPtype tipType = tipTypeDao.findById(type);
+        return edit(tip,userAccount,tipType,name,description,infoUrl,address,photoUrl);
+    }
+
+    public List<FeatureSearchDto> find(String boundsWKT, List<Long> typeIds, List<Long> cityIds, List<Long> facebookUserIds, List<Long> routes, boolean reviewed)
+            throws InstanceNotFoundException {
+        List<TIP> tips = tipDao.find(boundsWKT, typeIds, cityIds, facebookUserIds, routes, reviewed);
+        return dtoService.ListTIP2ListFeatureSearchDto(tips);
     }
 
     public TIPDetailsDto findById(Long TIPId, Long facebooUserId) throws InstanceNotFoundException {
@@ -104,20 +142,8 @@ public class TIPServiceImpl implements TIPService {
         }
     }
 
-    public List<FeatureSearchDto> find(String boundsWKT, List<Long> typeIds, List<Long> cityIds, List<Long> facebookUserIds, List<Long> routes, boolean reviewed)
-            throws InstanceNotFoundException {
-        List<TIP> tips = tipDao.find(boundsWKT, typeIds, cityIds, facebookUserIds, routes, reviewed);
-        return dtoService.ListTIP2ListFeatureSearchDto(tips);
-    }
-
-    public TIPDetailsDto edit(Long TIPId, Long facebooUserId, Long type, String name, String description, String infoUrl, String address, String photoUrl)
-            throws InstanceNotFoundException, InvalidTIPUrlException {
-        TIP tip = tipDao.findById(TIPId);
-        UserAccount userAccount = null;
-        if (facebooUserId != null) {
-            userAccount = userAccountDao.findByFBUserID(facebooUserId);
-        }
-        tip.setType(tipTypeDao.findById(type));
+    private TIPDetailsDto edit(TIP tip, UserAccount userAccount, TIPtype type, String name, String description, String infoUrl, String address, String photoUrl) throws InstanceNotFoundException, InvalidTIPUrlException {
+        tip.setType(type);
         tip.setName(name);
         tip.setDescription(description);
         tip.setInfoUrl(infoUrl);
@@ -150,15 +176,15 @@ public class TIPServiceImpl implements TIPService {
                 osmIds.add(osmId);
 
                 Long tipTypeId = tipSyncDto.getTip_type_id();
-                tipTypeDao.findById(tipTypeId);
+                TIPtype tipType = tipTypeDao.findById(tipTypeId);
 
                 Geometry geom = GeometryUtils.latLong2Geom(tipSyncDto.getLon(), tipSyncDto.getLat());
 
                 try {
                     TIP tip = tipDao.findByOSMId(osmId);
-                    edit(tip.getId(), null, tipTypeId, tipSyncDto.getName(), null, tipSyncDto.getInfo_url(), tip.getAddress(), tipSyncDto.getPhoto_url());
+                    edit(tip, null, tipType, tipSyncDto.getName(), null, tipSyncDto.getInfo_url(), tip.getAddress(), tipSyncDto.getPhoto_url());
                 } catch (InstanceNotFoundException e) {
-                    create(tipTypeId, tipSyncDto.getName(), null, tipSyncDto.getPhoto_url(), tipSyncDto.getInfo_url(), geom, osmId, true);
+                    createSyncTIPs(tipType, tipSyncDto.getName(), null, tipSyncDto.getPhoto_url(), tipSyncDto.getInfo_url(), geom, osmId, true);
                 }
             } catch (Exception e){
                 e.printStackTrace();

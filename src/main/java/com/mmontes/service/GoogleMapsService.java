@@ -22,9 +22,11 @@ import java.util.concurrent.TimeUnit;
 public class GoogleMapsService {
 
     private GeoApiContext context;
+    private String APIkey;
 
     public GoogleMapsService() {
         this.context = new GeoApiContext();
+        this.APIkey = PrivateConstants.GOOGLE_MAPS_KEY;
         this.context.setApiKey(PrivateConstants.GOOGLE_MAPS_KEY)
                 .setQueryRateLimit(5)
                 .setConnectTimeout(5, TimeUnit.SECONDS)
@@ -128,5 +130,10 @@ public class GoogleMapsService {
             add(TravelMode.BICYCLING.toUrlValue());
         }};
         return validTravelModes.contains(travelModeString);
+    }
+
+    public void setAPIkey(String APIkey) {
+        this.APIkey = APIkey;
+        this.context.setApiKey(APIkey);
     }
 }

@@ -59,7 +59,7 @@ CREATE TABLE TIPtype(
 CREATE TABLE TIP(
   id SERIAL,
   typeId INTEGER,
-  name VARCHAR(50),
+  name VARCHAR(100),
   geom GEOMETRY,
   address VARCHAR(255),
   description TEXT,

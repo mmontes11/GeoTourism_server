@@ -62,7 +62,7 @@ public class TIPServiceImpl implements TIPService {
     createSyncTIPs(TIPtype tipType, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long osmId, boolean reviewed)
             throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException {
         googleMapsService.setAPIkey(PrivateConstants.GOOGLE_MAPS_KEY_ETL);
-        return create(tipType,name,description,photoUrl,infoUrl,geom,osmId,reviewed,false);
+        return create(tipType,name,description,photoUrl,infoUrl,geom,osmId,reviewed,true);
     }
 
     public TIPDetailsDto

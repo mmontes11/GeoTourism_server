@@ -26,7 +26,7 @@ CREATE INDEX City_Geometry_Gix ON City USING GIST (geom);
 
 CREATE TABLE UserAccount(
   id SERIAL,
-  name VARCHAR(50),
+  name VARCHAR(200),
   registrationDate TIMESTAMP,
   facebookUserId BIGINT,
   facebookProfileUrl TEXT,
@@ -37,7 +37,7 @@ CREATE TABLE UserAccount(
 
 CREATE TABLE Route(
   id SERIAL,
-  name VARCHAR(100),
+  name VARCHAR(200),
   description TEXT,
   geom GEOMETRY,
   googleMapsUrl TEXT,

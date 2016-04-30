@@ -26,12 +26,12 @@ public class StatsController {
         return new ResponseEntity<>(statsService.getAllMetrics(), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/social/stats/metric/{metricID}", method = RequestMethod.GET)
+    @RequestMapping(value = "/social/stats/metric/{metricID}", method = RequestMethod.POST)
     public ResponseEntity<StatsDto>
     getMetricStats(@PathVariable String metricID,
-                   @RequestParam(value = "tips", required = false) List<Long> TIPs,
                    @RequestParam(value = "fromDate", required = false) @DateTimeFormat(pattern = Constants.DATE_FORMAT) Date fromDate,
-                   @RequestParam(value = "toDate", required = false) @DateTimeFormat(pattern = Constants.DATE_FORMAT) Date toDate) {
+                   @RequestParam(value = "toDate", required = false) @DateTimeFormat(pattern = Constants.DATE_FORMAT) Date toDate,
+                   @RequestBody List<Long> TIPs){
         try {
             StatsDto statsDto = statsService.getStats(metricID,TIPs,fromDate,toDate);
             return new ResponseEntity<>(statsDto, HttpStatus.OK);

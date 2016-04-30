@@ -74,13 +74,15 @@ public class CityServiceImpl implements CityService {
             try {
                 city = cityDao.findByOsmId(osmId);
             } catch (InstanceNotFoundException e) {
+                city = new City();
+                city.setOsmId(osmId);
                 try {
                     Geometry cityGeom = OSMservice.getGeometryByOSMId(osmId);
-                    city = new City();
                     city.setGeom(cityGeom);
-                    city.setOsmId(osmId);
-                } catch (Exception osmException) {
-                    e.printStackTrace();
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                    System.out.println(IDnameDto.getId());
+                    System.out.println(IDnameDto.getName());
                     continue;
                 }
             }

@@ -12,9 +12,7 @@ import java.net.URL;
 @Service("OpenStreetMapService")
 public class OpenStreetMapService {
 
-    public Geometry getGeometryByOSMId(Long osmId) throws Exception {
-        String url = "http://polygons.openstreetmap.fr/get_wkt.py?id=" + osmId + "&params=0";
-
+    private HttpURLConnection makeRequest(String url) throws Exception {
         URL obj = new URL(url);
         HttpURLConnection connnection = (HttpURLConnection) obj.openConnection();
         connnection.setRequestMethod("GET");
@@ -23,8 +21,17 @@ public class OpenStreetMapService {
         if (responseCode >= 400) {
             throw new Exception("Request to OpenStreetMap failed");
         }
+        return connnection;
+    }
 
-        String geomWKT = IOUtils.toString(connnection.getInputStream(), "UTF8");
+    public Geometry getGeometryByOSMId(Long osmId) throws Exception {
+        String generatePolygonUrl = "http://polygons.openstreetmap.fr/?id="+osmId;
+        String getPolygonUrl = "http://polygons.openstreetmap.fr/get_wkt.py?id=" + osmId + "&params=0";
+
+        makeRequest(generatePolygonUrl);
+        HttpURLConnection connection = makeRequest(getPolygonUrl);
+
+        String geomWKT = IOUtils.toString(connection.getInputStream(), "UTF8");
         Geometry geomCity = GeometryUtils.geometryFromWKT(geomWKT.split(";")[1]);
         geomCity.setSRID(Constants.SRID);
         return geomCity;

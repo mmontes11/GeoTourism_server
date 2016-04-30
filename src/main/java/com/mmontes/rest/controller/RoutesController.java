@@ -11,6 +11,7 @@ import com.mmontes.util.exception.InstanceNotFoundException;
 import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,7 +30,7 @@ public class RoutesController {
     @Autowired
     private UserAccountService userAccountService;
 
-    @RequestMapping(value = "/routes", method = RequestMethod.GET)
+    @RequestMapping(value = "/routes", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<FeatureSearchDto>>
     find(@RequestParam(value = "bounds", required = false) String boundsWKT,
          @RequestParam(value = "travelModes", required = false) List<String> travelModes,

@@ -64,14 +64,14 @@ public class AdminController {
         return new ResponseEntity<>(ResponseFactory.getCustomJSON("token", token), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/admin", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity
     validateToken() {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
 
-    @RequestMapping(value = "/admin/config", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/config", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ConfigDto>
     getConfig(@RequestParam(value = "bboxMin", required = false) Boolean BBoxMin,
               @RequestParam(value = "hasTIPtype", required = false) Boolean hasTIPtype) {
@@ -80,20 +80,20 @@ public class AdminController {
         return new ResponseEntity<>(configService.getConfig(BBoxMin, hasTIPtype), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/admin/config/bbox", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/config/bbox", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity
     getConfigBBox() {
         return new ResponseEntity<>(ResponseFactory.getCustomJSON("geom", configService.getBBox()), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/admin/config/osmtypes", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/config/osmtypes", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<OSMTypeDto>>
     getConfigOSMtypes(@RequestParam(value = "hasTIPtype", required = false) Boolean hasTIPtypeRequest) {
         boolean hasTIPtype = hasTIPtypeRequest != null ? hasTIPtypeRequest : false;
         return new ResponseEntity<>(configService.getOSMtypes(hasTIPtype), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/admin/config/osmtype/{OSMType}/check", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/config/osmtype/{OSMType}/check", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity
     checkOSMtypeByKeyValue(@PathVariable String OSMType) {
         try {
@@ -108,7 +108,7 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(value = "/admin/config/bbox", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/config/bbox", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity
     upsertBBox(@RequestBody ConfigBBoxRequest configBBoxRequest) {
         Geometry geom;
@@ -125,7 +125,7 @@ public class AdminController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/admin/config/osmkeys", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/config/osmkeys", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<String>>
     getOSMKeys() {
         return new ResponseEntity<>(configService.getOSMKeys(), HttpStatus.OK);
@@ -137,7 +137,7 @@ public class AdminController {
         return new ResponseEntity<>(configService.findOSMTypesByOSMKey(OSMKey), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/admin/config/tips", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/config/tips", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TIPReviewDto>>
     getUnreviewedTIPs() {
         return new ResponseEntity<>(configService.findUnreviewedTIPs(), HttpStatus.OK);

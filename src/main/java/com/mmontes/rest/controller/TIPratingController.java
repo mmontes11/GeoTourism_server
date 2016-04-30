@@ -5,6 +5,7 @@ import com.mmontes.rest.response.ResponseFactory;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +15,7 @@ public class TIPratingController {
     @Autowired
     private RatingService ratingService;
 
-    @RequestMapping(value = "/social/tip/{TIPId}/rating", method = RequestMethod.POST)
+    @RequestMapping(value = "/social/tip/{TIPId}/rating", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity
     upsertRating(@PathVariable Long TIPId,
                  @RequestHeader(value = "FacebookUserId", required = true) Long facebookUserId,

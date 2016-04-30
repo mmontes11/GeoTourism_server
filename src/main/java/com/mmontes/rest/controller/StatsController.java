@@ -8,6 +8,7 @@ import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class StatsController {
     @Autowired
     private StatsService statsService;
 
-    @RequestMapping(value = "/social/stats/metrics", method = RequestMethod.GET)
+    @RequestMapping(value = "/social/stats/metrics", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<MetricDto>>
     getMetrics() {
         return new ResponseEntity<>(statsService.getAllMetrics(), HttpStatus.OK);

@@ -2,6 +2,7 @@ package com.mmontes.rest.controller;
 
 import com.google.maps.model.TravelMode;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -13,7 +14,7 @@ import java.util.List;
 @RestController
 public class TravelModesController {
 
-    @RequestMapping(value = "/travelModes", method = RequestMethod.GET)
+    @RequestMapping(value = "/travelModes", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<String>>
     getTravelModes() {
         List<String> travelModes = new ArrayList<String>() {{

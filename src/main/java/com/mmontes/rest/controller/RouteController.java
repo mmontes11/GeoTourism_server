@@ -84,7 +84,7 @@ public class RouteController {
         return new ResponseEntity<>(routeDetailsDto, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/route/{routeID}", method = RequestMethod.GET)
+    @RequestMapping(value = "/route/{routeID}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<RouteDetailsDto>
     findById(@PathVariable Long routeID,
              @RequestHeader(value = "FacebookUserId", required = false) Long facebookUserId) {
@@ -109,7 +109,7 @@ public class RouteController {
         return new ResponseEntity(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/social/route/geom", method = RequestMethod.GET)
+    @RequestMapping(value = "/social/route/geom", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity
     getShortestPath(@RequestParam(value = "origin", required = true) Long TIPIdOrigin,
                     @RequestParam(value = "destination", required = true) Long TIPIdDestination,

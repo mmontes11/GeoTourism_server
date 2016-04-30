@@ -13,6 +13,7 @@ import com.mmontes.util.exception.InvalidTIPUrlException;
 import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,13 +46,13 @@ public class TIPController {
         return new ResponseEntity<>(tipDetailsDto, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value = "/admin/tip", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/tip", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TIPDetailsDto>
     createAdmin(@RequestBody TIPRequest tipRequest) {
         return createTIP(tipRequest,true);
     }
 
-    @RequestMapping(value = "/social/tip", method = RequestMethod.POST)
+    @RequestMapping(value = "/social/tip", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TIPDetailsDto>
     createSocial(@RequestBody TIPRequest tipRequest) {
         return createTIP(tipRequest,false);
@@ -84,7 +85,7 @@ public class TIPController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/admin/tip/{TIPId}", method = RequestMethod.PATCH)
+    @RequestMapping(value = "/admin/tip/{TIPId}", method = RequestMethod.PATCH,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity
     patch(@PathVariable Long TIPId,
           @RequestBody TIPPatchRequest tipPatchRequest,
@@ -102,7 +103,7 @@ public class TIPController {
         return new ResponseEntity<>(tipDetailsDto, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/admin/tip/{TIPId}/numroutes", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/tip/{TIPId}/numroutes", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity
     patch(@PathVariable Long TIPId) {
         try {

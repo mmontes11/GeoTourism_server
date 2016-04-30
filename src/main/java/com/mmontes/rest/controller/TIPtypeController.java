@@ -14,6 +14,7 @@ import com.mmontes.util.exception.DuplicateInstanceException;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,14 +45,14 @@ public class TIPtypeController {
         return osmTypes;
     }
 
-    @RequestMapping(value = "/tip/types", method = RequestMethod.GET)
+    @RequestMapping(value = "/tip/types", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TIPtypeDto>>
     findAllTIPtypes() {
         List<TIPtype> types = tipTypeService.findAllTypes();
         return new ResponseEntity<>(dtoService.ListTIPtype2TIPtypeDto(types), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/admin/tip/type/{TIPtypeId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/admin/tip/type/{TIPtypeId}", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TIPtypeDto>
     findById(@PathVariable Long TIPtypeId) {
         try {
@@ -62,7 +63,7 @@ public class TIPtypeController {
         }
     }
 
-    @RequestMapping(value = "/tip/type/{TIPtypeId}/name", method = RequestMethod.GET)
+    @RequestMapping(value = "/tip/type/{TIPtypeId}/name", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity
     getTypeName(@PathVariable Long TIPtypeId) {
         try {
@@ -73,7 +74,7 @@ public class TIPtypeController {
         }
     }
 
-    @RequestMapping(value = "/admin/tip/type", method = RequestMethod.POST)
+    @RequestMapping(value = "/admin/tip/type", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TIPtypeDto>
     create(@RequestBody TIPtypeRequest tipTypeRequest) {
         if (tipTypeRequest.getName() == null || tipTypeRequest.getName().isEmpty()) {
@@ -90,7 +91,7 @@ public class TIPtypeController {
         }
     }
 
-    @RequestMapping(value = "/admin/tip/type/{TIPtypeID}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/admin/tip/type/{TIPtypeID}", method = RequestMethod.PUT,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TIPtypeDto>
     update(@PathVariable Long TIPtypeID, @RequestBody TIPtypeRequest tipTypeRequest) {
         if (TIPtypeID == null || tipTypeRequest.getName() == null || tipTypeRequest.getName().isEmpty()) {

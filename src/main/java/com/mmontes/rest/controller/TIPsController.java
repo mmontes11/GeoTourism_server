@@ -9,6 +9,7 @@ import com.mmontes.util.dto.TIPSyncDto;
 import com.mmontes.util.exception.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +25,7 @@ public class TIPsController {
     @Autowired
     private UserAccountService userAccountService;
 
-    @RequestMapping(value = "/tips", method = RequestMethod.GET)
+    @RequestMapping(value = "/tips", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<FeatureSearchDto>>
     find(@RequestParam(value = "bounds", required = false) String boundsWKT,
          @RequestParam(value = "types", required = false) List<Long> typeIds,

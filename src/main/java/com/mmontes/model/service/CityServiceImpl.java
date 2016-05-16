@@ -81,8 +81,6 @@ public class CityServiceImpl implements CityService {
                     city.setGeom(cityGeom);
                 } catch (Exception e2) {
                     e2.printStackTrace();
-                    System.out.println(IDnameDto.getId());
-                    System.out.println(IDnameDto.getName());
                     continue;
                 }
             }

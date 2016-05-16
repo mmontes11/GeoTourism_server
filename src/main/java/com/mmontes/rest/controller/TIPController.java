@@ -105,7 +105,7 @@ public class TIPController {
 
     @RequestMapping(value = "/admin/tip/{TIPId}/numroutes", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity
-    patch(@PathVariable Long TIPId) {
+    getNumRoutes(@PathVariable Long TIPId) {
         try {
             return new ResponseEntity<>(ResponseFactory.getCustomJSON("numRoutes", String.valueOf(tipService.getNumRoutes(TIPId))), HttpStatus.OK);
         } catch (InstanceNotFoundException e) {

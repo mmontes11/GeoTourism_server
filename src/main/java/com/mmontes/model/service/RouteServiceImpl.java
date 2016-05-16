@@ -39,9 +39,6 @@ public class RouteServiceImpl implements RouteService {
     private UserAccountDao userAccountDao;
 
     @Autowired
-    private UserAccountService userAccountService;
-
-    @Autowired
     private DtoService dtoService;
 
     @Autowired

@@ -29,4 +29,17 @@ public class TIPratingController {
         }
     }
 
+    @RequestMapping(value = "/social/tip/{TIPId}/rating", method = RequestMethod.DELETE,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity
+    deleteRating(@PathVariable Long TIPId,
+                 @RequestHeader(value = "FacebookUserId") Long facebookUserId){
+
+        try {
+            Double averageRate = ratingService.deleteUserTIPRate(TIPId,facebookUserId);
+            return new ResponseEntity<>(ResponseFactory.getCustomJSON("averageRate",String.valueOf(averageRate)),HttpStatus.OK);
+        } catch (InstanceNotFoundException e) {
+            return new ResponseEntity(HttpStatus.NOT_FOUND);
+        }
+    }
+
 }

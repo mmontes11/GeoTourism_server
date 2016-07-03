@@ -26,19 +26,23 @@ public class WikipediaController {
 
     @RequestMapping(value = "/wikipedia", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<WikipediaResult>>
-    getLanguage (@RequestParam(value = "keywords", required = true) String keywords){
-        String language;
+    getLanguage (@RequestParam(value = "keywords") String keywords,
+                 @RequestParam(value = "language", required = false) String lang){
+        String language = lang;
         List<WikipediaResult> results = new ArrayList<>();
-        try {
-            language = languageDetectorService.getLanguage(keywords);
-        } catch (Exception e) {
-            return new ResponseEntity<>(results, HttpStatus.OK);
+        if (lang == null || lang.isEmpty()) {
+            try {
+                language = languageDetectorService.getLanguage(keywords);
+            } catch (Exception e) {
+                return new ResponseEntity<>(results, HttpStatus.OK);
+            }
         }
         try {
-            results = wikipediaService.search(language,keywords);
+            results = wikipediaService.search(language, keywords);
         } catch (Exception e) {
+            e.printStackTrace();
             return new ResponseEntity<>(results, HttpStatus.OK);
         }
-        return new ResponseEntity<>(results,HttpStatus.OK);
+        return new ResponseEntity<>(results, HttpStatus.OK);
     }
 }

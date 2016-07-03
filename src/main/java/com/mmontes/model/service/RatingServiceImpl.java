@@ -56,4 +56,12 @@ public class RatingServiceImpl implements RatingService{
         Rating rating = ratingDao.getUserTIPRate(TIPId, facebookUserId);
         return rating != null? rating.getRatingValue() : 0.0D;
     }
+
+    @Override
+    public Double deleteUserTIPRate(Long TIPId, Long facebookUserId) throws InstanceNotFoundException {
+        Rating rating = ratingDao.getUserTIPRate(TIPId, facebookUserId);
+        if (rating == null) throw new InstanceNotFoundException();
+        ratingDao.remove(rating.getId());
+        return getAverageRate(TIPId);
+    }
 }

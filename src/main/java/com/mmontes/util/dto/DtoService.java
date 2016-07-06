@@ -43,7 +43,7 @@ public class DtoService {
         String geom = GeometryUtils.WKTFromGeometry(tip.getGeom());
 
         tipDetailsDto.setId(tip.getId());
-        Long tipTypeId = tip.getType()!=null? tip.getType().getId() : null;
+        Long tipTypeId = tip.getType() != null ? tip.getType().getId() : null;
         tipDetailsDto.setType(tipTypeId);
         tipDetailsDto.setName(tip.getName());
         tipDetailsDto.setDescription(tip.getDescription());
@@ -69,7 +69,7 @@ public class DtoService {
     public FeatureSearchDto TIP2FeatureSearchDto(TIP tip) {
         Long id = tip.getId();
         String geom = GeometryUtils.WKTFromGeometry(tip.getGeom());
-        String icon = tip.getType() != null? tip.getType().getIcon() : null;
+        String icon = tip.getType() != null ? tip.getType().getIcon() : null;
         return new FeatureSearchDto(id, geom, icon);
     }
 
@@ -99,10 +99,10 @@ public class DtoService {
         return tipRouteDtos;
     }
 
-    public TIPReviewDto TIP2TIPReviewDto(TIP tip){
+    public TIPReviewDto TIP2TIPReviewDto(TIP tip) {
         TIPReviewDto tipReviewDto = new TIPReviewDto();
         tipReviewDto.setId(tip.getId());
-        if (tip.getType() != null){
+        if (tip.getType() != null) {
             tipReviewDto.setIcon(tip.getType().getIcon());
         }
         tipReviewDto.setName(tip.getName());
@@ -111,9 +111,9 @@ public class DtoService {
         return tipReviewDto;
     }
 
-    public List<TIPReviewDto> ListTIP2ListTIPReviewDto(List<TIP> tips){
+    public List<TIPReviewDto> ListTIP2ListTIPReviewDto(List<TIP> tips) {
         List<TIPReviewDto> tipReviewDtos = new ArrayList<>();
-        for(TIP tip : tips){
+        for (TIP tip : tips) {
             tipReviewDtos.add(TIP2TIPReviewDto(tip));
         }
         return tipReviewDtos;
@@ -184,6 +184,7 @@ public class DtoService {
         CommentDto commentDto = new CommentDto();
         commentDto.setId(comment.getId());
         commentDto.setCommentText(comment.getCommentText());
+        commentDto.setTimeInMillis(comment.getCommentDate().getTimeInMillis());
         commentDto.setUser(UserAccount2UserAccountDto(comment.getUserAccount()));
         return commentDto;
     }
@@ -203,15 +204,15 @@ public class DtoService {
         return metricDto;
     }
 
-    public List<MetricDto> ListMetric2ListMetricDto(List<Metric> metrics){
+    public List<MetricDto> ListMetric2ListMetricDto(List<Metric> metrics) {
         List<MetricDto> metricDtos = new ArrayList<>();
-        for (Metric metric : metrics){
+        for (Metric metric : metrics) {
             metricDtos.add(Metric2MetricDto(metric));
         }
         return metricDtos;
     }
 
-    public TIPtypeDto TIPtype2TIPtypeDto(TIPtype tipType){
+    public TIPtypeDto TIPtype2TIPtypeDto(TIPtype tipType) {
         TIPtypeDto tipTypeDetailsDto = new TIPtypeDto();
         tipTypeDetailsDto.setId(tipType.getId());
         tipTypeDetailsDto.setName(tipType.getName());
@@ -219,9 +220,9 @@ public class DtoService {
         return tipTypeDetailsDto;
     }
 
-    public List<TIPtypeDto> ListTIPtype2TIPtypeDto(List<TIPtype> tipTypes){
+    public List<TIPtypeDto> ListTIPtype2TIPtypeDto(List<TIPtype> tipTypes) {
         List<TIPtypeDto> tipTypeDtos = new ArrayList<>();
-        for (TIPtype tipType : tipTypes){
+        for (TIPtype tipType : tipTypes) {
             tipTypeDtos.add(TIPtype2TIPtypeDto(tipType));
         }
         return tipTypeDtos;
@@ -230,11 +231,11 @@ public class DtoService {
     public OSMTypeDto OSMType2OSMTypeDto(OSMType osmType) {
         OSMTypeDto osmTypeDto = new OSMTypeDto();
         osmTypeDto.setId(osmType.getId());
-        if (osmType.getOsmKey() != null){
+        if (osmType.getOsmKey() != null) {
             osmTypeDto.setKey(osmType.getOsmKey().getKey());
         }
         osmTypeDto.setValue(osmType.getValue());
-        if (osmType.getTipType() != null){
+        if (osmType.getTipType() != null) {
             osmTypeDto.setTipTypeID(osmType.getTipType().getId());
         }
         return osmTypeDto;

@@ -16,7 +16,7 @@ DROP TABLE IF EXISTS Config CASCADE;
 
 CREATE TABLE City(
   id SERIAL,
-  name VARCHAR(50),
+  name TEXT,
   geom GEOMETRY,
   osmId BIGINT,
   CONSTRAINT City_PK PRIMARY KEY(id),
@@ -59,9 +59,9 @@ CREATE TABLE TIPtype(
 CREATE TABLE TIP(
   id SERIAL,
   typeId INTEGER,
-  name VARCHAR(100),
+  name TEXT,
   geom GEOMETRY,
-  address VARCHAR(255),
+  address TEXT,
   description TEXT,
   photoUrl TEXT,
   infoUrl TEXT,

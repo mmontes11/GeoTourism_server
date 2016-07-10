@@ -13,6 +13,9 @@ import com.mmontes.model.service.FavouriteService;
 import com.mmontes.model.service.RatingService;
 import com.mmontes.model.service.RouteService;
 import com.mmontes.util.GeometryUtils;
+import com.mmontes.util.dto.xml.EntryXml;
+import com.mmontes.util.dto.xml.NodeXml;
+import com.mmontes.util.dto.xml.TIPXml;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -247,5 +250,40 @@ public class DtoService {
             osmTypeDtos.add(OSMType2OSMTypeDto(osmType));
         }
         return osmTypeDtos;
+    }
+
+    public List<TIPSyncDto> TIPXml2ListTIPSyncDto(TIPXml tipXml, Long tipTypeId) {
+        List<TIPSyncDto> tipSyncDtos = new ArrayList<>();
+        String name;
+        String info_url;
+        String photo_url;
+
+        if (tipXml != null && tipXml.getNode() != null) {
+            for (NodeXml node : tipXml.getNode()) {
+                name = "";
+                info_url = "";
+                photo_url = "";
+                // FIXME: Obtener unicamente los tags necesarios en lugar de todos, evitando así tener que hacer este bucle
+                for (EntryXml entry : node.getTags()) {
+                    switch (entry.getKey()) {
+                        case "name":
+                            name = entry.getValue();
+                            break;
+                        case "website":
+                            info_url = entry.getValue();
+                            break;
+                        case "image":
+                            photo_url = entry.getValue();
+                            break;
+                    }
+                }
+                if (!name.isEmpty()) {
+                    TIPSyncDto tipSyncDto = new TIPSyncDto(
+                            node.getId(), name, tipTypeId, node.getLat(), node.getLon(), info_url, photo_url);
+                    tipSyncDtos.add(tipSyncDto);
+                }
+            }
+        }
+        return tipSyncDtos;
     }
 }

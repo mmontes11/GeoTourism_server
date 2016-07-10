@@ -19,7 +19,7 @@
         <dataSource.password>${OPENSHIFT_POSTGRESQL_DB_PASSWORD}</dataSource.password>-->
         <dataSource.driverClassName>org.postgresql.Driver</dataSource.driverClassName>
         <dataSource.jndiName>jdbc/geotourism</dataSource.jndiName>
-        <testDataSource.url>jdbc:postgresql://localhost:5432/test</testDataSource.url>
+        <testDataSource.url>jdbc:postgresql://localhost:5432/geotourism</testDataSource.url>
         <testDataSource.user>${dataSource.user}</testDataSource.user>
         <testDataSource.password>${dataSource.password}</testDataSource.password>
         <!-- DB scripts properties -->
@@ -64,7 +64,7 @@
         <!-- Skip tests -->
         <skipTests>true</skipTests>
         <!-- Repositories-->
-        <updatePolity>daily</updatePolity>
+        <updatePolity>never</updatePolity>
     </properties>
 
     <dependencies>
@@ -221,6 +221,13 @@
                 </exclusion>
             </exclusions>
         </dependency>
+
+        <!--EclipseLink (XmlPath)-->
+        <dependency>
+            <groupId>org.eclipse.persistence</groupId>
+            <artifactId>org.eclipse.persistence.moxy</artifactId>
+            <version>2.5.1</version>
+        </dependency>
     </dependencies>
     <repositories>
         <repository>
@@ -365,8 +372,8 @@
                     <autocommit>true</autocommit>
                     <onError>continue</onError>
                     <srcFiles>
-                        <srcFile>${db.script.createDB}</srcFile>
-                        <srcFile>${db.script.admin}</srcFile>
+                        <!--<srcFile>${db.script.createDB}</srcFile>-->
+                        <!--<srcFile>${db.script.admin}</srcFile>-->
                     </srcFiles>
                 </configuration>
                 <executions>
@@ -383,8 +390,8 @@
                             <autocommit>true</autocommit>
                             <onError>continue</onError>
                             <srcFiles>
-                                <srcFile>${db.script.createDB}</srcFile>
-                                <srcFile>${db.script.testData}</srcFile>
+                                <!--<srcFile>${db.script.createDB}</srcFile>-->
+                                <!--<srcFile>${db.script.testData}</srcFile>-->
                             </srcFiles>
                         </configuration>
                     </execution>

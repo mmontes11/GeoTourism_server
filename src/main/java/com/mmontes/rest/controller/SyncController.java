@@ -18,7 +18,7 @@ public class SyncController {
     @RequestMapping(value = "/sync", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity
     synchronize() {
-        // TODO: Mover a un lugar que requiera permisos de admin. Añadir llamada a este método en la administración.
+        // TODO: Mover a un lugar que requiera permisos de admin, o directamente eliminar y dejar que el cron haga su trabajo periodicamente.
         syncService.sync();
         return new ResponseEntity<>(HttpStatus.OK);
     }

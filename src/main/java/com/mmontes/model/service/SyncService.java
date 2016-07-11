@@ -8,10 +8,13 @@ import com.mmontes.util.dto.xml.TIPXml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 /**
@@ -40,6 +43,18 @@ public class SyncService {
     @Autowired
     private DtoService dtoService;
 
+    @Scheduled(cron = "0 8 * * * *") // A las 8 de la mañana (10 hora local) todos los días
+    public void syncAddresses() {
+        System.out.println("****************** COMIENZO SINCRONIZACIÓN DIRECCIONES *******************");
+        System.out.println(DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()));
+
+        tipService.populateAddresses();
+
+        System.out.println(DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()));
+        System.out.println("****************** FIN SINCRONIZACIÓN DIRECCIONES *******************");
+    }
+
+
     // Se lanza automáticamente
     // TODO: Una vez se compruebe que funcione habrá que configurarlo para que se lance una vez a la semana (o al mes).
     // @Scheduled(cron = "0 2 * * *")
@@ -52,6 +67,9 @@ public class SyncService {
 
         int i;
         int j = 0;
+        System.out.println("****************** COMIENZO SINCRONIZACIÓN *******************");
+        System.out.println(DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()));
+        System.out.println("Ejecuciones previstas: " + (osmTypeDtos.size() * cityEnvelopeDtos.size()));
         for (OSMTypeDto osmType : osmTypeDtos) {
             i = 0;
             for (CityEnvelopeDto cityEnvelope : cityEnvelopeDtos) {
@@ -68,8 +86,10 @@ public class SyncService {
 //            if (j == 4) break;
         }
         if (!tips.isEmpty()) {
+            System.out.println("Nuevos tips: " + tips.size());
             tipService.syncTIPs(tips);
         }
+        System.out.println(DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()));
         System.out.println("****************** FIN SINCRONIZACIÓN *******************");
 
     }
@@ -85,12 +105,12 @@ public class SyncService {
                 e.printStackTrace();
                 try {
                     Thread.sleep((i * 2 + 1) * 1000);
-                    System.out.println("Pausada ejecución durante " + (i * 3 + 1) + "segundos");
+                    System.out.println("Pausada ejecución durante " + (i * 3 + 1) + " segundos");
                 } catch (InterruptedException e1) {
                 }
                 i++;
                 if (i == MAX_TRIES) {
-                    System.out.println("La siguiente URL no se ha podido procesar: " + url);
+                    System.out.println("La siguiente URL NO se ha podido procesar: " + url);
                 }
                 System.out.println("----------------------------");
             }

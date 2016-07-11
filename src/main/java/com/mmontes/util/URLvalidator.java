@@ -31,6 +31,7 @@ public class URLvalidator {
     }
 
     public static void checkURLs(TIP tip) throws InvalidTIPUrlException {
+        // FIXME: Es necesario lanzar excepciones? Así no se crea el tip. Con poner el valor a null pienso que valdría.
         if (tip.getPhotoUrl() != null && !URLvalidator.isValidURL(tip.getPhotoUrl())){
             throw new InvalidTIPUrlException("photo",tip.getPhotoUrl());
         }

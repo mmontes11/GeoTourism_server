@@ -70,11 +70,4 @@ public class TIPsController {
         }
         return new ResponseEntity<>(tipRouteDtos, HttpStatus.OK);
     }
-
-    @RequestMapping(value = "/admin/tips/sync", method = RequestMethod.POST)
-    public ResponseEntity
-    syncTIPs(@RequestBody List<TIPSyncDto> tipSyncDtos){
-        tipService.syncTIPs(tipSyncDtos);
-        return new ResponseEntity(HttpStatus.OK);
-    }
 }

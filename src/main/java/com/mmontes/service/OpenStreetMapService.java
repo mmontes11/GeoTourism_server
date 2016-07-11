@@ -25,8 +25,8 @@ public class OpenStreetMapService {
     }
 
     public Geometry getGeometryByOSMId(Long osmId) throws Exception {
-        String generatePolygonUrl = "http://polygons.openstreetmap.fr/?id="+osmId;
-        String getPolygonUrl = "http://polygons.openstreetmap.fr/get_wkt.py?id=" + osmId + "&params=0";
+        String generatePolygonUrl = Constants.OSM_POLYGONS_BASE_URL + "/?id="+osmId;
+        String getPolygonUrl = Constants.OSM_POLYGONS_BASE_URL + "/get_wkt.py?id=" + osmId + "&params=0";
 
         makeRequest(generatePolygonUrl);
         HttpURLConnection connection = makeRequest(getPolygonUrl);

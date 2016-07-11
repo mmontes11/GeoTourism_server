@@ -28,13 +28,6 @@ public class CitiesController {
         return new ResponseEntity<>(cities, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/admin/cities/sync", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity
-    syncCities(@RequestBody List<IDnameDto> cities) {
-        cityService.syncCities(cities);
-        return new ResponseEntity(HttpStatus.OK);
-    }
-
     @RequestMapping(value = "/admin/cities/envelopes", method = RequestMethod.GET,produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CityEnvelopeResponse>
     getCityEnvelopes() {

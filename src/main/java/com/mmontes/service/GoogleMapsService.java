@@ -7,6 +7,7 @@ import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
 import com.google.maps.model.TravelMode;
+import com.mmontes.util.Constants;
 import com.mmontes.util.PrivateConstants;
 import com.mmontes.util.GeometryUtils;
 import com.mmontes.util.exception.GoogleMapsServiceException;
@@ -22,11 +23,9 @@ import java.util.concurrent.TimeUnit;
 public class GoogleMapsService {
 
     private GeoApiContext context;
-    private String APIkey;
 
     public GoogleMapsService() {
         this.context = new GeoApiContext();
-        this.APIkey = PrivateConstants.GOOGLE_MAPS_KEY;
         this.context.setApiKey(PrivateConstants.GOOGLE_MAPS_KEY)
                 .setQueryRateLimit(5)
                 .setConnectTimeout(5, TimeUnit.SECONDS)
@@ -35,11 +34,11 @@ public class GoogleMapsService {
     }
 
     public String getTIPGoogleMapsUrl(Coordinate coordinate) {
-        return "http://maps.google.com/maps?q=loc:" + coordinate.y + "," + coordinate.x;
+        return  Constants.GMAPS_BASE_URL + coordinate.y + "," + coordinate.x;
     }
 
     public String getRouteGoogleMapsUrl(List<Coordinate> coordinates,String travelMode){
-        String routeUrl = "http://maps.google.com/maps?";
+        String routeUrl = Constants.GMAPS_BASE_URL;
         for (int i = 0; i<coordinates.size(); i++){
             Coordinate coordinate = coordinates.get(i);
             String coordinateString = coordinate.y + "," + coordinate.x;
@@ -133,7 +132,6 @@ public class GoogleMapsService {
     }
 
     public void setAPIkey(String APIkey) {
-        this.APIkey = APIkey;
         this.context.setApiKey(APIkey);
     }
 }

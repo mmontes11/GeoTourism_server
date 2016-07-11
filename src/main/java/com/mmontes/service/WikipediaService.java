@@ -1,14 +1,10 @@
 package com.mmontes.service;
 
 import com.amazonaws.util.json.JSONArray;
-import com.amazonaws.util.json.JSONObject;
 import com.mmontes.rest.response.WikipediaResult;
+import com.mmontes.util.Constants;
 import com.mmontes.util.JSONParser;
-import com.mmontes.util.XMLParser;
 import org.springframework.stereotype.Service;
-import org.w3c.dom.Document;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
@@ -30,8 +26,7 @@ public class WikipediaService {
         } catch (UnsupportedEncodingException e) {
             return null;
         }
-        // Ej: https://es.wikipedia.org/w/api.php?action=opensearch&search=torre%20de&limit=10&namespace=0&format=json
-        String url = "https://" + language + ".wikipedia.org/w/api.php?action=opensearch&search=" + encodedName
+        String url = "https://" + language + Constants.WIKIPEDIA_SEARCH_URL + encodedName
                 + "&limit=10&namespace=0&format=json";
         URL obj = new URL(url);
         HttpURLConnection connection = (HttpURLConnection) obj.openConnection();

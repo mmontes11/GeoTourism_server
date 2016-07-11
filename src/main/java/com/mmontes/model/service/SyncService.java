@@ -1,5 +1,6 @@
 package com.mmontes.model.service;
 
+import com.mmontes.util.Constants;
 import com.mmontes.util.dto.CityEnvelopeDto;
 import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.dto.OSMTypeDto;
@@ -14,18 +15,11 @@ import org.springframework.web.client.RestTemplate;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by Carlos on 10/07/2016.
- */
 @Service("SyncService")
 @EnableScheduling
 public class SyncService {
 
     private final int MAX_TRIES = 3;
-
-    // private String server = "http://www.overpass-api.de/api/xapi_meta?node[bbox=%s][%s=%s]";
-    private String server = "http://api.openstreetmap.fr/xapi?node[bbox=%s][%s=%s]";
-
     private RestTemplate restTemplate = new RestTemplate();
 
     @Autowired
@@ -40,7 +34,6 @@ public class SyncService {
     @Autowired
     private DtoService dtoService;
 
-    // Se lanza automáticamente
     // TODO: Una vez se compruebe que funcione habrá que configurarlo para que se lance una vez a la semana (o al mes).
     // @Scheduled(cron = "0 2 * * *")
     public void sync() {
@@ -50,22 +43,13 @@ public class SyncService {
         List<OSMTypeDto> osmTypeDtos = configService.getOSMtypes(true);
         List<CityEnvelopeDto> cityEnvelopeDtos = cityService.getCityEnvelopes();
 
-        int i;
-        int j = 0;
         for (OSMTypeDto osmType : osmTypeDtos) {
-            i = 0;
             for (CityEnvelopeDto cityEnvelope : cityEnvelopeDtos) {
-                url = String.format(server, cityEnvelope.getGeom(), osmType.getKey(), osmType.getValue());
+                url = String.format(Constants.OSM_BASE_URL, cityEnvelope.getGeom(), osmType.getKey(), osmType.getValue());
                 System.out.println("OSM get:" + url);
                 List<TIPSyncDto> tipsSync = doRequest(url, osmType.getTipTypeID());
                 if (tipsSync != null) tips.addAll(tipsSync);
-
-                // TODO: Breaks para debuggear
-//                i++;
-//                if (i == 4) break;
             }
-//            j++;
-//            if (j == 4) break;
         }
         if (!tips.isEmpty()) {
             tipService.syncTIPs(tips);

@@ -5,7 +5,10 @@ import com.mmontes.util.dto.FeatureSearchDto;
 import com.mmontes.util.dto.TIPDetailsDto;
 import com.mmontes.util.dto.TIPRouteDto;
 import com.mmontes.util.dto.TIPSyncDto;
-import com.mmontes.util.exception.*;
+import com.mmontes.util.exception.InstanceNotFoundException;
+import com.mmontes.util.exception.InvalidRouteException;
+import com.mmontes.util.exception.InvalidTIPUrlException;
+import com.mmontes.util.exception.TIPLocationException;
 import com.vividsolutions.jts.geom.Geometry;
 
 import java.util.List;
@@ -25,4 +28,5 @@ public interface TIPService {
     int getNumRoutes(Long tipId) throws InstanceNotFoundException;
     void syncTIPs(List<TIPSyncDto> tipSyncDtos);
     void review(Long tipId) throws InstanceNotFoundException;
+    void populateAddresses();
 }

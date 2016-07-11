@@ -5,7 +5,6 @@ import com.mmontes.model.util.QueryUtils;
 import com.mmontes.model.util.genericdao.GenericDaoHibernate;
 import com.mmontes.util.Constants;
 import com.mmontes.util.GeometryUtils;
-import com.mmontes.util.PrivateConstants;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import com.vividsolutions.jts.geom.Geometry;
 import org.hibernate.Query;
@@ -79,5 +78,11 @@ public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements T
         String ids = QueryUtils.getINvalues(osmIds);
         String queryString = "DELETE FROM TIP t WHERE t.osmId IS NOT NULL AND t.osmId NOT IN " + ids;
         getSession().createSQLQuery(queryString).executeUpdate();
+    }
+
+    @Override
+    public List<TIP> findWithoutAddress() {
+        String queryString = "SELECT t FROM TIP t WHERE t.address is null";
+        return getSession().createQuery(queryString).list();
     }
 }

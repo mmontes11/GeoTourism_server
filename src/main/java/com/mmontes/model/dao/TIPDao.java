@@ -13,4 +13,5 @@ public interface TIPDao extends GenericDao<TIP, Long>{
     boolean geometryContainsTIPs(Geometry superGeometry, List<Long> tipIds);
     TIP findByOSMId(Long osmId) throws InstanceNotFoundException;
     void deleteNonExistingFromOSMIds (List<Long> osmIds);
+    List<TIP> findWithoutAddress();
 }

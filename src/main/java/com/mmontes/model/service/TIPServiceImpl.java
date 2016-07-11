@@ -1,6 +1,9 @@
 package com.mmontes.model.service;
 
-import com.mmontes.model.dao.*;
+import com.mmontes.model.dao.RouteDao;
+import com.mmontes.model.dao.TIPDao;
+import com.mmontes.model.dao.TIPtypeDao;
+import com.mmontes.model.dao.UserAccountDao;
 import com.mmontes.model.entity.City;
 import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.model.entity.TIP.TIPtype;
@@ -55,14 +58,14 @@ public class TIPServiceImpl implements TIPService {
 
         TIPtype tipType = tipTypeDao.findById(typeId);
         googleMapsService.setAPIkey(PrivateConstants.GOOGLE_MAPS_KEY);
-        return create(tipType,name,description,photoUrl,infoUrl,geom,osmId,reviewed,true);
+        return create(tipType, name, description, photoUrl, infoUrl, geom, osmId, reviewed, true);
     }
 
     public TIPDetailsDto
     createSyncTIPs(TIPtype tipType, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long osmId, boolean reviewed)
             throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException {
         googleMapsService.setAPIkey(PrivateConstants.GOOGLE_MAPS_KEY_ETL);
-        return create(tipType,name,description,photoUrl,infoUrl,geom,osmId,reviewed,true);
+        return create(tipType, name, description, photoUrl, infoUrl, geom, osmId, reviewed, false);
     }
 
     public TIPDetailsDto
@@ -79,15 +82,19 @@ public class TIPServiceImpl implements TIPService {
         tip.setReviewed(reviewed);
 
         Coordinate coordinate = tip.getGeom().getCoordinate();
-
         tip.setGoogleMapsUrl(googleMapsService.getTIPGoogleMapsUrl(coordinate));
+
+        // Si no se encuentra la dirección, se pone como vacío. Si el servidor falla, se pone a null
         try {
-            if (getAddress){
+            if (getAddress) {
                 tip.setAddress(googleMapsService.getAddress(coordinate));
             }
-        } catch (Exception e) {
+        } catch (GoogleMapsServiceException e) {
             e.printStackTrace();
-            throw new TIPLocationException("Invalid TIP address");
+            tip.setAddress(null);
+        } catch (GoogleMapsAddressException e) {
+            e.printStackTrace();
+            tip.setAddress("");
         }
 
         City city = cityService.getCityFromLocation(geom);
@@ -108,7 +115,7 @@ public class TIPServiceImpl implements TIPService {
             userAccount = userAccountDao.findByFBUserID(facebookUserId);
         }
         TIPtype tipType = tipTypeDao.findById(type);
-        return edit(tip,userAccount,tipType,name,description,infoUrl,address,photoUrl);
+        return edit(tip, userAccount, tipType, name, description, infoUrl, address, photoUrl);
     }
 
     public List<FeatureSearchDto> find(String boundsWKT, List<Long> typeIds, List<Long> cityIds, List<Long> facebookUserIds, List<Long> routes, boolean reviewed)
@@ -168,7 +175,7 @@ public class TIPServiceImpl implements TIPService {
     }
 
     @Override
-    public void syncTIPs(List<TIPSyncDto> tipSyncDtos)  {
+    public void syncTIPs(List<TIPSyncDto> tipSyncDtos) {
         List<Long> osmIds = new ArrayList<>();
         for (TIPSyncDto tipSyncDto : tipSyncDtos) {
             try {
@@ -186,7 +193,7 @@ public class TIPServiceImpl implements TIPService {
                 } catch (InstanceNotFoundException e) {
                     createSyncTIPs(tipType, tipSyncDto.getName(), null, tipSyncDto.getPhoto_url(), tipSyncDto.getInfo_url(), geom, osmId, true);
                 }
-            } catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
@@ -198,5 +205,24 @@ public class TIPServiceImpl implements TIPService {
         TIP tip = tipDao.findById(tipId);
         tip.setReviewed(true);
         tipDao.save(tip);
+    }
+
+    @Override
+    public void populateAddresses() {
+        googleMapsService.setAPIkey(PrivateConstants.GOOGLE_MAPS_KEY_ETL);
+        List<TIP> tips = tipDao.findWithoutAddress();
+        System.out.println("Tips sin dirección: " + tips.size());
+        for (TIP tip : tips) {
+            try {
+                tip.setAddress(googleMapsService.getAddress(tip.getGeom().getCoordinate()));
+            } catch (GoogleMapsAddressException e) {
+                tip.setAddress("");
+            } catch (GoogleMapsServiceException e) {
+                tip.setAddress(null);
+                break;
+            }
+            tipDao.save(tip);
+        }
+        System.out.println("Tips sin dirección una vez finalizado el proceso: " + tipDao.findWithoutAddress().size());
     }
 }

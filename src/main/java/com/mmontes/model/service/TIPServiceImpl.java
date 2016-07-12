@@ -92,9 +92,6 @@ public class TIPServiceImpl implements TIPService {
         } catch (GoogleMapsServiceException e) {
             e.printStackTrace();
             tip.setAddress(null);
-        } catch (GoogleMapsAddressException e) {
-            e.printStackTrace();
-            tip.setAddress("");
         }
 
         City city = cityService.getCityFromLocation(geom);
@@ -215,8 +212,6 @@ public class TIPServiceImpl implements TIPService {
         for (TIP tip : tips) {
             try {
                 tip.setAddress(googleMapsService.getAddress(tip.getGeom().getCoordinate()));
-            } catch (GoogleMapsAddressException e) {
-                tip.setAddress("");
             } catch (GoogleMapsServiceException e) {
                 tip.setAddress(null);
                 break;

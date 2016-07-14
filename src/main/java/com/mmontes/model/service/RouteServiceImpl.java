@@ -9,6 +9,7 @@ import com.mmontes.model.entity.route.Route;
 import com.mmontes.model.entity.route.RouteTIP;
 import com.mmontes.service.GoogleMapsService;
 import com.mmontes.util.GeometryUtils;
+import com.mmontes.util.PrivateConstants;
 import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.dto.FeatureSearchDto;
 import com.mmontes.util.dto.RouteDetailsDto;
@@ -42,10 +43,9 @@ public class RouteServiceImpl implements RouteService {
     private DtoService dtoService;
 
     @Autowired
-    private GoogleMapsService googleMapsService;
-
-    @Autowired
     private TIPService tipService;
+
+    private GoogleMapsService googleMapsService = new GoogleMapsService(PrivateConstants.GOOGLE_MAPS_KEY);
 
     private List<Coordinate> setRouteTIPsAndGetCoords(Route route, List<Long> tipIds) throws InstanceNotFoundException {
         List<Coordinate> coordinates = new ArrayList<>();

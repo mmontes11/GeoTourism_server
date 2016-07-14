@@ -3,30 +3,29 @@ package com.mmontes.service;
 import com.google.maps.DirectionsApi;
 import com.google.maps.GeoApiContext;
 import com.google.maps.GeocodingApi;
+import com.google.maps.errors.ZeroResultsException;
 import com.google.maps.model.DirectionsRoute;
 import com.google.maps.model.GeocodingResult;
 import com.google.maps.model.LatLng;
 import com.google.maps.model.TravelMode;
 import com.mmontes.util.Constants;
-import com.mmontes.util.PrivateConstants;
 import com.mmontes.util.GeometryUtils;
+import com.mmontes.util.exception.GoogleMapsAddressException;
 import com.mmontes.util.exception.GoogleMapsServiceException;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-@Service("GoogleMapsService")
 public class GoogleMapsService {
 
     private GeoApiContext context;
 
-    public GoogleMapsService() {
+    public GoogleMapsService(String apiKey) {
         this.context = new GeoApiContext();
-        this.context.setApiKey(PrivateConstants.GOOGLE_MAPS_KEY)
+        this.context.setApiKey(apiKey)
                 .setQueryRateLimit(5)
                 .setConnectTimeout(5, TimeUnit.SECONDS)
                 .setReadTimeout(5, TimeUnit.SECONDS)
@@ -54,18 +53,20 @@ public class GoogleMapsService {
         return routeUrl;
     }
 
-    public String getAddress(Coordinate coordinate) throws GoogleMapsServiceException {
+    public String getAddress(Coordinate coordinate) throws GoogleMapsServiceException, GoogleMapsAddressException {
         GeocodingResult[] results;
         try {
             results = GeocodingApi.newRequest(context)
                     .latlng(new LatLng(coordinate.y, coordinate.x))
                     .await();
+        } catch (ZeroResultsException e) {
+            throw new GoogleMapsAddressException();
         } catch (Exception e) {
             e.printStackTrace();
             throw new GoogleMapsServiceException();
         }
         if (results.length == 0){
-            throw new GoogleMapsServiceException();
+            throw new GoogleMapsAddressException();
         }
         return results[0].formattedAddress;
     }
@@ -129,9 +130,5 @@ public class GoogleMapsService {
             add(TravelMode.BICYCLING.toUrlValue());
         }};
         return validTravelModes.contains(travelModeString);
-    }
-
-    public void setAPIkey(String APIkey) {
-        this.context.setApiKey(APIkey);
     }
 }

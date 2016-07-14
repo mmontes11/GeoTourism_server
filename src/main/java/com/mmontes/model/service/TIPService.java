@@ -17,7 +17,7 @@ public interface TIPService {
 
     TIPDetailsDto create(Long typeId, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long osmId, boolean reviewed)
             throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException;
-    TIPDetailsDto findById(Long TIPId,Long facebooUserId) throws InstanceNotFoundException;
+    TIPDetailsDto findById(Long TIPId,Long facebookUserId) throws InstanceNotFoundException;
     TIPRouteDto findById(Long TIPId) throws InstanceNotFoundException;
     void remove(Long TIPId) throws InstanceNotFoundException, InvalidRouteException;
     List<FeatureSearchDto> find(String boundsWKT, List<Long> typeIds, List<Long> cityIds, List<Long> facebookUserIds, List<Long> routes, boolean reviewed)
@@ -28,5 +28,4 @@ public interface TIPService {
     int getNumRoutes(Long tipId) throws InstanceNotFoundException;
     void syncTIPs(List<TIPSyncDto> tipSyncDtos);
     void review(Long tipId) throws InstanceNotFoundException;
-    void populateAddresses();
 }

@@ -49,27 +49,21 @@ public class TIPServiceImpl implements TIPService {
     @Autowired
     private DtoService dtoService;
 
-    @Autowired
-    private GoogleMapsService googleMapsService;
+    private GoogleMapsService gMapsServiceForUsers = new GoogleMapsService(PrivateConstants.GOOGLE_MAPS_KEY);
+    private GoogleMapsService gMapsServiceForETL = new GoogleMapsService(PrivateConstants.GOOGLE_MAPS_KEY_ETL);
 
-    public TIPDetailsDto
-    create(Long typeId, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long osmId, boolean reviewed)
-            throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException {
-
-        TIPtype tipType = tipTypeDao.findById(typeId);
-        googleMapsService.setAPIkey(PrivateConstants.GOOGLE_MAPS_KEY);
-        return create(tipType, name, description, photoUrl, infoUrl, geom, osmId, reviewed, true);
+    private String getAddress(GoogleMapsService gMapsService, Coordinate coordinate){
+        try {
+            return gMapsService.getAddress(coordinate);
+        } catch (GoogleMapsServiceException e) {
+            return null;
+        } catch (GoogleMapsAddressException e) {
+            return "";
+        }
     }
 
-    public TIPDetailsDto
-    createSyncTIPs(TIPtype tipType, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long osmId, boolean reviewed)
-            throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException {
-        googleMapsService.setAPIkey(PrivateConstants.GOOGLE_MAPS_KEY_ETL);
-        return create(tipType, name, description, photoUrl, infoUrl, geom, osmId, reviewed, false);
-    }
-
-    public TIPDetailsDto
-    create(TIPtype tipType, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long osmId, boolean reviewed, boolean getAddress)
+    private TIPDetailsDto
+    create(TIPtype tipType, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long osmId, boolean reviewed, String address)
             throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException {
         TIP tip = new TIP();
         tip.setType(tipType);
@@ -82,17 +76,12 @@ public class TIPServiceImpl implements TIPService {
         tip.setReviewed(reviewed);
 
         Coordinate coordinate = tip.getGeom().getCoordinate();
-        tip.setGoogleMapsUrl(googleMapsService.getTIPGoogleMapsUrl(coordinate));
+        tip.setGoogleMapsUrl(gMapsServiceForUsers.getTIPGoogleMapsUrl(coordinate));
 
-        // Si no se encuentra la dirección, se pone como vacío. Si el servidor falla, se pone a null
-        try {
-            if (getAddress) {
-                tip.setAddress(googleMapsService.getAddress(coordinate));
-            }
-        } catch (GoogleMapsServiceException e) {
-            e.printStackTrace();
-            tip.setAddress(null);
+        if (address == null){
+            address = getAddress(gMapsServiceForUsers,coordinate);
         }
+        tip.setGoogleMapsUrl(address);
 
         City city = cityService.getCityFromLocation(geom);
         tip.setCity(city);
@@ -103,6 +92,19 @@ public class TIPServiceImpl implements TIPService {
         return dtoService.TIP2TIPDetailsDto(tip, null);
     }
 
+    public TIPDetailsDto
+    create(Long typeId, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long osmId, boolean reviewed)
+            throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException {
+        TIPtype tipType = tipTypeDao.findById(typeId);
+        return create(tipType, name, description, photoUrl, infoUrl, geom, osmId, reviewed, null);
+    }
+
+    public TIPDetailsDto
+    createSyncTIPs(TIPtype tipType, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long osmId, boolean reviewed)
+            throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException {
+        String address = getAddress(gMapsServiceForETL,geom.getCoordinate());
+        return create(tipType, name, description, photoUrl, infoUrl, geom, osmId, reviewed, address);
+    }
 
     public TIPDetailsDto edit(Long TIPId, Long facebookUserId, Long type, String name, String description, String infoUrl, String address, String photoUrl)
             throws InstanceNotFoundException, InvalidTIPUrlException {
@@ -202,22 +204,5 @@ public class TIPServiceImpl implements TIPService {
         TIP tip = tipDao.findById(tipId);
         tip.setReviewed(true);
         tipDao.save(tip);
-    }
-
-    @Override
-    public void populateAddresses() {
-        googleMapsService.setAPIkey(PrivateConstants.GOOGLE_MAPS_KEY_ETL);
-        List<TIP> tips = tipDao.findWithoutAddress();
-        System.out.println("Tips sin dirección: " + tips.size());
-        for (TIP tip : tips) {
-            try {
-                tip.setAddress(googleMapsService.getAddress(tip.getGeom().getCoordinate()));
-            } catch (GoogleMapsServiceException e) {
-                tip.setAddress(null);
-                break;
-            }
-            tipDao.save(tip);
-        }
-        System.out.println("Tips sin dirección una vez finalizado el proceso: " + tipDao.findWithoutAddress().size());
     }
 }

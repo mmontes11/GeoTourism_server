@@ -1,6 +1,10 @@
 package com.mmontes.model.service;
 
+import com.mmontes.model.dao.TIPDao;
+import com.mmontes.model.entity.TIP.TIP;
+import com.mmontes.service.GoogleMapsService;
 import com.mmontes.util.Constants;
+import com.mmontes.util.PrivateConstants;
 import com.mmontes.util.dto.CityEnvelopeDto;
 import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.dto.OSMTypeDto;
@@ -9,10 +13,13 @@ import com.mmontes.util.dto.xml.TIPXml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import java.text.DateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Service("SyncService")
@@ -34,29 +41,10 @@ public class SyncService {
     @Autowired
     private DtoService dtoService;
 
-    // TODO: Una vez se compruebe que funcione habrá que configurarlo para que se lance una vez a la semana (o al mes).
-    // @Scheduled(cron = "0 2 * * *")
-    public void sync() {
+    @Autowired
+    private TIPDao tipDao;
 
-        String url;
-        List<TIPSyncDto> tips = new ArrayList<>();
-        List<OSMTypeDto> osmTypeDtos = configService.getOSMtypes(true);
-        List<CityEnvelopeDto> cityEnvelopeDtos = cityService.getCityEnvelopes();
-
-        for (OSMTypeDto osmType : osmTypeDtos) {
-            for (CityEnvelopeDto cityEnvelope : cityEnvelopeDtos) {
-                url = String.format(Constants.OSM_BASE_URL, cityEnvelope.getGeom(), osmType.getKey(), osmType.getValue());
-                System.out.println("OSM get:" + url);
-                List<TIPSyncDto> tipsSync = doRequest(url, osmType.getTipTypeID());
-                if (tipsSync != null) tips.addAll(tipsSync);
-            }
-        }
-        if (!tips.isEmpty()) {
-            tipService.syncTIPs(tips);
-        }
-        System.out.println("****************** FIN SINCRONIZACIÓN *******************");
-
-    }
+    private GoogleMapsService gMapsServiceForETL = new GoogleMapsService(PrivateConstants.GOOGLE_MAPS_KEY_ETL);
 
     private List<TIPSyncDto> doRequest(String url, Long tipTypeId) {
         int i = 0;
@@ -81,5 +69,54 @@ public class SyncService {
         }
         return new ArrayList<>();
     }
+
+    @Scheduled(cron = Constants.CRON_SYNC_TIPS)
+    public void syncTIPs() {
+        String url;
+        List<TIPSyncDto> tips = new ArrayList<>();
+        List<OSMTypeDto> osmTypeDtos = configService.getOSMtypes(true);
+        List<CityEnvelopeDto> cityEnvelopeDtos = cityService.getCityEnvelopes();
+
+        for (OSMTypeDto osmType : osmTypeDtos) {
+            for (CityEnvelopeDto cityEnvelope : cityEnvelopeDtos) {
+                url = String.format(Constants.OSM_BASE_URL, cityEnvelope.getGeom(), osmType.getKey(), osmType.getValue());
+                System.out.println("OSM get:" + url);
+                List<TIPSyncDto> tipsSync = doRequest(url, osmType.getTipTypeID());
+                if (tipsSync != null) tips.addAll(tipsSync);
+            }
+        }
+        if (!tips.isEmpty()) {
+            tipService.syncTIPs(tips);
+        }
+        System.out.println("****************** FIN SINCRONIZACIÓN *******************");
+
+    }
+
+    public void populateAddresses() {
+        List<TIP> tips = tipDao.findWithoutAddress();
+        System.out.println("Tips sin dirección: " + tips.size());
+        for (TIP tip : tips) {
+            try {
+                tip.setAddress(gMapsServiceForETL.getAddress(tip.getGeom().getCoordinate()));
+            } catch (Exception e) {
+                tip.setAddress(null);
+                break;
+            }
+            tipDao.save(tip);
+        }
+        System.out.println("Tips sin dirección una vez finalizado el proceso: " + tipDao.findWithoutAddress().size());
+    }
+
+    @Scheduled(cron = Constants.CRON_SYNC_ADDRESSES)
+    public void syncAddresses() {
+        System.out.println("****************** COMIENZO SINCRONIZACIÓN DIRECCIONES *******************");
+        System.out.println(DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()));
+
+        populateAddresses();
+
+        System.out.println(DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()));
+        System.out.println("****************** FIN SINCRONIZACIÓN DIRECCIONES *******************");
+    }
+
 
 }

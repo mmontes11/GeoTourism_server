@@ -70,7 +70,7 @@ public class SyncService {
         return new ArrayList<>();
     }
 
-    //@Scheduled(cron = Constants.CRON_SYNC_TIPS)
+    @Scheduled(cron = Constants.CRON_SYNC_TIPS)
     public void syncTIPs() {
         String url;
         List<TIPSyncDto> tips = new ArrayList<>();
@@ -107,7 +107,7 @@ public class SyncService {
         System.out.println("Tips sin dirección una vez finalizado el proceso: " + tipDao.findWithoutAddress().size());
     }
 
-    //@Scheduled(cron = Constants.CRON_SYNC_ADDRESSES)
+    @Scheduled(cron = Constants.CRON_SYNC_ADDRESSES)
     public void syncAddresses() {
         System.out.println("****************** COMIENZO SINCRONIZACIÓN DIRECCIONES *******************");
         System.out.println(DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()));

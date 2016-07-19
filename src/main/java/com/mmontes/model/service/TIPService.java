@@ -28,4 +28,5 @@ public interface TIPService {
     int getNumRoutes(Long tipId) throws InstanceNotFoundException;
     void syncTIPs(List<TIPSyncDto> tipSyncDtos);
     void review(Long tipId) throws InstanceNotFoundException;
+    void populateAddresses();
 }

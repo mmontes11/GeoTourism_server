@@ -41,18 +41,12 @@ public class SyncService {
     @Autowired
     private DtoService dtoService;
 
-    @Autowired
-    private TIPDao tipDao;
-
-    private GoogleMapsService gMapsServiceForETL = new GoogleMapsService(PrivateConstants.GOOGLE_MAPS_KEY_ETL);
-
     private List<TIPSyncDto> doRequest(String url, Long tipTypeId) {
         int i = 0;
         while (i < MAX_TRIES) {
             try {
                 ResponseEntity<TIPXml> responseEntity = restTemplate.getForEntity(url, TIPXml.class);
                 return dtoService.TIPXml2ListTIPSyncDto(responseEntity.getBody(), tipTypeId);
-
             } catch (Exception e) {
                 e.printStackTrace();
                 try {
@@ -92,27 +86,12 @@ public class SyncService {
 
     }
 
-    public void populateAddresses() {
-        List<TIP> tips = tipDao.findWithoutAddress();
-        System.out.println("Tips sin dirección: " + tips.size());
-        for (TIP tip : tips) {
-            try {
-                tip.setAddress(gMapsServiceForETL.getAddress(tip.getGeom().getCoordinate()));
-            } catch (Exception e) {
-                tip.setAddress(null);
-                break;
-            }
-            tipDao.save(tip);
-        }
-        System.out.println("Tips sin dirección una vez finalizado el proceso: " + tipDao.findWithoutAddress().size());
-    }
-
     //@Scheduled(cron = Constants.CRON_SYNC_ADDRESSES)
     public void syncAddresses() {
         System.out.println("****************** COMIENZO SINCRONIZACIÓN DIRECCIONES *******************");
         System.out.println(DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()));
 
-        populateAddresses();
+        tipService.populateAddresses();
 
         System.out.println(DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()));
         System.out.println("****************** FIN SINCRONIZACIÓN DIRECCIONES *******************");

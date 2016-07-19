@@ -81,7 +81,7 @@ public class TIPServiceImpl implements TIPService {
         if (address == null){
             address = getAddress(gMapsServiceForUsers,coordinate);
         }
-        tip.setGoogleMapsUrl(address);
+        tip.setAddress(address);
 
         City city = cityService.getCityFromLocation(geom);
         tip.setCity(city);
@@ -204,5 +204,21 @@ public class TIPServiceImpl implements TIPService {
         TIP tip = tipDao.findById(tipId);
         tip.setReviewed(true);
         tipDao.save(tip);
+    }
+
+    @Override
+    public void populateAddresses() {
+        List<TIP> tips = tipDao.findWithoutAddress();
+        System.out.println("Tips sin dirección: " + tips.size());
+        for (TIP tip : tips) {
+            try {
+                tip.setAddress(gMapsServiceForETL.getAddress(tip.getGeom().getCoordinate()));
+            } catch (Exception e) {
+                tip.setAddress(null);
+                break;
+            }
+            tipDao.save(tip);
+        }
+        System.out.println("Tips sin dirección una vez finalizado el proceso: " + tipDao.findWithoutAddress().size());
     }
 }

@@ -1,10 +1,6 @@
 package com.mmontes.model.service;
 
-import com.mmontes.model.dao.TIPDao;
-import com.mmontes.model.entity.TIP.TIP;
-import com.mmontes.service.GoogleMapsService;
 import com.mmontes.util.Constants;
-import com.mmontes.util.PrivateConstants;
 import com.mmontes.util.dto.CityEnvelopeDto;
 import com.mmontes.util.dto.DtoService;
 import com.mmontes.util.dto.OSMTypeDto;
@@ -13,7 +9,6 @@ import com.mmontes.util.dto.xml.TIPXml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 

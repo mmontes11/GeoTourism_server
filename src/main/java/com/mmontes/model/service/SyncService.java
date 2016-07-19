@@ -9,6 +9,7 @@ import com.mmontes.util.dto.xml.TIPXml;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -59,7 +60,7 @@ public class SyncService {
         return new ArrayList<>();
     }
 
-    //@Scheduled(cron = Constants.CRON_SYNC_TIPS)
+    @Scheduled(cron = Constants.CRON_SYNC_TIPS)
     public void syncTIPs() {
         String url;
         List<TIPSyncDto> tips = new ArrayList<>();
@@ -81,7 +82,7 @@ public class SyncService {
 
     }
 
-    //@Scheduled(cron = Constants.CRON_SYNC_ADDRESSES)
+    @Scheduled(cron = Constants.CRON_SYNC_ADDRESSES)
     public void syncAddresses() {
         System.out.println("****************** COMIENZO SINCRONIZACIÓN DIRECCIONES *******************");
         System.out.println(DateFormat.getDateTimeInstance().format(Calendar.getInstance().getTime()));

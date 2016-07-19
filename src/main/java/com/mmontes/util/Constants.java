@@ -18,6 +18,7 @@ public class Constants {
     public static final String GMAPS_BASE_URL = "http://maps.google.com/maps";
     public static final String WIKIPEDIA_SEARCH_URL = ".wikipedia.org/w/api.php?action=opensearch&search=";
 
-    public static final String CRON_SYNC_TIPS = "0 0 3 * * Sun";
-    public static final String CRON_SYNC_ADDRESSES = "0 0 3 * * Mon";
+    public static final String CRON_SYNC_TIPS = "0 0 3 * * Wed";
+    public static final String CRON_SYNC_ADDRESSES = "0 0 3 * * Thu";
 }
+

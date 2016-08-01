@@ -16,7 +16,7 @@ import java.util.List;
 @SuppressWarnings("unchecked")
 public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements TIPDao {
 
-    public List<TIP> find(String boundsWKT, List<Long> typeIds, List<Long> cityIds, List<Long> facebookUserIds, List<Long> routes, boolean reviewed) {
+    public List<TIP> find(String boundsWKT, List<Long> typeIds, List<Long> cityIds, List<Long> facebookUserIds, List<Long> routes, boolean reviewed, String query) {
 
         boolean filterByFacebookUserIds = facebookUserIds != null && !facebookUserIds.isEmpty();
         boolean filterByContainedInRoutes = routes != null && !routes.isEmpty();
@@ -47,8 +47,14 @@ public class TIPDaoHibernate extends GenericDaoHibernate<TIP, Long> implements T
             String FBuserIds = QueryUtils.getINvalues(facebookUserIds);
             queryString += "AND u.facebookuserid IN " + FBuserIds + " ";
         }
-        Query query = getSession().createSQLQuery(queryString).addEntity(TIP.class);
-        return query.list();
+        if (query != null){
+            queryString += "AND (LOWER(t.name) LIKE  '%" + query.toLowerCase() +"%' ";
+            queryString += " OR LOWER(t.description) LIKE '%"+ query.toLowerCase() +"%' ";
+            queryString += " OR LOWER(t.address) LIKE '%"+ query.toLowerCase() +"%')";
+        }
+
+        Query dbQuery = getSession().createSQLQuery(queryString).addEntity(TIP.class);
+        return dbQuery.list();
     }
 
     @Override

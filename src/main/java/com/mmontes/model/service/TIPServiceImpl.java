@@ -117,9 +117,9 @@ public class TIPServiceImpl implements TIPService {
         return edit(tip, userAccount, tipType, name, description, infoUrl, address, photoUrl);
     }
 
-    public List<FeatureSearchDto> find(String boundsWKT, List<Long> typeIds, List<Long> cityIds, List<Long> facebookUserIds, List<Long> routes, boolean reviewed)
+    public List<FeatureSearchDto> find(String boundsWKT, List<Long> typeIds, List<Long> cityIds, List<Long> facebookUserIds, List<Long> routes, boolean reviewed, String query)
             throws InstanceNotFoundException {
-        List<TIP> tips = tipDao.find(boundsWKT, typeIds, cityIds, facebookUserIds, routes, reviewed);
+        List<TIP> tips = tipDao.find(boundsWKT, typeIds, cityIds, facebookUserIds, routes, reviewed, query);
         return dtoService.ListTIP2ListFeatureSearchDto(tips);
     }
 

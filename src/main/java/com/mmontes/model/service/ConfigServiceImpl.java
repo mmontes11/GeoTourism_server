@@ -6,7 +6,10 @@ import com.mmontes.model.entity.OSM.OSMType;
 import com.mmontes.model.entity.TIP.TIP;
 import com.mmontes.model.entity.TIP.TIPtype;
 import com.mmontes.util.GeometryUtils;
-import com.mmontes.util.dto.*;
+import com.mmontes.util.dto.ConfigDto;
+import com.mmontes.util.dto.DtoService;
+import com.mmontes.util.dto.OSMTypeDto;
+import com.mmontes.util.dto.TIPReviewDto;
 import com.mmontes.util.exception.DuplicateInstanceException;
 import com.mmontes.util.exception.InstanceNotFoundException;
 import com.vividsolutions.jts.geom.Geometry;
@@ -74,7 +77,7 @@ public class ConfigServiceImpl implements ConfigService {
 
     @Override
     public List<TIPReviewDto> findUnreviewedTIPs() {
-        List<TIP> tips = tipDao.find(null,null,null,null,null,false);
+        List<TIP> tips = tipDao.find(null,null,null,null,null,false,null);
         return dtoService.ListTIP2ListTIPReviewDto(tips);
     }
 

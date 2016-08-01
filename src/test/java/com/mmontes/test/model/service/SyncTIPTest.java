@@ -57,7 +57,7 @@ public class SyncTIPTest {
     public void syncTIPs() {
         List<FeatureSearchDto> tipDtos;
         try {
-            tipDtos = tipService.find(null, null, null, null, null, true);
+            tipDtos = tipService.find(null, null, null, null, null, true, null);
             assertEquals(4, tipDtos.size());
 
             List<TIPSyncDto> tipSyncDtos = new ArrayList<>();
@@ -73,7 +73,7 @@ public class SyncTIPTest {
 
             tipService.syncTIPs(tipSyncDtos);
 
-            tipDtos = tipService.find(null, null, null, null, null, true);
+            tipDtos = tipService.find(null, null, null, null, null, true, null);
             assertEquals(2, tipDtos.size());
 
             TIP tip = tipDao.findByOSMId(CATHEDRAL_OSM_ID);
@@ -92,7 +92,7 @@ public class SyncTIPTest {
 
             tipService.syncTIPs(tipSyncDtos);
 
-            tipDtos = tipService.find(null, null, null, null, null, true);
+            tipDtos = tipService.find(null, null, null, null, null, true, null);
             assertEquals(3, tipDtos.size());
 
             tip = tipDao.findByOSMId(LIBERTY_STATUE_OSM_ID);

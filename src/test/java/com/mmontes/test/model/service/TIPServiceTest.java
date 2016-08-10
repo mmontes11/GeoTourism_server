@@ -54,31 +54,31 @@ public class TIPServiceTest {
             String name = "Tower of Hercules";
             String description = "Human Patrimony";
             Geometry geom = GeometryUtils.geometryFromWKT(POINT_TORRE_HERCULES);
-            towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, true);
+            towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, true, null);
 
             name = "Alameda Santiago de Compostela";
             description = "Sitio verde";
             geom = GeometryUtils.geometryFromWKT(POINT_ALAMEDA);
-            alameda = tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, true);
+            alameda = tipService.create(NATURAL_SPACE_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, true, null);
 
             name = "Catedral Santiago de Compostela";
             description = "Sitio de peregrinacion";
             geom = GeometryUtils.geometryFromWKT(POINT_CATEDRAL_SANTIAGO);
-            cathedral = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, true);
+            cathedral = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, true, null);
 
             name = "Hotel Os Reis Catolicos";
             description = "5 estrelas";
             geom = GeometryUtils.geometryFromWKT(POINT_HOTEL_REIS_CATOLICOS);
-            reisCatolicos = tipService.create(HOTEL_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, true);
+            reisCatolicos = tipService.create(HOTEL_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, true, null);
 
             name = "Liberty Statue";
             description = "NY symbol";
             geom = GeometryUtils.geometryFromWKT(POINT_STATUE_OF_LIBERTRY);
-            statueOfLiberty = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, true);
+            statueOfLiberty = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, true, null);
 
             name = "Unreviewed Place";
             description = "Unreviewed";
-            unreviewed = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, false);
+            unreviewed = tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, false, null);
 
             favouriteService.markAsFavourite(statueOfLiberty.getId(), EXISTING_FACEBOOK_USER_ID);
             favouriteService.markAsFavourite(towerHercules.getId(), EXISTING_FACEBOOK_USER_ID2);
@@ -132,7 +132,7 @@ public class TIPServiceTest {
             String name = "Alhambra";
             String description = "Patrimonio de la humanidad";
             Geometry geom = GeometryUtils.geometryFromWKT(POINT_ALHAMBRA);
-            tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, true);
+            tipService.create(MONUMENT_DISCRIMINATOR, name, description, VALID_TIP_PHOTO_URL, VALID_TIP_INFO_URL, geom, null, true, null);
         } catch (InvalidTIPUrlException | GeometryParsingException | InstanceNotFoundException e) {
             e.printStackTrace();
             fail();

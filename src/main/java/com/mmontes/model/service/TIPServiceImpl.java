@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Service("TIPService")
@@ -63,8 +64,9 @@ public class TIPServiceImpl implements TIPService {
     }
 
     private TIPDetailsDto
-    create(TIPtype tipType, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long osmId, boolean reviewed, String address)
-            throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException {
+    create(TIPtype tipType, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long osmId,
+           boolean reviewed, String address, Long facebookUserId)
+           throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException {
         TIP tip = new TIP();
         tip.setType(tipType);
         tip.setName(name);
@@ -74,6 +76,8 @@ public class TIPServiceImpl implements TIPService {
         tip.setInfoUrl(infoUrl);
         tip.setOsmId(osmId);
         tip.setReviewed(reviewed);
+        tip.setCreationDate(Calendar.getInstance());
+        tip.setUserAccount(userAccountDao.findByFBUserID(facebookUserId));
 
         Coordinate coordinate = tip.getGeom().getCoordinate();
         tip.setGoogleMapsUrl(gMapsServiceForUsers.getTIPGoogleMapsUrl(coordinate));
@@ -93,17 +97,18 @@ public class TIPServiceImpl implements TIPService {
     }
 
     public TIPDetailsDto
-    create(Long typeId, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long osmId, boolean reviewed)
-            throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException {
+    create(Long typeId, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long osmId,
+           boolean reviewed, Long facebookUserId)
+           throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException {
         TIPtype tipType = tipTypeDao.findById(typeId);
-        return create(tipType, name, description, photoUrl, infoUrl, geom, osmId, reviewed, null);
+        return create(tipType, name, description, photoUrl, infoUrl, geom, osmId, reviewed, null, facebookUserId);
     }
 
     public TIPDetailsDto
     createSyncTIPs(TIPtype tipType, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long osmId, boolean reviewed)
             throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException {
         String address = getAddress(gMapsServiceForETL,geom.getCoordinate());
-        return create(tipType, name, description, photoUrl, infoUrl, geom, osmId, reviewed, address);
+        return create(tipType, name, description, photoUrl, infoUrl, geom, osmId, reviewed, address, null);
     }
 
     public TIPDetailsDto edit(Long TIPId, Long facebookUserId, Long type, String name, String description, String infoUrl, String address, String photoUrl)
@@ -123,10 +128,10 @@ public class TIPServiceImpl implements TIPService {
         return dtoService.ListTIP2ListFeatureSearchDto(tips);
     }
 
-    public TIPDetailsDto findById(Long TIPId, Long facebooUserId) throws InstanceNotFoundException {
+    public TIPDetailsDto findById(Long TIPId, Long facebookUserId) throws InstanceNotFoundException {
         UserAccount userAccount = null;
-        if (facebooUserId != null) {
-            userAccount = userAccountDao.findByFBUserID(facebooUserId);
+        if (facebookUserId != null) {
+            userAccount = userAccountDao.findByFBUserID(facebookUserId);
         }
         return dtoService.TIP2TIPDetailsDto(tipDao.findById(TIPId), userAccount);
     }
@@ -148,7 +153,9 @@ public class TIPServiceImpl implements TIPService {
         }
     }
 
-    private TIPDetailsDto edit(TIP tip, UserAccount userAccount, TIPtype type, String name, String description, String infoUrl, String address, String photoUrl) throws InstanceNotFoundException, InvalidTIPUrlException {
+    private TIPDetailsDto edit(TIP tip, UserAccount userAccount, TIPtype type, String name, String description,
+                               String infoUrl, String address, String photoUrl)
+            throws InstanceNotFoundException, InvalidTIPUrlException {
         tip.setType(type);
         tip.setName(name);
         tip.setDescription(description);

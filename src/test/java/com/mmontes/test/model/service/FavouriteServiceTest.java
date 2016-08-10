@@ -38,7 +38,7 @@ public class FavouriteServiceTest {
     public void favouriteCreateDeleteTest() {
         try {
             Point geom = (Point) GeometryUtils.geometryFromWKT(POINT_TORRE_HERCULES);
-            TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom, null, true);
+            TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom, null, true, null);
             TIP tip = tipDao.findById(towerHercules.getId());
 
             assertEquals(0, favouriteService.getFavouritedBy(tip.getId()).size());
@@ -82,7 +82,7 @@ public class FavouriteServiceTest {
         TIP tip = null;
         try {
             Point geom = (Point) GeometryUtils.geometryFromWKT(POINT_TORRE_HERCULES);
-            TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom, null, true);
+            TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom, null, true, null);
             tip = tipDao.findById(towerHercules.getId());
         } catch (Exception e) {
             fail();
@@ -95,7 +95,7 @@ public class FavouriteServiceTest {
         TIP tip = null;
         try {
             Point geom = (Point) GeometryUtils.geometryFromWKT(POINT_TORRE_HERCULES);
-            TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom, null, true);
+            TIPDetailsDto towerHercules = tipService.create(MONUMENT_DISCRIMINATOR, "Tower of Hercules", "Human Patrimony", VALID_TIP_PHOTO_URL, null, geom, null, true, null);
             tip = tipDao.findById(towerHercules.getId());
         } catch (Exception e) {
             fail();

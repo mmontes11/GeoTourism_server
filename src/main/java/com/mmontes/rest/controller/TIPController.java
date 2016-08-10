@@ -1,6 +1,7 @@
 package com.mmontes.rest.controller;
 
 import com.mmontes.model.service.TIPService;
+import com.mmontes.model.service.UserAccountService;
 import com.mmontes.rest.request.TIPPatchRequest;
 import com.mmontes.rest.request.TIPRequest;
 import com.mmontes.rest.response.ResponseFactory;
@@ -23,7 +24,7 @@ public class TIPController {
     @Autowired
     private TIPService tipService;
 
-    private ResponseEntity<TIPDetailsDto> createTIP(TIPRequest tipRequest,boolean reviewed){
+    private ResponseEntity<TIPDetailsDto> createTIP(TIPRequest tipRequest, Long facebookUserId, boolean reviewed){
         if (tipRequest.getName() == null || tipRequest.getName().isEmpty() ||
                 tipRequest.getGeometry() == null || tipRequest.getGeometry().isEmpty()) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -35,10 +36,11 @@ public class TIPController {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
+
         TIPDetailsDto tipDetailsDto;
         try {
             tipDetailsDto = tipService.create(tipRequest.getType(), tipRequest.getName(), tipRequest.getDescription(),
-                    tipRequest.getPhotoUrl(), tipRequest.getInfoUrl(), geometry, null, reviewed);
+                    tipRequest.getPhotoUrl(), tipRequest.getInfoUrl(), geometry, null, reviewed, facebookUserId);
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -49,13 +51,14 @@ public class TIPController {
     @RequestMapping(value = "/admin/tip", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TIPDetailsDto>
     createAdmin(@RequestBody TIPRequest tipRequest) {
-        return createTIP(tipRequest,true);
+        return createTIP(tipRequest, null, true);
     }
 
     @RequestMapping(value = "/social/tip", method = RequestMethod.POST,consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<TIPDetailsDto>
-    createSocial(@RequestBody TIPRequest tipRequest) {
-        return createTIP(tipRequest,false);
+    createSocial(@RequestBody TIPRequest tipRequest,
+                 @RequestHeader(value = "FacebookUserId", required = false) Long facebookUserId) {
+        return createTIP(tipRequest, facebookUserId, false);
     }
 
     @RequestMapping(value = "/tip/{TIPId}", method = RequestMethod.GET)

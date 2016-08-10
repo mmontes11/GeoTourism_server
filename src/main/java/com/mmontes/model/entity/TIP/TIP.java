@@ -9,6 +9,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
+import java.util.Calendar;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,6 +30,8 @@ public class TIP {
     private Long osmId;
     private boolean reviewed;
     private City city;
+    private Calendar creationDate;
+    private UserAccount userAccount;
     private Set<RouteTIP> routeTIPs = new HashSet<>();
 
     public TIP() {
@@ -146,6 +149,26 @@ public class TIP {
 
     public void setCity(City city) {
         this.city = city;
+    }
+
+    @Column(name = "creationDate")
+    @Temporal(TemporalType.TIMESTAMP)
+    public Calendar getCreationDate() {
+        return creationDate;
+    }
+
+    public void setCreationDate(Calendar creationDate) {
+        this.creationDate = creationDate;
+    }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "userId")
+    public UserAccount getUserAccount() {
+        return userAccount;
+    }
+
+    public void setUserAccount(UserAccount userAccount) {
+        this.userAccount = userAccount;
     }
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.tip", orphanRemoval=true, cascade=CascadeType.ALL)

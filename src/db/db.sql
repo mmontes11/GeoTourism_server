@@ -168,21 +168,35 @@ INSERT INTO OSMKey VALUES(1,'historic');
 INSERT INTO OSMKey VALUES(2,'tourism');
 INSERT INTO OSMKey VALUES(3,'amenity');
 
-INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(1,1,'monument');
+INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(1,1,'archaeological_site');
 INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(1,1,'battlefield');
+INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(1,1,'cannon');
 INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(1,1,'castle');
 INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(1,1,'citywalls');
+INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(1,1,'city_gate');
 INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(1,1,'memorial');
 INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(1,1,'monastery');
+INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(1,1,'monument');
 INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(1,1,'ruins');
+INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(1,1,'rune_stone');
+
+INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(2,2,'camp_site');
+INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(2,2,'picnic_site');
 INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(2,2,'viewpoint');
+
 INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(2,3,'hostel');
 INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(2,3,'hotel');
 INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(2,3,'motel');
-INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(3,4,'restaurant');
+
 INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(3,4,'fast_food');
 INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(3,4,'food_court');
+INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(3,4,'ice_cream');
+INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(3,4,'restaurant');
+
 INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(3,5,'bar');
+INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(3,5,'cafe');
+
+INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(3,6,'nightclub');
 INSERT INTO OSMType(OSMKeyId, TIPTypeId, value) VALUES(3,6,'pub');
 
 INSERT INTO Config VALUES (1,(SELECT ST_GeometryFromText('POLYGON ((-8.750267028808594 43.224942386217435, -8.750267028808594 43.524903942167406, -8.036155700683594 43.524903942167406, -8.036155700683594 43.224942386217435, -8.750267028808594 43.224942386217435))')));

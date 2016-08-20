@@ -13,6 +13,8 @@ import java.util.List;
 public class UserAccountDaoHibernate extends GenericDaoHibernate<UserAccount, Long> implements UserAccountDao {
     @Override
     public UserAccount findByFBUserID(Long FBUserID) throws InstanceNotFoundException {
+        if (FBUserID == null) return null;
+
         String queryString = "SELECT ua FROM UserAccount ua WHERE ua.facebookUserId = :id";
         UserAccount user = (UserAccount) getSession().createQuery(queryString)
                                 .setParameter("id", FBUserID)

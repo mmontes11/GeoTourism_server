@@ -22,7 +22,7 @@ import java.util.List;
 @EnableScheduling
 public class SyncService {
 
-    private final int MAX_TRIES = 3;
+    private final int MAX_TRIES = 4;
     private RestTemplate restTemplate = new RestTemplate();
 
     @Autowired
@@ -68,9 +68,9 @@ public class SyncService {
         List<CityEnvelopeDto> cityEnvelopeDtos = cityService.getCityEnvelopes();
 
         for (OSMTypeDto osmType : osmTypeDtos) {
+            System.out.println("OSM Type: " + osmType.getValue());
             for (CityEnvelopeDto cityEnvelope : cityEnvelopeDtos) {
                 url = String.format(Constants.OSM_BASE_URL, cityEnvelope.getGeom(), osmType.getKey(), osmType.getValue());
-                System.out.println("OSM get:" + url);
                 List<TIPSyncDto> tipsSync = doRequest(url, osmType.getTipTypeID());
                 if (tipsSync != null) tips.addAll(tipsSync);
             }

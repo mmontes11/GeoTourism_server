@@ -46,8 +46,9 @@ public class SyncService {
             } catch (Exception e) {
                 e.printStackTrace();
                 try {
-                    Thread.sleep((i * 2 + 1) * 1000);
-                    System.out.println("Pausada ejecución durante " + (i * 3 + 1) + "segundos");
+                    int sleep = (i * 3 + 1) * 1000;
+                    Thread.sleep(sleep);
+                    System.out.println("Pausada ejecución durante " + (sleep / 1000) + "segundos");
                 } catch (InterruptedException e1) {
                 }
                 i++;

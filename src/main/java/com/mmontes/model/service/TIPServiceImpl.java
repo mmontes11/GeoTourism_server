@@ -53,7 +53,8 @@ public class TIPServiceImpl implements TIPService {
     private GoogleMapsService gMapsServiceForUsers = new GoogleMapsService(PrivateConstants.GOOGLE_MAPS_KEY);
     private GoogleMapsService gMapsServiceForETL = new GoogleMapsService(PrivateConstants.GOOGLE_MAPS_KEY_ETL);
 
-    private String getAddress(GoogleMapsService gMapsService, Coordinate coordinate){
+    private String getAddress(GoogleMapsService gMapsService, Coordinate coordinate) {
+        // Si no se encuentra la dirección, se pone como vacío. Si el servidor falla, se pone a null
         try {
             return gMapsService.getAddress(coordinate);
         } catch (GoogleMapsServiceException e) {
@@ -65,8 +66,8 @@ public class TIPServiceImpl implements TIPService {
 
     private TIPDetailsDto
     create(TIPtype tipType, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long osmId,
-           boolean reviewed, String address, Long facebookUserId)
-           throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException {
+           boolean reviewed, boolean getAddress, Long facebookUserId)
+            throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException {
         TIP tip = new TIP();
         tip.setType(tipType);
         tip.setName(name);
@@ -79,13 +80,11 @@ public class TIPServiceImpl implements TIPService {
         tip.setCreationDate(Calendar.getInstance());
         tip.setUserAccount(userAccountDao.findByFBUserID(facebookUserId));
 
-        Coordinate coordinate = tip.getGeom().getCoordinate();
-        tip.setGoogleMapsUrl(gMapsServiceForUsers.getTIPGoogleMapsUrl(coordinate));
-
-        if (address == null){
-            address = getAddress(gMapsServiceForUsers,coordinate);
+        if (getAddress) {
+            Coordinate coordinate = tip.getGeom().getCoordinate();
+            tip.setGoogleMapsUrl(gMapsServiceForUsers.getTIPGoogleMapsUrl(coordinate));
+            tip.setAddress(getAddress(gMapsServiceForUsers, coordinate));
         }
-        tip.setAddress(address);
 
         City city = cityService.getCityFromLocation(geom);
         tip.setCity(city);
@@ -99,16 +98,15 @@ public class TIPServiceImpl implements TIPService {
     public TIPDetailsDto
     create(Long typeId, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long osmId,
            boolean reviewed, Long facebookUserId)
-           throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException {
+            throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException {
         TIPtype tipType = tipTypeDao.findById(typeId);
-        return create(tipType, name, description, photoUrl, infoUrl, geom, osmId, reviewed, null, facebookUserId);
+        return create(tipType, name, description, photoUrl, infoUrl, geom, osmId, reviewed, true, facebookUserId);
     }
 
     public TIPDetailsDto
     createSyncTIPs(TIPtype tipType, String name, String description, String photoUrl, String infoUrl, Geometry geom, Long osmId, boolean reviewed)
             throws TIPLocationException, InvalidTIPUrlException, InstanceNotFoundException {
-        String address = getAddress(gMapsServiceForETL,geom.getCoordinate());
-        return create(tipType, name, description, photoUrl, infoUrl, geom, osmId, reviewed, address, null);
+        return create(tipType, name, description, photoUrl, infoUrl, geom, osmId, reviewed, false, null);
     }
 
     public TIPDetailsDto edit(Long TIPId, Long facebookUserId, Long type, String name, String description, String infoUrl, String address, String photoUrl)
@@ -203,6 +201,8 @@ public class TIPServiceImpl implements TIPService {
                 e.printStackTrace();
             }
         }
+        // FIXME: No sé si es buena idea eliminar automáticamente los TIPs que se han eliminado de OSM... Igual sería mejor sacar un listado y eliminarlos manualmente (por si tienen reviews, comentarios...)
+        // Se eliminan los TIPs obtenidos de OSM que ya no existan.
         tipDao.deleteNonExistingFromOSMIds(osmIds);
     }
 
@@ -218,12 +218,7 @@ public class TIPServiceImpl implements TIPService {
         List<TIP> tips = tipDao.findWithoutAddress();
         System.out.println("Tips sin dirección: " + tips.size());
         for (TIP tip : tips) {
-            try {
-                tip.setAddress(gMapsServiceForETL.getAddress(tip.getGeom().getCoordinate()));
-            } catch (Exception e) {
-                tip.setAddress(null);
-                break;
-            }
+            tip.setAddress(getAddress(gMapsServiceForETL, tip.getGeom().getCoordinate()));
             tipDao.save(tip);
         }
         System.out.println("Tips sin dirección una vez finalizado el proceso: " + tipDao.findWithoutAddress().size());

@@ -1,8 +1,6 @@
 # GeoTourism
 Tourism interest points and routes management platform.
 
-[DEMO](http://geotourism.eastus.cloudapp.azure.com)
-
 ### Preview
 ![GeoTourism Preview](https://raw.githubusercontent.com/mmontes11/mmontes11.github.io/master/img/geotourism/overview.png)
 

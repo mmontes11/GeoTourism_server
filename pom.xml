@@ -47,7 +47,7 @@
         <junit.version>4.11</junit.version>
         <aws.sdk.version>1.2.1</aws.sdk.version>
         <geotools.version>15-SNAPSHOT</geotools.version>
-        <commons.io.version>2.4</commons.io.version>
+        <commons.io.version>2.7</commons.io.version>
         <commons.validator.version>1.4.0</commons.validator.version>
         <jackson.version>2.4.2</jackson.version>
         <servlet.api.version>3.0.1</servlet.api.version>

@@ -37,7 +37,7 @@
         <!-- Package versions -->
         <postgresql.driver.groupId>org.postgresql</postgresql.driver.groupId>
         <postgresql.driver.artifactId>postgresql</postgresql.driver.artifactId>
-        <postgresql.driver.version>9.3-1100-jdbc41</postgresql.driver.version>
+        <postgresql.driver.version>42.2.25</postgresql.driver.version>
         <slf4j.version>1.6.6</slf4j.version>
         <javassist.version>3.15.0-GA</javassist.version>
         <cglib.version>2.2</cglib.version>

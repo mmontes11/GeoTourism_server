@@ -42,7 +42,7 @@
         <javassist.version>3.15.0-GA</javassist.version>
         <cglib.version>2.2</cglib.version>
         <hibernate.version>4.0</hibernate.version>
-        <spring.version>4.0.2.RELEASE</spring.version>
+        <spring.version>6.0.0</spring.version>
         <jjwt.version>0.5.1</jjwt.version>
         <junit.version>4.11</junit.version>
         <aws.sdk.version>1.2.1</aws.sdk.version>
